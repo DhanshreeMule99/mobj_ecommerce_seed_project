@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.phonepe.phonepe_payment_sdk-mergeReleaseResources-15:/values-v24/values-v24.xml",
+            "map": [
+                {
+                    "source": "/Users/geexu/.gradle/caches/transforms-3/ab1d319be3a13c7b8cdcd57888a12ed2/transformed/appcompat-1.3.1/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.phonepe.phonepe_payment_sdk-merged_res-17:/values-v24/values-v24.xml",
+            "map": [
+                {
+                    "source": "/Users/geexu/.gradle/caches/transforms-3/ab1d319be3a13c7b8cdcd57888a12ed2/transformed/appcompat-1.3.1/res/values-v24/values-v24.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,212",
+                        "endColumns": "156,134",
+                        "endOffsets": "207,342"
+                    }
+                }
+            ]
+        }
+    ]
+}

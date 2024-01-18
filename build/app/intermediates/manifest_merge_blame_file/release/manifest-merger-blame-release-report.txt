@@ -1,0 +1,956 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.setoo.mobj"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:2:5-67
+11-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:2:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:3:5-79
+12-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:3:22-76
+13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+13-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:4:5-79
+13-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:4:22-76
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:5:5-81
+14-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:5:22-78
+15
+16    <queries>
+16-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:6:5-31:15
+17
+18        <!-- If your app opens https URLs -->
+19        <intent>
+19-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:8:9-11:18
+20            <action android:name="android.intent.action.VIEW" />
+20-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+20-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+21
+22            <data android:scheme="https" />
+22-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+22-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+23        </intent>
+24        <intent>
+24-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:12:9-14:18
+25            <action android:name="android.media.browse.MediaBrowserService" />
+25-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:13:13-79
+25-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:13:21-76
+26        </intent>
+27        <!-- If your app makes calls -->
+28        <intent>
+28-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:16:9-19:18
+29            <action android:name="android.intent.action.DIAL" />
+29-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:17:13-65
+29-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:17:21-62
+30
+31            <data android:scheme="tel" />
+31-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+31-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+32        </intent>
+33        <!-- If your app emails -->
+34        <intent>
+34-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:21:9-24:18
+35            <action android:name="android.intent.action.VIEW" />
+35-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+35-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+36
+37            <data android:scheme="sms" />
+37-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+37-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+38        </intent>
+39        <!-- If your app checks for call support -->
+40
+41        <intent>
+41-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:27:9-30:18
+42            <action android:name="android.intent.action.SEND" />
+42-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:28:13-65
+42-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:28:21-62
+43
+44            <data android:mimeType="*/*" />
+44-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+44-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:29:19-41
+45        </intent>
+46        <intent>
+46-->[:file_picker] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:12:9-16:18
+47            <action android:name="android.intent.action.GET_CONTENT" />
+47-->[:file_picker] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-72
+47-->[:file_picker] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:13:21-69
+48
+49            <data android:mimeType="*/*" />
+49-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+49-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:29:19-41
+50        </intent>
+51        <intent>
+51-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:11:9-17:18
+52            <action android:name="android.intent.action.VIEW" />
+52-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+52-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+53
+54            <data
+54-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+55                android:mimeType="*/*"
+55-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:29:19-41
+56                android:scheme="*" />
+56-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+57        </intent>
+58        <intent>
+58-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:18:9-27:18
+59            <action android:name="android.intent.action.VIEW" />
+59-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+59-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+60
+61            <category android:name="android.intent.category.BROWSABLE" />
+61-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:17-78
+61-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:27-75
+62
+63            <data
+63-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+64                android:host="pay"
+64-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+65                android:mimeType="*/*"
+65-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:29:19-41
+66                android:scheme="upi" />
+66-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+67        </intent>
+68        <intent>
+68-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:28:9-30:18
+69            <action android:name="android.intent.action.MAIN" />
+69-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:17-68
+69-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:25-66
+70        </intent>
+71        <intent>
+71-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:36:9-38:18
+72            <action android:name="rzp.device_token.share" />
+72-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:13-61
+72-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:21-58
+73        </intent>
+74
+75        <package android:name="com.phonepe.app" />
+75-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:8:9-51
+75-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:8:18-48
+76        <package android:name="com.phonepe.app.preprod" />
+76-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:9:9-59
+76-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:9:18-56
+77        <package android:name="com.phonepe.simulator" />
+77-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:10:9-57
+77-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:10:18-54
+78        <package android:name="com.phonepe.simulator.debug" />
+78-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:11:9-63
+78-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:11:18-60
+79
+80        <intent>
+80-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:13:9-19:18
+81            <action android:name="android.intent.action.VIEW" />
+81-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+81-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+82
+83            <data
+83-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+84                android:host="pay"
+84-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+85                android:scheme="upi" />
+85-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+86        </intent>
+87        <intent>
+87-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:20:9-26:18
+88            <action android:name="android.intent.action.VIEW" />
+88-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+88-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+89
+90            <data
+90-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+91                android:host="upi"
+91-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+92                android:scheme="mandate" />
+92-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+93        </intent>
+94    </queries>
+95
+96    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Permissions options for the `notification` group -->
+96-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-68
+96-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-65
+97    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+97-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:13:5-77
+97-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:13:22-74
+98    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+98-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-81
+98-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-78
+99    <uses-permission android:name="android.permission.VIBRATE" />
+99-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:10:5-66
+99-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:10:22-63
+100    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+100-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:11:5-81
+100-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:11:22-78
+101    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+101-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:12:5-79
+101-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:12:22-76
+102    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+102-->[:file_picker] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-80
+102-->[:file_picker] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-77
+103
+104    <meta-data
+104-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:32:5-34:32
+105        android:name="android.webkit.WebView.EnableSafeBrowsing"
+105-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:33:9-65
+106        android:value="true" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+106-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:34:9-29
+107    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+107-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:26:5-82
+107-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:26:22-79
+108
+109    <uses-feature
+109-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+110        android:glEsVersion="0x00020000"
+110-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+111        android:required="true" />
+111-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+112
+113    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+113-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/geexu/.gradle/caches/transforms-3/5ea5f18314ffc227cee169f4138bbed5/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:5-79
+113-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/geexu/.gradle/caches/transforms-3/5ea5f18314ffc227cee169f4138bbed5/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:25:22-76
+114    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+114-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:5-110
+114-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:26:22-107
+115
+116    <permission
+116-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:22:5-24:47
+117        android:name="com.setoo.mobj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+117-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:23:9-81
+118        android:protectionLevel="signature" />
+118-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:24:9-44
+119
+120    <uses-permission android:name="com.setoo.mobj.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+120-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:26:5-97
+120-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:26:22-94
+121
+122    <application
+123        android:name="android.app.Application"
+123-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:34:9-42
+124        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+124-->[androidx.core:core:1.10.1] /Users/geexu/.gradle/caches/transforms-3/18a7f5e1e6c11d26de9342f92785d7ea/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
+125        android:icon="@mipmap/ic_launcher"
+125-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:35:9-43
+126        android:label="P.Y.Vaidya" >
+126-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:33:9-35
+127        <activity
+127-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:36:9-72:20
+128            android:name="com.example.mobj_project.MainActivity"
+128-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:37:13-41
+129            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+129-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:41:13-163
+130            android:exported="true"
+130-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:38:13-36
+131            android:hardwareAccelerated="true"
+131-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:42:13-47
+132            android:launchMode="singleTop"
+132-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:39:13-43
+133            android:theme="@style/LaunchTheme"
+133-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:40:13-47
+134            android:windowSoftInputMode="adjustResize" >
+134-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:43:13-55
+135
+136            <!--
+137                 Specifies an Android theme to apply to this Activity as soon as
+138                 the Android process has started. This theme is visible to the user
+139                 while the Flutter UI initializes. After that, this theme continues
+140                 to determine the Window background behind the Flutter UI.
+141            -->
+142            <meta-data
+142-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:48:13-50:50
+143                android:name="com.google.android.gms.signin.CLIENT_ID"
+143-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:49:17-71
+144                android:value="YOUR_CLIENT_ID" />
+144-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:50:17-47
+145            <meta-data
+145-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:51:13-54:17
+146                android:name="io.flutter.embedding.android.NormalTheme"
+146-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:52:15-70
+147                android:resource="@style/NormalTheme" />
+147-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:53:15-52
+148            <meta-data
+148-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:55:13-57:49
+149                android:name="com.google.firebase.messaging.default_notification_channel_id"
+149-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:56:17-93
+150                android:value="mobjappchannel" />
+150-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:57:17-47
+151
+152            <intent-filter>
+152-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:58:13-61:29
+153                <action android:name="android.intent.action.MAIN" />
+153-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:17-68
+153-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:25-66
+154
+155                <category android:name="android.intent.category.LAUNCHER" />
+155-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:60:17-76
+155-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:60:27-74
+156            </intent-filter>
+157
+158            <meta-data
+158-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:62:13-90
+159                android:name="flutter_deeplinking_enabled"
+159-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:62:24-66
+160                android:value="true" />
+160-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:62:67-87
+161            <meta-data
+161-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:63:13-91
+162                android:name="com.phonepe.android.sdk.isUAT"
+162-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:63:24-68
+163                android:value="true" />
+163-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:63:69-89
+164            <meta-data
+164-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:64:13-97
+165                android:name="com.phonepe.android.sdk.isSimulator"
+165-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:64:24-74
+166                android:value="true" />
+166-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:64:75-95
+167            <meta-data
+167-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:65:13-104
+168                android:name="com.phonepe.android.sdk.MerchantId"
+168-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:65:24-73
+169                android:value="PGTESTPAYUAT" />
+169-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:65:74-102
+170
+171            <intent-filter>
+171-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:66:13-71:29
+172                <action android:name="android.intent.action.VIEW" />
+172-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+172-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+173
+174                <category android:name="android.intent.category.DEFAULT" />
+174-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:17-76
+174-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:27-73
+175                <category android:name="android.intent.category.BROWSABLE" />
+175-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:17-78
+175-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:27-75
+176
+177                <data
+177-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+178                    android:host="setoo.page.link"
+178-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+179                    android:scheme="https" />
+179-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+180            </intent-filter>
+181        </activity>
+182        <!--
+183             Don't delete the meta-data below.
+184             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+185        -->
+186        <meta-data
+186-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:75:9-77:33
+187            android:name="flutterEmbedding"
+187-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:76:13-44
+188            android:value="2" />
+188-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:77:13-30
+189
+190        <!-- <meta-data android:name="com.phonepe.android.sdk.AppId" android:value="appId"/> -->
+191
+192        <activity
+192-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:81:9-84:71
+193            android:name="com.yalantis.ucrop.UCropActivity"
+193-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:82:13-60
+194            android:screenOrientation="portrait"
+194-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:83:13-49
+195            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+195-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:84:13-69
+196
+197        <service
+197-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:16:9-19:72
+198            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingBackgroundService"
+198-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:17:13-107
+199            android:exported="false"
+199-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:18:13-37
+200            android:permission="android.permission.BIND_JOB_SERVICE" />
+200-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:19:13-69
+201        <service
+201-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:20:9-26:19
+202            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingService"
+202-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:21:13-97
+203            android:exported="false" >
+203-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-37
+204            <intent-filter>
+204-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-25:29
+205                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+205-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:17-78
+205-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:25-75
+206            </intent-filter>
+207        </service>
+208
+209        <receiver
+209-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:28:9-35:20
+210            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingReceiver"
+210-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:29:13-98
+211            android:exported="true"
+211-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:30:13-36
+212            android:permission="com.google.android.c2dm.permission.SEND" >
+212-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:31:13-73
+213            <intent-filter>
+213-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:32:13-34:29
+214                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+214-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:17-81
+214-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:25-78
+215            </intent-filter>
+216        </receiver>
+217
+218        <service
+218-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:37:9-41:19
+219            android:name="com.google.firebase.components.ComponentDiscoveryService"
+219-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:37:18-89
+220            android:directBootAware="true"
+220-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:34:13-43
+221            android:exported="false" >
+221-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/geexu/.gradle/caches/transforms-3/072b81e564aebe0801d3ff1959099766/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:10:13-37
+222            <meta-data
+222-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:38:13-40:85
+223                android:name="com.google.firebase.components:io.flutter.plugins.firebase.messaging.FlutterFirebaseAppRegistrar"
+223-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:39:17-128
+224                android:value="com.google.firebase.components.ComponentRegistrar" />
+224-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:40:17-82
+225            <meta-data
+225-->[:firebase_dynamic_links] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_dynamic_links/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-15:85
+226                android:name="com.google.firebase.components:io.flutter.plugins.firebase.dynamiclinks.FlutterFirebaseAppRegistrar"
+226-->[:firebase_dynamic_links] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_dynamic_links/intermediates/merged_manifest/release/AndroidManifest.xml:14:17-131
+227                android:value="com.google.firebase.components.ComponentRegistrar" />
+227-->[:firebase_dynamic_links] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_dynamic_links/intermediates/merged_manifest/release/AndroidManifest.xml:15:17-82
+228            <meta-data
+228-->[:firebase_auth] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+229                android:name="com.google.firebase.components:io.flutter.plugins.firebase.auth.FlutterFirebaseAuthRegistrar"
+229-->[:firebase_auth] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-124
+230                android:value="com.google.firebase.components.ComponentRegistrar" />
+230-->[:firebase_auth] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_auth/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+231            <meta-data
+231-->[:firebase_core] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-13:85
+232                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+232-->[:firebase_core] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:12:17-124
+233                android:value="com.google.firebase.components.ComponentRegistrar" />
+233-->[:firebase_core] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_core/intermediates/merged_manifest/release/AndroidManifest.xml:13:17-82
+234            <meta-data
+234-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/geexu/.gradle/caches/transforms-3/072b81e564aebe0801d3ff1959099766/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:11:13-13:85
+235                android:name="com.google.firebase.components:com.google.firebase.analytics.ktx.FirebaseAnalyticsKtxRegistrar"
+235-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/geexu/.gradle/caches/transforms-3/072b81e564aebe0801d3ff1959099766/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:12:17-126
+236                android:value="com.google.firebase.components.ComponentRegistrar" />
+236-->[com.google.firebase:firebase-analytics-ktx:21.3.0] /Users/geexu/.gradle/caches/transforms-3/072b81e564aebe0801d3ff1959099766/transformed/jetified-firebase-analytics-ktx-21.3.0/AndroidManifest.xml:13:17-82
+237            <meta-data
+237-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/geexu/.gradle/caches/transforms-3/a35df7744120e0555a988eeb6981ff51/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:14:13-16:85
+238                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
+238-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/geexu/.gradle/caches/transforms-3/a35df7744120e0555a988eeb6981ff51/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:15:17-113
+239                android:value="com.google.firebase.components.ComponentRegistrar" />
+239-->[com.google.firebase:firebase-common-ktx:20.3.3] /Users/geexu/.gradle/caches/transforms-3/a35df7744120e0555a988eeb6981ff51/transformed/jetified-firebase-common-ktx-20.3.3/AndroidManifest.xml:16:17-82
+240            <meta-data
+240-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:69:13-71:85
+241                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+241-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:70:17-109
+242                android:value="com.google.firebase.components.ComponentRegistrar" />
+242-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:71:17-82
+243            <meta-data
+243-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:53:13-55:85
+244                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+244-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:54:17-119
+245                android:value="com.google.firebase.components.ComponentRegistrar" />
+245-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:55:17-82
+246            <meta-data
+246-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/geexu/.gradle/caches/transforms-3/56e79e5ce49e5fab64d94a9a63e9e499/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:26:13-28:85
+247                android:name="com.google.firebase.components:com.google.firebase.dynamiclinks.internal.FirebaseDynamicLinkRegistrar"
+247-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/geexu/.gradle/caches/transforms-3/56e79e5ce49e5fab64d94a9a63e9e499/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:27:17-133
+248                android:value="com.google.firebase.components.ComponentRegistrar" />
+248-->[com.google.firebase:firebase-dynamic-links:21.1.0] /Users/geexu/.gradle/caches/transforms-3/56e79e5ce49e5fab64d94a9a63e9e499/transformed/jetified-firebase-dynamic-links-21.1.0/AndroidManifest.xml:28:17-82
+249            <meta-data
+249-->[com.google.firebase:firebase-iid:21.1.0] /Users/geexu/.gradle/caches/transforms-3/4be4762432ef7b290ad1aa25c24851bf/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:32:13-34:85
+250                android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
+250-->[com.google.firebase:firebase-iid:21.1.0] /Users/geexu/.gradle/caches/transforms-3/4be4762432ef7b290ad1aa25c24851bf/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:33:17-96
+251                android:value="com.google.firebase.components.ComponentRegistrar" />
+251-->[com.google.firebase:firebase-iid:21.1.0] /Users/geexu/.gradle/caches/transforms-3/4be4762432ef7b290ad1aa25c24851bf/transformed/jetified-firebase-iid-21.1.0/AndroidManifest.xml:34:17-82
+252            <meta-data
+252-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/geexu/.gradle/caches/transforms-3/5ea5f18314ffc227cee169f4138bbed5/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:31:13-33:85
+253                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+253-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/geexu/.gradle/caches/transforms-3/5ea5f18314ffc227cee169f4138bbed5/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:32:17-139
+254                android:value="com.google.firebase.components.ComponentRegistrar" />
+254-->[com.google.android.gms:play-services-measurement-api:21.3.0] /Users/geexu/.gradle/caches/transforms-3/5ea5f18314ffc227cee169f4138bbed5/transformed/jetified-play-services-measurement-api-21.3.0/AndroidManifest.xml:33:17-82
+255            <meta-data
+255-->[com.google.firebase:firebase-installations:17.1.4] /Users/geexu/.gradle/caches/transforms-3/857f3e44651993257f0117f26987065f/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:15:13-17:85
+256                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+256-->[com.google.firebase:firebase-installations:17.1.4] /Users/geexu/.gradle/caches/transforms-3/857f3e44651993257f0117f26987065f/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:16:17-127
+257                android:value="com.google.firebase.components.ComponentRegistrar" />
+257-->[com.google.firebase:firebase-installations:17.1.4] /Users/geexu/.gradle/caches/transforms-3/857f3e44651993257f0117f26987065f/transformed/jetified-firebase-installations-17.1.4/AndroidManifest.xml:17:17-82
+258            <meta-data
+258-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/geexu/.gradle/caches/transforms-3/b7bf4844e8a231616b9fa1b9f7daa817/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:27:13-29:85
+259                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+259-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/geexu/.gradle/caches/transforms-3/b7bf4844e8a231616b9fa1b9f7daa817/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:28:17-115
+260                android:value="com.google.firebase.components.ComponentRegistrar" />
+260-->[com.google.firebase:firebase-datatransport:18.1.7] /Users/geexu/.gradle/caches/transforms-3/b7bf4844e8a231616b9fa1b9f7daa817/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:29:17-82
+261        </service>
+262
+263        <provider
+263-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:43:9-47:38
+264            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
+264-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:44:13-102
+265            android:authorities="com.setoo.mobj.flutterfirebasemessaginginitprovider"
+265-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:45:13-88
+266            android:exported="false"
+266-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:46:13-37
+267            android:initOrder="99" />
+267-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:47:13-35
+268
+269        <service
+269-->[:geolocator_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-14:56
+270            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+270-->[:geolocator_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-77
+271            android:enabled="true"
+271-->[:geolocator_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-35
+272            android:exported="false"
+272-->[:geolocator_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
+273            android:foregroundServiceType="location" />
+273-->[:geolocator_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-53
+274
+275        <receiver
+275-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:16:9-18:40
+276            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
+276-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:17:13-97
+277            android:exported="false" />
+277-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:18:13-37
+278        <receiver
+278-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:19:9-28:20
+279            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+279-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:20:13-101
+280            android:exported="false" >
+280-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:21:13-37
+281            <intent-filter>
+281-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-27:29
+282                <action android:name="android.intent.action.BOOT_COMPLETED" />
+282-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:23:17-79
+282-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:23:25-76
+283                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+283-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:24:17-84
+283-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:24:25-81
+284                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+284-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:25:17-82
+284-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:25:25-79
+285                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+285-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:26:17-82
+285-->[:flutter_local_notifications] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/flutter_local_notifications/intermediates/merged_manifest/release/AndroidManifest.xml:26:25-79
+286            </intent-filter>
+287        </receiver>
+288
+289        <provider
+289-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-18:20
+290            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
+290-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-77
+291            android:authorities="com.setoo.mobj.flutter.share_provider"
+291-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-74
+292            android:exported="false"
+292-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
+293            android:grantUriPermissions="true" >
+293-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-47
+294            <meta-data
+294-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-17:68
+295                android:name="android.support.FILE_PROVIDER_PATHS"
+295-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:16:17-67
+296                android:resource="@xml/flutter_share_file_paths" />
+296-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-65
+297        </provider>
+298        <provider
+298-->[:image_picker_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-18:20
+299            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+299-->[:image_picker_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-82
+300            android:authorities="com.setoo.mobj.flutter.image_provider"
+300-->[:image_picker_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-74
+301            android:exported="false"
+301-->[:image_picker_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-37
+302            android:grantUriPermissions="true" >
+302-->[:image_picker_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-47
+303            <meta-data
+303-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-17:68
+304                android:name="android.support.FILE_PROVIDER_PATHS"
+304-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:16:17-67
+305                android:resource="@xml/flutter_image_picker_file_paths" />
+305-->[:share_plus] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/share_plus/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-65
+306        </provider>
+307
+308        <activity
+308-->[:url_launcher_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-13:74
+309            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+309-->[:url_launcher_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-74
+310            android:exported="false"
+310-->[:url_launcher_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-37
+311            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+311-->[:url_launcher_android] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/url_launcher_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-71
+312
+313        <receiver
+313-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:42:9-49:20
+314            android:name="com.razorpay.RzpTokenReceiver"
+314-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:43:13-57
+315            android:exported="true" >
+315-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:44:13-36
+316            <intent-filter>
+316-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:46:13-48:29
+317                <action android:name="rzp.device_token.share" />
+317-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:13-61
+317-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:37:21-58
+318            </intent-filter>
+319        </receiver>
+320
+321        <activity
+321-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:51:9-59:20
+322            android:name="com.razorpay.CheckoutActivity"
+322-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:52:13-57
+323            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+323-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:53:13-83
+324            android:exported="false"
+324-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:54:13-37
+325            android:theme="@style/CheckoutTheme" >
+325-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:55:13-49
+326            <intent-filter>
+326-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:56:13-58:29
+327                <action android:name="android.intent.action.MAIN" />
+327-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:17-68
+327-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:59:25-66
+328            </intent-filter>
+329        </activity>
+330
+331        <meta-data
+331-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:61:9-63:58
+332            android:name="com.razorpay.plugin.googlepay_all"
+332-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:62:13-61
+333            android:value="com.razorpay.RzpGpayMerged" />
+333-->[com.razorpay:checkout:1.6.36] /Users/geexu/.gradle/caches/transforms-3/c018d2f634522ab18e2a4067b104a3d4/transformed/jetified-checkout-1.6.36/AndroidManifest.xml:63:13-55
+334
+335        <activity
+335-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:29:9-46:20
+336            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+336-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:30:13-80
+337            android:excludeFromRecents="true"
+337-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:31:13-46
+338            android:exported="true"
+338-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:32:13-36
+339            android:launchMode="singleTask"
+339-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:33:13-44
+340            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+340-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:34:13-72
+341            <intent-filter>
+341-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:35:13-45:29
+342                <action android:name="android.intent.action.VIEW" />
+342-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+342-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+343
+344                <category android:name="android.intent.category.DEFAULT" />
+344-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:17-76
+344-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:27-73
+345                <category android:name="android.intent.category.BROWSABLE" />
+345-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:17-78
+345-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:27-75
+346
+347                <data
+347-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+348                    android:host="firebase.auth"
+348-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+349                    android:path="/"
+350                    android:scheme="genericidp" />
+350-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+351            </intent-filter>
+352        </activity>
+353        <activity
+353-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:47:9-64:20
+354            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+354-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:48:13-79
+355            android:excludeFromRecents="true"
+355-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:49:13-46
+356            android:exported="true"
+356-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:50:13-36
+357            android:launchMode="singleTask"
+357-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:51:13-44
+358            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+358-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:52:13-72
+359            <intent-filter>
+359-->[com.google.firebase:firebase-auth:22.1.1] /Users/geexu/.gradle/caches/transforms-3/1aecb924984e89f98d58d4b6717080c3/transformed/jetified-firebase-auth-22.1.1/AndroidManifest.xml:53:13-63:29
+360                <action android:name="android.intent.action.VIEW" />
+360-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:13-65
+360-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:9:21-62
+361
+362                <category android:name="android.intent.category.DEFAULT" />
+362-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:17-76
+362-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:68:27-73
+363                <category android:name="android.intent.category.BROWSABLE" />
+363-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:17-78
+363-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:69:27-75
+364
+365                <data
+365-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:13-44
+366                    android:host="firebase.auth"
+366-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:70:46-76
+367                    android:path="/"
+368                    android:scheme="recaptcha" />
+368-->/Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/android/app/src/main/AndroidManifest.xml:10:19-41
+369            </intent-filter>
+370        </activity>
+371        <activity
+371-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:37:9-40:66
+372            android:name="com.phonepe.intent.sdk.ui.B2BPGActivity"
+372-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:38:13-67
+373            android:exported="false"
+373-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:39:13-37
+374            android:theme="@style/phonepeThemeInvisibleCompat" />
+374-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:40:13-63
+375        <activity
+375-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:41:9-45:67
+376            android:name="com.phonepe.intent.sdk.ui.TransactionActivity"
+376-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:42:13-73
+377            android:configChanges="orientation"
+377-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:43:13-48
+378            android:theme="@style/phonepeThemeInvisibleCompat"
+378-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:44:13-63
+379            android:windowSoftInputMode="stateHidden|adjustPan" />
+379-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:45:13-64
+380
+381        <service
+381-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:47:9-49:40
+382            android:name="com.phonepe.intent.sdk.ui.PreCacheService"
+382-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:48:13-69
+383            android:exported="false" />
+383-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:49:13-37
+384
+385        <activity
+385-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:51:9-53:66
+386            android:name="com.phonepe.intent.sdk.ui.OpenIntentTransactionActivity"
+386-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:52:13-83
+387            android:theme="@style/phonepeThemeInvisibleCompat" />
+387-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:53:13-63
+388        <activity
+388-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:54:9-56:60
+389            android:name="com.phonepe.intent.sdk.ui.UpiAppsSelectionDialogActivity"
+389-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:55:13-84
+390            android:theme="@style/phonepeThemeInvisible" />
+390-->[phonepe.intentsdk.android.release:IntentSDK:2.4.1] /Users/geexu/.gradle/caches/transforms-3/e2fcd980925f9f6e7421d73db23cd676/transformed/jetified-IntentSDK-2.4.1/AndroidManifest.xml:56:13-57
+391        <activity
+391-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:23:9-27:75
+392            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+392-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:24:13-93
+393            android:excludeFromRecents="true"
+393-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:25:13-46
+394            android:exported="false"
+394-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:26:13-37
+395            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+395-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:27:13-72
+396        <!--
+397            Service handling Google Sign-In user revocation. For apps that do not integrate with
+398            Google Sign-In, this service will never be started.
+399        -->
+400        <service
+400-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:33:9-37:51
+401            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+401-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:34:13-89
+402            android:exported="true"
+402-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:35:13-36
+403            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+403-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:36:13-107
+404            android:visibleToInstantApps="true" />
+404-->[com.google.android.gms:play-services-auth:20.7.0] /Users/geexu/.gradle/caches/transforms-3/c42eaa482e83afef183b4ba7344ca275/transformed/jetified-play-services-auth-20.7.0/AndroidManifest.xml:37:13-48
+405
+406        <receiver
+406-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:29:9-36:20
+407            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+407-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:30:13-78
+408            android:exported="true"
+408-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:31:13-36
+409            android:permission="com.google.android.c2dm.permission.SEND" >
+409-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:32:13-73
+410            <intent-filter>
+410-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:32:13-34:29
+411                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+411-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:17-81
+411-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:33:25-78
+412            </intent-filter>
+413        </receiver>
+414        <!--
+415             FirebaseMessagingService performs security checks at runtime,
+416             but set to not exported to explicitly avoid allowing another app to call it.
+417        -->
+418        <service
+418-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:42:9-49:19
+419            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+419-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:43:13-82
+420            android:directBootAware="true"
+420-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:44:13-43
+421            android:exported="false" >
+421-->[com.google.firebase:firebase-messaging:23.2.1] /Users/geexu/.gradle/caches/transforms-3/c475ff2eb65039e0328b1c8f1c675865/transformed/jetified-firebase-messaging-23.2.1/AndroidManifest.xml:45:13-37
+422            <intent-filter android:priority="-500" >
+422-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-25:29
+423                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+423-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:17-78
+423-->[:firebase_messaging] /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/firebase_messaging/intermediates/merged_manifest/release/AndroidManifest.xml:24:25-75
+424            </intent-filter>
+425        </service> <!-- Needs to be explicitly declared on P+ -->
+426        <uses-library
+426-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+427            android:name="org.apache.http.legacy"
+427-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+428            android:required="false" />
+428-->[com.google.android.gms:play-services-maps:17.0.0] /Users/geexu/.gradle/caches/transforms-3/cdc34fa8cea1f1b72bab9f40d083c011/transformed/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+429
+430        <activity
+430-->[com.google.android.gms:play-services-base:18.1.0] /Users/geexu/.gradle/caches/transforms-3/22e76ea82585127186c0cbf5bbc6dc6a/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+431            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+431-->[com.google.android.gms:play-services-base:18.1.0] /Users/geexu/.gradle/caches/transforms-3/22e76ea82585127186c0cbf5bbc6dc6a/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+432            android:exported="false"
+432-->[com.google.android.gms:play-services-base:18.1.0] /Users/geexu/.gradle/caches/transforms-3/22e76ea82585127186c0cbf5bbc6dc6a/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+433            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+433-->[com.google.android.gms:play-services-base:18.1.0] /Users/geexu/.gradle/caches/transforms-3/22e76ea82585127186c0cbf5bbc6dc6a/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+434
+435        <provider
+435-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:25:9-30:39
+436            android:name="com.google.firebase.provider.FirebaseInitProvider"
+436-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:26:13-77
+437            android:authorities="com.setoo.mobj.firebaseinitprovider"
+437-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:27:13-72
+438            android:directBootAware="true"
+438-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:28:13-43
+439            android:exported="false"
+439-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:29:13-37
+440            android:initOrder="100" />
+440-->[com.google.firebase:firebase-common:20.3.3] /Users/geexu/.gradle/caches/transforms-3/b382574606cb6990fad73af0e708e7b1/transformed/jetified-firebase-common-20.3.3/AndroidManifest.xml:30:13-36
+441
+442        <receiver
+442-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:29:9-33:20
+443            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+443-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:30:13-85
+444            android:enabled="true"
+444-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:31:13-35
+445            android:exported="false" >
+445-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:32:13-37
+446        </receiver>
+447
+448        <service
+448-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:35:9-38:40
+449            android:name="com.google.android.gms.measurement.AppMeasurementService"
+449-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:36:13-84
+450            android:enabled="true"
+450-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:37:13-35
+451            android:exported="false" />
+451-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:38:13-37
+452        <service
+452-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:39:9-43:72
+453            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+453-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:40:13-87
+454            android:enabled="true"
+454-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:41:13-35
+455            android:exported="false"
+455-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:42:13-37
+456            android:permission="android.permission.BIND_JOB_SERVICE" />
+456-->[com.google.android.gms:play-services-measurement:21.3.0] /Users/geexu/.gradle/caches/transforms-3/f9133504a3d61d4c670fff35e956488d/transformed/jetified-play-services-measurement-21.3.0/AndroidManifest.xml:43:13-69
+457
+458        <meta-data
+458-->[com.google.android.gms:play-services-basement:18.2.0] /Users/geexu/.gradle/caches/transforms-3/0b439073779277b892358adc29df17ea/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:21:9-23:69
+459            android:name="com.google.android.gms.version"
+459-->[com.google.android.gms:play-services-basement:18.2.0] /Users/geexu/.gradle/caches/transforms-3/0b439073779277b892358adc29df17ea/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:22:13-58
+460            android:value="@integer/google_play_services_version" />
+460-->[com.google.android.gms:play-services-basement:18.2.0] /Users/geexu/.gradle/caches/transforms-3/0b439073779277b892358adc29df17ea/transformed/jetified-play-services-basement-18.2.0/AndroidManifest.xml:23:13-66
+461
+462        <uses-library
+462-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+463            android:name="androidx.window.extensions"
+463-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+464            android:required="false" />
+464-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+465        <uses-library
+465-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+466            android:name="androidx.window.sidecar"
+466-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+467            android:required="false" />
+467-->[androidx.window:window:1.0.0-beta04] /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+468
+469        <provider
+469-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
+470            android:name="androidx.startup.InitializationProvider"
+470-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:25:13-67
+471            android:authorities="com.setoo.mobj.androidx-startup"
+471-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:26:13-68
+472            android:exported="false" >
+472-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:27:13-37
+473            <meta-data
+473-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+474                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+474-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+475                android:value="androidx.startup" />
+475-->[androidx.lifecycle:lifecycle-process:2.6.1] /Users/geexu/.gradle/caches/transforms-3/b76490bcaaf74e33116ef6c2b8c3fa95/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+476            <meta-data
+476-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+477                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+477-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+478                android:value="androidx.startup" />
+478-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+479        </provider>
+480
+481        <service
+481-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:28:9-34:19
+482            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+482-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:29:13-103
+483            android:exported="false" >
+483-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:30:13-37
+484            <meta-data
+484-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:31:13-33:39
+485                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+485-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:32:17-94
+486                android:value="cct" />
+486-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /Users/geexu/.gradle/caches/transforms-3/a2ce17f549d39c6b23a9beeecde8c284/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:33:17-36
+487        </service>
+488        <service
+488-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:26:9-30:19
+489            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+489-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:27:13-117
+490            android:exported="false"
+490-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:28:13-37
+491            android:permission="android.permission.BIND_JOB_SERVICE" >
+491-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:29:13-69
+492        </service>
+493
+494        <receiver
+494-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:32:9-34:40
+495            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+495-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:33:13-132
+496            android:exported="false" />
+496-->[com.google.android.datatransport:transport-runtime:3.1.8] /Users/geexu/.gradle/caches/transforms-3/aef0b44550af3ac2bdb1ea61c4d63e75/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:34:13-37
+497        <receiver
+497-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+498            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+498-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+499            android:directBootAware="false"
+499-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+500            android:enabled="true"
+500-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+501            android:exported="true"
+501-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+502            android:permission="android.permission.DUMP" >
+502-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+503            <intent-filter>
+503-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+504                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+504-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+504-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+505            </intent-filter>
+506            <intent-filter>
+506-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+507                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+507-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+507-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+508            </intent-filter>
+509            <intent-filter>
+509-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+510                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+510-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+510-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+511            </intent-filter>
+512            <intent-filter>
+512-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+513                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+513-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+513-->[androidx.profileinstaller:profileinstaller:1.3.0] /Users/geexu/.gradle/caches/transforms-3/c82e9f2b3f19b50a2174c83af69a50ee/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+514            </intent-filter>
+515        </receiver>
+516    </application>
+517
+518</manifest>

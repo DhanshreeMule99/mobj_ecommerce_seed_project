@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "940215671581",
+    "project_id": "mobj-41646",
+    "storage_bucket": "mobj-41646.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940215671581:android:375815911c546b94379ff4",
+        "android_client_info": {
+          "package_name": "com.setoo.mobj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940215671581-704phsb8se3piockj8fcfsb05pvfju2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDG6FWFJN7igcYDA58fb1qDlL1DHMpupE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940215671581-704phsb8se3piockj8fcfsb05pvfju2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

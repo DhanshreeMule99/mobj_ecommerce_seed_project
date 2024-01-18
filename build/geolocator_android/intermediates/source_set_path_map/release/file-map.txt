@@ -1,0 +1,15 @@
+com.baseflow.geolocator.geolocator_android-jetified-play-services-base-18.1.0-0 /Users/geexu/.gradle/caches/transforms-3/22e76ea82585127186c0cbf5bbc6dc6a/transformed/jetified-play-services-base-18.1.0/res
+com.baseflow.geolocator.geolocator_android-jetified-window-java-1.0.0-beta04-1 /Users/geexu/.gradle/caches/transforms-3/234cf6cab2ae0df1de11d520bd41701d/transformed/jetified-window-java-1.0.0-beta04/res
+com.baseflow.geolocator.geolocator_android-jetified-window-1.0.0-beta04-2 /Users/geexu/.gradle/caches/transforms-3/2f632d8dec5aedcc344894ac2d746d3d/transformed/jetified-window-1.0.0-beta04/res
+com.baseflow.geolocator.geolocator_android-jetified-annotation-experimental-1.3.0-3 /Users/geexu/.gradle/caches/transforms-3/6a885e1ca1213d74ca3cafdacbecf529/transformed/jetified-annotation-experimental-1.3.0/res
+com.baseflow.geolocator.geolocator_android-core-1.9.0-4 /Users/geexu/.gradle/caches/transforms-3/9c1d2e404caec33c1b4c5b322860d26e/transformed/core-1.9.0/res
+com.baseflow.geolocator.geolocator_android-jetified-play-services-basement-18.1.0-5 /Users/geexu/.gradle/caches/transforms-3/b1b34065a9e0fbeb945439284bc5f6a3/transformed/jetified-play-services-basement-18.1.0/res
+com.baseflow.geolocator.geolocator_android-lifecycle-runtime-2.3.1-6 /Users/geexu/.gradle/caches/transforms-3/fc4914173ebab6198a04a2da077c677a/transformed/lifecycle-runtime-2.3.1/res
+com.baseflow.geolocator.geolocator_android-main-7 /Users/geexu/.pub-cache/hosted/pub.dev/geolocator_android-4.3.1/android/src/main/res
+com.baseflow.geolocator.geolocator_android-release-8 /Users/geexu/.pub-cache/hosted/pub.dev/geolocator_android-4.3.1/android/src/release/res
+com.baseflow.geolocator.geolocator_android-pngs-9 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/generated/res/pngs/release
+com.baseflow.geolocator.geolocator_android-resValues-10 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/generated/res/resValues/release
+com.baseflow.geolocator.geolocator_android-rs-11 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/generated/res/rs/release
+com.baseflow.geolocator.geolocator_android-mergeReleaseResources-12 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.baseflow.geolocator.geolocator_android-mergeReleaseResources-13 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.baseflow.geolocator.geolocator_android-merged_res-14 /Users/geexu/AndroidStudioProjects/mobj-P.Y.Vaidya/build/geolocator_android/intermediates/merged_res/release
