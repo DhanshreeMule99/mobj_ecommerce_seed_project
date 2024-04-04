@@ -10,12 +10,14 @@ class ApiManager {
     final String? token = (await getToken());
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
 
-    final headers = {
-      'X-Shopify-Access-Token': '$token',
-      "X-Shopify-Storefront-Access-Token": storeFrontToken,
-      'Content-Type': 'application/json',
-      'SECRET-KEY': AppConfigure.feraSecretKey
-    };
+    final headers = AppConfigure.bigCommerce == true
+        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        : {
+            'X-Shopify-Access-Token': '$token',
+            "X-Shopify-Storefront-Access-Token": storeFrontToken,
+            'Content-Type': 'application/json',
+            'SECRET-KEY': AppConfigure.feraSecretKey
+          };
 
     final response = await http.get(url, headers: headers);
 
