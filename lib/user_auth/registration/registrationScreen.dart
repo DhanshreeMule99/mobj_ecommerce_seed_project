@@ -737,7 +737,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: appInfo.primaryColorValue,
+                                        backgroundColor: appInfo.primaryColorValue,
                                         minimumSize: Size.fromHeight(50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(

@@ -63,7 +63,7 @@ class HelpCenterScreen extends ConsumerWidget {
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: AppColors.buttonColor,),
+                              backgroundColor: AppColors.buttonColor,),
 
                             onPressed: () {
                             },

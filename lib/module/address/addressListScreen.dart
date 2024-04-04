@@ -678,7 +678,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                   error != AppString.noDataError
                                       ? ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            primary: AppColors.buttonColor,
+                                            backgroundColor: AppColors.buttonColor,
                                           ),
                                           onPressed: () {
                                             ref.refresh(
@@ -722,7 +722,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                 error != AppString.noDataError
                     ? ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         onPressed: () {
                           ref.refresh(addressDataProvider);

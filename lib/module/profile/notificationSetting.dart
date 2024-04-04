@@ -270,7 +270,7 @@ class NotificationSettingScreenState
                             // notification.savePreferences();
                           },
                     style: ElevatedButton.styleFrom(
-                      primary: color,
+                      backgroundColor: color,
                       minimumSize: Size.fromHeight(50),
                       shape: RoundedRectangleBorder(
                           borderRadius:

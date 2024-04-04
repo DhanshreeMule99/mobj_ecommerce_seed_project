@@ -149,7 +149,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                 error != AppString.noDataError
                     ? ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppColors.buttonColor,
+                          backgroundColor: AppColors.buttonColor,
                         ),
                         onPressed: () {
                           ref.refresh(orderDataProvider);

@@ -308,7 +308,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.buttonColor,
+                            backgroundColor: AppColors.buttonColor,
                           ),
                           onPressed: () {
                             ref.refresh(profileDataProvider);

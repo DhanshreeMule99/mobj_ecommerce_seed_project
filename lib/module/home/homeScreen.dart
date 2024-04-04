@@ -532,7 +532,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: AppColors.buttonColor,
+                      backgroundColor: AppColors.buttonColor,
                     ),
                     onPressed: () {
                       ref.refresh(productDataProvider);
@@ -576,7 +576,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           error != AppString.noDataError
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: AppColors.buttonColor,
+                    backgroundColor: AppColors.buttonColor,
                   ),
                   onPressed: () {
                     ref.refresh(productDataProvider);

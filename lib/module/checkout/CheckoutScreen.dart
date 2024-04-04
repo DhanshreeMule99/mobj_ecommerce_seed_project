@@ -582,7 +582,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: appInfo.primaryColorValue,
+                                    backgroundColor: appInfo.primaryColorValue,
                                     minimumSize: const Size.fromHeight(50),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
@@ -629,7 +629,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   error != AppString.noDataError
                       ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.buttonColor,
+                            backgroundColor: AppColors.buttonColor,
                           ),
                           onPressed: () {
                             ref.refresh(cartDetailsDataProvider);

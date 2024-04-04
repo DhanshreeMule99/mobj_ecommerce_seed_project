@@ -268,7 +268,7 @@ class _CollectionWiseProductScreenState
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                    primary:
+                                                    backgroundColor:
                                                         AppColors.whiteColor,
                                                     // Button color
                                                     side: BorderSide(
@@ -318,7 +318,7 @@ class _CollectionWiseProductScreenState
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                    primary:
+                                                    backgroundColor:
                                                         AppColors.whiteColor,
                                                     // Button color
                                                     side: BorderSide(
@@ -532,7 +532,7 @@ class _CollectionWiseProductScreenState
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: AppColors.buttonColor,
+                                backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
                                 ref.refresh(productDataProvider);
@@ -692,7 +692,7 @@ class _CollectionWiseProductScreenState
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: AppColors.buttonColor,
+                                backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
                                 ref.refresh(productDataProvider);
@@ -730,7 +730,7 @@ class _CollectionWiseProductScreenState
           error != AppString.noDataError
               ? ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: AppColors.buttonColor,
+                    backgroundColor: AppColors.buttonColor,
                   ),
                   onPressed: () {
                     ref.refresh(productDataProvider);
@@ -820,7 +820,7 @@ class _CollectionWiseProductScreenState
                           Navigator.pop(context); // Close the bottom sheet
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: AppColors.whiteColor, // Button color
+                          backgroundColor: AppColors.whiteColor, // Button color
                           side: BorderSide(color: color), // Border color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -852,7 +852,7 @@ class _CollectionWiseProductScreenState
                           Navigator.pop(context); // Close the bottom sheet
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: AppColors.whiteColor, // Button color
+                          backgroundColor: AppColors.whiteColor, // Button color
                           side: BorderSide(color: color), // Border color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(

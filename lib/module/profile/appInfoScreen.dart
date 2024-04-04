@@ -107,7 +107,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.buttonColor,
+                            backgroundColor: AppColors.buttonColor,
                           ),
                           onPressed: () {
                             ref.refresh(userDataProvider);

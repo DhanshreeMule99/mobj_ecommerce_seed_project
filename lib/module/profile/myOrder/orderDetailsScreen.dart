@@ -273,7 +273,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                   error != AppString.noDataError
                       ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.buttonColor,
+                            backgroundColor: AppColors.buttonColor,
                           ),
                           onPressed: () {
                             ref.refresh(orderDataProvider);
@@ -300,7 +300,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: appInfo.primaryColorValue,
+                          backgroundColor: appInfo.primaryColorValue,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   AppDimension.buttonRadius)),
@@ -329,7 +329,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: appInfo.primaryColorValue,
+                          backgroundColor: appInfo.primaryColorValue,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   AppDimension.buttonRadius)),

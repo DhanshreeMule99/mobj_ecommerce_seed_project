@@ -121,7 +121,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                     ),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: AppColors.buttonColor,
+                                        backgroundColor: AppColors.buttonColor,
                                       ),
                                       onPressed: () {
                                         ref.refresh(userDataProvider);

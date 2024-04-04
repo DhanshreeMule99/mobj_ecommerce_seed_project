@@ -162,7 +162,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: AppColors.buttonColor,
+                                backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
                                 ref.refresh(productDetailsProvider(widget.uid));
@@ -930,7 +930,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                primary: selectedVariant != null
+                backgroundColor: selectedVariant != null
                     ? selectedVariant.inventoryQuantity > 0
                         ? appInfo.primaryColorValue
                         : AppColors.greyShade200
@@ -1184,7 +1184,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: AppColors.green,
+                                        backgroundColor: AppColors.green,
                                         // minimumSize: const Size.fromHeight(50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
@@ -1384,7 +1384,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: AppColors.green,
+                                  backgroundColor: AppColors.green,
                                   // minimumSize: const Size.fromHeight(50),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
@@ -1448,7 +1448,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: AppColors.green,
+                    backgroundColor: AppColors.green,
                     // minimumSize: const Size.fromHeight(50),
                     shape: RoundedRectangleBorder(
                         borderRadius:

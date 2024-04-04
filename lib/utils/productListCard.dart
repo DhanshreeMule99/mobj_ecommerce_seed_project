@@ -272,7 +272,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: widget.tileColor,
+                              backgroundColor: widget.tileColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
                               textStyle: const TextStyle(

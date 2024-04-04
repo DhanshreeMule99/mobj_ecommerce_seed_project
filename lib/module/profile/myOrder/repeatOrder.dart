@@ -581,7 +581,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      primary: appInfo.primaryColorValue,
+                                      backgroundColor: appInfo.primaryColorValue,
                                       minimumSize: const Size.fromHeight(50),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -628,7 +628,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                   error != AppString.noDataError
                       ? ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: AppColors.buttonColor,
+                      backgroundColor: AppColors.buttonColor,
                     ),
                     onPressed: () {
                       ref.refresh(cartDetailsDataProvider);
