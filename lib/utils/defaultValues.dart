@@ -1,11 +1,13 @@
 // defaultValues
+import 'package:mobj_project/utils/appConfiguer.dart';
+
 import '../models/shopifyModel/product/productModel.dart';
 
 class DefaultValues {
   static int defaultId = 0;
-  static String defaultTitle = "";
+  static String defaultTitle = "Varients";
   static String defaultBodyHtml = "";
-  static String defaultVendor = "";
+  static String defaultVendor = AppConfigure.appName;
   static String defaultProductType = "";
   static String defaultCreatedAt = "";
   static String defaultHandle = "";

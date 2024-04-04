@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:mobj_project/models/bigcommerceModel/constants/bigAPIConstants.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
@@ -12,21 +13,32 @@ class ProductRepository {
 
   Future<List<ProductModel>> getProducts() async {
     try {
+      log('calling api');
       final response = await ApiManager.get(AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.product);
+
+      // final response = await ApiManager.get(
+      //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+
       if (response.statusCode == APIConstants.successCode) {
-        final List result = jsonDecode(response.body)['products'];
+        final List result = AppConfigure.bigCommerce == true
+            ? jsonDecode(response.body)['data']
+            : jsonDecode(response.body)['products'];
+
         return result.map((e) => ProductModel.fromJson(e)).toList();
       } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+        log("empty data here");
         throw (AppString.noDataError);
       } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+        log("empty data here unauthorized");
         throw AppString.unAuthorized;
       } else {
         return empty;
       }
-    } catch (error) {
+    } catch (error, stackTrace) {
+      log("error is this $error $stackTrace");
       throw error;
     }
   }

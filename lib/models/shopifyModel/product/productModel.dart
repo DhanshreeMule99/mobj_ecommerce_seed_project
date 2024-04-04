@@ -1,3 +1,4 @@
+import 'package:mobj_project/utils/appConfiguer.dart';
 import 'package:mobj_project/utils/defaultValues.dart';
 
 class ProductModel {
@@ -43,38 +44,70 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'] ?? DefaultValues.defaultId,
+      id: AppConfigure.bigCommerce == true
+          ? json['id']
+          : json['id'] ?? DefaultValues.defaultId,
       // Default value for id
-      title: json['title'] ?? DefaultValues.defaultTitle,
+      title: AppConfigure.bigCommerce == true
+          ? json['name']
+          : json['title'] ?? DefaultValues.defaultTitle,
       // Default value for title
-      bodyHtml: json['body_html'] ?? DefaultValues.defaultBodyHtml,
-      vendor: json['vendor'] ?? DefaultValues.defaultVendor,
-      productType: json['product_type'] ?? DefaultValues.defaultProductType,
-      createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
-      handle: json['handle'] ?? DefaultValues.defaultHandle,
-      updatedAt: json['updated_at'] ?? DefaultValues.defaultUpdatedAt,
-      publishedAt: json['published_at'] ?? DefaultValues.defaultPublishedAt,
-      templateSuffix:
-          json['template_suffix'] ?? DefaultValues.defaultTemplateSuffix,
-      publishedScope:
-          json['published_scope'] ?? DefaultValues.defaultPublishedScope,
-      tags: json['tags'] ?? DefaultValues.defaultTags,
-      status: json['status'] ?? DefaultValues.defaultStatus,
-      adminGraphqlApiId: json['admin_graphql_api_id'] ??
-          DefaultValues.defaultAdminGraphqlApiId,
+      bodyHtml: AppConfigure.bigCommerce == true
+          ? json['description']
+          : json['body_html'] ?? DefaultValues.defaultBodyHtml,
+      vendor: AppConfigure.bigCommerce == true
+          ? DefaultValues.defaultVendor
+          : json['vendor'] ?? DefaultValues.defaultVendor,
+      productType: AppConfigure.bigCommerce == true
+          ? json['type']
+          : json['product_type'] ?? DefaultValues.defaultProductType,
+      createdAt: AppConfigure.bigCommerce == true
+          ? json['date_created']
+          : json['created_at'] ?? DefaultValues.defaultCreatedAt,
+      handle: AppConfigure.bigCommerce == true
+          ? json['name']
+          : json['handle'] ?? DefaultValues.defaultHandle,
+      updatedAt: AppConfigure.bigCommerce == true
+          ? json['date_modified']
+          : json['updated_at'] ?? DefaultValues.defaultUpdatedAt,
+      publishedAt: AppConfigure.bigCommerce == true
+          ? json['date_created']
+          : json['published_at'] ?? DefaultValues.defaultPublishedAt,
+      templateSuffix: AppConfigure.bigCommerce == true
+          ? DefaultValues.defaultTemplateSuffix
+          : json['template_suffix'] ?? DefaultValues.defaultTemplateSuffix,
+      publishedScope: AppConfigure.bigCommerce == true
+          ? DefaultValues.defaultPublishedScope
+          : json['published_scope'] ?? DefaultValues.defaultPublishedScope,
+      tags: AppConfigure.bigCommerce == true
+          ? DefaultValues.defaultTags
+          : json['tags'] ?? DefaultValues.defaultTags,
+      status: AppConfigure.bigCommerce == true
+          ? json['is_visible'].toString()
+          : json['status'] ?? DefaultValues.defaultStatus,
+      adminGraphqlApiId: AppConfigure.bigCommerce == true
+          ? json['custom_url']['url']
+          : json['admin_graphql_api_id'] ??
+              DefaultValues.defaultAdminGraphqlApiId,
       variants: (json['variants'] as List<dynamic>?)
-          ?.map((variantJson) => ProductVariant.fromJson(variantJson as Map<String, dynamic>))
-          .toList() ??
+              ?.map((variantJson) =>
+                  ProductVariant.fromJson(variantJson as Map<String, dynamic>))
+              .toList() ??
           DefaultValues.defaultVariants,
       options: (json['options'] as List<dynamic>?)
-          ?.map((optionJson) => ProductOption.fromJson(optionJson as Map<String, dynamic>))
-          .toList() ??
+              ?.map((optionJson) =>
+                  ProductOption.fromJson(optionJson as Map<String, dynamic>))
+              .toList() ??
           DefaultValues.defaultOptions,
       images: (json['images'] as List<dynamic>?)
-          ?.map((imageJson) => ProductImage.fromJson(imageJson as Map<String, dynamic>))
-          .toList() ??
+              ?.map((imageJson) =>
+                  ProductImage.fromJson(imageJson as Map<String, dynamic>))
+              .toList() ??
           DefaultValues.defaultImages,
-      image: ProductImage.fromJson(json['image'] as Map<String, dynamic>? ?? {}),
+      image: AppConfigure.bigCommerce == true
+          ? ProductImage.fromJson(
+              json['images'][0] as Map<String, dynamic>? ?? {})
+          : ProductImage.fromJson(json['image'] as Map<String, dynamic>? ?? {}),
     );
   }
 }
@@ -98,7 +131,7 @@ class ProductVariant {
   final bool taxable;
   final String barcode;
   final int grams;
-  final int imageId;
+  final String imageId;
   final double weight;
   final String weightUnit;
   final int inventoryItemId;
@@ -141,18 +174,31 @@ class ProductVariant {
       id: json['id'] ?? DefaultValues.defaultId,
       productId: json['product_id'] ?? DefaultValues.defaultProductId,
       title: json['title'] ?? DefaultValues.defaultTitle,
-      price: json['price'] ?? DefaultValues.defaultPrice,
-      sku: json['sku'] ?? DefaultValues.defaultSku,
+      price: AppConfigure.bigCommerce == true
+          ? json['calculated_price'].toString()
+          : json['price'] ?? DefaultValues.defaultPrice,
+      sku: AppConfigure.bigCommerce == true
+          ? json['sku_id'].toString()
+          : json['sku'] ?? DefaultValues.defaultSku,
       position: json['position'] ?? DefaultValues.defaultPosition,
       inventoryPolicy:
           json['inventory_policy'] ?? DefaultValues.defaultInventoryPolicy,
-      compareAtPrice:
-          json['compare_at_price'] ?? DefaultValues.defaultCompareAtPrice,
-      fulfillmentService: json['fulfillment_service'] ??
-          DefaultValues.defaultFulfillmentService,
-      inventoryManagement: json['inventory_management'] ??
-          DefaultValues.defaultInventoryManagement,
-      option1: json['option1'] ?? DefaultValues.defaultOption1,
+      compareAtPrice: AppConfigure.bigCommerce == true
+          ? json['retail_price'].toString() ??
+              DefaultValues.defaultCompareAtPrice
+          : json['compare_at_price'] ?? DefaultValues.defaultCompareAtPrice,
+      fulfillmentService: AppConfigure.bigCommerce == true
+          ? ""
+          : json['fulfillment_service'] ??
+              DefaultValues.defaultFulfillmentService,
+      inventoryManagement: AppConfigure.bigCommerce == true
+          ? ""
+          : json['inventory_management'] ??
+              DefaultValues.defaultInventoryManagement,
+      option1: AppConfigure.bigCommerce == true
+          ? DefaultValues.defaultOption1
+          // json['option_values'][0]['label'] ?? DefaultValues.defaultOption1
+          : json['option1'] ?? DefaultValues.defaultOption1,
       option2: json['option2'] ?? DefaultValues.defaultOption2,
       option3: json['option3'] ?? DefaultValues.defaultOption3,
       createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
@@ -160,19 +206,28 @@ class ProductVariant {
       taxable: json['taxable'] ?? DefaultValues.defaultTaxable,
       barcode: json['barcode'] ?? DefaultValues.defaultBarcode,
       grams: json['grams'] ?? DefaultValues.defaultGrams,
-      imageId: json['image_id'] ?? DefaultValues.defaultImageId,
-      weight: json['weight'] ?? DefaultValues.defaultWeight,
+      imageId: AppConfigure.bigCommerce == true
+          ? json['image_url']
+          : json['image_id'].toString() ??
+              DefaultValues.defaultImageId.toString(),
+      weight: json['weight'] == null
+          ? DefaultValues.defaultWeight
+          : json['weight'].toDouble(),
       weightUnit: json['weight_unit'] ?? DefaultValues.defaultWeightUnit,
       inventoryItemId:
           json['inventory_item_id'] ?? DefaultValues.defaultInventoryItemId,
-      inventoryQuantity:
-          json['inventory_quantity'] ?? DefaultValues.defaultInventoryQuantity,
+      inventoryQuantity: AppConfigure.bigCommerce == true
+          ? json['inventory_level']
+          : json['inventory_quantity'] ??
+              DefaultValues.defaultInventoryQuantity,
       oldInventoryQuantity: json['old_inventory_quantity'] ??
           DefaultValues.defaultOldInventoryQuantity,
       requiresShipping:
           json['requires_shipping'] ?? DefaultValues.defaultRequiresShipping,
-      adminGraphqlApiId: json['admin_graphql_api_id'] ??
-          DefaultValues.defaultAdminGraphqlApiId,
+      adminGraphqlApiId: AppConfigure.bigCommerce == true
+          ? json['sku']
+          : json['admin_graphql_api_id'] ??
+              DefaultValues.defaultAdminGraphqlApiId,
     );
   }
 }
@@ -198,10 +253,14 @@ class ProductOption {
       productId: json['product_id'] ?? DefaultValues.defaultOptionProductId,
       name: json['name'] ?? DefaultValues.defaultOptionName,
       position: json['position'] ?? DefaultValues.defaultOptionPosition,
-      values: (json['values'] as List<dynamic>?)
-              ?.map((value) => value.toString())
-              .toList() ??
-          DefaultValues.defaultOptionValues,
+      values: AppConfigure.bigCommerce == true
+          ? (json['option_values'] as List<dynamic>)
+              .map((optionValue) => optionValue['label'] as String)
+              .toList()
+          : (json['values'] as List<dynamic>?)
+                  ?.map((value) => value.toString())
+                  .toList() ??
+              DefaultValues.defaultOptionValues,
     );
   }
 }
@@ -243,7 +302,9 @@ class ProductImage {
       alt: json['alt'] ?? DefaultValues.defaultImagesAlt,
       width: json['width'] ?? DefaultValues.defaultImagesWidth,
       height: json['height'] ?? DefaultValues.defaultImagesHeight,
-      src: json['src'] ?? DefaultValues.defaultImagesSrc,
+      src: AppConfigure.bigCommerce == true
+          ? json['url_thumbnail']
+          : json['src'] ?? DefaultValues.defaultImagesSrc,
       variantIds: (json['variant_ids'] as List<dynamic>?)
               ?.map((id) => id as int)
               .toList() ??

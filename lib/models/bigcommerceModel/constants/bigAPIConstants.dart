@@ -1,6 +1,4 @@
-import 'package:mobj_project/utils/appConfiguer.dart';
-
-class APIConstants {
+class BigCommerceAPIConstants {
   static const successCode = 200;
   static const successCreateCode = 201;
   static const unAuthorizedCode = 401;
@@ -10,16 +8,13 @@ class APIConstants {
   static const conflictCode = 409;
   static const alreadyExistCode = 422;
   static const internalServerErrorCode = 500;
-  static const signUp = "login";
-  static const forgotPassword = "forgotpassword";
+  static const catalog = "/catalog";
+  static const products = "/products";
   static const signIn = "/api/2023-10/graphql.json";
   static const device = "devices";
-  static const apiURL =
-      AppConfigure.bigCommerce == true ? bigCommercecatalog : "api/2023-10/";
-  static const apiForAdminURL =
-      AppConfigure.bigCommerce == true ? "" : "admin/";
-  static const product =
-      AppConfigure.bigCommerce == true ? bigCommerceproducts : "products.json";
+  static const apiURL = "api/2023-10/";
+  static const apiForAdminURL = "admin/";
+  static const product = "products.json";
   static const graphQL = "${apiURL}graphql.json";
   static const productDetails = "products";
   static const collection = "collections.json";
@@ -38,9 +33,4 @@ class APIConstants {
   static const variants = "variants";
   static const reviewProduct = "reviews";
   static const ratingProduct = "rating";
-
-  //Big Commerce catalog
-  static const bigCommercecatalog = "/catalog";
-  static const bigCommerceproducts =
-      "/products?include=images,variants,options";
 }

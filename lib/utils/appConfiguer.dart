@@ -1,10 +1,12 @@
+//// shopify configureation
 class AppConfigure {
   static const appName = "P.Y.Vaidya";
   static const primaryColor = "#0000FF";
   static const secondaryColor = "#ADD8E6";
   static const logoImagePath =
       "https://www.creativefabrica.com/wp-content/uploads/2019/03/Monogram-PY-Logo-Design-by-Greenlines-Studios-580x386.jpg";
-  static const baseUrl = "https://b8507f-9a.myshopify.com/";
+  static const baseUrl =
+      bigCommerce == true ? bigcommerceUrl : "https://b8507f-9a.myshopify.com/";
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
   static const aboutApp =
@@ -29,4 +31,10 @@ class AppConfigure {
       "sk_c836fc6ec10cf04f52e45906d988fb62fad9d0d361f3bfda8a13408761e22d77";
   static const pickUpAddressLongitude = 73.841940;
   static const pickUpAddressLatitude = 18.516040;
+
+  ////bigcommerce urls
+  static const bigCommerce = true;
+  static const bigcommerceUrl =
+      'https://api.bigcommerce.com/stores/05vrtqkend/v3';
+  static const bigCommerceAccessToken = 'ik5es3nwfm8pfhaywhdqlu8t2tw345z';
 }
