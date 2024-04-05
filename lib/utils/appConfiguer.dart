@@ -36,5 +36,5 @@ class AppConfigure {
   static const bigCommerce = true;
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/05vrtqkend/v3';
-  static const bigCommerceAccessToken = 'ik5es3nwfm8pfhaywhdqlu8t2tw345z';
+  static const bigCommerceAccessToken = '5kjgmsu7t6t3rp2xpuakb3oqzkkueiv';
 }

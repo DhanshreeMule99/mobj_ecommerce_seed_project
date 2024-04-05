@@ -67,18 +67,29 @@ class ProductRepository {
 
   Future<ProductModel> getProductInfo(String pid) async {
     try {
-      String BASE_URL = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL;
-      final response = await ApiManager.get(
-          "$BASE_URL${APIConstants.productDetails}/$pid.json");
+      String BASE_URL = AppConfigure.bigCommerce == true
+          ? AppConfigure.baseUrl +
+              APIConstants.apiForAdminURL +
+              APIConstants.apiURL
+          : AppConfigure.baseUrl +
+              APIConstants.apiForAdminURL +
+              APIConstants.apiURL;
+      log(BASE_URL + pid);
+      final response = AppConfigure.bigCommerce == true
+          ? await ApiManager.get(
+              "$BASE_URL/products/$pid?include=images,variants,options,images")
+          : await ApiManager.get(
+              "$BASE_URL${APIConstants.productDetails}/$pid.json");
       if (response.statusCode == APIConstants.successCode) {
-        final userData = json.decode(response.body)['product'];
+        final userData = AppConfigure.bigCommerce == true
+            ? jsonDecode(response.body)['data']
+            : jsonDecode(response.body)['product'];
         return ProductModel.fromJson(userData);
       } else {
         throw (AppString.noDataError);
       }
-    } catch (error) {
+    } catch (error, stackTrace) {
+      print("$error + $stackTrace");
       throw error;
     }
   }

@@ -43,4 +43,5 @@ class APIConstants {
   static const bigCommercecatalog = "/catalog";
   static const bigCommerceproducts =
       "/products?include=images,variants,options";
+  //images&page=1&limit=20  for pagination
 }

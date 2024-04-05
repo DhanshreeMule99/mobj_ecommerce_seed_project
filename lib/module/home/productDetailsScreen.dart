@@ -189,7 +189,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       WidgetRef ref,
       AsyncValue<AppInfo> appInfoAsyncValue,
       AsyncValue<List<RecommendedProductModel>> product,
-       AsyncValue<ReviewProductModels> ratingProduct,
+      AsyncValue<ReviewProductModels> ratingProduct,
       AsyncValue<ProductRatingModel> productRating) {
     return SingleChildScrollView(
         child: appInfoAsyncValue.when(
@@ -199,93 +199,197 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           SizedBox(
             height: 15,
           ),
-          selectedVariant != null &&
-                  selectedVariant != DefaultValues.defaultVariants
-              ? selectedVariant.imageId != DefaultValues.defaultImageId
-                  ? Column(
-                      children: productModel.images.map(
-                        (images) {
-                          return images.id == selectedVariant.imageId
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 0, right: 0, top: 0),
-                                  child: Center(
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              try {
-                                                return ImageDialog(
-                                                  imageUrl: selectedVariant !=
-                                                          null
-                                                      ? images.id ==
-                                                              selectedVariant
-                                                                  .imageId
-                                                          ? images.src
-                                                          : productModel
-                                                              .image.src
-                                                      : productModel.image.src,
-                                                );
-                                              } catch (e) {
-                                                return Container();
-                                              }
-                                            },
-                                          );
-                                        },
-                                        child: CachedNetworkImage(
-                                          imageUrl: selectedVariant != null
-                                              ? images.id ==
-                                                      selectedVariant.imageId
-                                                  ? images.src
-                                                  : productModel.image.src
-                                              : productModel.image.src,
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                3,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                //image size fill
-                                                image: imageProvider,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                3,
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            color: AppColors.whiteColor,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height /
-                                                      3,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  color: AppColors.whiteColor),
-                                        )),
-                                  ),
-                                )
-                              : Container();
+          AppConfigure.bigCommerce == true
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+                  child: Center(
+                    child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              try {
+                                return ImageDialog(
+                                  imageUrl: productModel.image.src,
+                                );
+                              } catch (e) {
+                                return Container();
+                              }
+                            },
+                          );
                         },
-                      ).toList(), // Convert Iterable<Padding> to List<Widget>
-                    )
+                        child: CachedNetworkImage(
+                          imageUrl: productModel.image.src,
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                //image size fill
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => Container(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width,
+                            color: AppColors.whiteColor,
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                              height: MediaQuery.of(context).size.height / 3,
+                              width: MediaQuery.of(context).size.width,
+                              color: AppColors.whiteColor),
+                        )),
+                  ),
+                )
+              : selectedVariant != null &&
+                      selectedVariant != DefaultValues.defaultVariants
+                  ? selectedVariant.imageId != DefaultValues.defaultImageId
+                      ? Column(
+                          children: productModel.images.map(
+                            (images) {
+                              return images.id == selectedVariant.imageId
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0, right: 0, top: 0),
+                                      child: Center(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  try {
+                                                    return ImageDialog(
+                                                      imageUrl: selectedVariant !=
+                                                              null
+                                                          ? images.id ==
+                                                                  selectedVariant
+                                                                      .imageId
+                                                              ? images.src
+                                                              : productModel
+                                                                  .image.src
+                                                          : productModel
+                                                              .image.src,
+                                                    );
+                                                  } catch (e) {
+                                                    return Container();
+                                                  }
+                                                },
+                                              );
+                                            },
+                                            child: CachedNetworkImage(
+                                              imageUrl: selectedVariant != null
+                                                  ? images.id ==
+                                                          selectedVariant
+                                                              .imageId
+                                                      ? images.src
+                                                      : productModel.image.src
+                                                  : productModel.image.src,
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    3,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    //image size fill
+                                                    image: imageProvider,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    3,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                color: AppColors.whiteColor,
+                                              ),
+                                              errorWidget:
+                                                  (context, url,
+                                                          error) =>
+                                                      Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              3,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          color: AppColors
+                                                              .whiteColor),
+                                            )),
+                                      ),
+                                    )
+                                  : Container();
+                            },
+                          ).toList(), // Convert Iterable<Padding> to List<Widget>
+                        )
+                      : Padding(
+                          padding:
+                              const EdgeInsets.only(left: 0, right: 0, top: 0),
+                          child: Center(
+                            child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      try {
+                                        return ImageDialog(
+                                          imageUrl: productModel.image.src,
+                                        );
+                                      } catch (e) {
+                                        return Container();
+                                      }
+                                    },
+                                  );
+                                },
+                                child: CachedNetworkImage(
+                                  imageUrl: productModel.image.src,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 3,
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        //image size fill
+                                        image: imageProvider,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 3,
+                                    width: MediaQuery.of(context).size.width,
+                                    color: AppColors.whiteColor,
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              3,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          color: AppColors.whiteColor),
+                                )),
+                          ),
+                        )
                   : Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
                       child: Center(
@@ -330,50 +434,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                   color: AppColors.whiteColor),
                             )),
                       ),
-                    )
-              : Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
-                  child: Center(
-                    child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              try {
-                                return ImageDialog(
-                                  imageUrl: productModel.image.src,
-                                );
-                              } catch (e) {
-                                return Container();
-                              }
-                            },
-                          );
-                        },
-                        child: CachedNetworkImage(
-                          imageUrl: productModel.image.src,
-                          imageBuilder: (context, imageProvider) => Container(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                //image size fill
-                                image: imageProvider,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => Container(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width,
-                            color: AppColors.whiteColor,
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                              height: MediaQuery.of(context).size.height / 3,
-                              width: MediaQuery.of(context).size.width,
-                              color: AppColors.whiteColor),
-                        )),
-                  ),
-                ),
+                    ),
           const SizedBox(height: 15),
 
           Text(
@@ -1278,7 +1339,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                             width: 3,
                                                           ),
                                                           Text(
-                                                              product.reviews[index]
+                                                              product
+                                                                  .reviews[
+                                                                      index]
                                                                   .rating
                                                                   .toString(),
                                                               style: TextStyle(
@@ -1299,8 +1362,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                  product.reviews[index]
-                                                      .title
+                                                  product.reviews[index].title
                                                       .toString(),
                                                   style: TextStyle(
                                                     fontSize: 0.04 *
@@ -1315,8 +1377,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             padding: const EdgeInsets.only(
                                                 top: 5, left: 3, bottom: 5),
                                             child: Text(
-                                                product.reviews[index]
-                                                    .body
+                                                product.reviews[index].body
                                                     .toString(),
                                                 style: TextStyle(
                                                   fontSize: 0.04 *
@@ -1522,8 +1583,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
     );
   }
 
-  void showReviewsBottomSheet(BuildContext context,
-      AsyncValue<ReviewProductModels> ratingProduct) {
+  void showReviewsBottomSheet(
+      BuildContext context, AsyncValue<ReviewProductModels> ratingProduct) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1631,7 +1692,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                                 width: 3,
                                                               ),
                                                               Text(
-                                                                  product.reviews[
+                                                                  product
+                                                                      .reviews[
                                                                           index]
                                                                       .rating
                                                                       .toString(),
@@ -1653,8 +1715,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                     width: 5,
                                                   ),
                                                   Text(
-                                                        product.reviews[index]
-                                                          .title
+                                                      product
+                                                          .reviews[index].title
                                                           .toString(),
                                                       style: TextStyle(
                                                         fontSize: 0.04 *
@@ -1666,13 +1728,14 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                             FontWeight.w700,
                                                       )),
                                                 ])),
-                                          product.reviews[index].body.toString() != ""
+                                        product.reviews[index].body
+                                                    .toString() !=
+                                                ""
                                             ? Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5, left: 3, bottom: 5),
                                                 child: Text(
-                                                    product.reviews[index]
-                                                        .body
+                                                    product.reviews[index].body
                                                         .toString(),
                                                     style: TextStyle(
                                                       fontSize: 0.04 *

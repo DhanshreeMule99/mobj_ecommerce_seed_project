@@ -131,7 +131,7 @@ class ProductVariant {
   final bool taxable;
   final String barcode;
   final int grams;
-  final String imageId;
+  var imageId;
   final double weight;
   final String weightUnit;
   final int inventoryItemId;
@@ -208,8 +208,7 @@ class ProductVariant {
       grams: json['grams'] ?? DefaultValues.defaultGrams,
       imageId: AppConfigure.bigCommerce == true
           ? json['image_url']
-          : json['image_id'].toString() ??
-              DefaultValues.defaultImageId.toString(),
+          : json['image_id'] ?? DefaultValues.defaultImageId,
       weight: json['weight'] == null
           ? DefaultValues.defaultWeight
           : json['weight'].toDouble(),
