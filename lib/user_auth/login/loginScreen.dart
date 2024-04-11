@@ -2,7 +2,7 @@
 
 // import 'package:flutter/material.dart';
 import 'dart:developer';
-
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,226 +34,226 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool loadingSignup = false;
 
-  Future<void> _handleSignIn() async {
-    setState(() {
-      loadingSignup = true;
-    });
-    loadingSignup == true
-        ? showDialog<bool>(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                  content: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(width: 20.0),
-                  Text(AppLocalizations.of(context)!.pleaseWait),
-                ],
-              ));
-            },
-          )
-        : null;
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        final UserCredential authResult =
-            await _auth.signInWithCredential(credential);
-        final User? user = authResult.user;
-        if (user != null) {
-          final body = {
-            "email": user.email,
-            "isSocialLogin": true,
-            "socialLoginType": AppString.google,
-            "token": googleAuth.idToken
-          };
-          final login = LoginRepository();
-          login.signIn(body).then((value) async {
-            await SharedPreferenceManager()
-                .setGoogleToken(googleAuth.idToken.toString());
-            Navigator.pop(context);
-            if (value.runtimeType != String) {
-              setState(() {
-                error = "";
-                loadingSignup = false;
-              });
-              Fluttertoast.showToast(
-                  msg: value["message"].toString(),
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 0,
-                  backgroundColor: AppColors.green,
-                  textColor: AppColors.whiteColor,
-                  fontSize: 16.0);
-              DeviceRepository().deviceInfo(value['data']["_id"]);
+  // Future<void> _handleSignIn() async {
+  //   setState(() {
+  //     loadingSignup = true;
+  //   });
+  //   loadingSignup == true
+  //       ? showDialog<bool>(
+  //           context: context,
+  //           builder: (BuildContext context) {
+  //             return AlertDialog(
+  //                 content: Row(
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 CircularProgressIndicator(),
+  //                 SizedBox(width: 20.0),
+  //                 Text(AppLocalizations.of(context)!.pleaseWait),
+  //               ],
+  //             ));
+  //           },
+  //         )
+  //       : null;
+  //   try {
+  //     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+  //     if (googleUser != null) {
+  //       final GoogleSignInAuthentication googleAuth =
+  //           await googleUser.authentication;
+  //       final AuthCredential credential = GoogleAuthProvider.credential(
+  //         accessToken: googleAuth.accessToken,
+  //         idToken: googleAuth.idToken,
+  //       );
+  //       final UserCredential authResult =
+  //           await _auth.signInWithCredential(credential);
+  //       final User? user = authResult.user;
+  //       if (user != null) {
+  //         final body = {
+  //           "email": user.email,
+  //           "isSocialLogin": true,
+  //           "socialLoginType": AppString.google,
+  //           "token": googleAuth.idToken
+  //         };
+  //         final login = LoginRepository();
+  //         login.signIn(body).then((value) async {
+  //           await SharedPreferenceManager()
+  //               .setGoogleToken(googleAuth.idToken.toString());
+  //           Navigator.pop(context);
+  //           if (value.runtimeType != String) {
+  //             setState(() {
+  //               error = "";
+  //               loadingSignup = false;
+  //             });
+  //             Fluttertoast.showToast(
+  //                 msg: value["message"].toString(),
+  //                 toastLength: Toast.LENGTH_SHORT,
+  //                 gravity: ToastGravity.BOTTOM,
+  //                 timeInSecForIosWeb: 0,
+  //                 backgroundColor: AppColors.green,
+  //                 textColor: AppColors.whiteColor,
+  //                 fontSize: 16.0);
+  //             DeviceRepository().deviceInfo(value['data']["_id"]);
 
-              await SharedPreferenceManager()
-                  .setToken(value['data']["token"].toString());
-              await SharedPreferenceManager()
-                  .setUserId(value['data']['_id'].toString());
-              Navigator.of(context).pushAndRemoveUntil(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        const HomeScreen(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                  (route) => route.isCurrent);
-            } else if (value == "2") {
-              setState(() {
-                error = AppLocalizations.of(context)!.userNotFound;
-                loadingSignup = false;
-              });
-            } else if (value == "3") {
-              setState(() {
-                error = AppLocalizations.of(context)!.checkInternet;
-                isLoading = false;
-              });
-            } else if (value == "4") {
-              setState(() {
-                error = AppLocalizations.of(context)!.userNotRegister;
-                loadingSignup = false;
-              });
-            } else {
-              setState(() {
-                error = value;
-                loadingSignup = false;
-              });
-            }
-            // if (widget.logout == null) {
-            //   Navigator.of(context).push(PageRouteBuilder(
-            //     pageBuilder: (context, animation1, animation2) =>
-            //         Login_volunteer_otp_screen(
-            //           mob_or_email: mob_or_email,
-            //           mob_or_email_value: mob_or_email_value,
-            //         ),
-            //     transitionDuration: Duration.zero,
-            //     reverseTransitionDuration: Duration.zero,
-            //   ));
-            // } else {
-            //   Navigator.of(context).push(PageRouteBuilder(
-            //     pageBuilder: (context, animation1, animation2) =>
-            //         Login_volunteer_otp_screen(
-            //             mob_or_email: mob_or_email,
-            //             mob_or_email_value: mob_or_email_value,
-            //             logout: widget.logout),
-            //     transitionDuration: Duration.zero,
-            //     reverseTransitionDuration: Duration.zero,
-            //   ));
-            // }
-          });
-          // Navigator.of(context).pushReplacement(MaterialPageRoute(
-          //   builder: (context) => HomePage(user: user),
-          // ));
-        } else {
-          setState(() {
-            loadingSignup = false;
-          });
-          Navigator.pop(context);
-        }
-      }
-    } catch (error) {
-      setState(() {
-        loadingSignup = false;
-      });
-      Navigator.pop(context);
+  //             await SharedPreferenceManager()
+  //                 .setToken(value['data']["token"].toString());
+  //             await SharedPreferenceManager()
+  //                 .setUserId(value['data']['_id'].toString());
+  //             Navigator.of(context).pushAndRemoveUntil(
+  //                 PageRouteBuilder(
+  //                   pageBuilder: (context, animation1, animation2) =>
+  //                       const HomeScreen(),
+  //                   transitionDuration: Duration.zero,
+  //                   reverseTransitionDuration: Duration.zero,
+  //                 ),
+  //                 (route) => route.isCurrent);
+  //           } else if (value == "2") {
+  //             setState(() {
+  //               error = AppLocalizations.of(context)!.userNotFound;
+  //               loadingSignup = false;
+  //             });
+  //           } else if (value == "3") {
+  //             setState(() {
+  //               error = AppLocalizations.of(context)!.checkInternet;
+  //               isLoading = false;
+  //             });
+  //           } else if (value == "4") {
+  //             setState(() {
+  //               error = AppLocalizations.of(context)!.userNotRegister;
+  //               loadingSignup = false;
+  //             });
+  //           } else {
+  //             setState(() {
+  //               error = value;
+  //               loadingSignup = false;
+  //             });
+  //           }
+  //           // if (widget.logout == null) {
+  //           //   Navigator.of(context).push(PageRouteBuilder(
+  //           //     pageBuilder: (context, animation1, animation2) =>
+  //           //         Login_volunteer_otp_screen(
+  //           //           mob_or_email: mob_or_email,
+  //           //           mob_or_email_value: mob_or_email_value,
+  //           //         ),
+  //           //     transitionDuration: Duration.zero,
+  //           //     reverseTransitionDuration: Duration.zero,
+  //           //   ));
+  //           // } else {
+  //           //   Navigator.of(context).push(PageRouteBuilder(
+  //           //     pageBuilder: (context, animation1, animation2) =>
+  //           //         Login_volunteer_otp_screen(
+  //           //             mob_or_email: mob_or_email,
+  //           //             mob_or_email_value: mob_or_email_value,
+  //           //             logout: widget.logout),
+  //           //     transitionDuration: Duration.zero,
+  //           //     reverseTransitionDuration: Duration.zero,
+  //           //   ));
+  //           // }
+  //         });
+  //         // Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //         //   builder: (context) => HomePage(user: user),
+  //         // ));
+  //       } else {
+  //         setState(() {
+  //           loadingSignup = false;
+  //         });
+  //         Navigator.pop(context);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     setState(() {
+  //       loadingSignup = false;
+  //     });
+  //     Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("${AppString.googleSignupError}: $error"),
-        ),
-      );
-    }
-  }
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text("${AppString.googleSignupError}: $error"),
+  //       ),
+  //     );u
+  //   }
+  // }
 
-  signUp() async {
-    setState(() {
-      isLoading = true;
-    });
-    final body = {"email": email.text.trim(), "password": pass.text.trim()};
+  // signUp() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   final body = {"email": email.text.trim(), "password": pass.text.trim()};
 
-    final login = LoginRepository();
-    login.signIn(body).then((value) async {
-      if (value.runtimeType != String) {
-        setState(() {
-          error = "";
-          isLoading = false;
-        });
-        Fluttertoast.showToast(
-            msg: value["message"].toString(),
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 0,
-            backgroundColor: AppColors.green,
-            textColor: AppColors.whiteColor,
-            fontSize: 16.0);
-        await SharedPreferenceManager()
-            .setToken(value['data']["token"].toString());
-        await SharedPreferenceManager()
-            .setUserId(value['data']['_id'].toString());
-        ref.refresh(addressDataProvider);
-        ref.refresh(orderDataProvider);
-        ref.refresh(profileDataProvider);
+  //   final login = LoginRepository();
+  //   login.signIn(body).then((value) async {
+  //     if (value.runtimeType != String) {
+  //       setState(() {
+  //         error = "";
+  //         isLoading = false;
+  //       });
+  //       Fluttertoast.showToast(
+  //           msg: value["message"].toString(),
+  //           toastLength: Toast.LENGTH_SHORT,
+  //           gravity: ToastGravity.BOTTOM,
+  //           timeInSecForIosWeb: 0,
+  //           backgroundColor: AppColors.green,
+  //           textColor: AppColors.whiteColor,
+  //           fontSize: 16.0);
+  //       await SharedPreferenceManager()
+  //           .setToken(value['data']["token"].toString());
+  //       await SharedPreferenceManager()
+  //           .setUserId(value['data']['_id'].toString());
+  //       ref.refresh(addressDataProvider);
+  //       ref.refresh(orderDataProvider);
+  //       ref.refresh(profileDataProvider);
 
-        Navigator.of(context).pushAndRemoveUntil(
-            PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) =>
-                  const HomeScreen(),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            ),
-            (route) => route.isCurrent);
-      } else if (value == "2") {
-        setState(() {
-          error = AppLocalizations.of(context)!.userNotRegister;
-          isLoading = false;
-        });
-      } else if (value == "3") {
-        setState(() {
-          error = AppLocalizations.of(context)!.checkInternet;
-          isLoading = false;
-        });
-      } else if (value == "4") {
-        setState(() {
-          error = AppLocalizations.of(context)!.invalidCred;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          error = value;
-          isLoading = false;
-        });
-      }
-      // if (widget.logout == null) {
-      //   Navigator.of(context).push(PageRouteBuilder(
-      //     pageBuilder: (context, animation1, animation2) =>
-      //         Login_volunteer_otp_screen(
-      //           mob_or_email: mob_or_email,
-      //           mob_or_email_value: mob_or_email_value,
-      //         ),
-      //     transitionDuration: Duration.zero,
-      //     reverseTransitionDuration: Duration.zero,
-      //   ));
-      // } else {
-      //   Navigator.of(context).push(PageRouteBuilder(
-      //     pageBuilder: (context, animation1, animation2) =>
-      //         Login_volunteer_otp_screen(
-      //             mob_or_email: mob_or_email,
-      //             mob_or_email_value: mob_or_email_value,
-      //             logout: widget.logout),
-      //     transitionDuration: Duration.zero,
-      //     reverseTransitionDuration: Duration.zero,
-      //   ));
-      // }
-    });
-  }
+  //       Navigator.of(context).pushAndRemoveUntil(
+  //           PageRouteBuilder(
+  //             pageBuilder: (context, animation1, animation2) =>
+  //                 const HomeScreen(),
+  //             transitionDuration: Duration.zero,
+  //             reverseTransitionDuration: Duration.zero,
+  //           ),
+  //           (route) => route.isCurrent);
+  //     } else if (value == "2") {
+  //       setState(() {
+  //         error = AppLocalizations.of(context)!.userNotRegister;
+  //         isLoading = false;
+  //       });
+  //     } else if (value == "3") {
+  //       setState(() {
+  //         error = AppLocalizations.of(context)!.checkInternet;
+  //         isLoading = false;
+  //       });
+  //     } else if (value == "4") {
+  //       setState(() {
+  //         error = AppLocalizations.of(context)!.invalidCred;
+  //         isLoading = false;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         error = value;
+  //         isLoading = false;
+  //       });
+  //     }
+  //     // if (widget.logout == null) {
+  //     //   Navigator.of(context).push(PageRouteBuilder(
+  //     //     pageBuilder: (context, animation1, animation2) =>
+  //     //         Login_volunteer_otp_screen(
+  //     //           mob_or_email: mob_or_email,
+  //     //           mob_or_email_value: mob_or_email_value,
+  //     //         ),
+  //     //     transitionDuration: Duration.zero,
+  //     //     reverseTransitionDuration: Duration.zero,
+  //     //   ));
+  //     // } else {
+  //     //   Navigator.of(context).push(PageRouteBuilder(
+  //     //     pageBuilder: (context, animation1, animation2) =>
+  //     //         Login_volunteer_otp_screen(
+  //     //             mob_or_email: mob_or_email,
+  //     //             mob_or_email_value: mob_or_email_value,
+  //     //             logout: widget.logout),
+  //     //     transitionDuration: Duration.zero,
+  //     //     reverseTransitionDuration: Duration.zero,
+  //     //   ));
+  //     // }
+  //   });
+  // }
 
   void _toggleObscured() {
     setState(() {
@@ -350,62 +350,262 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-    GraphQLClient client = graphQLConfig.clientToQuery();
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      QueryResult result = await client.query(QueryOptions(
-        fetchPolicy: FetchPolicy.noCache,
-        document: gql('''
-        mutation SignInWithEmailAndPassword(\$email: String!, \$password: String!) {
-          customerAccessTokenCreate(input: { email: \$email, password: \$password }) {
-            customerAccessToken {
-              accessToken
-              expiresAt
-            }
-            customerUserErrors {
-              code
-              message
-            }
-          }
-        }
-      '''),
-        variables: {"email": email.text.trim(), "password": pass.text.trim()},
-      ));
 
-      if (result.hasException) {
+
+  // Future<void> _signInWithEmailAndPassword(BuildContext context) async {
+  //   GraphQLClient client = graphQLConfig.clientToQuery();
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   try {
+  //     QueryResult result = await client.query(QueryOptions(
+  //       fetchPolicy: FetchPolicy.noCache,
+  //       document: gql('''
+  //       mutation SignInWithEmailAndPassword(\$email: String!, \$password: String!) {
+  //         customerAccessTokenCreate(input: { email: \$email, password: \$password }) {
+  //           customerAccessToken {
+  //             accessToken
+  //             expiresAt
+  //           }
+  //           customerUserErrors {
+  //             code
+  //             message
+  //           }
+  //         }
+  //       }
+  //     '''),
+  //       variables: {"email": email.text.trim(), "password": pass.text.trim()},
+  //     ));
+
+  //     if (result.hasException) {
+  //       setState(() {
+  //         error = AppLocalizations.of(context)!.oops;
+  //         isLoading = false;
+  //       });
+  //     } else {
+  //       if (result.data?["customerAccessTokenCreate"] != null &&
+  //           result.data?["customerAccessTokenCreate"]['customerAccessToken'] !=
+  //               null) {
+  //         getCustomerDetails(result.data!["customerAccessTokenCreate"]
+  //                 ['customerAccessToken']['accessToken']
+  //             .toString());
+  //       } else {
+  //         setState(() {
+  //           error = AppLocalizations.of(context)!.invalidCred;
+  //           isLoading = false;
+  //         });
+  //       }
+
+  //       // if (res == null || res.isEmpty) {
+  //       //   return [];
+  //       // }
+  //     }
+  //   } catch (errors) {
+  //     // return [];
+  //     setState(() {
+  //       error = AppLocalizations.of(context)!.oops;
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
+
+
+
+
+  Future<void> _signInWithEmailAndPassword(BuildContext context) async {
+     if (AppConfigure.bigCommerce) {
+    // Login with BigCommerce
+     String bigCommerceUrl = AppConfigure.bigcommerceUrl;
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final response = await http.post(
+        Uri.parse('$bigCommerceUrl/customers/validate-credentials'),
+        headers: <String, String>{
+            "Content-Type": "application/json",
+          "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
+        },
+        body: jsonEncode(<String, String>{
+          'email': email.text.trim(),
+          'password': pass.text.trim(),
+        }),
+      );
+      print('BigCommerce Response: ${response.body}');
+      if (response.statusCode == 200) {
+    
+        if (response.body != null) { 
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          if (responseData['is_valid'] == true) {
+         
+  await SharedPreferenceManager().setUserId(responseData['customer_id'].toString().replaceAll("gid://shopify/Customer/", ""));
+            await SharedPreferenceManager().setToken(AppConfigure.bigCommerceAccessToken);
+            ref.refresh(addressDataProvider);
+            ref.refresh(orderDataProvider);
+            ref.refresh(profileDataProvider);
+            Fluttertoast.showToast(
+                msg: AppLocalizations.of(context)!.loginSuccess,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 0,
+                backgroundColor: AppColors.green,
+                textColor: AppColors.whiteColor,
+                fontSize: 16.0);
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const HomeScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (route) => route.isCurrent);
+
+            
+          } else {
+            // Failure, show error message
+            setState(() {
+              error = responseData['message'];
+              isLoading = false;
+            });
+          }
+        } else {
+          // If body is null, show error message
+          setState(() {
+            error = 'Error: Empty response body';
+            isLoading = false;
+          });
+        }
+      } else {
+        // If the server did not return a 200 OK response, show error message
         setState(() {
           error = AppLocalizations.of(context)!.oops;
           isLoading = false;
         });
-      } else {
-        if (result.data?["customerAccessTokenCreate"] != null &&
-            result.data?["customerAccessTokenCreate"]['customerAccessToken'] !=
-                null) {
-          getCustomerDetails(result.data!["customerAccessTokenCreate"]
-                  ['customerAccessToken']['accessToken']
-              .toString());
-        } else {
-          setState(() {
-            error = AppLocalizations.of(context)!.invalidCred;
-            isLoading = false;
-          });
-        }
-
-        // if (res == null || res.isEmpty) {
-        //   return [];
-        // }
       }
-    } catch (errors) {
-      // return [];
-      setState(() {
-        error = AppLocalizations.of(context)!.oops;
-        isLoading = false;
-      });
+    }  catch (e) {
+      // Exception occurred, show error message
+      print('Error occurred: $e');
     }
   }
+
+
+
+
+
+//  if (AppConfigure.bigCommerce) {
+//     // Login with BigCommerce
+//     String bigCommerceUrl = AppConfigure.bigcommerceUrl;
+//     try {
+//       setState(() {
+//         isLoading = true;
+//       });
+//       final response = await http.post(
+//         Uri.parse('$bigCommerceUrl/customers/validate-credentials'),
+//         headers: <String, String>{
+//           "Content-Type": "application/json",
+//           "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
+//         },
+//         body: jsonEncode(<String, String>{
+//           'email': email.text.trim(),
+//           'password': pass.text.trim(),
+//         }),
+//       );
+//       print('BigCommerce Response: ${response.body}');
+//       if (response.statusCode == 200) {
+//         // If the server returns a 200 OK response, parse the JSON.
+//         final Map<String, dynamic> responseData = json.decode(response.body);
+//         final bool? isValid = responseData['is_valid'];
+//         if (isValid != null && isValid) {
+//           // Success, continue with customer details retrieval
+//           final String? customerId = responseData['customer_id']?.toString();
+//           if (customerId != null) {
+//             getCustomerDetails(customerId);
+//           } else {
+//             // Customer ID is null or not a string, handle error
+//             setState(() {
+//               error = 'Error: Customer ID is null or invalid';
+//               isLoading = false;
+//             });
+//           }
+//         } else {
+//           // Failure, show error message
+//            setState(() {
+//           error = AppLocalizations.of(context)!.oops;
+//           isLoading = false;
+//         });
+//         }
+//       } else {
+//         // If the server did not return a 200 OK response, show error message
+//         setState(() {
+//           error = AppLocalizations.of(context)!.oops;
+//           isLoading = false;
+//         });
+//       }
+//     } catch (e) {
+//       // Exception occurred, show error message
+//       print('Error occurred: $e');
+//       setState(() {
+//         error = 'An error occurred: $e';
+//         isLoading = false;
+//       });
+//     }
+//   }
+
+  else {
+      // Login with Shopify (existing code)
+      GraphQLClient client = graphQLConfig.clientToQuery();
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        QueryResult result = await client.query(QueryOptions(
+          fetchPolicy: FetchPolicy.noCache,
+          document: gql('''
+          mutation SignInWithEmailAndPassword(\$email: String!, \$password: String!) {
+            customerAccessTokenCreate(input: { email: \$email, password: \$password }) {
+              customerAccessToken {
+                accessToken
+                expiresAt
+              }
+              customerUserErrors {
+                code
+                message
+              }
+            }
+          }
+        '''),
+          variables: {"email": email.text.trim(), "password": pass.text.trim()},
+        ));
+
+        if (result.hasException) {
+          setState(() {
+            error = AppLocalizations.of(context)!.oops;
+            isLoading = false;
+          });
+        } else {
+          if (result.data?["customerAccessTokenCreate"] != null &&
+              result.data?["customerAccessTokenCreate"]['customerAccessToken'] !=
+                  null) {
+            getCustomerDetails(result.data!["customerAccessTokenCreate"]
+                    ['customerAccessToken']['accessToken']
+                .toString());
+          } else {
+            setState(() {
+              error = AppLocalizations.of(context)!.invalidCred;
+              isLoading = false;
+            });
+          }
+        }
+      } catch (errors) {
+        setState(() {
+          error = AppLocalizations.of(context)!.oops;
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

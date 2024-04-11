@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
@@ -27,62 +28,194 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
   }
 
   logout() async {
-    GraphQLClient client = graphQLConfig.clientToQuery();
-    final token = await SharedPreferenceManager().getToken();
 
-    try {
-      final MutationOptions options = MutationOptions(
-        document: gql('''
-        mutation DeleteAccessToken(\$customerAccessToken: String!) {
-          customerAccessTokenDelete(customerAccessToken: \$customerAccessToken) {
-            deletedAccessToken
-          }
-        }
-      '''),
-        variables: {
-          "customerAccessToken": token,
-        },
-      );
+     if (AppConfigure.bigCommerce) {
+      // Logout with BigCommerce
 
-      final QueryResult result = await client.mutate(options);
 
-      if (result.hasException) {
-        Navigator.of(context).pop();
-        Fluttertoast.showToast(
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
+  Navigator.of(context).pop();
+  navigatorKey.currentState!.pushNamedAndRemoveUntil(
+    RouteConstants.login,
+    (route) => false,
+  );
+
+
+
+      // try {
+      //   final response = await http.post(
+      //     Uri.parse('${AppConfigure.bigcommerceUrl}/customers/logout'),
+      //     headers: <String, String>{
+      //       "Content-Type": "application/json",
+      //       "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
+      //     },
+      //   );
+
+      //   if (response.statusCode == 204) {
+      //     SharedPreferences prefs = await SharedPreferences.getInstance();
+      //     prefs.clear();
+      //     Navigator.of(context).pop();
+      //     navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      //       RouteConstants.login,
+      //       (route) => false,
+      //     );
+      //   } else {
+      //     Fluttertoast.showToast(
+      //       msg: 'Logout failed. Please try again. 1234',
+      //       toastLength: Toast.LENGTH_SHORT,
+      //       gravity: ToastGravity.BOTTOM,
+      //       timeInSecForIosWeb: 0,
+      //       backgroundColor: AppColors.blackColor,
+      //       textColor: AppColors.whiteColor,
+      //       fontSize: 16.0,
+      //     );
+      //   }
+      // } catch (e) {
+      //   Fluttertoast.showToast(
+      //     msg: 'Logout failed. Please try again.',
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 0,
+      //     backgroundColor: AppColors.blackColor,
+      //     textColor: AppColors.whiteColor,
+      //     fontSize: 16.0,
+      //   );
+      // }
+
+      
+    } else {
+      // Logout with Shopify (existing code)
+      GraphQLClient client = graphQLConfig.clientToQuery();
+      final token = await SharedPreferenceManager().getToken();
+
+      try {
+        final MutationOptions options = MutationOptions(
+          document: gql('''
+            mutation DeleteAccessToken(\$customerAccessToken: String!) {
+              customerAccessTokenDelete(customerAccessToken: \$customerAccessToken) {
+                deletedAccessToken
+              }
+            }
+          '''),
+          variables: {
+            "customerAccessToken": token,
+          },
+        );
+
+        final QueryResult result = await client.mutate(options);
+
+        if (result.hasException) {
+          Navigator.of(context).pop();
+          Fluttertoast.showToast(
             msg: AppLocalizations.of(context)!.oops,
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 0,
             backgroundColor: AppColors.blackColor,
             textColor: AppColors.whiteColor,
-            fontSize: 16.0);
-        print(
-            'Failed to delete access token. Exception: ${result.exception.toString()}');
-      } else {
-        final deletedAccessToken =
-            result.data?['customerAccessTokenDelete']['deletedAccessToken'];
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.clear();
-        Navigator.of(context).pop();
-        navigatorKey.currentState!.pushNamedAndRemoveUntil(
-          RouteConstants.login,
-          (route) => false,
-        );
-      }
-    } catch (errors) {
-      Fluttertoast.showToast(
+            fontSize: 16.0,
+          );
+          print(
+            'Failed to delete access token. Exception: ${result.exception.toString()}',
+          );
+        } else {
+          final deletedAccessToken = result.data?['customerAccessTokenDelete']
+              ['deletedAccessToken'];
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.clear();
+          Navigator.of(context).pop();
+          navigatorKey.currentState!.pushNamedAndRemoveUntil(
+            RouteConstants.login,
+            (route) => false,
+          );
+        }
+      } catch (errors) {
+        Fluttertoast.showToast(
           msg: AppLocalizations.of(context)!.oops,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 0,
           backgroundColor: AppColors.blackColor,
           textColor: AppColors.whiteColor,
-          fontSize: 16.0);
-      Navigator.of(context).pop();
+          fontSize: 16.0,
+        );
+        Navigator.of(context).pop();
+      }
     }
 
-    final login = LoginRepository();
+
+
+
+
+
+
+
+
+    // GraphQLClient client = graphQLConfig.clientToQuery();
+    // final token = await SharedPreferenceManager().getToken();
+
+    // try {
+    //   final MutationOptions options = MutationOptions(
+    //     document: gql('''
+    //     mutation DeleteAccessToken(\$customerAccessToken: String!) {
+    //       customerAccessTokenDelete(customerAccessToken: \$customerAccessToken) {
+    //         deletedAccessToken
+    //       }
+    //     }
+    //   '''),
+    //     variables: {
+    //       "customerAccessToken": token,
+    //     },
+    //   );
+
+    //   final QueryResult result = await client.mutate(options);
+
+    //   if (result.hasException) {
+    //     Navigator.of(context).pop();
+    //     Fluttertoast.showToast(
+    //         msg: AppLocalizations.of(context)!.oops,
+    //         toastLength: Toast.LENGTH_SHORT,
+    //         gravity: ToastGravity.BOTTOM,
+    //         timeInSecForIosWeb: 0,
+    //         backgroundColor: AppColors.blackColor,
+    //         textColor: AppColors.whiteColor,
+    //         fontSize: 16.0);
+    //     print(
+    //         'Failed to delete access token. Exception: ${result.exception.toString()}');
+    //   } else {
+    //     final deletedAccessToken =
+    //         result.data?['customerAccessTokenDelete']['deletedAccessToken'];
+    //     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //     prefs.clear();
+    //     Navigator.of(context).pop();
+    //     navigatorKey.currentState!.pushNamedAndRemoveUntil(
+    //       RouteConstants.login,
+    //       (route) => false,
+    //     );
+    //   }
+    // } catch (errors) {
+    //   Fluttertoast.showToast(
+    //       msg: AppLocalizations.of(context)!.oops,
+    //       toastLength: Toast.LENGTH_SHORT,
+    //       gravity: ToastGravity.BOTTOM,
+    //       timeInSecForIosWeb: 0,
+    //       backgroundColor: AppColors.blackColor,
+    //       textColor: AppColors.whiteColor,
+    //       fontSize: 16.0);
+    //   Navigator.of(context).pop();
+    // }
+
+    // final login = LoginRepository();
   }
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
