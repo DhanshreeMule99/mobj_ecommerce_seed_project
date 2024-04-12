@@ -462,18 +462,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
             
           } else {
+
+         
             // Failure, show error message
-            setState(() {
-              error = responseData['message'];
-              isLoading = false;
-            });
+           setState(() {
+          error = AppLocalizations.of(context)!.invalidCred;
+          isLoading = false;
+        });
           }
         } else {
           // If body is null, show error message
-          setState(() {
-            error = 'Error: Empty response body';
-            isLoading = false;
-          });
+           setState(() {
+          error = AppLocalizations.of(context)!.invalidCred;
+          isLoading = false;
+        });
         }
       } else {
         // If the server did not return a 200 OK response, show error message

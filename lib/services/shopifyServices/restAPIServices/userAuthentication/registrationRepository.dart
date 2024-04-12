@@ -21,20 +21,20 @@ class RegistrationRepository {
         //     },
         //     body: jsonEncode({"customer": body}));
         String query = '''
-    mutation RegisterAccount(
+             mutation RegisterAccount(
         \$email: String!, 
         \$password: String!,  
         \$firstName: String!, 
         \$lastName: String!, 
         \$acceptsMarketing: Boolean = false,
-    ) {
+         ) {
         customerCreate(input: {
             email: \$email, 
             password: \$password, 
             firstName: \$firstName, 
             lastName: \$lastName,
             acceptsMarketing: \$acceptsMarketing, 
-        }) {
+              }) {
             customer {
                 id
             }
@@ -42,9 +42,9 @@ class RegistrationRepository {
                 code
                 message
             }
-        }
-    }
-  ''';
+                }
+            }
+            ''';
         Map<String, dynamic> variables = body;
         // {
         //   'email': 'example@example.com',

@@ -307,7 +307,7 @@ signIn() async {
 
   log("this is data ${widget.isOtp} \n ${email.text} \n ${firstName.text}\n${lastName.text} \n${mobNo.text},\n${password.text}");
 
-  if (AppConfigure.bigCommerce == true) {
+   if (AppConfigure.bigCommerce == true) {
     final body = [
       {
         "email": email.text,
@@ -357,13 +357,45 @@ signIn() async {
             ),
           );
         // Optionally, you can navigate to another screen or perform any additional action here
+      } else if (response.statusCode == APIConstants.alreadyExistCode) {
+           setState(() {
+          loadingSignup = false;
+        });
+            Fluttertoast.showToast(
+            msg: "User Already Exist",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 0,
+            backgroundColor: AppColors.green,
+            textColor: AppColors.whiteColor,
+            fontSize: 16.0);
+          //   Navigator.of(context).pushReplacement(
+          //   PageRouteBuilder(
+          //     pageBuilder: (context, animation1, animation2) =>
+          //         const LoginScreen(),
+          //     transitionDuration: Duration.zero,
+          //     reverseTransitionDuration: Duration.zero,
+          //   ),
+          // );
       } else {
         setState(() {
           error = "Registration failed";
           loadingSignup = false;
         });
       }
-    } catch (error) {
+    }on DioException catch (error) {
+      if(error.response!.statusCode == APIConstants.alreadyExistCode){
+ Fluttertoast.showToast(
+            msg: "${error.response!.data["errors"]}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 0,
+            backgroundColor: AppColors.green,
+            textColor: AppColors.whiteColor,
+            fontSize: 16.0);
+
+      }
+      log("error: $error");
       setState(() {
         loadingSignup = false;
       });
