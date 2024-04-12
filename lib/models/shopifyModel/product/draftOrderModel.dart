@@ -1,4 +1,4 @@
-
+import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../../utils/defaultValues.dart';
 
@@ -25,7 +25,7 @@ class DraftOrderModel {
   final List<TaxLine> taxLines;
   final String tags;
   final List<NoteAttribute> noteAttributes;
-  late  double totalPrice;
+  late double totalPrice;
   final String subtotalPrice;
   final String totalTax;
   final String paymentTerms;
@@ -77,21 +77,26 @@ class DraftOrderModel {
       completedAt: json['completed_at'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       status: json['status'] ?? DefaultValues.defaultString,
-      lineItems: List<LineItem>.from(json['line_items'].map((item) => LineItem.fromJson(item))),
+      lineItems: List<LineItem>.from(
+          json['line_items'].map((item) => LineItem.fromJson(item))),
       shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
       billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
       invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
       appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
       shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
-      taxLines: List<TaxLine>.from(json['tax_lines'].map((item) => TaxLine.fromJson(item))),
+      taxLines: List<TaxLine>.from(
+          json['tax_lines'].map((item) => TaxLine.fromJson(item))),
       tags: json['tags'] ?? DefaultValues.defaultString,
-      noteAttributes: List<NoteAttribute>.from(json['note_attributes'].map((item) => NoteAttribute.fromJson(item))),
-      totalPrice: double.parse(json['total_price'].toString()) ?? DefaultValues.defaultDouble,
+      noteAttributes: List<NoteAttribute>.from(
+          json['note_attributes'].map((item) => NoteAttribute.fromJson(item))),
+      totalPrice: double.parse(json['total_price'].toString()) ??
+          DefaultValues.defaultDouble,
       subtotalPrice: json['subtotal_price'] ?? DefaultValues.defaultString,
       totalTax: json['total_tax'] ?? DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId: json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
+      adminGraphqlApiId:
+          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
       customer: CustomerModel.fromJson(json['customer']),
     );
   }
@@ -155,15 +160,18 @@ class LineItem {
       requiresShipping: json['requires_shipping'] ?? false,
       taxable: json['taxable'] ?? false,
       giftCard: json['gift_card'] ?? false,
-      fulfillmentService: json['fulfillment_service'] ?? DefaultValues.defaultString,
+      fulfillmentService:
+          json['fulfillment_service'] ?? DefaultValues.defaultString,
       grams: json['grams'] ?? DefaultValues.defaultInt,
-      taxLines: List<TaxLine>.from(json['tax_lines'].map((item) => TaxLine.fromJson(item))),
+      taxLines: List<TaxLine>.from(
+          json['tax_lines'].map((item) => TaxLine.fromJson(item))),
       appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       properties: List<dynamic>.from(json['properties'].map((item) => item)),
       custom: json['custom'] ?? false,
       price: json['price'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId: json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
+      adminGraphqlApiId:
+          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
     );
   }
 }
@@ -265,7 +273,8 @@ class CustomerModel {
       lastOrderName: json['last_order_name'] ?? DefaultValues.defaultString,
       currency: json['currency'] ?? DefaultValues.defaultString,
       phone: json['phone'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId: json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
+      adminGraphqlApiId:
+          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
     );
   }
 }
@@ -285,7 +294,8 @@ class EmailMarketingConsent {
     return EmailMarketingConsent(
       state: json['state'] ?? DefaultValues.defaultString,
       optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
-      consentUpdatedAt: json['consent_updated_at'] ?? DefaultValues.defaultString,
+      consentUpdatedAt:
+          json['consent_updated_at'] ?? DefaultValues.defaultString,
     );
   }
 }
@@ -307,8 +317,10 @@ class SmsMarketingConsent {
     return SmsMarketingConsent(
       state: json['state'] ?? DefaultValues.defaultString,
       optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
-      consentUpdatedAt: json['consent_updated_at'] ?? DefaultValues.defaultString,
-      consentCollectedFrom: json['consent_collected_from'] ?? DefaultValues.defaultString,
+      consentUpdatedAt:
+          json['consent_updated_at'] ?? DefaultValues.defaultString,
+      consentCollectedFrom:
+          json['consent_collected_from'] ?? DefaultValues.defaultString,
     );
   }
 }
@@ -356,14 +368,20 @@ class DefaultAddressModel {
       lastName: json['last_name'] ?? DefaultValues.defaultString,
       address1: json['address1'] ?? DefaultValues.defaultString,
       city: json['city'] ?? DefaultValues.defaultString,
-      province: json['province'] ?? DefaultValues.defaultString,
+      province: AppConfigure.bigCommerce
+          ? json['state_or_province'] ?? DefaultValues.defaultString
+          : json['province'] ?? DefaultValues.defaultString,
       country: json['country'] ?? DefaultValues.defaultString,
-      zip: json['zip'] ?? DefaultValues.defaultString,
+      zip: AppConfigure.bigCommerce
+          ? json['postal_code'] ?? DefaultValues.defaultString
+          : json['zip'] ?? DefaultValues.defaultString,
       phone: json['phone'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       provinceCode: json['province_code'] ?? DefaultValues.defaultString,
       countryCode: json['country_code'] ?? DefaultValues.defaultString,
-      countryName: json['country_name'] ?? DefaultValues.defaultString,
+      countryName: AppConfigure.bigCommerce
+          ? json['country'] ?? DefaultValues.defaultString
+          : json['country_name'] ?? DefaultValues.defaultString,
       defaultAddress: json['default'] ?? false,
     );
   }

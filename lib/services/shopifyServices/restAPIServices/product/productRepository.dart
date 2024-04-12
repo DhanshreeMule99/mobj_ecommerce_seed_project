@@ -351,6 +351,7 @@ class ProductRepository {
           }
         }
         var data = jsonDecode(response.body);
+        log('add to cart data is this $data');
 
         if (response.statusCode == APIConstants.successCode ||
             response.statusCode == APIConstants.successCreateCode) {

@@ -237,12 +237,42 @@ class _ProductListCardstate extends State<ProductListCard> {
                                   CommonAlert.show_loading_alert(context);
                                   log("varient id is this ${widget.variantId}");
                                   if (AppConfigure.bigCommerce) {
-                                    ProductRepository().addToCartBigcommerce(
-                                        widget.variantId,
-                                        '1',
-                                        widget.productName,
-                                        widget.productPrice.toString(),
-                                        widget.productId);
+                                    ProductRepository()
+                                        .addToCartBigcommerce(
+                                            widget.variantId,
+                                            '1',
+                                            widget.productName,
+                                            widget.productPrice.toString(),
+                                            widget.productId)
+                                        .then((value) async {
+                                      if (value == AppString.success) {
+                                        Navigator.of(context).pop();
+                                        widget.ref.refresh(productDataProvider);
+                                        widget.ref
+                                            .refresh(cartDetailsDataProvider);
+                                        widget.ref.refresh(
+                                            productDetailsProvider(
+                                                widget.productId));
+                                        Fluttertoast.showToast(
+                                            msg: AppString.addToCartSuccess,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 0,
+                                            backgroundColor: AppColors.green,
+                                            textColor: AppColors.whiteColor,
+                                            fontSize: 16.0);
+                                      } else {
+                                        Navigator.of(context).pop();
+                                        Fluttertoast.showToast(
+                                            msg: AppString.oops,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 0,
+                                            backgroundColor: AppColors.green,
+                                            textColor: AppColors.whiteColor,
+                                            fontSize: 16.0);
+                                      }
+                                    });
                                   } else {
                                     ProductRepository()
                                         .addToCart(widget.variantId, "1")

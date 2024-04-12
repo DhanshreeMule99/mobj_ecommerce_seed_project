@@ -12,26 +12,52 @@ class AddressRepository {
 
   Future<List<DefaultAddressModel>> getAddress() async {
     final uid = await SharedPreferenceManager().getUserId();
-    try {
-      final response =
-          await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
-      if (response.statusCode == APIConstants.successCode) {
-        log("body is this ${response.body} $uid");
-        final List result = jsonDecode(response.body)['addresses'];
-        if (result.isEmpty) {
+
+    if (AppConfigure.bigCommerce) {
+      try {
+        final response = await ApiManager.get(
+            "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?customer_id:in=$uid");
+        if (response.statusCode == APIConstants.successCode) {
+          log("body is this ${response.body} $uid");
+          final List result = jsonDecode(response.body)['data'];
+          log("body is this ${result} $uid");
+          if (result.isEmpty) {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
         } else {
-          return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+          return empty;
         }
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        throw AppString.unAuthorized;
-      } else {
-        return empty;
+      } catch (error) {
+        rethrow;
       }
-    } catch (error) {
-      rethrow;
+    } else {
+      try {
+        final response =
+            await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
+        if (response.statusCode == APIConstants.successCode) {
+          log("body is this ${response.body} $uid");
+          final List result = jsonDecode(response.body)['addresses'];
+          if (result.isEmpty) {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error) {
+        rethrow;
+      }
     }
   }
 

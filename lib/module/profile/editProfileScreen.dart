@@ -42,32 +42,33 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     editProfile() async {
-      ref.read(isLoading.notifier).state = true;
-      final body = {
-        "first_name": ref.read(fNameProvider),
-        "last_name": ref.read(lNameProvider),
-        // "email": ref.read(emailProvider),
-        "phone": ref.read(phoneProvider),
-      };
+      //ref.read(isLoading.notifier).state = true;
+      final uid = await SharedPreferenceManager().getUserId();
+      Map<String, dynamic> body = AppConfigure.bigCommerce
+          ? {
+              "first_name": ref.read(fNameProvider),
+              "last_name": ref.read(lNameProvider),
+              "company": "setooooo",
+              "phone": ref.read(phoneProvider),
+              "id": int.parse(uid)
+            }
+          : {
+              "first_name": ref.read(fNameProvider),
+              "last_name": ref.read(lNameProvider),
+              // "email": ref.read(emailProvider),
+              "phone": ref.read(phoneProvider),
+            };
 
       final register = UserRepository();
       register.editProfile(body).then((value) async {
         if (value != AppString.serverError) {
+          print('got in');
           if (value == AppString.checkInternet) {
             ref.read(isLoading.notifier).state = false;
             Fluttertoast.showToast(
                 msg: value,
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 0,
-                backgroundColor: AppColors.green,
-                textColor: AppColors.whiteColor,
-                fontSize: 16.0);
-          } else if (value['code'] == 2) {
-            ref.read(isLoading.notifier).state = false;
-            Fluttertoast.showToast(
-                msg: value['message'],
-                toastLength: Toast.LENGTH_SHORT,
                 timeInSecForIosWeb: 0,
                 backgroundColor: AppColors.green,
                 textColor: AppColors.whiteColor,
@@ -113,7 +114,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             appBar: AppBar(
               elevation: 2,
               // backgroundColor: app_colors.white_color,
-              title:  Text(
+              title: Text(
                 AppLocalizations.of(context)!.profile,
               ),
             ),
@@ -216,10 +217,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                             AutovalidateMode.onUserInteraction,
 
                                         decoration: InputDecoration(
-                                            label:  Row(
+                                            label: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text(AppLocalizations.of(context)!.firstName),
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .firstName),
                                                 Text(
                                                   '*',
                                                   style: TextStyle(
@@ -230,9 +233,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                             ),
                                             border: OutlineInputBorder(
                                                 //Outline border type for TextFeild
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(AppDimension
-                                                        .buttonRadius)),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(
+                                                            AppDimension
+                                                                .buttonRadius)),
                                                 borderSide: BorderSide(
                                                   color:
                                                       appInfo.primaryColorValue,
@@ -243,8 +248,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                                 //Outline border type for TextFeild
                                                 borderRadius:
                                                     const BorderRadius.all(
-                                                        Radius.circular(AppDimension
-                                                            .buttonRadius)),
+                                                        Radius.circular(
+                                                            AppDimension
+                                                                .buttonRadius)),
                                                 borderSide: BorderSide(
                                                   color:
                                                       appInfo.primaryColorValue,
@@ -285,10 +291,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                             AutovalidateMode.onUserInteraction,
 
                                         decoration: InputDecoration(
-                                            label:  Row(
+                                            label: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text(AppLocalizations.of(context)!.lastName),
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .lastName),
                                                 Text(
                                                   '*',
                                                   style: TextStyle(
@@ -299,9 +307,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                             ),
                                             border: OutlineInputBorder(
                                                 //Outline border type for TextFeild
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(AppDimension
-                                                        .buttonRadius)),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(
+                                                            AppDimension
+                                                                .buttonRadius)),
                                                 borderSide: BorderSide(
                                                   color:
                                                       appInfo.primaryColorValue,
@@ -312,8 +322,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                                 //Outline border type for TextFeild
                                                 borderRadius:
                                                     const BorderRadius.all(
-                                                        Radius.circular(AppDimension
-                                                            .buttonRadius)),
+                                                        Radius.circular(
+                                                            AppDimension
+                                                                .buttonRadius)),
                                                 borderSide: BorderSide(
                                                   color:
                                                       appInfo.primaryColorValue,
@@ -428,10 +439,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       AutovalidateMode.onUserInteraction,
                                   // autofocus: widget.autofocus,
                                   decoration: InputDecoration(
-                                      label:  Row(
+                                      label: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(AppLocalizations.of(context)!.mobileNo),
+                                          Text(AppLocalizations.of(context)!
+                                              .mobileNo),
                                           Text(
                                             '*',
                                             style: TextStyle(
@@ -519,7 +531,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 ),
                                 child: ref.watch(isLoading) == false
                                     ? Text(
-                                  AppLocalizations.of(context)!.updateProfile.toUpperCase(),
+                                        AppLocalizations.of(context)!
+                                            .updateProfile
+                                            .toUpperCase(),
                                         style: TextStyle(
                                             color: AppColors.whiteColor,
                                             fontSize: MediaQuery.of(context)

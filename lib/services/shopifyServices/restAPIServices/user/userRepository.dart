@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../../../models/shopifyModel/product/draftOrderModel.dart';
+import '../../../../utils/api.dart';
 
 class UserRepository {
   List<UserModel> empty = [];
@@ -86,32 +88,71 @@ class UserRepository {
   editProfile(Map<String, dynamic> body) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    String BASE_URL = AppConfigure.baseUrl +
-        APIConstants.apiForAdminURL +
-        APIConstants.apiURL +
-        APIConstants.customer;
+    log('getting 2');
+    API api = API();
+    if (AppConfigure.bigCommerce) {
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL +
+          APIConstants.customer;
 
-    var body1 = jsonEncode({"customer": body});
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await ApiManager.put("$BASE_URL$uid.json", body1);
-        var data = jsonDecode(response.body);
-        if (response.statusCode == APIConstants.successCode) {
-          return data;
-        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-          exceptionString = AppString.unAuthorized;
-          return exceptionString;
+      var body1 = jsonEncode({"customer": body});
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response = await api.sendRequest.put(
+            '/customers',
+            data: [body],
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),
+          );
+
+          if (response.statusCode == APIConstants.successCode) {
+            return response;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
         } else {
-          exceptionString = AppString.serverError;
+          var exceptionString = AppString.checkInternet;
           return exceptionString;
         }
-      } else {
-        var exceptionString = AppString.checkInternet;
+      } catch (error) {
+        exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } catch (error) {
-      exceptionString = AppString.serverError;
-      return exceptionString;
+    } else {
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL +
+          APIConstants.customer;
+
+      var body1 = jsonEncode({"customer": body});
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          final response = await ApiManager.put("$BASE_URL$uid.json", body1);
+          var data = jsonDecode(response.body);
+          if (response.statusCode == APIConstants.successCode) {
+            return data;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      } catch (error) {
+        exceptionString = AppString.serverError;
+        return exceptionString;
+      }
     }
   }
 }
