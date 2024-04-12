@@ -33,13 +33,14 @@ class ApiManager {
     final Uri url = Uri.parse(apiName);
     final String? token = (await getToken());
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
-    final headers = {
-      //'Authorization': 'Bearer $token',
-      "X-Shopify-Access-Token": token!,
-      "X-Shopify-Storefront-Access-Token": storeFrontToken,
-      'Content-Type': 'application/json',
-      "SECRET-KEY": AppConfigure.feraSecretKey
-    };
+    final headers = AppConfigure.bigCommerce == true
+        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        : {
+            'X-Shopify-Access-Token': '$token',
+            "X-Shopify-Storefront-Access-Token": storeFrontToken,
+            'Content-Type': 'application/json',
+            'SECRET-KEY': AppConfigure.feraSecretKey
+          };
     print("headers*******$headers");
     final response = await http.post(url,
         headers: headers, body: body.toString() != "{}" ? body : null);

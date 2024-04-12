@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../../../models/shopifyModel/product/draftOrderModel.dart';
@@ -26,22 +28,41 @@ class UserRepository {
   }
 
   Future<CustomerModel> getProfile() async {
-    try {
-      String BASE_URL = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL +
-          APIConstants.customer;
-      final uid = await SharedPreferenceManager().getUserId();
-      final response = await ApiManager.get(
-          "$BASE_URL$uid.json");
-      if (response.statusCode == APIConstants.successCode) {
-        final result = jsonDecode(response.body)['customer'];
-        return CustomerModel.fromJson(result);
-      } else {
-        throw Exception(response.reasonPhrase);
+    log('calling profile api');
+    if (AppConfigure.bigCommerce) {
+      log('calling bigcommerce profile api');
+      try {
+        String BASE_URL = AppConfigure.baseUrl;
+        final uid = await SharedPreferenceManager().getUserId();
+        final response = await ApiManager.get("$BASE_URL/customers?id:in=$uid");
+        if (response.statusCode == APIConstants.successCode) {
+          final result = jsonDecode(response.body)['data'][0];
+          log('result is this $result');
+          return CustomerModel.fromJson(result);
+        } else {
+          throw Exception(response.reasonPhrase);
+        }
+      } catch (error) {
+        log('profile data error is this $error');
+        throw error;
       }
-    } catch (error) {
-      throw error;
+    } else {
+      try {
+        String BASE_URL = AppConfigure.baseUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL +
+            APIConstants.customer;
+        final uid = await SharedPreferenceManager().getUserId();
+        final response = await ApiManager.get("$BASE_URL$uid.json");
+        if (response.statusCode == APIConstants.successCode) {
+          final result = jsonDecode(response.body)['customer'];
+          return CustomerModel.fromJson(result);
+        } else {
+          throw Exception(response.reasonPhrase);
+        }
+      } catch (error) {
+        throw error;
+      }
     }
   }
 
@@ -73,8 +94,7 @@ class UserRepository {
     var body1 = jsonEncode({"customer": body});
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await ApiManager.put(
-            "$BASE_URL$uid.json", body1);
+        final response = await ApiManager.put("$BASE_URL$uid.json", body1);
         var data = jsonDecode(response.body);
         if (response.statusCode == APIConstants.successCode) {
           return data;

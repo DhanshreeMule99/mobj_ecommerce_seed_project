@@ -218,6 +218,101 @@ class ProductRepository {
               value.toString() != AppString.noDataError) {
             if (value.lineItems.isNotEmpty) {
               final lineItemsList = value.lineItems;
+              log('values lineItemslist is this $lineItemsList');
+              for (int i = 0; i <= value.lineItems.length - 1; i++) {
+                decodedBody["draft_order"]["line_items"].add({
+                  "variant_id": lineItemsList[i].variantId,
+                  "quantity": lineItemsList[i].quantity
+                });
+              }
+              final lineItems = decodedBody['draft_order']['line_items'];
+              final uniqueVariants = {};
+              lineItems.forEach((item) {
+                int variantId = int.parse(item['variant_id'].toString());
+                int quantity = int.parse(item['quantity'].toString());
+                //
+                if (uniqueVariants.containsKey(variantId)) {
+                  // If the variant ID already exists, add the quantity
+                  uniqueVariants[variantId] =
+                      uniqueVariants[variantId]! + quantity;
+                } else {
+                  // If the variant ID is new, add it to the map
+                  uniqueVariants[variantId] = quantity;
+                }
+              });
+              // // Clear the original line items
+              lineItems.clear();
+              uniqueVariants.forEach((variantId, quantity) {
+                lineItems.add({
+                  'variant_id': variantId,
+                  'quantity': quantity,
+                });
+              });
+            }
+
+            body = jsonEncode(decodedBody);
+            response = await ApiManager.put(
+                "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json",
+                body);
+            log('add to cart response is this $response');
+          }
+        }
+        var data = jsonDecode(response.body);
+
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          if (draftId == "") {
+            await SharedPreferenceManager()
+                .setDraftId(data["draft_order"]["id"].toString());
+          }
+          return AppString.success;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+  }
+
+  addToCartBigcommerce(String variantId, String quantity, String name,
+      String price, String productId) async {
+    String exceptionString = "";
+    String uid = await SharedPreferenceManager().getUserId();
+    log('$uid $variantId');
+
+    var body = jsonEncode({
+      "customer_id": int.parse(uid),
+      "line_items": [
+        {
+          "quantity": int.parse(quantity),
+          "product_id": int.parse(productId),
+          "list_price": int.parse(price),
+          "name": name,
+          "variant_id": int.parse(variantId)
+        }
+      ],
+      "currency": {"code": "INR"},
+      "locale": "en-US"
+    });
+    var decodedBody = jsonDecode(body);
+    String BASE_URL = AppConfigure.baseUrl;
+    log(BASE_URL + '${APIConstants.draftProduct}');
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        String draftId = await SharedPreferenceManager().getDraftId();
+        log('darftId is this $draftId');
+        var response;
+        if (draftId == "") {
+          response = await ApiManager.post("$BASE_URL/carts", body);
+        } else {
+          var value = await getCartDetails(); // await the result here
+          if (value.toString() != AppString.error ||
+              value.toString() != AppString.noDataError) {
+            if (value.lineItems.isNotEmpty) {
+              final lineItemsList = value.lineItems;
               for (int i = 0; i <= value.lineItems.length - 1; i++) {
                 decodedBody["draft_order"]["line_items"].add({
                   "variant_id": lineItemsList[i].variantId,
@@ -261,7 +356,8 @@ class ProductRepository {
             response.statusCode == APIConstants.successCreateCode) {
           if (draftId == "") {
             await SharedPreferenceManager()
-                .setDraftId(data["draft_order"]["id"].toString());
+                .setDraftId(data["data"]["id"].toString());
+            log('cart id is this bigcommerce ${data["data"]["id"].toString()}');
           }
           return AppString.success;
         } else {
