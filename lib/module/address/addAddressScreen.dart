@@ -1,8 +1,7 @@
-import 'package:mobj_project/module/address/addressListScreen.dart';
-import 'package:mobj_project/module/paymentGatways/razorpay/paymentHandler.dart';
-import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// ignore_for_file: unused_result
 
+import 'package:mobj_project/module/address/addressListScreen.dart';
+import 'package:mobj_project/utils/cmsConfigue.dart';
 import '../../provider/addressProvider.dart';
 import '../../utils/currentLocations.dart';
 
@@ -306,7 +305,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Wrap(
                             children: [
                               ChoiceChip(
@@ -330,7 +329,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                   });
                                 },
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               ChoiceChip(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
@@ -352,7 +351,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                   });
                                 },
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               ChoiceChip(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
@@ -401,7 +400,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
                                         children: [
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           TextFormField(
@@ -456,7 +455,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                                     .phoneLabel),
                                             keyboardType: TextInputType.phone,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                         ],
@@ -505,7 +504,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                         ],
                                       )))),
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   top: 10, bottom: 10, right: 0),
                               child: Center(
                                   child: Text(
@@ -549,7 +548,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                     Expanded(
                                         child: Column(
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         TextFormField(
@@ -629,16 +628,16 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                             return null;
                                           },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                       ],
                                     )),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     )
                                   ]))),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           error != ""
@@ -651,7 +650,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                                 ))
                               : Container(),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(5, 35, 5, 10),
+                            padding: const EdgeInsets.fromLTRB(5, 35, 5, 10),
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate() &&
@@ -661,7 +660,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: appInfo.primaryColorValue,
-                                minimumSize: Size.fromHeight(50),
+                                minimumSize: const Size.fromHeight(50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         AppDimension.buttonRadius)),

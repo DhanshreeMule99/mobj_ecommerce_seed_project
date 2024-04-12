@@ -240,10 +240,10 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           selcted_icon_color: AppColors.buttonColor,
           unselcted_icon_color: AppColors.blackColor,
           selectedPage: 3,
-          screen1: AddressListScreen(),
-          screen2: SearchWidget(),
-          screen3: AddressListScreen(),
-          screen4: ProfileScreen(),
+          screen1: const AddressListScreen(),
+          screen2: const SearchWidget(),
+          screen3: const AddressListScreen(),
+          screen4: const ProfileScreen(),
           ref: ref,
         ),
         body: Column(children: [
@@ -274,7 +274,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                             child: Card(
                                 child: Column(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
@@ -398,13 +398,13 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                               ),
                                             );
                                           },
-                                          icon: Icon(Icons.edit),
+                                          icon: const Icon(Icons.edit),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -464,7 +464,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -494,7 +494,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -524,7 +524,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -622,7 +622,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                           backgroundColor: appInfo
                                                               .primaryColorValue,
                                                           minimumSize:
-                                                              Size.fromHeight(
+                                                              const Size.fromHeight(
                                                                   50),
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
@@ -655,7 +655,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                       .bold),
                                                         )))
                                                 : Container(),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 15,
                                             )
                                           ],
@@ -678,7 +678,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                   error != AppString.noDataError
                                       ? ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.buttonColor,
+                                            backgroundColor:
+                                                AppColors.buttonColor,
                                           ),
                                           onPressed: () {
                                             ref.refresh(
