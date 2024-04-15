@@ -308,47 +308,49 @@ class ProductRepository {
         if (draftId == "") {
           response = await ApiManager.post("$BASE_URL/carts", body);
         } else {
-          var value = await getCartDetails(); // await the result here
-          if (value.toString() != AppString.error ||
-              value.toString() != AppString.noDataError) {
-            if (value.lineItems.isNotEmpty) {
-              final lineItemsList = value.lineItems;
-              for (int i = 0; i <= value.lineItems.length - 1; i++) {
-                decodedBody["draft_order"]["line_items"].add({
-                  "variant_id": lineItemsList[i].variantId,
-                  "quantity": lineItemsList[i].quantity
-                });
-              }
-              final lineItems = decodedBody['draft_order']['line_items'];
-              final uniqueVariants = {};
-              lineItems.forEach((item) {
-                int variantId = int.parse(item['variant_id'].toString());
-                int quantity = int.parse(item['quantity'].toString());
-                //
-                if (uniqueVariants.containsKey(variantId)) {
-                  // If the variant ID already exists, add the quantity
-                  uniqueVariants[variantId] =
-                      uniqueVariants[variantId]! + quantity;
-                } else {
-                  // If the variant ID is new, add it to the map
-                  uniqueVariants[variantId] = quantity;
-                }
-              });
-              // // Clear the original line items
-              lineItems.clear();
-              uniqueVariants.forEach((variantId, quantity) {
-                lineItems.add({
-                  'variant_id': variantId,
-                  'quantity': quantity,
-                });
-              });
-            }
+          response =
+              await ApiManager.post("$BASE_URL/carts/$draftId/items", body);
+          // var value = await getCartDetails(); // await the result here
+          // if (value.toString() != AppString.error ||
+          //     value.toString() != AppString.noDataError) {
+          //   if (value.lineItems.isNotEmpty) {
+          //     final lineItemsList = value.lineItems;
+          //     for (int i = 0; i <= value.lineItems.length - 1; i++) {
+          //       decodedBody["draft_order"]["line_items"].add({
+          //         "variant_id": lineItemsList[i].variantId,
+          //         "quantity": lineItemsList[i].quantity
+          //       });
+          //     }
+          //     final lineItems = decodedBody['draft_order']['line_items'];
+          //     final uniqueVariants = {};
+          //     lineItems.forEach((item) {
+          //       int variantId = int.parse(item['variant_id'].toString());
+          //       int quantity = int.parse(item['quantity'].toString());
+          //       //
+          //       if (uniqueVariants.containsKey(variantId)) {
+          //         // If the variant ID already exists, add the quantity
+          //         uniqueVariants[variantId] =
+          //             uniqueVariants[variantId]! + quantity;
+          //       } else {
+          //         // If the variant ID is new, add it to the map
+          //         uniqueVariants[variantId] = quantity;
+          //       }
+          //     });
+          //     // // Clear the original line items
+          //     lineItems.clear();
+          //     uniqueVariants.forEach((variantId, quantity) {
+          //       lineItems.add({
+          //         'variant_id': variantId,
+          //         'quantity': quantity,
+          //       });
+          //     });
+          //   }
 
-            body = jsonEncode(decodedBody);
-            response = await ApiManager.put(
-                "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json",
-                body);
-          }
+          //   body = jsonEncode(decodedBody);
+          //   response = await ApiManager.put(
+          //       "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json",
+          //       body);
+          // }
         }
         var data = jsonDecode(response.body);
         log('add to cart data is this $data');
