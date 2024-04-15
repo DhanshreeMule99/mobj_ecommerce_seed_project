@@ -953,40 +953,81 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         variantId = variant.id;
                       });
 
-                      ProductRepository()
-                          .addToCart(
-                              variantId != null
-                                  ? variantId.toString()
-                                  : productModel.variants[0].id.toString(),
-                              quantity.toString())
-                          .then((value) async {
-                        Navigator.of(context).pop();
-                        if (value == AppString.success) {
-                          setState(() {
-                            error = "";
-                            isLoading = false;
-                          });
-                          ref.refresh(cartDetailsDataProvider);
-                          ref.refresh(productDetailsProvider(widget.uid));
-                          Fluttertoast.showToast(
-                              msg: AppLocalizations.of(context)!
-                                  .addToCartSuccess,
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 0,
-                              backgroundColor: AppColors.green,
-                              textColor: AppColors.whiteColor,
-                              fontSize: 16.0);
-                        } else {
-                          setState(() {
-                            error = AppLocalizations.of(context)!.oops;
-                            isLoading = false;
+                      if (AppConfigure.bigCommerce) {
+                        ProductRepository()
+                            .addToCartBigcommerce(
+                                variantId != null
+                                    ? variantId.toString()
+                                    : productModel.variants[0].id.toString(),
+                                quantity.toString(),
+                                productModel.title,
+                                selectedVariant != null
+                                    ? selectedVariant.price
+                                    : productModel.variants[0].price,
+                                productModel.id.toString())
+                            .then((value) async {
+                          if (value == AppString.success) {
+                            Navigator.of(context).pop();
+                            ref.refresh(cartDetailsDataProvider);
+                            ref.refresh(productDetailsProvider(widget.uid));
+                            Fluttertoast.showToast(
+                                msg: AppString.addToCartSuccess,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 0,
+                                backgroundColor: AppColors.green,
+                                textColor: AppColors.whiteColor,
+                                fontSize: 16.0);
+                          } else {
+                            Navigator.of(context).pop();
+                            Fluttertoast.showToast(
+                                msg: AppString.oops,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 0,
+                                backgroundColor: AppColors.green,
+                                textColor: AppColors.whiteColor,
+                                fontSize: 16.0);
+                          }
+                        });
+                      } else {
+                        {
+                          ProductRepository()
+                              .addToCart(
+                                  variantId != null
+                                      ? variantId.toString()
+                                      : productModel.variants[0].id.toString(),
+                                  quantity.toString())
+                              .then((value) async {
+                            Navigator.of(context).pop();
+                            if (value == AppString.success) {
+                              setState(() {
+                                error = "";
+                                isLoading = false;
+                              });
+                              ref.refresh(cartDetailsDataProvider);
+                              ref.refresh(productDetailsProvider(widget.uid));
+                              Fluttertoast.showToast(
+                                  msg: AppLocalizations.of(context)!
+                                      .addToCartSuccess,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 0,
+                                  backgroundColor: AppColors.green,
+                                  textColor: AppColors.whiteColor,
+                                  fontSize: 16.0);
+                            } else {
+                              setState(() {
+                                error = AppLocalizations.of(context)!.oops;
+                                isLoading = false;
+                              });
+                            }
                           });
                         }
-                      });
+                      }
+                    } else {
+                      CommonAlert.showAlertAndNavigateToLogin(context);
                     }
-                  } else {
-                    CommonAlert.showAlertAndNavigateToLogin(context);
                   }
                 });
               },
