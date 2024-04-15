@@ -38,7 +38,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           return Scaffold(
             appBar: AppBar(
                 elevation: 1,
-                title:  Text(
+                title: Text(
                   AppLocalizations.of(context)!.myBag,
                 )),
             bottomNavigationBar: MobjBottombar(
@@ -115,68 +115,71 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                         const EdgeInsets.only(
                                                             left: 5),
                                                     child: CachedNetworkImage(
-                                                      imageUrl: (ref.watch(
-                                                                  productImageDataProvider(
+                                                      imageUrl: AppConfigure
+                                                              .bigCommerce
+                                                          ? orderList
+                                                              .adminGraphqlApiId
+                                                          : (ref.watch(productImageDataProvider(
                                                                       orderList
                                                                           .productId
                                                                           .toString())))
-                                                              .when(
-                                                            data: (images) {
-                                                              if (images
-                                                                  .isNotEmpty) {
-                                                                // Find the image with the specified variant ID
-                                                                final selectedImage =
-                                                                    images
-                                                                        .firstWhere(
-                                                                  (image) => image
-                                                                      .variantIds
-                                                                      .contains(
-                                                                          orderList
-                                                                              .variantId),
-                                                                  orElse: () =>
-                                                                      ProductImage(
-                                                                    id: 0,
-                                                                    // Provide a default ID
-                                                                    alt:
-                                                                        "Default",
-                                                                    position: 0,
-                                                                    productId:
-                                                                        0,
-                                                                    createdAt: DateTime
-                                                                            .now()
-                                                                        .toString(),
-                                                                    // Provide a default creation time
-                                                                    updatedAt: DateTime
-                                                                            .now()
-                                                                        .toString(),
-                                                                    // Provide a default update time
-                                                                    adminGraphqlApiId:
-                                                                        "gid://shopify/ProductImage/0",
-                                                                    width: 0,
-                                                                    height: 0,
-                                                                    src: images[
-                                                                            0]
-                                                                        .src,
-                                                                    // Provide a default image URL
-                                                                    variantIds: [],
-                                                                  ),
-                                                                );
+                                                                  .when(
+                                                                data: (images) {
+                                                                  if (images
+                                                                      .isNotEmpty) {
+                                                                    // Find the image with the specified variant ID
+                                                                    final selectedImage =
+                                                                        images
+                                                                            .firstWhere(
+                                                                      (image) => image
+                                                                          .variantIds
+                                                                          .contains(
+                                                                              orderList.variantId),
+                                                                      orElse: () =>
+                                                                          ProductImage(
+                                                                        id: 0,
+                                                                        // Provide a default ID
+                                                                        alt:
+                                                                            "Default",
+                                                                        position:
+                                                                            0,
+                                                                        productId:
+                                                                            0,
+                                                                        createdAt:
+                                                                            DateTime.now().toString(),
+                                                                        // Provide a default creation time
+                                                                        updatedAt:
+                                                                            DateTime.now().toString(),
+                                                                        // Provide a default update time
+                                                                        adminGraphqlApiId:
+                                                                            "gid://shopify/ProductImage/0",
+                                                                        width:
+                                                                            0,
+                                                                        height:
+                                                                            0,
+                                                                        src: images[0]
+                                                                            .src,
+                                                                        // Provide a default image URL
+                                                                        variantIds: [],
+                                                                      ),
+                                                                    );
 
-                                                                return selectedImage
-                                                                    .src;
-                                                              }
-                                                              return DefaultValues
-                                                                  .defaultImagesSrc;
-                                                            },
-                                                            loading: () =>
-                                                                DefaultValues
-                                                                    .defaultImagesSrc,
-                                                            error: (_, __) =>
-                                                                DefaultValues
-                                                                    .defaultImagesSrc,
-                                                          ) ??
-                                                          DefaultValues
-                                                              .defaultImagesSrc,
+                                                                    return selectedImage
+                                                                        .src;
+                                                                  }
+                                                                  return DefaultValues
+                                                                      .defaultImagesSrc;
+                                                                },
+                                                                loading: () =>
+                                                                    DefaultValues
+                                                                        .defaultImagesSrc,
+                                                                error: (_,
+                                                                        __) =>
+                                                                    DefaultValues
+                                                                        .defaultImagesSrc,
+                                                              ) ??
+                                                              DefaultValues
+                                                                  .defaultImagesSrc,
                                                       placeholder:
                                                           (context, url) =>
                                                               Container(
@@ -401,10 +404,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                         icon: const Icon(
                                                             Icons.delete),
                                                         onPressed: () async {
-
                                                           CommonAlert
                                                               .show_loading_alert(
-                                                              context);
+                                                                  context);
                                                           if (productlist
                                                                   .lineItems
                                                                   .length ==
@@ -414,7 +416,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                             ref.refresh(
                                                                 cartDetailsDataProvider);
                                                             Navigator.of(
-                                                                context)
+                                                                    context)
                                                                 .pop();
                                                           } else {
                                                             setState(
@@ -484,16 +486,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment
-                                    .spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '${AppLocalizations.of(context)!.actualPrice}:',
                                     style: TextStyle(
                                       fontSize: 0.05 *
-                                          MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          MediaQuery.of(context).size.width,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -501,9 +500,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     '\u{20B9}${product.subtotalPrice}',
                                     style: TextStyle(
                                       fontSize: 0.05 *
-                                          MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          MediaQuery.of(context).size.width,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -559,48 +556,53 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   ),
                                 ],
                               ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.only(
-                                top: 25,
-                                left: 10,
-                                right: 10),
-                            child:ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (context, animation1, animation2) =>
-                                         AddressListScreen(
-                                          isCheckout: true,
-                                             amount: product.totalPrice.toInt()* 100,mobile:product.customer.phone.toString()
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 25, left: 10, right: 10),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
+                                              AddressListScreen(
+                                                  isCheckout: true,
+                                                  amount: product.totalPrice
+                                                          .toInt() *
+                                                      100,
+                                                  mobile: product.customer.phone
+                                                      .toString()),
+                                          transitionDuration: Duration.zero,
+                                          reverseTransitionDuration:
+                                              Duration.zero,
                                         ),
-                                        transitionDuration: Duration.zero,
-                                        reverseTransitionDuration:
-                                        Duration.zero,
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: appInfo.primaryColorValue,
-                                    minimumSize: const Size.fromHeight(50),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            AppDimension.buttonRadius)),
-                                    textStyle: const TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 10,
-                                        fontStyle: FontStyle.normal),
-                                  ),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.next.toUpperCase(),
-                                    style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                        fontWeight: FontWeight.bold),
-                                  )),),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          appInfo.primaryColorValue,
+                                      minimumSize: const Size.fromHeight(50),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                              AppDimension.buttonRadius)),
+                                      textStyle: const TextStyle(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 10,
+                                          fontStyle: FontStyle.normal),
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .next
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          color: AppColors.whiteColor,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
                               const SizedBox(height: 16),
                             ],
                           ),
@@ -634,7 +636,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           onPressed: () {
                             ref.refresh(cartDetailsDataProvider);
                           },
-                          child:  Text(
+                          child: Text(
                             AppLocalizations.of(context)!.refresh,
                             style: TextStyle(
                               fontSize: 16,

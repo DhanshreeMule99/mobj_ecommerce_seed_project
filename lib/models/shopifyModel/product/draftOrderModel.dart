@@ -3,7 +3,7 @@ import 'package:mobj_project/utils/appConfiguer.dart';
 import '../../../utils/defaultValues.dart';
 
 class DraftOrderModel {
-  final int id;
+  final dynamic id;
   final String note;
   final String email;
   final bool taxesIncluded;
@@ -65,45 +65,88 @@ class DraftOrderModel {
 
   factory DraftOrderModel.fromJson(Map<String, dynamic> json) {
     return DraftOrderModel(
-      id: json['id'] ?? DefaultValues.defaultInt,
+      id: AppConfigure.bigCommerce
+          ? json['id']
+          : json['id'] ?? DefaultValues.defaultInt,
       note: json['note'] ?? DefaultValues.defaultString,
       email: json['email'] ?? DefaultValues.defaultString,
       taxesIncluded: json['taxes_included'] ?? false,
-      currency: json['currency'] ?? DefaultValues.defaultString,
+      currency: AppConfigure.bigCommerce
+          ? json['currency']['code']
+          : json['currency'] ?? DefaultValues.defaultString,
       invoiceSentAt: json['invoice_sent_at'] ?? DefaultValues.defaultString,
-      createdAt: json['created_at'] ?? DefaultValues.defaultString,
-      updatedAt: json['updated_at'] ?? DefaultValues.defaultString,
+      createdAt: AppConfigure.bigCommerce
+          ? json['created_time']
+          : json['created_at'] ?? DefaultValues.defaultString,
+      updatedAt: AppConfigure.bigCommerce
+          ? json['updated_time']
+          : json['updated_at'] ?? DefaultValues.defaultString,
       taxExempt: json['tax_exempt'] ?? false,
-      completedAt: json['completed_at'] ?? DefaultValues.defaultString,
+      completedAt: AppConfigure.bigCommerce
+          ? json['updated_time']
+          : json['completed_at'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       status: json['status'] ?? DefaultValues.defaultString,
-      lineItems: List<LineItem>.from(
-          json['line_items'].map((item) => LineItem.fromJson(item))),
+      lineItems: AppConfigure.bigCommerce
+          ? List<LineItem>.from(json['line_items']['physical_items']
+              .map((item) => LineItem.fromJson(item)))
+          : List<LineItem>.from(
+              json['line_items'].map((item) => LineItem.fromJson(item))),
       shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
       billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
       invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
-      appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
+      appliedDiscount: AppConfigure.bigCommerce
+          ? json['discount_amount'].toString()
+          : json['applied_discount'] ?? DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
       shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
-      taxLines: List<TaxLine>.from(
-          json['tax_lines'].map((item) => TaxLine.fromJson(item))),
+      taxLines: AppConfigure.bigCommerce
+          ? [TaxLine(rate: 1.00, title: "title", price: "11.0")]
+          : List<TaxLine>.from(
+              json['tax_lines'].map((item) => TaxLine.fromJson(item))),
       tags: json['tags'] ?? DefaultValues.defaultString,
-      noteAttributes: List<NoteAttribute>.from(
-          json['note_attributes'].map((item) => NoteAttribute.fromJson(item))),
-      totalPrice: double.parse(json['total_price'].toString()) ??
-          DefaultValues.defaultDouble,
-      subtotalPrice: json['subtotal_price'] ?? DefaultValues.defaultString,
+      noteAttributes: AppConfigure.bigCommerce
+          ? []
+          : List<NoteAttribute>.from(json['note_attributes']
+              .map((item) => NoteAttribute.fromJson(item))),
+      totalPrice: AppConfigure.bigCommerce
+          ? double.parse(json['cart_amount'].toString())
+          : double.parse(json['total_price'].toString()) ??
+              DefaultValues.defaultDouble,
+      subtotalPrice: AppConfigure.bigCommerce
+          ? json['cart_amount'].toString()
+          : json['subtotal_price'] ?? DefaultValues.defaultString,
       totalTax: json['total_tax'] ?? DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
           json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
-      customer: CustomerModel.fromJson(json['customer']),
+      customer: AppConfigure.bigCommerce
+          ? CustomerModel(
+              id: 7,
+              email: 'cyberpunk7099@gmail.com',
+              acceptsMarketing: true,
+              createdAt: "createdAt",
+              updatedAt: "updatedAt",
+              firstName: "firstName",
+              lastName: "lastName",
+              ordersCount: 2,
+              state: "state",
+              totalSpent: "totalSpent",
+              lastOrderId: 123,
+              note: "note",
+              taxExempt: true,
+              tags: "tags",
+              lastOrderName: "lastOrderName",
+              currency: "INR",
+              phone: "7378646221",
+              adminGraphqlApiId: "adminGraphqlApiId")
+          : CustomerModel.fromJson(json['customer']),
     );
   }
 }
 
 class LineItem {
-  final int id;
+  final dynamic id;
   late final int variantId;
   final int productId;
   final String title;
@@ -152,26 +195,39 @@ class LineItem {
       id: json['id'] ?? DefaultValues.defaultInt,
       variantId: json['variant_id'] ?? DefaultValues.defaultInt,
       productId: json['product_id'] ?? DefaultValues.defaultInt,
-      title: json['title'] ?? DefaultValues.defaultString,
+      title: AppConfigure.bigCommerce
+          ? json['name']
+          : json['title'] ?? DefaultValues.defaultString,
       variantTitle: json['variant_title'] ?? DefaultValues.defaultString,
       sku: json['sku'] ?? DefaultValues.defaultString,
       vendor: json['vendor'] ?? DefaultValues.defaultString,
       quantity: json['quantity'] ?? DefaultValues.defaultInt,
-      requiresShipping: json['requires_shipping'] ?? false,
+      requiresShipping: AppConfigure.bigCommerce
+          ? json['is_require_shipping']
+          : json['requires_shipping'] ?? false,
       taxable: json['taxable'] ?? false,
       giftCard: json['gift_card'] ?? false,
       fulfillmentService:
           json['fulfillment_service'] ?? DefaultValues.defaultString,
       grams: json['grams'] ?? DefaultValues.defaultInt,
-      taxLines: List<TaxLine>.from(
-          json['tax_lines'].map((item) => TaxLine.fromJson(item))),
-      appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
+      taxLines: AppConfigure.bigCommerce
+          ? [TaxLine(rate: 1.00, title: "title", price: "11.0")]
+          : List<TaxLine>.from(
+              json['tax_lines'].map((item) => TaxLine.fromJson(item))),
+      appliedDiscount: AppConfigure.bigCommerce
+          ? json['discount_amount']
+          : json['applied_discount'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
-      properties: List<dynamic>.from(json['properties'].map((item) => item)),
+      properties: AppConfigure.bigCommerce
+          ? []
+          : List<dynamic>.from(json['properties'].map((item) => item)),
       custom: json['custom'] ?? false,
-      price: json['price'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId:
-          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
+      price: AppConfigure.bigCommerce
+          ? json['sale_price'].toString()
+          : json['price'] ?? DefaultValues.defaultString,
+      adminGraphqlApiId: AppConfigure.bigCommerce
+          ? json['image_url']
+          : json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
     );
   }
 }
