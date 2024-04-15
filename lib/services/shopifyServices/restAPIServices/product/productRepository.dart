@@ -548,27 +548,53 @@ class ProductRepository {
   }
 
   Future<DraftOrderModel> getCartDetails() async {
-    String BASE_URL = AppConfigure.baseUrl +
-        APIConstants.apiForAdminURL +
-        APIConstants.apiURL;
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        String draftId = await SharedPreferenceManager().getDraftId();
+    if (AppConfigure.bigCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String draftId = await SharedPreferenceManager().getDraftId();
 
-        final response = await ApiManager.get(
-            "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json");
-        if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-          final result = jsonDecode(response.body)['draft_order'];
-          return DraftOrderModel.fromJson(result);
+          final response = await ApiManager.get(
+              "https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            log("${response.body}");
+            final result = jsonDecode(response.body)['data'];
+            log("result is this ${result}");
+
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
         } else {
-          throw (AppString.noDataError);
+          throw (AppString.error);
         }
-      } else {
-        throw (AppString.error);
+      } catch (error, stackTrace) {
+        log('error is this $error $stackTrace');
+        throw (error);
       }
-    } catch (error) {
-      throw (error);
+    } else {
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String draftId = await SharedPreferenceManager().getDraftId();
+
+          final response = await ApiManager.get(
+              "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            final result = jsonDecode(response.body)['draft_order'];
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error) {
+        throw (error);
+      }
     }
   }
 
