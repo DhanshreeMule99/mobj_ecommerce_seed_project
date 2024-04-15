@@ -130,28 +130,45 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
         (countryController.text.trim().toLowerCase() == "india" &&
             cityController.text.trim().toLowerCase() == "pune" &&
             selectedAddressIndex == 1)) {
-      final body = {
-        "address1":
-            selectedAddressIndex == 1 ? addressController.text : residence,
-        "address2": "",
-        "Company": "",
-        "first_name": firstNameController.text,
-        "last_name": selectedOption,
-        "city": selectedAddressIndex == 1 ? cityController.text : city,
 
-        "phone": phoneController.text,
-        "province": "",
-        "country": selectedAddressIndex == 1 ? countryController.text : country,
-        "zip": selectedAddressIndex == 1 ? zipController.text : postalCode,
-        "name": "",
-        "province_code": "",
-        "country_code": "IN",
-        "country_name":
-            selectedAddressIndex == 1 ? countryController.text : country,
-        "default": true
-        // "name":nickAddressController.text
+final uid = await SharedPreferenceManager().getUserId();
+      Map<String, dynamic> body = AppConfigure.bigCommerce
+          ?  {
+            "first_name":  firstNameController.text,
+            "last_name": selectedOption,
+            "address1": selectedAddressIndex == 1 ? addressController.text : residence,
+            "address2": "",
+            "city":  selectedAddressIndex == 1 ? cityController.text : city,
+            "state_or_province": "",
+            "postal_code":selectedAddressIndex == 1 ? zipController.text : postalCode,
+            "country_code": "IN",
+            "phone":  phoneController.text,
+            "address_type": "residential",
+            "customer_id": int.parse(uid),
+            "id": widget.addressId.isEmpty ? 0 : int.tryParse(widget.addressId) ?? 0,
+          }
+         :{
+          "address1":
+              selectedAddressIndex == 1 ? addressController.text : residence,
+          "address2": "",
+          "Company": "",
+          "first_name": firstNameController.text,
+          "last_name": selectedOption,
+          "city": selectedAddressIndex == 1 ? cityController.text : city,
+
+          "phone": phoneController.text,
+          "province": "",
+          "country": selectedAddressIndex == 1 ? countryController.text : country,
+          "zip": selectedAddressIndex == 1 ? zipController.text : postalCode,
+          "name": "",
+          "province_code": "",
+          "country_code": "IN",
+          "country_name":
+              selectedAddressIndex == 1 ? countryController.text : country,
+          "default": true
+          // "name":nickAddressController.text
       };
-      print('sending this address id ${widget.addressId}');
+       print('sending this address id ${widget.addressId}');
       AddressRepository()
           .editAddress(
         body,
@@ -195,7 +212,10 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
             loader = false;
           });
         }
-      });
+      }).catchError((error) {
+  // Handle errors here
+  print("Error: $error");
+});
     } else {
       setState(() {
         error = AppLocalizations.of(context)!.locationError;

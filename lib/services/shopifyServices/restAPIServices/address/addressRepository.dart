@@ -1,7 +1,10 @@
 // addressRepository
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
+
+import '../../../../utils/api.dart';
 
 class AddressRepository {
   List<DefaultAddressModel> empty = [];
@@ -69,7 +72,38 @@ class AddressRepository {
         APIConstants.apiURL +
         APIConstants.customer;
 
-    try {
+
+ API api = API();
+if(AppConfigure.bigCommerce){
+try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        final response = await api.sendRequest.delete(
+            "/customers/addresses?id:in=$addId",
+                 options: Options(headers: {
+              'Content-Type': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),);
+        // var data = jsonDecode(response.body);
+        if (response.statusCode == 204) {
+          return AppString.success;
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          exceptionString = AppString.unAuthorized;
+          return exceptionString;
+        } else {
+          exceptionString = AppString.serverError;
+          return exceptionString;
+        }
+      } else {
+        var exceptionString = AppString.checkInternet;
+        return exceptionString;
+      }
+    } catch (error) {
+      exceptionString = AppString.serverError;
+      return exceptionString;
+    }
+
+}
+    else{try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         final response = await ApiManager.delete(
             "$BASE_URL$uid/${APIConstants.address}/$addId.json");
@@ -90,7 +124,7 @@ class AddressRepository {
     } catch (error) {
       exceptionString = AppString.serverError;
       return exceptionString;
-    }
+    }}
   }
 
   editAddress(Map<String, dynamic> body, String addId) async {
@@ -101,6 +135,101 @@ class AddressRepository {
         APIConstants.apiURL +
         APIConstants.customer;
 
+    // var body1 = jsonEncode({"address": body});
+
+ API api = API();
+if (AppConfigure.bigCommerce){
+  try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        // final response = addId.isEmpty
+        //     ? await ApiManager.post(
+        //         "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?id:in=$uid",
+        //         body)
+        //     : await ApiManager.put(
+        //         "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?id:in=$addId",
+        //         body);
+
+
+                 final response;
+        if (addId == "") {
+          log("calling null addressid api");
+          var body1 = jsonEncode({"address": body});
+          response = await api.sendRequest.post(
+               "/customers/addresses",
+                data: [body],
+                 options: Options(headers: {
+              'Content-Type': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),);
+        } else {
+          log("calling not null addressid api");
+          response =  await api.sendRequest.put(
+                "/customers/addresses",
+                data: [body],
+                 options: Options(headers: {
+              'Content-Type': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),);
+        }
+       
+        // var data = jsonDecode(response.body);
+        if (response.statusCode == APIConstants.successCode 
+        ) {
+  return response;
+            //    Fluttertoast.showToast(
+            // msg: "customer address added successfully",
+            // toastLength: Toast.LENGTH_SHORT,
+            // gravity: ToastGravity.BOTTOM,
+            // timeInSecForIosWeb: 0,
+            // backgroundColor: AppColors.green,
+            // textColor: AppColors.whiteColor,
+            // fontSize: 16.0);
+
+            // return data;
+          // return AppString.success;
+         
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          exceptionString = AppString.unAuthorized;
+          return exceptionString;
+        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+          exceptionString = AppString.alreadyExist;
+          return exceptionString;
+        } else {
+          exceptionString = AppString.serverError;
+          return exceptionString;
+        }
+      } else {
+        var exceptionString = AppString.checkInternet;
+        return exceptionString;
+      }
+    } 
+    //  catch (error) {
+    //   exceptionString = AppString.serverError;
+    //   return exceptionString;
+    // }
+    
+    
+    on DioException catch (error) {
+      if(error.response!.statusCode == APIConstants.alreadyExistCode){
+ Fluttertoast.showToast(
+            msg: "${error.response!.data["errors"]}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 0,
+            backgroundColor: AppColors.green,
+            textColor: AppColors.whiteColor,
+            fontSize: 16.0);
+
+      }
+      
+      
+    }
+
+
+}
+
+else
+   { 
     var body1 = jsonEncode({"address": body});
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
@@ -137,6 +266,7 @@ class AddressRepository {
       exceptionString = AppString.serverError;
       return exceptionString;
     }
+  }
   }
 
   setDefaultAddress(String addId) async {
