@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:mobj_project/models/bigcommerceModel/constants/bigAPIConstants.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -113,18 +114,39 @@ class ProductRepository {
   }
 
   Future<ReviewProductModels> getProductReviews(String pid) async {
-    try {
-      String BASE_URL = AppConfigure.feraUrl;
-      final response = await ApiManager.get(
-          "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com");
-      if (response.statusCode == APIConstants.successCode) {
-        var result = jsonDecode(response.body);
-        return ReviewProductModels.fromJson(result);
-      } else {
-        throw (AppString.noDataError);
+    API api = API();
+
+    if (AppConfigure.bigCommerce) {
+      try {
+        Response response = await api.sendRequest.get('https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/112/reviews',
+            options: Options(headers: {
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+              'Content-Type': 'application/json',
+            }));
+        if (response.statusCode == APIConstants.successCode) {
+          var result = response.data;
+          return ReviewProductModels.fromJson(result);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error,stackTrace) {
+        log('print error is this $error $stackTrace');
+        throw error;
       }
-    } catch (error) {
-      throw error;
+    } else {
+      try {
+        String BASE_URL = AppConfigure.feraUrl;
+        final response = await ApiManager.get(
+            "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com");
+        if (response.statusCode == APIConstants.successCode) {
+          var result = jsonDecode(response.body);
+          return ReviewProductModels.fromJson(result);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error) {
+        throw error;
+      }
     }
   }
 
