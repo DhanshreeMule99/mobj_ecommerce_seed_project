@@ -60,10 +60,10 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                     children: <Widget>[
                       Expanded(
                           child: ListView.builder(
-                             itemCount: order != []
-                                    ? order.length
-                                    : 0,
-                        // itemCount: order.length,
+                            //  itemCount: order != []
+                            //         ? order.length
+                            //         : 0,
+                         itemCount: order.length,
                         itemBuilder: (BuildContext context, int index) {
                           final orderes = order[index];
                           String formattedDate;

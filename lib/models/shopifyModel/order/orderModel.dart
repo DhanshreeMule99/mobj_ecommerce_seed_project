@@ -100,7 +100,10 @@ class OrderModel {
           .toList() ??
           [],
       // totalPrice: json['current_total_price'] ??"",
-      totalPrice: json['current_total_price'] ?? DefaultValues.stringDefault,
+       totalPrice: AppConfigure.bigCommerce == true
+            ? json['total_ex_tax'] ?? DefaultValues.stringDefault
+            : json['current_total_price'] ?? DefaultValues.stringDefault,
+      // totalPrice: json['current_total_price'] ?? DefaultValues.stringDefault,
       currentTotalTax: json['current_total_tax'] ??
           DefaultValues.stringDefault, // Ensure it's a List<LineItem>
     );

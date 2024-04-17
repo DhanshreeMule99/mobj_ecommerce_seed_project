@@ -774,9 +774,11 @@ class ProductRepository {
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
         } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-          throw AppString.unAuthorized;
+          // throw AppString.unAuthorized;
+            throw (AppString.noDataError);
         } else {
-          throw AppString.serverError;
+          // throw AppString.serverError;
+            throw (AppString.noDataError);
         }
       } catch (error, stackTrace) {
         log("error is this: $stackTrace");
