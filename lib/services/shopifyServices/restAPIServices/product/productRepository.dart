@@ -119,7 +119,7 @@ class ProductRepository {
     if (AppConfigure.bigCommerce) {
       try {
         Response response = await api.sendRequest.get(
-            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/112/reviews',
+            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/$pid/reviews',
             options: Options(headers: {
               "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
               'Content-Type': 'application/json',
@@ -775,10 +775,10 @@ class ProductRepository {
           throw (AppString.noDataError);
         } else if (response.statusCode == APIConstants.unAuthorizedCode) {
           // throw AppString.unAuthorized;
-            throw (AppString.noDataError);
+          throw (AppString.noDataError);
         } else {
           // throw AppString.serverError;
-            throw (AppString.noDataError);
+          throw (AppString.noDataError);
         }
       } catch (error, stackTrace) {
         log("error is this: $stackTrace");
