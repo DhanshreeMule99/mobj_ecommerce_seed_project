@@ -21,7 +21,7 @@ import 'module/splash screen/Splash_screen.dart';
 import 'utils/appColors.dart';
 
 final providerContainer = ProviderContainer();
-
+List<Map<String, dynamic>> bigcommerceOrderedItems = [];
 Future<void> backgroundHandler(RemoteMessage message) async {}
 
 void main() async {

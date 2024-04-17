@@ -1,5 +1,6 @@
 // ignore_for_file: unused_result
 
+import 'package:mobj_project/main.dart';
 import 'package:mobj_project/module/address/addressListScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import '../../provider/addressProvider.dart';
@@ -208,7 +209,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                 isCheckout: widget.isCheckout,
                 amount: widget.amount,
                 mobile: widget.mobile,
-                bigcommerceOrderedItems: const [],
+                bigcommerceOrderedItems: bigcommerceOrderedItems,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,

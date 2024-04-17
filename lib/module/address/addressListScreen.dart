@@ -8,6 +8,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../main.dart';
 import '../../provider/addressProvider.dart';
 import '../../utils/api.dart';
 import '../paymentGatways/phonePePay/phonePeGateway.dart';
@@ -248,11 +249,11 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           unselcted_icon_color: AppColors.blackColor,
           selectedPage: 3,
           screen1: AddressListScreen(
-            bigcommerceOrderedItems: widget.bigcommerceOrderedItems,
+            bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
           screen2: const SearchWidget(),
           screen3: AddressListScreen(
-            bigcommerceOrderedItems: widget.bigcommerceOrderedItems,
+            bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
           screen4: const ProfileScreen(),
           ref: ref,

@@ -9,6 +9,7 @@ import 'package:mobj_project/models/shopifyModel/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../main.dart';
 import '../../utils/api.dart';
 import '../address/addAddressScreen.dart';
 import '../address/addressListScreen.dart';
@@ -24,7 +25,7 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<DraftOrderModel> cart = [];
   double total = 0;
-  List<Map<String, dynamic>> bigcommerceOrderedItems = [];
+
   void removeItem(LineItem item) {}
 
   @override

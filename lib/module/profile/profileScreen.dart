@@ -283,8 +283,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        const AddressListScreen(
-                                  bigcommerceOrderedItems: [],
+                                        AddressListScreen(
+                                  bigcommerceOrderedItems:
+                                      bigcommerceOrderedItems,
                                 ),
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,

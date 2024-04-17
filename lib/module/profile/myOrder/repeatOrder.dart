@@ -5,6 +5,7 @@ import 'package:mobj_project/models/shopifyModel/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../../main.dart';
 import '../../address/addressListScreen.dart';
 
 class RepeatOrderScreen extends ConsumerStatefulWidget {
@@ -570,7 +571,8 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                                 100,
                                             mobile: product.customer.phone
                                                 .toString(),
-                                            bigcommerceOrderedItems: [],
+                                            bigcommerceOrderedItems:
+                                                bigcommerceOrderedItems,
                                           ),
                                           transitionDuration: Duration.zero,
                                           reverseTransitionDuration:
