@@ -1,3 +1,5 @@
+import 'package:mobj_project/utils/appConfiguer.dart';
+
 import '../../../utils/defaultValues.dart';
 import '../product/draftOrderModel.dart';
 
@@ -10,6 +12,9 @@ class OrderModel {
   final String? cancelReason;
   final String? cancelledAt;
   final String? cartToken;
+  final String? firstname;
+  final String? lastname;
+  final String? phone;
   final int checkoutId;
   final String checkoutToken;
   final bool confirmed;
@@ -41,13 +46,28 @@ class OrderModel {
     required this.createdAt,
     required this.currency,
     required this.currentSubtotalPrice,
-    required this.currentTotalTax, required this.totalPrice,
+    required this.currentTotalTax, 
+    required this.totalPrice,
     required this.customer,
     required this.lineItems,
+     required this.firstname,
+    required this.lastname,
+    required this.phone,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
+
+
+      firstname:AppConfigure.bigCommerce == true 
+            ? json['billing_address']['first_name'] ?? DefaultValues.stringDefault
+            : json['first_name'] ?? DefaultValues.stringDefault,
+      lastname:AppConfigure.bigCommerce == true 
+            ? json['billing_address']['last_name'] ?? DefaultValues.stringDefault
+            : json['last_name'] ?? DefaultValues.stringDefault,
+      phone:AppConfigure.bigCommerce == true 
+            ? json['billing_address']['phone'] ?? DefaultValues.stringDefault
+            : json['phone'] ?? DefaultValues.stringDefault,
       id: json['id'] ?? DefaultValues.intDefault,
       adminGraphqlApiId:
       json['admin_graphql_api_id'] ?? DefaultValues.stringDefault,
@@ -61,8 +81,14 @@ class OrderModel {
       checkoutId: json['checkout_id'] ?? DefaultValues.intDefault,
       checkoutToken: json['checkout_token'] ?? DefaultValues.stringDefault,
       confirmed: json['confirmed'] ?? DefaultValues.boolDefault,
-      contactEmail: json['contact_email'] ?? DefaultValues.stringDefault,
-      createdAt: json['created_at'] ?? DefaultValues.stringDefault,
+      contactEmail: AppConfigure.bigCommerce == true
+            ? json['billing_address']['email'] ?? DefaultValues.stringDefault
+            : json['contact_email'] ?? DefaultValues.stringDefault,
+      // contactEmail: json['contact_email'] ?? DefaultValues.stringDefault,
+       createdAt: AppConfigure.bigCommerce == true
+            ? json['date_created'] ?? DefaultValues.stringDefault
+            : json['created_at'] ?? DefaultValues.stringDefault,
+      // createdAt: json['date_created'] ?? DefaultValues.stringDefault,
       currency: json['currency'] ?? DefaultValues.stringDefault,
       currentSubtotalPrice:
       json['current_subtotal_price'] ?? DefaultValues.stringDefault,
@@ -73,7 +99,8 @@ class OrderModel {
           ?.map((item) => LineItem.fromJson(item))
           .toList() ??
           [],
-      totalPrice: json['current_total_price'] ??"",
+      // totalPrice: json['current_total_price'] ??"",
+      totalPrice: json['current_total_price'] ?? DefaultValues.stringDefault,
       currentTotalTax: json['current_total_tax'] ??
           DefaultValues.stringDefault, // Ensure it's a List<LineItem>
     );

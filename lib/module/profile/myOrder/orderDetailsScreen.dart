@@ -88,17 +88,17 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.name}: ${order.customer.firstName} ${order.customer.lastName}'),
+                                                '${AppLocalizations.of(context)!.name}: ${order.firstname} ${order.lastname}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.email}: ${order.customer.email}'),
+                                                '${AppLocalizations.of(context)!.email}: ${order.contactEmail}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.phoneLabel}: ${order.customer.phone}'),
+                                                '${AppLocalizations.of(context)!.phoneLabel}: ${order.phone}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -312,6 +312,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.trackOrder,
                           style: TextStyle(
+                             color: AppColors.whiteColor,
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold),
@@ -341,6 +342,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.repeatOrder,
                           style: TextStyle(
+                            color: AppColors.whiteColor,
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold),

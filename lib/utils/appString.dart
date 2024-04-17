@@ -121,6 +121,7 @@ class AppString {
   static const giveReview = "Write your review";
   static const titleReview = "Title your review";
   static const emptyCart = "Your cart is empty";
+  static const emptyorders = "No Order";
   static const emptyAddress = "No address added";
   static const emptyProduct = "No products found";
   static const addToCartSuccess = "Product added in cart";

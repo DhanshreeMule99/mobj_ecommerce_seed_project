@@ -112,7 +112,7 @@ class ProductRepository {
       throw error;
     }
     
-    }
+    
   }
 
   Future<ReviewProductModels> getProductReviews(String pid) async {
@@ -765,7 +765,8 @@ API api = API();
       } else if (response.statusCode == APIConstants.unAuthorizedCode) {
         throw AppString.unAuthorized;
       } else {
-        throw AppString.serverError;
+        // throw AppString.serverError;
+         throw (AppString.noDataError);
       }
     } catch (error,stackTrace) {
 
