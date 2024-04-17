@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:mobj_project/models/bigcommerceModel/constants/bigAPIConstants.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -110,6 +111,8 @@ class ProductRepository {
     } catch (error) {
       throw error;
     }
+    
+    }
   }
 
   Future<ReviewProductModels> getProductReviews(String pid) async {
@@ -167,6 +170,7 @@ class ProductRepository {
 
   Future<List<ProductModel>> getProductsByCollection(
       String colllectionId) async {
+        
     try {
       String BASE_URL = AppConfigure.baseUrl + APIConstants.apiForAdminURL;
       final response = await ApiManager.get(
@@ -405,9 +409,48 @@ class ProductRepository {
     }
   }
 
-  addProductReview(Map<String, dynamic> reqBody) async {
+  addProductReview(reqBody, String pid) async {
     String exceptionString = "";
-    var body = jsonEncode(reqBody);
+
+     API api = API();
+  if(AppConfigure.bigCommerce){
+
+  try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        // print("$BASE_URL/${APIConstants.reviewProduct}");
+
+  var body1 = jsonEncode({"address": reqBody});
+
+        final response = await api.sendRequest.post(
+              "/catalog/products/$pid/reviews",
+                data: reqBody,
+                 options: Options(headers: {
+              'Content-Type': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),);
+        // var data = jsonDecode(response.reqBody);
+
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          return AppString.success;
+        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+          return AppString.alreadyReview;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+
+  }
+
+  else
+  { 
+    
+     var body = jsonEncode(reqBody);
     String BASE_URL = AppConfigure.feraUrl;
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
@@ -429,6 +472,7 @@ class ProductRepository {
     } catch (error) {
       exceptionString = AppString.oops;
       return exceptionString;
+    }
     }
   }
 
@@ -624,8 +668,38 @@ class ProductRepository {
   }
 
   Future<OrderModel> getOrderInfo(String pid) async {
+
+
     final uid = await SharedPreferenceManager().getUserId();
+API api = API();
+          if (AppConfigure.bigCommerce ){
+
     try {
+    
+      final response =
+          await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v2/orders/$pid",
+           options: Options(headers: {
+              'Content-Type': 'application/json',
+              "Accept" : "application/json",
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),
+          );
+      if (response.statusCode == APIConstants.successCode) {
+        final userData = response.data;
+        return OrderModel.fromJson(userData);
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error) {
+      throw error;
+    }
+
+
+
+          }
+          else
+        {
+      try {
       String BASE_URL = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;
@@ -640,10 +714,52 @@ class ProductRepository {
     } catch (error) {
       throw error;
     }
+    }
   }
 
   Future<List<OrderModel>> getOrder() async {
-    final uid = await SharedPreferenceManager().getUserId();
+   
+   
+   API api= API();
+   if(AppConfigure.bigCommerce) {
+ final uid = await SharedPreferenceManager().getUserId();
+ try {
+      final response =
+          await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v2/orders?customer_id=$uid",      
+                 options: Options(headers: {
+              'Content-Type': 'application/json',
+              "Accept" : "application/json",
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),
+          );
+      if (response.statusCode == APIConstants.successCode) {
+        final List result = response.data;
+        if (result.isEmpty || result.toString() == "[]") {
+          throw (AppString.noDataError);
+        } else {
+          return result.map((e) => OrderModel.fromJson(e)).toList();
+        }
+      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+        throw (AppString.noDataError);
+      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+        throw AppString.unAuthorized;
+      } else {
+        throw AppString.serverError;
+      }
+    } catch (error,stackTrace) {
+
+      log("error is this: $stackTrace");
+        log("error is this: $error");
+      rethrow;
+    }
+
+
+   }
+   else
+    {
+      
+      
+      final uid = await SharedPreferenceManager().getUserId();
     String BASE_URL = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL +
@@ -668,8 +784,11 @@ class ProductRepository {
     } catch (error) {
       rethrow;
     }
+    
+    }
   }
 }
 
 final productsProvider =
     Provider<ProductRepository>((ref) => ProductRepository());
+ 
