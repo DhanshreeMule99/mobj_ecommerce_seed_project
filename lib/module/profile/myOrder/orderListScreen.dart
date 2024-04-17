@@ -30,7 +30,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
       data: (appInfo) => Scaffold(
         appBar: AppBar(
           elevation: 2,
-          title:  Text(
+          title: Text(
             AppLocalizations.of(context)!.myOrders,
           ),
           actions: [],
@@ -60,10 +60,10 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                     children: <Widget>[
                       Expanded(
                           child: ListView.builder(
-                            //  itemCount: order != []
-                            //         ? order.length
-                            //         : 0,
-                         itemCount: order.length,
+                        //  itemCount: order != []
+                        //         ? order.length
+                        //         : 0,
+                        itemCount: order.length,
                         itemBuilder: (BuildContext context, int index) {
                           final orderes = order[index];
                           String formattedDate;
@@ -102,7 +102,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${order[index].totalPrice} '),
+                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order[index].totalPrice).toStringAsFixed(2)} '),
                                             SizedBox(
                                               height: 5,
                                             ),
@@ -168,44 +168,43 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
             //         : Container()
             //   ],
             // ),
-             error: (error, s) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: ErrorHandling(
-                      error_type: error != AppString.noDataError
-                          ? AppString.error
-                          : AppString.noDataError,
-                    ),
+            error: (error, s) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: ErrorHandling(
+                    error_type: error != AppString.noDataError
+                        ? AppString.error
+                        : AppString.noDataError,
                   ),
-                  error == AppString.noDataError
-                      //  ? Text(AppLocalizations.of(context)!.emptyorders,
-                       ? Text("No Orders",
+                ),
+                error == AppString.noDataError
+                    //  ? Text(AppLocalizations.of(context)!.emptyorders,
+                    ? Text("No Orders",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                            fontWeight: FontWeight.bold))
+                    : Container(),
+                error != AppString.noDataError
+                    ? ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.buttonColor,
+                        ),
+                        onPressed: () {
+                          ref.refresh(cartDetailsDataProvider);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.refresh,
                           style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              fontWeight: FontWeight.bold))
-                      : Container(),
-                  error != AppString.noDataError
-                      ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.buttonColor,
+                            fontSize: 16,
+                            color: AppColors.whiteColor,
                           ),
-                          onPressed: () {
-                            ref.refresh(cartDetailsDataProvider);
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.whiteColor,
-                            ),
-                          ),
-                        )
-                      : Container()
-                ],
-              ),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
             loading: () => SkeletonLoaderWidget(),
           ))
         ]),
@@ -241,7 +240,7 @@ class OrderStatus extends StatelessWidget {
       ),
       child: Text(
         orderStatus,
-        style:  TextStyle(color: AppColors.whiteColor),
+        style: TextStyle(color: AppColors.whiteColor),
       ),
     );
   }

@@ -108,7 +108,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${order.totalPrice} ${order.currency}'),
+                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order.totalPrice).toStringAsFixed(2)} ${order.currency}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -312,7 +312,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.trackOrder,
                           style: TextStyle(
-                             color: AppColors.whiteColor,
+                              color: AppColors.whiteColor,
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold),
@@ -342,7 +342,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                         child: Text(
                           AppLocalizations.of(context)!.repeatOrder,
                           style: TextStyle(
-                            color: AppColors.whiteColor,
+                              color: AppColors.whiteColor,
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
                               fontWeight: FontWeight.bold),
