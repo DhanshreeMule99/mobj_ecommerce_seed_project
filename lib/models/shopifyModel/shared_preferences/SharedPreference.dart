@@ -34,6 +34,16 @@ class SharedPreferenceManager {
     return prefs.getString(draftId) ?? "";
   }
 
+  Future<bool> setEmail(String emailId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(email, emailId);
+  }
+
+  Future<String> getEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(email) ?? "";
+  }
+
   Future<int> getDeviceId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt(deviceIds) ?? 0;
@@ -84,12 +94,12 @@ class SharedPreferenceManager {
     return prefs.getString(profilePic) ?? "";
   }
 
-   Future<String> getname() async {
+  Future<String> getname() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(name) ?? "";
   }
 
-   Future<bool> setname(String tokens) async {
+  Future<bool> setname(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(name, tokens);
   }
@@ -99,7 +109,7 @@ class SharedPreferenceManager {
     return prefs.getString(email) ?? "";
   }
 
-   Future<bool> setemail(String tokens) async {
+  Future<bool> setemail(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(email, tokens);
   }

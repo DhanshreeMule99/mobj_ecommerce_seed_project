@@ -350,8 +350,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-
-
   // Future<void> _signInWithEmailAndPassword(BuildContext context) async {
   //   GraphQLClient client = graphQLConfig.clientToQuery();
   //   setState(() {
@@ -409,90 +407,85 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //   }
   // }
 
-
-
-
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-     if (AppConfigure.bigCommerce) {
-    // Login with BigCommerce
-     String bigCommerceUrl = AppConfigure.bigcommerceUrl;
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      final response = await http.post(
-        Uri.parse('$bigCommerceUrl/customers/validate-credentials'),
-        headers: <String, String>{
-            "Content-Type": "application/json",
-          "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
-        },
-        body: jsonEncode(<String, String>{
-          'email': email.text.trim(),
-          'password': pass.text.trim(),
-        }),
-      );
-      print('BigCommerce Response: ${response.body}');
-      if (response.statusCode == 200) {
-    
-        if (response.body != null) { 
-          final Map<String, dynamic> responseData = json.decode(response.body);
-          if (responseData['is_valid'] == true) {
-         
-  await SharedPreferenceManager().setUserId(responseData['customer_id'].toString().replaceAll("gid://shopify/Customer/", ""));
-            await SharedPreferenceManager().setToken(AppConfigure.bigCommerceAccessToken);
-            ref.refresh(addressDataProvider);
-            ref.refresh(orderDataProvider);
-            ref.refresh(profileDataProvider);
-            Fluttertoast.showToast(
-                msg: AppLocalizations.of(context)!.loginSuccess,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 0,
-                backgroundColor: AppColors.green,
-                textColor: AppColors.whiteColor,
-                fontSize: 16.0);
-            Navigator.of(context).pushAndRemoveUntil(
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      const HomeScreen(),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-                (route) => route.isCurrent);
-
-            
-          } else {
-
-         
-            // Failure, show error message
-           setState(() {
-          error = AppLocalizations.of(context)!.invalidCred;
-          isLoading = false;
+    if (AppConfigure.bigCommerce) {
+      // Login with BigCommerce
+      String bigCommerceUrl = AppConfigure.bigcommerceUrl;
+      try {
+        setState(() {
+          isLoading = true;
         });
+        final response = await http.post(
+          Uri.parse('$bigCommerceUrl/customers/validate-credentials'),
+          headers: <String, String>{
+            "Content-Type": "application/json",
+            "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
+          },
+          body: jsonEncode(<String, String>{
+            'email': email.text.trim(),
+            'password': pass.text.trim(),
+          }),
+        );
+        print('BigCommerce Response: ${response.body}');
+        if (response.statusCode == 200) {
+          if (response.body != null) {
+            final Map<String, dynamic> responseData =
+                json.decode(response.body);
+            if (responseData['is_valid'] == true) {
+              await SharedPreferenceManager().setEmail(
+                email.text.trim(),
+              );
+              await SharedPreferenceManager().setUserId(
+                  responseData['customer_id']
+                      .toString()
+                      .replaceAll("gid://shopify/Customer/", ""));
+              await SharedPreferenceManager()
+                  .setToken(AppConfigure.bigCommerceAccessToken);
+              ref.refresh(addressDataProvider);
+              ref.refresh(orderDataProvider);
+              ref.refresh(profileDataProvider);
+              Fluttertoast.showToast(
+                  msg: AppLocalizations.of(context)!.loginSuccess,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 0,
+                  backgroundColor: AppColors.green,
+                  textColor: AppColors.whiteColor,
+                  fontSize: 16.0);
+              Navigator.of(context).pushAndRemoveUntil(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        const HomeScreen(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                  (route) => route.isCurrent);
+            } else {
+              // Failure, show error message
+              setState(() {
+                error = AppLocalizations.of(context)!.invalidCred;
+                isLoading = false;
+              });
+            }
+          } else {
+            // If body is null, show error message
+            setState(() {
+              error = AppLocalizations.of(context)!.invalidCred;
+              isLoading = false;
+            });
           }
         } else {
-          // If body is null, show error message
-           setState(() {
-          error = AppLocalizations.of(context)!.invalidCred;
-          isLoading = false;
-        });
+          // If the server did not return a 200 OK response, show error message
+          setState(() {
+            error = AppLocalizations.of(context)!.oops;
+            isLoading = false;
+          });
         }
-      } else {
-        // If the server did not return a 200 OK response, show error message
-        setState(() {
-          error = AppLocalizations.of(context)!.oops;
-          isLoading = false;
-        });
+      } catch (e) {
+        // Exception occurred, show error message
+        print('Error occurred: $e');
       }
-    }  catch (e) {
-      // Exception occurred, show error message
-      print('Error occurred: $e');
     }
-  }
-
-
-
-
 
 //  if (AppConfigure.bigCommerce) {
 //     // Login with BigCommerce
@@ -553,7 +546,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 //     }
 //   }
 
-  else {
+    else {
       // Login with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       setState(() {
@@ -586,7 +579,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           });
         } else {
           if (result.data?["customerAccessTokenCreate"] != null &&
-              result.data?["customerAccessTokenCreate"]['customerAccessToken'] !=
+              result.data?["customerAccessTokenCreate"]
+                      ['customerAccessToken'] !=
                   null) {
             getCustomerDetails(result.data!["customerAccessTokenCreate"]
                     ['customerAccessToken']['accessToken']
@@ -606,8 +600,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -26,6 +26,7 @@ class AddressListScreen extends ConsumerStatefulWidget {
 }
 
 class _AddressListScreenState extends ConsumerState<AddressListScreen> {
+  int bigCommerceAddressIndex = -1;
   double userLat = 0.0;
   double userLng = 0.0;
   double destinationLat = AppConfigure.pickUpAddressLatitude;
@@ -279,51 +280,140 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Radio(
-                                      value: index,
-                                      groupValue: selectedDefaultIndex == 0
-                                          ? addressList.indexWhere((address) =>
-                                              address.defaultAddress)
-                                          : selectedDefaultIndex,
-                                      onChanged: (value) async {
-                                        setState(() {
-                                          selectedDefaultIndex = value as int;
-                                          getLocationFromAddress(
-                                              "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
-                                        });
-                                        CommonAlert.show_loading_alert(context);
-                                        AddressRepository()
-                                            .setDefaultAddress(
-                                                addresses.id.toString())
-                                            .then((subjectFromServer) {
-                                          Navigator.of(context).pop();
-                                          if (subjectFromServer ==
-                                              AppString.success) {
-                                            ref.refresh(addressDataProvider);
-                                            Fluttertoast.showToast(
-                                                msg: AppString
-                                                    .defaultAddressSuccess,
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                timeInSecForIosWeb: 0,
-                                                backgroundColor:
-                                                    AppColors.green,
-                                                textColor: AppColors.whiteColor,
-                                                fontSize: 16.0);
-                                          } else {
-                                            Fluttertoast.showToast(
-                                                msg: AppString.oops,
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                timeInSecForIosWeb: 0,
-                                                backgroundColor:
-                                                    AppColors.green,
-                                                textColor: AppColors.whiteColor,
-                                                fontSize: 16.0);
-                                          }
-                                        });
-                                      },
-                                    ),
+                                    AppConfigure.bigCommerce
+                                        ? Radio(
+                                            value: index,
+                                            groupValue: bigCommerceAddressIndex,
+                                            onChanged: (value) async {
+                                              String draftId =
+                                                  await SharedPreferenceManager()
+                                                      .getDraftId();
+                                              print(draftId);
+                                              String email =
+                                                  await SharedPreferenceManager()
+                                                      .getEmail();
+                                              print(
+                                                  "$value ${addressList[index]}");
+                                              Map<String, dynamic> body = {
+                                                "first_name":
+                                                    addresses.firstName,
+                                                "last_name": addresses.lastName,
+                                                "email": email,
+                                                "company": "setoo",
+                                                "address1": addresses.address1,
+                                                "address2": "string",
+                                                "city": addresses.city,
+                                                "state_or_province":
+                                                    addresses.province,
+                                                "state_or_province_code":
+                                                    addresses.provinceCode,
+                                                "country_code":
+                                                    addresses.countryCode,
+                                                "postal_code": addresses.zip,
+                                                "phone": addresses.phone,
+                                              };
+                                              print(body);
+                                              setState(() {
+                                                bigCommerceAddressIndex = index;
+                                              });
+
+                                              CommonAlert.show_loading_alert(
+                                                  context);
+                                              AddressRepository()
+                                                  .bigCommerceShippingAddress(
+                                                      body)
+                                                  .then((subjectFromServer) {
+                                                Navigator.of(context).pop();
+                                                if (subjectFromServer ==
+                                                    AppString.success) {
+                                                  ref.refresh(
+                                                      addressDataProvider);
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString
+                                                          .defaultAddressSuccess,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString.oops,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
+                                            },
+                                          )
+                                        : Radio(
+                                            value: index,
+                                            groupValue: selectedDefaultIndex ==
+                                                    0
+                                                ? addressList.indexWhere(
+                                                    (address) =>
+                                                        address.defaultAddress)
+                                                : selectedDefaultIndex,
+                                            onChanged: (value) async {
+                                              setState(() {
+                                                selectedDefaultIndex =
+                                                    value as int;
+                                                getLocationFromAddress(
+                                                    "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
+                                              });
+                                              CommonAlert.show_loading_alert(
+                                                  context);
+                                              AddressRepository()
+                                                  .setDefaultAddress(
+                                                      addresses.id.toString())
+                                                  .then((subjectFromServer) {
+                                                Navigator.of(context).pop();
+                                                if (subjectFromServer ==
+                                                    AppString.success) {
+                                                  ref.refresh(
+                                                      addressDataProvider);
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString
+                                                          .defaultAddressSuccess,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                } else {
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString.oops,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
+                                            },
+                                          ),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -622,7 +712,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                           backgroundColor: appInfo
                                                               .primaryColorValue,
                                                           minimumSize:
-                                                              const Size.fromHeight(
+                                                              const Size
+                                                                  .fromHeight(
                                                                   50),
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:

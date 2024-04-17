@@ -14,8 +14,11 @@ class PaymentHandler {
     Fluttertoast.showToast(
         msg: "${AppString.successPayment}: ${response.paymentId}",
         timeInSecForIosWeb: 4);
-
-    final checkout = await ProductRepository().checkout(response.paymentId!);
+    var checkout;
+    if (AppConfigure.bigCommerce) {
+    } else {
+      checkout = await ProductRepository().checkout(response.paymentId!);
+    }
     if (checkout == AppString.success) {
       Navigator.pop(context);
 
