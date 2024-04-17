@@ -111,8 +111,6 @@ class ProductRepository {
     } catch (error) {
       throw error;
     }
-    
-    
   }
 
   Future<ReviewProductModels> getProductReviews(String pid) async {
@@ -120,7 +118,8 @@ class ProductRepository {
 
     if (AppConfigure.bigCommerce) {
       try {
-        Response response = await api.sendRequest.get('https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/112/reviews',
+        Response response = await api.sendRequest.get(
+            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/112/reviews',
             options: Options(headers: {
               "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
               'Content-Type': 'application/json',
@@ -131,7 +130,7 @@ class ProductRepository {
         } else {
           throw (AppString.noDataError);
         }
-      } catch (error,stackTrace) {
+      } catch (error, stackTrace) {
         log('print error is this $error $stackTrace');
         throw error;
       }
@@ -191,7 +190,6 @@ class ProductRepository {
 
   Future<List<ProductModel>> getProductsByCollection(
       String colllectionId) async {
-        
     try {
       String BASE_URL = AppConfigure.baseUrl + APIConstants.apiForAdminURL;
       final response = await ApiManager.get(
@@ -433,67 +431,62 @@ class ProductRepository {
   addProductReview(reqBody, String pid) async {
     String exceptionString = "";
 
-     API api = API();
-  if(AppConfigure.bigCommerce){
+    API api = API();
+    if (AppConfigure.bigCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          // print("$BASE_URL/${APIConstants.reviewProduct}");
 
-  try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        // print("$BASE_URL/${APIConstants.reviewProduct}");
+          var body1 = jsonEncode({"address": reqBody});
 
-  var body1 = jsonEncode({"address": reqBody});
-
-        final response = await api.sendRequest.post(
-              "/catalog/products/$pid/reviews",
-                data: reqBody,
-                 options: Options(headers: {
+          final response = await api.sendRequest.post(
+            "/catalog/products/$pid/reviews",
+            data: reqBody,
+            options: Options(headers: {
               'Content-Type': 'application/json',
               "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-            }),);
-        // var data = jsonDecode(response.reqBody);
+            }),
+          );
+          // var data = jsonDecode(response.reqBody);
 
-        if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-          return AppString.success;
-        } else if (response.statusCode == APIConstants.alreadyExistCode) {
-          return AppString.alreadyReview;
-        } else {
-          exceptionString = AppString.oops;
-          return exceptionString;
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            return AppString.alreadyReview;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
+          }
         }
+      } catch (error) {
+        exceptionString = AppString.oops;
+        return exceptionString;
       }
-    } catch (error) {
-      exceptionString = AppString.oops;
-      return exceptionString;
-    }
+    } else {
+      var body = jsonEncode(reqBody);
+      String BASE_URL = AppConfigure.feraUrl;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          print("$BASE_URL/${APIConstants.reviewProduct}");
+          final response = await ApiManager.post(
+              "$BASE_URL/${APIConstants.reviewProduct}", body);
+          var data = jsonDecode(response.body);
 
-  }
-
-  else
-  { 
-    
-     var body = jsonEncode(reqBody);
-    String BASE_URL = AppConfigure.feraUrl;
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        print("$BASE_URL/${APIConstants.reviewProduct}");
-        final response = await ApiManager.post(
-            "$BASE_URL/${APIConstants.reviewProduct}", body);
-        var data = jsonDecode(response.body);
-
-        if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-          return AppString.success;
-        } else if (response.statusCode == APIConstants.alreadyExistCode) {
-          return AppString.alreadyReview;
-        } else {
-          exceptionString = AppString.oops;
-          return exceptionString;
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            return AppString.alreadyReview;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
+          }
         }
+      } catch (error) {
+        exceptionString = AppString.oops;
+        return exceptionString;
       }
-    } catch (error) {
-      exceptionString = AppString.oops;
-      return exceptionString;
-    }
     }
   }
 
@@ -565,31 +558,60 @@ class ProductRepository {
   }
 
   checkout(String paymentId) async {
-    String exceptionString = "";
-    String draftId = await SharedPreferenceManager().getDraftId();
-    String BASE_URL = AppConfigure.baseUrl +
-        APIConstants.apiForAdminURL +
-        APIConstants.apiURL;
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        var response;
-        response = await ApiManager.put(
-            "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId/${APIConstants.complete}.json",
-            {});
-        var data = jsonDecode(response.body);
-        log("${response.body} ${response.statusCode}");
-        if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-          await SharedPreferenceManager().setDraftId("");
-          var service = await getPaymentDetails(paymentId);
-          var gateWayMethod = service["method"];
-          return AppString.success;
+    if (AppConfigure.bigCommerce) {
+      String exceptionString = "";
+      String draftId = await SharedPreferenceManager().getDraftId();
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          var response;
+          response = await ApiManager.post(
+              "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/orders",
+              {});
+          var data = jsonDecode(response.body);
+          log("${response.body} ${response.statusCode}");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            await SharedPreferenceManager().setDraftId("");
+            var service = await getPaymentDetails(paymentId);
+            var gateWayMethod = service["method"];
+            return AppString.success;
+          }
         }
+      } catch (error) {
+        log('error is this $error');
+        exceptionString = AppString.oops;
+        return exceptionString;
       }
-    } catch (error) {
-      log('error is this $error');
-      exceptionString = AppString.oops;
-      return exceptionString;
+    } else {
+      String exceptionString = "";
+      String draftId = await SharedPreferenceManager().getDraftId();
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          var response;
+          response = await ApiManager.put(
+              "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId/${APIConstants.complete}.json",
+              {});
+          var data = jsonDecode(response.body);
+          log("${response.body} ${response.statusCode}");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            await SharedPreferenceManager().setDraftId("");
+            var service = await getPaymentDetails(paymentId);
+            var gateWayMethod = service["method"];
+            return AppString.success;
+          }
+        }
+      } catch (error) {
+        log('error is this $error');
+        exceptionString = AppString.oops;
+        return exceptionString;
+      }
     }
   }
 
@@ -689,128 +711,107 @@ class ProductRepository {
   }
 
   Future<OrderModel> getOrderInfo(String pid) async {
-
-
     final uid = await SharedPreferenceManager().getUserId();
-API api = API();
-          if (AppConfigure.bigCommerce ){
-
-    try {
-    
-      final response =
-          await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v2/orders/$pid",
-           options: Options(headers: {
-              'Content-Type': 'application/json',
-              "Accept" : "application/json",
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-            }),
-          );
-      if (response.statusCode == APIConstants.successCode) {
-        final userData = response.data;
-        return OrderModel.fromJson(userData);
-      } else {
-        throw (AppString.noDataError);
-      }
-    } catch (error) {
-      throw error;
-    }
-
-
-
-          }
-          else
-        {
+    API api = API();
+    if (AppConfigure.bigCommerce) {
       try {
-      String BASE_URL = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL;
-      final response =
-          await ApiManager.get("$BASE_URL/${APIConstants.order}/$pid.json");
-      if (response.statusCode == APIConstants.successCode) {
-        final userData = json.decode(response.body)['order'];
-        return OrderModel.fromJson(userData);
-      } else {
-        throw (AppString.noDataError);
+        final response = await api.sendRequest.get(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v2/orders/$pid",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = response.data;
+          return OrderModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error) {
+        throw error;
       }
-    } catch (error) {
-      throw error;
-    }
+    } else {
+      try {
+        String BASE_URL = AppConfigure.baseUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL;
+        final response =
+            await ApiManager.get("$BASE_URL/${APIConstants.order}/$pid.json");
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = json.decode(response.body)['order'];
+          return OrderModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error) {
+        throw error;
+      }
     }
   }
 
   Future<List<OrderModel>> getOrder() async {
-   
-   
-   API api= API();
-   if(AppConfigure.bigCommerce) {
- final uid = await SharedPreferenceManager().getUserId();
- try {
-      final response =
-          await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v2/orders?customer_id=$uid",      
-                 options: Options(headers: {
-              'Content-Type': 'application/json',
-              "Accept" : "application/json",
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-            }),
-          );
-      if (response.statusCode == APIConstants.successCode) {
-        final List result = response.data;
-        if (result.isEmpty || result.toString() == "[]") {
-          throw (AppString.noDataError);
-        } else {
-          return result.map((e) => OrderModel.fromJson(e)).toList();
-        }
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        throw AppString.unAuthorized;
-      } else {
-        // throw AppString.serverError;
-         throw (AppString.noDataError);
-      }
-    } catch (error,stackTrace) {
-
-      log("error is this: $stackTrace");
-        log("error is this: $error");
-      rethrow;
-    }
-
-
-   }
-   else
-    {
-      
-      
+    API api = API();
+    if (AppConfigure.bigCommerce) {
       final uid = await SharedPreferenceManager().getUserId();
-    String BASE_URL = AppConfigure.baseUrl +
-        APIConstants.apiForAdminURL +
-        APIConstants.apiURL +
-        APIConstants.customer;
-    try {
-      final response =
-          await ApiManager.get("$BASE_URL$uid/${APIConstants.order}.json");
-      if (response.statusCode == APIConstants.successCode) {
-        final List result = jsonDecode(response.body)['orders'];
-        if (result.isEmpty || result.toString() == "[]") {
+      try {
+        final response = await api.sendRequest.get(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v2/orders?customer_id=$uid",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          final List result = response.data;
+          if (result.isEmpty || result.toString() == "[]") {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => OrderModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
         } else {
-          return result.map((e) => OrderModel.fromJson(e)).toList();
+          throw AppString.serverError;
         }
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        throw AppString.unAuthorized;
-      } else {
-        throw AppString.serverError;
+      } catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+        log("error is this: $error");
+        rethrow;
       }
-    } catch (error) {
-      rethrow;
-    }
-    
+    } else {
+      final uid = await SharedPreferenceManager().getUserId();
+      String BASE_URL = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL +
+          APIConstants.customer;
+      try {
+        final response =
+            await ApiManager.get("$BASE_URL$uid/${APIConstants.order}.json");
+        if (response.statusCode == APIConstants.successCode) {
+          final List result = jsonDecode(response.body)['orders'];
+          if (result.isEmpty || result.toString() == "[]") {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => OrderModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          throw AppString.serverError;
+        }
+      } catch (error) {
+        rethrow;
+      }
     }
   }
 }
 
 final productsProvider =
     Provider<ProductRepository>((ref) => ProductRepository());
- 

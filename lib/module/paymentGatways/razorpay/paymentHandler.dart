@@ -15,10 +15,9 @@ class PaymentHandler {
         msg: "${AppString.successPayment}: ${response.paymentId}",
         timeInSecForIosWeb: 4);
     var checkout;
-    if (AppConfigure.bigCommerce) {
-    } else {
-      checkout = await ProductRepository().checkout(response.paymentId!);
-    }
+
+    checkout = await ProductRepository().checkout(response.paymentId!);
+
     if (checkout == AppString.success) {
       Navigator.pop(context);
 

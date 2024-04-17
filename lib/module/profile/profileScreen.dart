@@ -69,13 +69,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               elevation: 2,
               actions: [
                 IconButton(
-                    onPressed: () async{
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      LanguageProvider languageProvider = LanguageProvider(prefs);
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      LanguageProvider languageProvider =
+                          LanguageProvider(prefs);
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                               SettingScreen(languageProvider: languageProvider,),
+                              SettingScreen(
+                            languageProvider: languageProvider,
+                          ),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
@@ -83,7 +87,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     },
                     icon: const Icon(Icons.settings))
               ],
-              title:  Text(
+              title: Text(
                 AppLocalizations.of(context)!.profile,
               ),
             ),
@@ -279,7 +283,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        AddressListScreen(),
+                                        const AddressListScreen(
+                                  bigcommerceOrderedItems: [],
+                                ),
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,
                               ),
@@ -313,7 +319,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           onPressed: () {
                             ref.refresh(profileDataProvider);
                           },
-                          child:  Text(
+                          child: Text(
                             AppLocalizations.of(context)!.refresh,
                             style: TextStyle(
                               fontSize: 16,

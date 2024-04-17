@@ -1,5 +1,6 @@
 // addressListScreen
 import 'dart:math';
+import 'package:dio/dio.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,6 +9,7 @@ import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../provider/addressProvider.dart';
+import '../../utils/api.dart';
 import '../paymentGatways/phonePePay/phonePeGateway.dart';
 import '../paymentGatways/razorpay/paymentHandler.dart';
 import '../paymentGatways/stripe/stripegateway.dart';
@@ -17,9 +19,13 @@ class AddressListScreen extends ConsumerStatefulWidget {
   final bool? isCheckout;
   final int? amount;
   final String? mobile;
-
+  final List<Map<String, dynamic>> bigcommerceOrderedItems;
   const AddressListScreen(
-      {super.key, this.isCheckout, this.amount, this.mobile});
+      {super.key,
+      this.isCheckout,
+      this.amount,
+      this.mobile,
+      required this.bigcommerceOrderedItems});
 
   @override
   ConsumerState<AddressListScreen> createState() => _AddressListScreenState();
@@ -33,7 +39,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
   double destinationLng = AppConfigure.pickUpAddressLongitude;
   double distance = 0.0;
   final LocationMobj _locationService = LocationMobj();
-
+  Map<String, dynamic>? addressbody;
   Future<void> getUserLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
@@ -241,9 +247,13 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           selcted_icon_color: AppColors.buttonColor,
           unselcted_icon_color: AppColors.blackColor,
           selectedPage: 3,
-          screen1: const AddressListScreen(),
+          screen1: AddressListScreen(
+            bigcommerceOrderedItems: widget.bigcommerceOrderedItems,
+          ),
           screen2: const SearchWidget(),
-          screen3: const AddressListScreen(),
+          screen3: AddressListScreen(
+            bigcommerceOrderedItems: widget.bigcommerceOrderedItems,
+          ),
           screen4: const ProfileScreen(),
           ref: ref,
         ),
@@ -294,7 +304,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       .getEmail();
                                               print(
                                                   "$value ${addressList[index]}");
-                                              Map<String, dynamic> body = {
+                                              addressbody = {
                                                 "first_name":
                                                     addresses.firstName,
                                                 "last_name": addresses.lastName,
@@ -312,7 +322,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                 "postal_code": addresses.zip,
                                                 "phone": addresses.phone,
                                               };
-                                              print(body);
+                                              print(addressbody);
                                               setState(() {
                                                 bigCommerceAddressIndex = index;
                                               });
@@ -321,7 +331,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                   context);
                                               AddressRepository()
                                                   .bigCommerceShippingAddress(
-                                                      body)
+                                                      addressbody!)
                                                   .then((subjectFromServer) {
                                                 Navigator.of(context).pop();
                                                 if (subjectFromServer ==
@@ -652,60 +662,175 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                             left: 10,
                                                             right: 10),
                                                     child: ElevatedButton(
-                                                        onPressed: () {
-                                                          // Stripe payment gateway
-                                                          // StripePaymentService(
-                                                          //         context:
-                                                          //             context,
-                                                          //         ref: ref)
-                                                          //     .makepayment(
-                                                          //         productlist
-                                                          //                 .customer
-                                                          //                 .firstName +
-                                                          //             productlist
-                                                          //                 .customer
-                                                          //                 .lastName,
-                                                          //         productlist
-                                                          //             .customer
-                                                          //             .phone,
-                                                          //         productlist
-                                                          //             .customer
-                                                          //             .email,
-                                                          //         double.parse(
-                                                          //             productlist
-                                                          //                 .totalPrice
-                                                          //                 .toString()));
-                                                          //Razor payment service
-                                                          PaymentHandler(
-                                                            _razorpay!,
-                                                            context,
-                                                            ref,
-                                                          ).openPaymentPortal(
-                                                              productlist
-                                                                      .customer
-                                                                      .firstName +
-                                                                  productlist
-                                                                      .customer
-                                                                      .lastName,
-                                                              productlist
-                                                                  .customer
-                                                                  .phone,
-                                                              productlist
-                                                                  .customer
-                                                                  .email,
-                                                              double.parse(
-                                                                  productlist
-                                                                      .totalPrice
-                                                                      .toString()));
+                                                        onPressed: () async {
+                                                          print(
+                                                              "calling this checkout");
+                                                          API api = API();
+                                                          if (bigCommerceAddressIndex ==
+                                                              -1) {
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "Please select shipping address",
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                timeInSecForIosWeb:
+                                                                    0,
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .green,
+                                                                textColor: AppColors
+                                                                    .whiteColor,
+                                                                fontSize: 16.0);
+                                                          } else {
+                                                            if (AppConfigure
+                                                                .bigCommerce) {
+                                                              CommonAlert
+                                                                  .show_loading_alert(
+                                                                      context);
+                                                              String draftId =
+                                                                  await SharedPreferenceManager()
+                                                                      .getDraftId();
+                                                              Response response = await api
+                                                                  .sendRequest
+                                                                  .post(
+                                                                      'https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/consignments?include=consignments.available_shipping_options',
+                                                                      options:
+                                                                          Options(
+                                                                              headers: {
+                                                                            "X-auth-Token":
+                                                                                "${AppConfigure.bigCommerceAccessToken}",
+                                                                            'Content-Type':
+                                                                                'application/json',
+                                                                          }),
+                                                                      data: [
+                                                                    {
+                                                                      "address":
+                                                                          addressbody,
+                                                                      "line_items":
+                                                                          widget
+                                                                              .bigcommerceOrderedItems
+                                                                    }
+                                                                  ]);
 
-                                                          //phone pay integration
-                                                          // _paymentHandler!
-                                                          //     .startPgTransaction(
-                                                          //         (result) {
-                                                          //   // setState(() {
-                                                          //   //   this.result = result;
-                                                          //   // });
-                                                          // });
+                                                              String
+                                                                  consignmentId =
+                                                                  response.data[
+                                                                              "data"]
+                                                                          [
+                                                                          "consignments"]
+                                                                      [0]["id"];
+                                                              String
+                                                                  shippingAddressId =
+                                                                  response.data["data"]["consignments"]
+                                                                              [
+                                                                              0]
+                                                                          [
+                                                                          "available_shipping_options"]
+                                                                      [0]["id"];
+
+                                                              print(
+                                                                  'consignment added successfully ${response.statusCode} $consignmentId $shippingAddressId');
+
+                                                              Response
+                                                                  responsedata =
+                                                                  await api
+                                                                      .sendRequest
+                                                                      .put(
+                                                                          'https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/consignments/$consignmentId',
+                                                                          options: Options(headers: {
+                                                                            "X-auth-Token":
+                                                                                "${AppConfigure.bigCommerceAccessToken}",
+                                                                            'Content-Type':
+                                                                                'application/json',
+                                                                          }),
+                                                                          data: {
+                                                                    "shipping_option_id":
+                                                                        shippingAddressId
+                                                                  });
+                                                              print(
+                                                                  'shipping address added succssfully ${responsedata.statusCode}');
+
+                                                              //  Razor payment service
+                                                              PaymentHandler(
+                                                                _razorpay!,
+                                                                context,
+                                                                ref,
+                                                              ).openPaymentPortal(
+                                                                  productlist
+                                                                          .customer
+                                                                          .firstName +
+                                                                      productlist
+                                                                          .customer
+                                                                          .lastName,
+                                                                  productlist
+                                                                      .customer
+                                                                      .phone,
+                                                                  productlist
+                                                                      .customer
+                                                                      .email,
+                                                                  double.parse(
+                                                                      productlist
+                                                                          .totalPrice
+                                                                          .toString()));
+                                                            } else {
+                                                              // Stripe payment gateway
+                                                              // StripePaymentService(
+                                                              //         context:
+                                                              //             context,
+                                                              //         ref: ref)
+                                                              //     .makepayment(
+                                                              //         productlist
+                                                              //                 .customer
+                                                              //                 .firstName +
+                                                              //             productlist
+                                                              //                 .customer
+                                                              //                 .lastName,
+                                                              //         productlist
+                                                              //             .customer
+                                                              //             .phone,
+                                                              //         productlist
+                                                              //             .customer
+                                                              //             .email,
+                                                              //         double.parse(
+                                                              //             productlist
+                                                              //                 .totalPrice
+                                                              //                 .toString()));
+                                                              //Razor payment service
+                                                              PaymentHandler(
+                                                                _razorpay!,
+                                                                context,
+                                                                ref,
+                                                              ).openPaymentPortal(
+                                                                  productlist
+                                                                          .customer
+                                                                          .firstName +
+                                                                      productlist
+                                                                          .customer
+                                                                          .lastName,
+                                                                  productlist
+                                                                      .customer
+                                                                      .phone,
+                                                                  productlist
+                                                                      .customer
+                                                                      .email,
+                                                                  double.parse(
+                                                                      productlist
+                                                                          .totalPrice
+                                                                          .toString()));
+
+                                                              //phone pay integration
+                                                              // _paymentHandler!
+                                                              //     .startPgTransaction(
+                                                              //         (result) {
+                                                              //   // setState(() {
+                                                              //   //   this.result = result;
+                                                              //   // });
+                                                              // });
+                                                            }
+                                                          }
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(

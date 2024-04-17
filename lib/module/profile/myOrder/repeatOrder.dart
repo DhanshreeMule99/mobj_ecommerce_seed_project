@@ -9,7 +9,10 @@ import '../../address/addressListScreen.dart';
 
 class RepeatOrderScreen extends ConsumerStatefulWidget {
   final String orderId;
-  RepeatOrderScreen({super.key,required this.orderId, });
+  RepeatOrderScreen({
+    super.key,
+    required this.orderId,
+  });
 
   @override
   _RepeatOrderScreenState createState() => _RepeatOrderScreenState();
@@ -37,7 +40,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
           return Scaffold(
             appBar: AppBar(
                 elevation: 1,
-                title:  Text(
+                title: Text(
                   AppLocalizations.of(context)!.orderDetailsTitle,
                 )),
             bottomNavigationBar: MobjBottombar(
@@ -70,218 +73,218 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                     : 0,
                                 itemBuilder: (BuildContext context, int index) {
                                   final orderList =
-                                  productlist.lineItems[index];
+                                      productlist.lineItems[index];
                                   return productlist.lineItems != []
                                       ? Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 5, 10, 5),
-                                      child: GestureDetector(
-                                          onTap: () {
-                                            ref.refresh(
-                                                productDetailsProvider(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 5, 10, 5),
+                                          child: GestureDetector(
+                                              onTap: () {
+                                                ref.refresh(
+                                                    productDetailsProvider(
                                                   orderList.productId
                                                       .toString(),
                                                 ));
-                                            Navigator.of(context).push(
-                                              PageRouteBuilder(
-                                                pageBuilder: (context,
-                                                    animation1,
-                                                    animation2) =>
-                                                    ProductDetailsScreen(
+                                                Navigator.of(context).push(
+                                                  PageRouteBuilder(
+                                                    pageBuilder: (context,
+                                                            animation1,
+                                                            animation2) =>
+                                                        ProductDetailsScreen(
                                                       uid: orderList.productId
                                                           .toString(),
                                                     ),
-                                                transitionDuration:
-                                                Duration.zero,
-                                                reverseTransitionDuration:
-                                                Duration.zero,
-                                              ),
-                                            );
-                                          },
-                                          child: Card(
-                                            margin: const EdgeInsets.only(
-                                                bottom: 0),
-                                            elevation: 2,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(15),
-                                            ),
-                                            child: ListTile(
-                                              contentPadding:
-                                              EdgeInsets.zero,
-                                              leading: Padding(
-                                                padding:
-                                                const EdgeInsets.only(
-                                                    left: 5),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: (ref.watch(
-                                                      productImageDataProvider(
-                                                          orderList
-                                                              .productId
-                                                              .toString())))
-                                                      .when(
-                                                    data: (images) {
-                                                      if (images
-                                                          .isNotEmpty) {
-                                                        // Find the image with the specified variant ID
-                                                        final selectedImage =
-                                                        images
-                                                            .firstWhere(
-                                                              (image) => image
-                                                              .variantIds
-                                                              .contains(
-                                                              orderList
-                                                                  .variantId),
-                                                          orElse: () =>
-                                                              ProductImage(
-                                                                id: 0,
-                                                                // Provide a default ID
-                                                                alt:
-                                                                "Default",
-                                                                position: 0,
-                                                                productId:
-                                                                0,
-                                                                createdAt: DateTime
-                                                                    .now()
-                                                                    .toString(),
-                                                                // Provide a default creation time
-                                                                updatedAt: DateTime
-                                                                    .now()
-                                                                    .toString(),
-                                                                // Provide a default update time
-                                                                adminGraphqlApiId:
-                                                                "gid://shopify/ProductImage/0",
-                                                                width: 0,
-                                                                height: 0,
-                                                                src: images[
-                                                                0]
-                                                                    .src,
-                                                                // Provide a default image URL
-                                                                variantIds: [],
-                                                              ),
-                                                        );
+                                                    transitionDuration:
+                                                        Duration.zero,
+                                                    reverseTransitionDuration:
+                                                        Duration.zero,
+                                                  ),
+                                                );
+                                              },
+                                              child: Card(
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 0),
+                                                elevation: 2,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  leading: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: (ref.watch(
+                                                                  productImageDataProvider(
+                                                                      orderList
+                                                                          .productId
+                                                                          .toString())))
+                                                              .when(
+                                                            data: (images) {
+                                                              if (images
+                                                                  .isNotEmpty) {
+                                                                // Find the image with the specified variant ID
+                                                                final selectedImage =
+                                                                    images
+                                                                        .firstWhere(
+                                                                  (image) => image
+                                                                      .variantIds
+                                                                      .contains(
+                                                                          orderList
+                                                                              .variantId),
+                                                                  orElse: () =>
+                                                                      ProductImage(
+                                                                    id: 0,
+                                                                    // Provide a default ID
+                                                                    alt:
+                                                                        "Default",
+                                                                    position: 0,
+                                                                    productId:
+                                                                        0,
+                                                                    createdAt: DateTime
+                                                                            .now()
+                                                                        .toString(),
+                                                                    // Provide a default creation time
+                                                                    updatedAt: DateTime
+                                                                            .now()
+                                                                        .toString(),
+                                                                    // Provide a default update time
+                                                                    adminGraphqlApiId:
+                                                                        "gid://shopify/ProductImage/0",
+                                                                    width: 0,
+                                                                    height: 0,
+                                                                    src: images[
+                                                                            0]
+                                                                        .src,
+                                                                    // Provide a default image URL
+                                                                    variantIds: [],
+                                                                  ),
+                                                                );
 
-                                                        return selectedImage
-                                                            .src;
-                                                      }
-                                                      return DefaultValues
-                                                          .defaultImagesSrc;
-                                                    },
-                                                    loading: () =>
-                                                    DefaultValues
-                                                        .defaultImagesSrc,
-                                                    error: (_, __) =>
-                                                    DefaultValues
-                                                        .defaultImagesSrc,
-                                                  ) ??
-                                                      DefaultValues
-                                                          .defaultImagesSrc,
-                                                  placeholder:
-                                                      (context, url) =>
-                                                      Container(
+                                                                return selectedImage
+                                                                    .src;
+                                                              }
+                                                              return DefaultValues
+                                                                  .defaultImagesSrc;
+                                                            },
+                                                            loading: () =>
+                                                                DefaultValues
+                                                                    .defaultImagesSrc,
+                                                            error: (_, __) =>
+                                                                DefaultValues
+                                                                    .defaultImagesSrc,
+                                                          ) ??
+                                                          DefaultValues
+                                                              .defaultImagesSrc,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Container(
                                                         height: 50,
                                                         width: 50,
                                                         color:
-                                                        AppColors.greyShade,
+                                                            AppColors.greyShade,
                                                       ),
-                                                  errorWidget: (context,
-                                                      url, error) =>
-                                                  const Icon(
-                                                      Icons.error),
-                                                  width: 50,
-                                                  height: 50,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                              title: Padding(
-                                                padding:
-                                                const EdgeInsets.only(
-                                                    top: 10, left: 0),
-                                                child: Text(orderList.name),
-                                              ),
-                                              subtitle: Padding(
-                                                  padding:
-                                                  const EdgeInsets.only(
-                                                      top: 5, left: 0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
-                                                    children: [
-                                                      Text(
-                                                        '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(orderList.price.toString()) * orderList.quantity).toStringAsFixed(2)}',
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                    ],
-                                                  )),
-                                              trailing: Row(
-                                                mainAxisSize:
-                                                MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    decoration:
-                                                    BoxDecoration(
-                                                      border: Border.all(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          width: 1.5),
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          AppDimension
-                                                              .buttonRadius),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                      width: 50,
+                                                      height: 50,
+                                                      fit: BoxFit.contain,
                                                     ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                      MainAxisSize.min,
-                                                      children: [
-                                                        IconButton(
-                                                          padding:
-                                                          EdgeInsets
-                                                              .zero,
-                                                          // Remove padding
-                                                          icon: const Icon(
-                                                            Icons.remove,
+                                                  ),
+                                                  title: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 10, left: 0),
+                                                    child: Text(orderList.name),
+                                                  ),
+                                                  subtitle: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5, left: 0),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(orderList.price.toString()) * orderList.quantity).toStringAsFixed(2)}',
                                                           ),
-                                                          // Adjust icon size
-                                                          onPressed: () {
-                                                            if (orderList
-                                                                .quantity >
-                                                                1) {
-                                                              setState(
+                                                          const SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                        ],
+                                                      )),
+                                                  trailing: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: AppColors
+                                                                  .blackColor,
+                                                              width: 1.5),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  AppDimension
+                                                                      .buttonRadius),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            IconButton(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              // Remove padding
+                                                              icon: const Icon(
+                                                                Icons.remove,
+                                                              ),
+                                                              // Adjust icon size
+                                                              onPressed: () {
+                                                                if (orderList
+                                                                        .quantity >
+                                                                    1) {
+                                                                  setState(
                                                                     () {
-                                                                  orderList
-                                                                      .quantity--;
-                                                                  final lineItemsList =
-                                                                      productlist
-                                                                          .lineItems;
-                                                                  var reqBody =
-                                                                  [];
-                                                                  for (int i =
-                                                                  0;
-                                                                  i <=
-                                                                      productlist.lineItems.length - 1;
-                                                                  i++) {
-                                                                    reqBody
-                                                                        .add({
-                                                                      "variant_id":
-                                                                      lineItemsList[i].variantId,
-                                                                      "quantity":
-                                                                      lineItemsList[i].quantity
-                                                                    });
-                                                                  }
+                                                                      orderList
+                                                                          .quantity--;
+                                                                      final lineItemsList =
+                                                                          productlist
+                                                                              .lineItems;
+                                                                      var reqBody =
+                                                                          [];
+                                                                      for (int i =
+                                                                              0;
+                                                                          i <=
+                                                                              productlist.lineItems.length - 1;
+                                                                          i++) {
+                                                                        reqBody
+                                                                            .add({
+                                                                          "variant_id":
+                                                                              lineItemsList[i].variantId,
+                                                                          "quantity":
+                                                                              lineItemsList[i].quantity
+                                                                        });
+                                                                      }
 
-                                                                  CommonAlert
-                                                                      .show_loading_alert(
-                                                                      context);
-                                                                  // getProductsByVariantId
+                                                                      CommonAlert
+                                                                          .show_loading_alert(
+                                                                              context);
+                                                                      // getProductsByVariantId
 
-                                                                  ProductRepository()
-                                                                      .updateCart(
-                                                                      reqBody)
-                                                                      .then(
-                                                                          (subjectFromServer) {
+                                                                      ProductRepository()
+                                                                          .updateCart(
+                                                                              reqBody)
+                                                                          .then(
+                                                                              (subjectFromServer) {
                                                                         Navigator.of(context)
                                                                             .pop();
 
@@ -291,64 +294,64 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                                                               cartDetailsDataProvider);
                                                                         }
                                                                       });
-                                                                },
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
-                                                        Text(
-                                                            '${orderList.quantity}'),
-                                                        IconButton(
-                                                          padding:
-                                                          EdgeInsets
-                                                              .zero,
-                                                          // Remove padding
+                                                                    },
+                                                                  );
+                                                                }
+                                                              },
+                                                            ),
+                                                            Text(
+                                                                '${orderList.quantity}'),
+                                                            IconButton(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              // Remove padding
 
-                                                          icon: const Icon(
-                                                            Icons.add,
-                                                          ),
-                                                          onPressed: () {
-                                                            final price =
-                                                            double.parse(
-                                                                orderList
-                                                                    .price
-                                                                    .toString());
-                                                            CommonAlert
-                                                                .show_loading_alert(
-                                                                context);
-                                                            ProductRepository()
-                                                                .getProductsByVariantId(
-                                                                orderList
-                                                                    .variantId
-                                                                    .toString(),
-                                                                orderList
-                                                                    .productId
-                                                                    .toString())
-                                                                .then(
-                                                                    (subjectFromServer) {
+                                                              icon: const Icon(
+                                                                Icons.add,
+                                                              ),
+                                                              onPressed: () {
+                                                                final price =
+                                                                    double.parse(
+                                                                        orderList
+                                                                            .price
+                                                                            .toString());
+                                                                CommonAlert
+                                                                    .show_loading_alert(
+                                                                        context);
+                                                                ProductRepository()
+                                                                    .getProductsByVariantId(
+                                                                        orderList
+                                                                            .variantId
+                                                                            .toString(),
+                                                                        orderList
+                                                                            .productId
+                                                                            .toString())
+                                                                    .then(
+                                                                        (subjectFromServer) {
                                                                   if (orderList
-                                                                      .quantity <
+                                                                          .quantity <
                                                                       subjectFromServer
                                                                           .inventoryQuantity) {
                                                                     setState(
-                                                                          () {
+                                                                      () {
                                                                         orderList
                                                                             .quantity++;
                                                                         final lineItemsList =
                                                                             productlist.lineItems;
                                                                         var reqBody =
-                                                                        [];
+                                                                            [];
                                                                         for (int i =
-                                                                        0;
-                                                                        i <=
-                                                                            productlist.lineItems.length - 1;
-                                                                        i++) {
+                                                                                0;
+                                                                            i <=
+                                                                                productlist.lineItems.length - 1;
+                                                                            i++) {
                                                                           reqBody
                                                                               .add({
                                                                             "variant_id":
-                                                                            lineItemsList[i].variantId,
+                                                                                lineItemsList[i].variantId,
                                                                             "quantity":
-                                                                            lineItemsList[i].quantity
+                                                                                lineItemsList[i].quantity
                                                                           });
                                                                         }
 
@@ -367,88 +370,87 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                                                     );
                                                                   } else {
                                                                     Navigator.of(
-                                                                        context)
+                                                                            context)
                                                                         .pop();
                                                                     Fluttertoast.showToast(
                                                                         msg:
-                                                                        "Only ${subjectFromServer.inventoryQuantity} left in stock",
+                                                                            "Only ${subjectFromServer.inventoryQuantity} left in stock",
                                                                         toastLength:
-                                                                        Toast
-                                                                            .LENGTH_SHORT,
+                                                                            Toast
+                                                                                .LENGTH_SHORT,
                                                                         gravity:
-                                                                        ToastGravity
-                                                                            .BOTTOM,
+                                                                            ToastGravity
+                                                                                .BOTTOM,
                                                                         timeInSecForIosWeb:
-                                                                        0,
+                                                                            0,
                                                                         backgroundColor:
-                                                                        AppColors
-                                                                            .blackColor,
+                                                                            AppColors
+                                                                                .blackColor,
                                                                         textColor:
-                                                                        AppColors
-                                                                            .whiteColor,
+                                                                            AppColors
+                                                                                .whiteColor,
                                                                         fontSize:
-                                                                        16.0);
+                                                                            16.0);
                                                                   }
                                                                   // });
                                                                 });
-                                                          },
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  IconButton(
-                                                    icon: const Icon(
-                                                        Icons.delete),
-                                                    onPressed: () async {
-
-                                                      CommonAlert
-                                                          .show_loading_alert(
-                                                          context);
-                                                      if (productlist
-                                                          .lineItems
-                                                          .length ==
-                                                          1) {
-                                                        await SharedPreferenceManager()
-                                                            .setDraftId("");
-                                                        ref.refresh(
-                                                            cartDetailsDataProvider);
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop();
-                                                      } else {
-                                                        setState(
+                                                              },
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                            Icons.delete),
+                                                        onPressed: () async {
+                                                          CommonAlert
+                                                              .show_loading_alert(
+                                                                  context);
+                                                          if (productlist
+                                                                  .lineItems
+                                                                  .length ==
+                                                              1) {
+                                                            await SharedPreferenceManager()
+                                                                .setDraftId("");
+                                                            ref.refresh(
+                                                                cartDetailsDataProvider);
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          } else {
+                                                            setState(
                                                               () {
-                                                            productlist
-                                                                .lineItems
-                                                                .removeAt(
-                                                                index);
-                                                            final lineItemsList =
                                                                 productlist
-                                                                    .lineItems;
-                                                            var reqBody =
-                                                            [];
-                                                            for (int i = 0;
-                                                            i <=
-                                                                productlist.lineItems.length -
-                                                                    1;
-                                                            i++) {
-                                                              reqBody.add({
-                                                                "variant_id":
-                                                                lineItemsList[i]
-                                                                    .variantId,
-                                                                "quantity":
-                                                                lineItemsList[i]
-                                                                    .quantity
-                                                              });
-                                                            }
+                                                                    .lineItems
+                                                                    .removeAt(
+                                                                        index);
+                                                                final lineItemsList =
+                                                                    productlist
+                                                                        .lineItems;
+                                                                var reqBody =
+                                                                    [];
+                                                                for (int i = 0;
+                                                                    i <=
+                                                                        productlist.lineItems.length -
+                                                                            1;
+                                                                    i++) {
+                                                                  reqBody.add({
+                                                                    "variant_id":
+                                                                        lineItemsList[i]
+                                                                            .variantId,
+                                                                    "quantity":
+                                                                        lineItemsList[i]
+                                                                            .quantity
+                                                                  });
+                                                                }
 
-                                                            ProductRepository()
-                                                                .updateCart(
-                                                                reqBody)
-                                                                .then(
-                                                                    (subjectFromServer) {
+                                                                ProductRepository()
+                                                                    .updateCart(
+                                                                        reqBody)
+                                                                    .then(
+                                                                        (subjectFromServer) {
                                                                   Navigator.of(
-                                                                      context)
+                                                                          context)
                                                                       .pop();
 
                                                                   if (subjectFromServer ==
@@ -458,20 +460,20 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                                                         cartDetailsDataProvider);
                                                                   }
                                                                 });
-                                                          },
-                                                        );
-                                                      }
-                                                    },
+                                                              },
+                                                            );
+                                                          }
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          )))
+                                                ),
+                                              )))
                                       : const Center(
-                                    child: ErrorHandling(
-                                      error_type: AppString.noDataError,
-                                    ),
-                                  );
+                                          child: ErrorHandling(
+                                            error_type: AppString.noDataError,
+                                          ),
+                                        );
                                 })),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -483,16 +485,13 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment
-                                    .spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '${AppLocalizations.of(context)!.actualPrice}:',
                                     style: TextStyle(
                                       fontSize: 0.05 *
-                                          MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          MediaQuery.of(context).size.width,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
@@ -500,9 +499,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                     '\u{20B9}${product.subtotalPrice}',
                                     style: TextStyle(
                                       fontSize: 0.05 *
-                                          MediaQuery.of(context)
-                                              .size
-                                              .width,
+                                          MediaQuery.of(context).size.width,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -513,7 +510,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '${AppLocalizations.of(context)!.tax}:',
@@ -538,7 +535,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     '${AppLocalizations.of(context)!.total}:',
@@ -559,29 +556,31 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                 ],
                               ),
                               Padding(
-                                padding:
-                                const EdgeInsets.only(
-                                    top: 25,
-                                    left: 10,
-                                    right: 10),
-                                child:ElevatedButton(
+                                padding: const EdgeInsets.only(
+                                    top: 25, left: 10, right: 10),
+                                child: ElevatedButton(
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         PageRouteBuilder(
-                                          pageBuilder:
-                                              (context, animation1, animation2) =>
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
                                               AddressListScreen(
-                                                  isCheckout: true,
-                                                  amount: product.totalPrice.toInt()* 100,mobile:product.customer.phone.toString()
-                                              ),
+                                            isCheckout: true,
+                                            amount: product.totalPrice.toInt() *
+                                                100,
+                                            mobile: product.customer.phone
+                                                .toString(),
+                                            bigcommerceOrderedItems: [],
+                                          ),
                                           transitionDuration: Duration.zero,
                                           reverseTransitionDuration:
-                                          Duration.zero,
+                                              Duration.zero,
                                         ),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: appInfo.primaryColorValue,
+                                      backgroundColor:
+                                          appInfo.primaryColorValue,
                                       minimumSize: const Size.fromHeight(50),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
@@ -592,14 +591,18 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                           fontStyle: FontStyle.normal),
                                     ),
                                     child: Text(
-                                      AppLocalizations.of(context)!.next.toUpperCase(),
+                                      AppLocalizations.of(context)!
+                                          .next
+                                          .toUpperCase(),
                                       style: TextStyle(
                                           color: AppColors.whiteColor,
-                                          fontSize:
-                                          MediaQuery.of(context).size.width *
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
                                               0.05,
                                           fontWeight: FontWeight.bold),
-                                    )),),
+                                    )),
+                              ),
                               const SizedBox(height: 16),
                             ],
                           ),
@@ -620,27 +623,27 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                   ),
                   error == AppString.noDataError
                       ? Text(AppLocalizations.of(context)!.emptyCart,
-                      style: TextStyle(
-                          fontSize:
-                          MediaQuery.of(context).size.width * 0.05,
-                          fontWeight: FontWeight.bold))
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
+                              fontWeight: FontWeight.bold))
                       : Container(),
                   error != AppString.noDataError
                       ? ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.buttonColor,
-                    ),
-                    onPressed: () {
-                      ref.refresh(cartDetailsDataProvider);
-                    },
-                    child:  Text(
-                      AppLocalizations.of(context)!.refresh,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.whiteColor,
-                      ),
-                    ),
-                  )
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.buttonColor,
+                          ),
+                          onPressed: () {
+                            ref.refresh(cartDetailsDataProvider);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.refresh,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                        )
                       : Container()
                 ],
               ),

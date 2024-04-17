@@ -24,7 +24,7 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<DraftOrderModel> cart = [];
   double total = 0;
-
+  List<Map<String, dynamic>> bigcommerceOrderedItems = [];
   void removeItem(LineItem item) {}
 
   @override
@@ -35,6 +35,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bigcommerceOrderedItems.clear();
     final product = ref.watch(cartDetailsDataProvider);
     final appInfoAsyncValue = ref.watch(appInfoProvider);
 
@@ -60,6 +61,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             body: product.when(
               data: (product) {
                 DraftOrderModel productlist = product;
+                productlist.lineItems.forEach((element) {
+                  bigcommerceOrderedItems.add(
+                      {"item_id": element.id, "quantity": element.quantity});
+                });
 
                 return RefreshIndicator(
                   // Wrap the list in a RefreshIndicator widget
@@ -77,6 +82,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                 itemBuilder: (BuildContext context, int index) {
                                   final orderList =
                                       productlist.lineItems[index];
+
+                                  log('products are this $bigcommerceOrderedItems');
                                   return productlist.lineItems != []
                                       ? Padding(
                                           padding: const EdgeInsets.fromLTRB(
@@ -646,12 +653,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
                                               AddressListScreen(
-                                                  isCheckout: true,
-                                                  amount: product.totalPrice
-                                                          .toInt() *
-                                                      100,
-                                                  mobile: product.customer.phone
-                                                      .toString()),
+                                            isCheckout: true,
+                                            amount: product.totalPrice.toInt() *
+                                                100,
+                                            mobile: product.customer.phone
+                                                .toString(),
+                                            bigcommerceOrderedItems:
+                                                bigcommerceOrderedItems,
+                                          ),
                                           transitionDuration: Duration.zero,
                                           reverseTransitionDuration:
                                               Duration.zero,
