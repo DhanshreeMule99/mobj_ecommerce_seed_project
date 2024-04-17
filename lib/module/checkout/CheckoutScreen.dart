@@ -1,10 +1,15 @@
 // CheckoutScreen
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mobj_project/models/shopifyModel/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../utils/api.dart';
 import '../address/addAddressScreen.dart';
 import '../address/addressListScreen.dart';
 import '../paymentGatways/phonePePay/phonePeGateway.dart';
@@ -249,56 +254,95 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                 Icons.remove,
                                                               ),
                                                               // Adjust icon size
-                                                              onPressed: () {
-                                                                if (orderList
-                                                                        .quantity >
-                                                                    1) {
-                                                                  setState(
-                                                                    () {
-                                                                      orderList
-                                                                          .quantity--;
-                                                                      final lineItemsList =
-                                                                          productlist
-                                                                              .lineItems;
-                                                                      var reqBody =
-                                                                          [];
-                                                                      for (int i =
-                                                                              0;
-                                                                          i <=
-                                                                              productlist.lineItems.length - 1;
-                                                                          i++) {
-                                                                        reqBody
-                                                                            .add({
-                                                                          "variant_id":
-                                                                              lineItemsList[i].variantId,
-                                                                          "quantity":
-                                                                              lineItemsList[i].quantity
-                                                                        });
-                                                                      }
-
-                                                                      CommonAlert
-                                                                          .show_loading_alert(
+                                                              onPressed: AppConfigure
+                                                                      .bigCommerce
+                                                                  ? () async {
+                                                                      if (orderList
+                                                                              .quantity >
+                                                                          1) {
+                                                                        API api =
+                                                                            API();
+                                                                        try {
+                                                                          String
+                                                                              draftId =
+                                                                              await SharedPreferenceManager().getDraftId();
+                                                                          CommonAlert.show_loading_alert(
                                                                               context);
-                                                                      // getProductsByVariantId
 
-                                                                      ProductRepository()
-                                                                          .updateCart(
-                                                                              reqBody)
-                                                                          .then(
-                                                                              (subjectFromServer) {
-                                                                        Navigator.of(context)
-                                                                            .pop();
+                                                                          orderList
+                                                                              .quantity--;
+                                                                          setState(
+                                                                              () {});
+                                                                          log('add maps');
 
-                                                                        if (subjectFromServer ==
-                                                                            AppString.success) {
+                                                                          log('calling put api ');
+                                                                          var response = await api.sendRequest.put(
+                                                                              'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                              data: {
+                                                                                "line_item": {
+                                                                                  "id": orderList.id,
+                                                                                  "variant_id": orderList.variantId,
+                                                                                  "product_id": orderList.productId,
+                                                                                  "quantity": orderList.quantity,
+                                                                                }
+                                                                              },
+                                                                              options: Options(headers: {
+                                                                                "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+                                                                                'Content-Type': 'application/json',
+                                                                              }));
+
+                                                                          // Response
+                                                                          //     response =
+                                                                          //     await ApiManager.put('https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                          //         body);
+
                                                                           ref.refresh(
                                                                               cartDetailsDataProvider);
+
+                                                                          log('cart updated successfully ${response.statusCode}');
+                                                                        } on Exception catch (e) {
+                                                                          log(e
+                                                                              .toString());
+                                                                        } finally {
+                                                                          Navigator.of(context)
+                                                                              .pop();
                                                                         }
-                                                                      });
+                                                                      }
+                                                                    }
+                                                                  : () {
+                                                                      if (orderList
+                                                                              .quantity >
+                                                                          1) {
+                                                                        setState(
+                                                                          () {
+                                                                            orderList.quantity--;
+                                                                            final lineItemsList =
+                                                                                productlist.lineItems;
+                                                                            var reqBody =
+                                                                                [];
+                                                                            for (int i = 0;
+                                                                                i <= productlist.lineItems.length - 1;
+                                                                                i++) {
+                                                                              reqBody.add({
+                                                                                "variant_id": lineItemsList[i].variantId,
+                                                                                "quantity": lineItemsList[i].quantity
+                                                                              });
+                                                                            }
+
+                                                                            CommonAlert.show_loading_alert(context);
+                                                                            // getProductsByVariantId
+
+                                                                            ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                              Navigator.of(context).pop();
+
+                                                                              if (subjectFromServer == AppString.success) {
+                                                                                ref.refresh(cartDetailsDataProvider);
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                        );
+                                                                      }
                                                                     },
-                                                                  );
-                                                                }
-                                                              },
                                                             ),
                                                             Text(
                                                                 '${orderList.quantity}'),
@@ -311,91 +355,108 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               icon: const Icon(
                                                                 Icons.add,
                                                               ),
-                                                              onPressed: () {
-                                                                final price =
-                                                                    double.parse(
-                                                                        orderList
-                                                                            .price
-                                                                            .toString());
-                                                                CommonAlert
-                                                                    .show_loading_alert(
-                                                                        context);
-                                                                ProductRepository()
-                                                                    .getProductsByVariantId(
-                                                                        orderList
-                                                                            .variantId
-                                                                            .toString(),
-                                                                        orderList
-                                                                            .productId
-                                                                            .toString())
-                                                                    .then(
-                                                                        (subjectFromServer) {
-                                                                  if (orderList
-                                                                          .quantity <
-                                                                      subjectFromServer
-                                                                          .inventoryQuantity) {
-                                                                    setState(
-                                                                      () {
+                                                              onPressed: AppConfigure
+                                                                      .bigCommerce
+                                                                  ? () async {
+                                                                      API api =
+                                                                          API();
+                                                                      try {
+                                                                        String
+                                                                            draftId =
+                                                                            await SharedPreferenceManager().getDraftId();
+                                                                        CommonAlert.show_loading_alert(
+                                                                            context);
+
                                                                         orderList
                                                                             .quantity++;
-                                                                        final lineItemsList =
-                                                                            productlist.lineItems;
-                                                                        var reqBody =
-                                                                            [];
-                                                                        for (int i =
-                                                                                0;
-                                                                            i <=
-                                                                                productlist.lineItems.length - 1;
-                                                                            i++) {
-                                                                          reqBody
-                                                                              .add({
-                                                                            "variant_id":
-                                                                                lineItemsList[i].variantId,
-                                                                            "quantity":
-                                                                                lineItemsList[i].quantity
-                                                                          });
-                                                                        }
+                                                                        setState(
+                                                                            () {});
+                                                                        log('add maps');
 
-                                                                        ProductRepository()
-                                                                            .updateCart(reqBody)
-                                                                            .then((subjectFromServers) {
+                                                                        log('calling put api ');
+                                                                        var response = await api.sendRequest.put(
+                                                                            'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                            data: {
+                                                                              "line_item": {
+                                                                                "id": orderList.id,
+                                                                                "variant_id": orderList.variantId,
+                                                                                "product_id": orderList.productId,
+                                                                                "quantity": orderList.quantity,
+                                                                              }
+                                                                            },
+                                                                            options:
+                                                                                Options(headers: {
+                                                                              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+                                                                              'Content-Type': 'application/json',
+                                                                            }));
+
+                                                                        // Response
+                                                                        //     response =
+                                                                        //     await ApiManager.put('https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                        //         body);
+
+                                                                        ref.refresh(
+                                                                            cartDetailsDataProvider);
+
+                                                                        log('cart updated successfully ${response.statusCode}');
+                                                                      } on Exception catch (e) {
+                                                                        log(e
+                                                                            .toString());
+                                                                      } finally {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      }
+                                                                    }
+                                                                  : () {
+                                                                      final price = double.parse(orderList
+                                                                          .price
+                                                                          .toString());
+                                                                      CommonAlert
+                                                                          .show_loading_alert(
+                                                                              context);
+                                                                      ProductRepository()
+                                                                          .getProductsByVariantId(
+                                                                              orderList.variantId.toString(),
+                                                                              orderList.productId.toString())
+                                                                          .then((subjectFromServer) {
+                                                                        if (orderList.quantity <
+                                                                            subjectFromServer.inventoryQuantity) {
+                                                                          setState(
+                                                                            () {
+                                                                              orderList.quantity++;
+                                                                              final lineItemsList = productlist.lineItems;
+                                                                              var reqBody = [];
+                                                                              for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                reqBody.add({
+                                                                                  "variant_id": lineItemsList[i].variantId,
+                                                                                  "quantity": lineItemsList[i].quantity
+                                                                                });
+                                                                              }
+
+                                                                              ProductRepository().updateCart(reqBody).then((subjectFromServers) {
+                                                                                Navigator.of(context).pop();
+
+                                                                                if (subjectFromServers == AppString.success) {
+                                                                                  ref.refresh(cartDetailsDataProvider);
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                          );
+                                                                        } else {
                                                                           Navigator.of(context)
                                                                               .pop();
-
-                                                                          if (subjectFromServers ==
-                                                                              AppString.success) {
-                                                                            ref.refresh(cartDetailsDataProvider);
-                                                                          }
-                                                                        });
-                                                                      },
-                                                                    );
-                                                                  } else {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Fluttertoast.showToast(
-                                                                        msg:
-                                                                            "Only ${subjectFromServer.inventoryQuantity} left in stock",
-                                                                        toastLength:
-                                                                            Toast
-                                                                                .LENGTH_SHORT,
-                                                                        gravity:
-                                                                            ToastGravity
-                                                                                .BOTTOM,
-                                                                        timeInSecForIosWeb:
-                                                                            0,
-                                                                        backgroundColor:
-                                                                            AppColors
-                                                                                .blackColor,
-                                                                        textColor:
-                                                                            AppColors
-                                                                                .whiteColor,
-                                                                        fontSize:
-                                                                            16.0);
-                                                                  }
-                                                                  // });
-                                                                });
-                                                              },
+                                                                          Fluttertoast.showToast(
+                                                                              msg: "Only ${subjectFromServer.inventoryQuantity} left in stock",
+                                                                              toastLength: Toast.LENGTH_SHORT,
+                                                                              gravity: ToastGravity.BOTTOM,
+                                                                              timeInSecForIosWeb: 0,
+                                                                              backgroundColor: AppColors.blackColor,
+                                                                              textColor: AppColors.whiteColor,
+                                                                              fontSize: 16.0);
+                                                                        }
+                                                                        // });
+                                                                      });
+                                                                    },
                                                             )
                                                           ],
                                                         ),
@@ -404,6 +465,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                         icon: const Icon(
                                                             Icons.delete),
                                                         onPressed: () async {
+                                                          log('id is this ${orderList.id}');
+                                                          String draftId =
+                                                              await SharedPreferenceManager()
+                                                                  .getDraftId();
                                                           CommonAlert
                                                               .show_loading_alert(
                                                                   context);
@@ -419,50 +484,65 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                     context)
                                                                 .pop();
                                                           } else {
-                                                            setState(
-                                                              () {
+                                                            productlist
+                                                                .lineItems
+                                                                .removeAt(
+                                                                    index);
+                                                            setState(() {});
+                                                            final lineItemsList =
                                                                 productlist
-                                                                    .lineItems
-                                                                    .removeAt(
-                                                                        index);
-                                                                final lineItemsList =
+                                                                    .lineItems;
+                                                            var reqBody = [];
+                                                            for (int i = 0;
+                                                                i <=
                                                                     productlist
-                                                                        .lineItems;
-                                                                var reqBody =
-                                                                    [];
-                                                                for (int i = 0;
-                                                                    i <=
-                                                                        productlist.lineItems.length -
-                                                                            1;
-                                                                    i++) {
-                                                                  reqBody.add({
-                                                                    "variant_id":
-                                                                        lineItemsList[i]
-                                                                            .variantId,
-                                                                    "quantity":
-                                                                        lineItemsList[i]
-                                                                            .quantity
-                                                                  });
+                                                                            .lineItems
+                                                                            .length -
+                                                                        1;
+                                                                i++) {
+                                                              reqBody.add({
+                                                                "variant_id":
+                                                                    lineItemsList[
+                                                                            i]
+                                                                        .variantId,
+                                                                "quantity":
+                                                                    lineItemsList[
+                                                                            i]
+                                                                        .quantity
+                                                              });
+                                                            }
+
+                                                            if (AppConfigure
+                                                                .bigCommerce) {
+                                                              var response =
+                                                                  await ApiManager
+                                                                      .delete(
+                                                                          'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}');
+
+                                                              ref.refresh(
+                                                                  cartDetailsDataProvider);
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              log("cart item deleted successfully ${response.statusCode}");
+                                                            } else {
+                                                              ProductRepository()
+                                                                  .updateCart(
+                                                                      reqBody)
+                                                                  .then(
+                                                                      (subjectFromServer) {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+
+                                                                if (subjectFromServer ==
+                                                                    AppString
+                                                                        .success) {
+                                                                  ref.refresh(
+                                                                      cartDetailsDataProvider);
                                                                 }
-
-                                                                ProductRepository()
-                                                                    .updateCart(
-                                                                        reqBody)
-                                                                    .then(
-                                                                        (subjectFromServer) {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-
-                                                                  if (subjectFromServer ==
-                                                                      AppString
-                                                                          .success) {
-                                                                    ref.refresh(
-                                                                        cartDetailsDataProvider);
-                                                                  }
-                                                                });
-                                                              },
-                                                            );
+                                                              });
+                                                            }
                                                           }
                                                         },
                                                       ),

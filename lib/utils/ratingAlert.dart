@@ -33,6 +33,8 @@ class RatingAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.rateUs),
       content: Column(
@@ -78,10 +80,23 @@ class RatingAlert extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+             String customername = await SharedPreferenceManager().getname();
+               String customeremail = await SharedPreferenceManager().getemail();
             String uid = await SharedPreferenceManager().getUserId();
             CommonAlert.show_loading_alert(context);
-
-            final body = {
+              Map<String, dynamic> body = AppConfigure.bigCommerce
+            ?
+            {
+              "title": review.text,
+              "text": header.text,
+              "status": "pending",
+              "rating": rating,
+              "email": customeremail,
+              "name": customername,
+              "date_reviewed": "2019-03-24T14:15:22Z"
+              }
+            
+            : {
               "data": {
                 "body": review.text,
                 "heading": header.text,
@@ -92,7 +107,7 @@ class RatingAlert extends StatelessWidget {
                 "rating": rating
               }
             };
-            ProductRepository().addProductReview(body).then((value) async {
+            ProductRepository().addProductReview(body, pid ).then((value) async {
               Navigator.of(context).pop();
               if (value == AppString.success) {
                 ref.refresh(cartDetailsDataProvider);
@@ -109,6 +124,8 @@ class RatingAlert extends StatelessWidget {
                     backgroundColor: AppColors.green,
                     textColor: AppColors.whiteColor,
                     fontSize: 16.0);
+  ref.refresh(productReviewsProvider(pid));
+
               } else {
                 Navigator.of(context).pop();
 

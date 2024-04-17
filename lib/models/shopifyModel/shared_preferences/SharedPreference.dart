@@ -7,6 +7,8 @@ class SharedPreferenceManager {
   static const String profilePic = 'profile';
   static const String googleToken = 'googleToken';
   static const String draftId = 'draftId';
+  static const String name = 'name';
+  static const String email = 'email';
 
   static final SharedPreferenceManager _instance =
       SharedPreferenceManager._internal();
@@ -80,5 +82,25 @@ class SharedPreferenceManager {
   Future<String> getProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(profilePic) ?? "";
+  }
+
+   Future<String> getname() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(name) ?? "";
+  }
+
+   Future<bool> setname(String tokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(name, tokens);
+  }
+
+  Future<String> getemail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(email) ?? "";
+  }
+
+   Future<bool> setemail(String tokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(email, tokens);
   }
 }
