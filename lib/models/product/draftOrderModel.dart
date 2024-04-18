@@ -1,5 +1,7 @@
 import 'package:mobj_project/utils/appConfiguer.dart';
 
+import '../../mappers/bigcommerce_models/bigcommerce_draftordermodel.dart';
+import '../../mappers/shopify_models/shopify_draftoderdermodel.dart';
 import '../../utils/defaultValues.dart';
 
 class DraftOrderModel {
@@ -64,84 +66,11 @@ class DraftOrderModel {
   });
 
   factory DraftOrderModel.fromJson(Map<String, dynamic> json) {
-    return DraftOrderModel(
-      id: AppConfigure.bigCommerce
-          ? json['id']
-          : json['id'] ?? DefaultValues.defaultInt,
-      note: json['note'] ?? DefaultValues.defaultString,
-      email: json['email'] ?? DefaultValues.defaultString,
-      taxesIncluded: json['taxes_included'] ?? false,
-      currency: AppConfigure.bigCommerce
-          ? json['currency']['code']
-          : json['currency'] ?? DefaultValues.defaultString,
-      invoiceSentAt: json['invoice_sent_at'] ?? DefaultValues.defaultString,
-      createdAt: AppConfigure.bigCommerce
-          ? json['created_time']
-          : json['created_at'] ?? DefaultValues.defaultString,
-      updatedAt: AppConfigure.bigCommerce
-          ? json['updated_time']
-          : json['updated_at'] ?? DefaultValues.defaultString,
-      taxExempt: json['tax_exempt'] ?? false,
-      completedAt: AppConfigure.bigCommerce
-          ? json['updated_time']
-          : json['completed_at'] ?? DefaultValues.defaultString,
-      name: json['name'] ?? DefaultValues.defaultString,
-      status: json['status'] ?? DefaultValues.defaultString,
-      lineItems: AppConfigure.bigCommerce
-          ? List<LineItem>.from(json['line_items']['physical_items']
-              .map((item) => LineItem.fromJson(item)))
-          : List<LineItem>.from(
-              json['line_items'].map((item) => LineItem.fromJson(item))),
-      shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
-      billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
-      invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
-      appliedDiscount: AppConfigure.bigCommerce
-          ? json['discount_amount'].toString()
-          : json['applied_discount'] ?? DefaultValues.defaultString,
-      orderId: json['order_id'] ?? DefaultValues.defaultInt,
-      shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
-      taxLines: AppConfigure.bigCommerce
-          ? [TaxLine(rate: 1.00, title: "title", price: "11.0")]
-          : List<TaxLine>.from(
-              json['tax_lines'].map((item) => TaxLine.fromJson(item))),
-      tags: json['tags'] ?? DefaultValues.defaultString,
-      noteAttributes: AppConfigure.bigCommerce
-          ? []
-          : List<NoteAttribute>.from(json['note_attributes']
-              .map((item) => NoteAttribute.fromJson(item))),
-      totalPrice: AppConfigure.bigCommerce
-          ? double.parse(json['cart_amount'].toString())
-          : double.parse(json['total_price'].toString()) ??
-              DefaultValues.defaultDouble,
-      subtotalPrice: AppConfigure.bigCommerce
-          ? json['cart_amount'].toString()
-          : json['subtotal_price'] ?? DefaultValues.defaultString,
-      totalTax: json['total_tax'] ?? DefaultValues.defaultString,
-      paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId:
-          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
-      customer: AppConfigure.bigCommerce
-          ? CustomerModel(
-              id: 7,
-              email: 'cyberpunk7099@gmail.com',
-              acceptsMarketing: true,
-              createdAt: "createdAt",
-              updatedAt: "updatedAt",
-              firstName: "firstName",
-              lastName: "lastName",
-              ordersCount: 2,
-              state: "state",
-              totalSpent: "totalSpent",
-              lastOrderId: 123,
-              note: "note",
-              taxExempt: true,
-              tags: "tags",
-              lastOrderName: "lastOrderName",
-              currency: "INR",
-              phone: "7378646221",
-              adminGraphqlApiId: "adminGraphqlApiId")
-          : CustomerModel.fromJson(json['customer']),
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceDraftOrderModel.fromJson(json);
+    } else {
+      return ShopifyDraftOrderModel.fromJson(json);
+    }
   }
 }
 
@@ -191,44 +120,11 @@ class LineItem {
   });
 
   factory LineItem.fromJson(Map<String, dynamic> json) {
-    return LineItem(
-      id: json['id'] ?? DefaultValues.defaultInt,
-      variantId: json['variant_id'] ?? DefaultValues.defaultInt,
-      productId: json['product_id'] ?? DefaultValues.defaultInt,
-      title: AppConfigure.bigCommerce
-          ? json['name']
-          : json['title'] ?? DefaultValues.defaultString,
-      variantTitle: json['variant_title'] ?? DefaultValues.defaultString,
-      sku: json['sku'] ?? DefaultValues.defaultString,
-      vendor: json['vendor'] ?? DefaultValues.defaultString,
-      quantity: json['quantity'] ?? DefaultValues.defaultInt,
-      requiresShipping: AppConfigure.bigCommerce
-          ? json['is_require_shipping']
-          : json['requires_shipping'] ?? false,
-      taxable: json['taxable'] ?? false,
-      giftCard: json['gift_card'] ?? false,
-      fulfillmentService:
-          json['fulfillment_service'] ?? DefaultValues.defaultString,
-      grams: json['grams'] ?? DefaultValues.defaultInt,
-      taxLines: AppConfigure.bigCommerce
-          ? [TaxLine(rate: 1.00, title: "title", price: "11.0")]
-          : List<TaxLine>.from(
-              json['tax_lines'].map((item) => TaxLine.fromJson(item))),
-      appliedDiscount: AppConfigure.bigCommerce
-          ? json['discount_amount']
-          : json['applied_discount'] ?? DefaultValues.defaultString,
-      name: json['name'] ?? DefaultValues.defaultString,
-      properties: AppConfigure.bigCommerce
-          ? []
-          : List<dynamic>.from(json['properties'].map((item) => item)),
-      custom: json['custom'] ?? false,
-      price: AppConfigure.bigCommerce
-          ? json['sale_price'].toString()
-          : json['price'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId: AppConfigure.bigCommerce
-          ? json['image_url']
-          : json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceLineItem.fromJson(json);
+    } else {
+      return ShopifyLineItem.fromJson(json);
+    }
   }
 }
 
@@ -311,27 +207,11 @@ class CustomerModel {
   });
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
-    return CustomerModel(
-      id: json['id'] ?? DefaultValues.defaultInt,
-      email: json['email'] ?? DefaultValues.defaultString,
-      acceptsMarketing: json['accepts_marketing'] ?? false,
-      createdAt: json['created_at'] ?? DefaultValues.defaultString,
-      updatedAt: json['updated_at'] ?? DefaultValues.defaultString,
-      firstName: json['first_name'] ?? DefaultValues.defaultString,
-      lastName: json['last_name'] ?? DefaultValues.defaultString,
-      ordersCount: json['orders_count'] ?? DefaultValues.defaultInt,
-      state: json['state'] ?? DefaultValues.defaultString,
-      totalSpent: json['total_spent'] ?? DefaultValues.defaultString,
-      lastOrderId: json['last_order_id'] ?? DefaultValues.defaultInt,
-      note: json['note'] ?? DefaultValues.defaultString,
-      taxExempt: json['tax_exempt'] ?? false,
-      tags: json['tags'] ?? DefaultValues.defaultString,
-      lastOrderName: json['last_order_name'] ?? DefaultValues.defaultString,
-      currency: json['currency'] ?? DefaultValues.defaultString,
-      phone: json['phone'] ?? DefaultValues.defaultString,
-      adminGraphqlApiId:
-          json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceCustomerModel.fromJson(json);
+    } else {
+      return ShopifyCustomerModel.fromJson(json);
+    }
   }
 }
 
@@ -347,12 +227,11 @@ class EmailMarketingConsent {
   });
 
   factory EmailMarketingConsent.fromJson(Map<String, dynamic> json) {
-    return EmailMarketingConsent(
-      state: json['state'] ?? DefaultValues.defaultString,
-      optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
-      consentUpdatedAt:
-          json['consent_updated_at'] ?? DefaultValues.defaultString,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceEmailMarketingConsent.fromJson(json);
+    } else {
+      return ShopifyEmailMarketingConsent.fromJson(json);
+    }
   }
 }
 
@@ -370,14 +249,11 @@ class SmsMarketingConsent {
   });
 
   factory SmsMarketingConsent.fromJson(Map<String, dynamic> json) {
-    return SmsMarketingConsent(
-      state: json['state'] ?? DefaultValues.defaultString,
-      optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
-      consentUpdatedAt:
-          json['consent_updated_at'] ?? DefaultValues.defaultString,
-      consentCollectedFrom:
-          json['consent_collected_from'] ?? DefaultValues.defaultString,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceSmsMarketingConsent.fromJson(json);
+    } else {
+      return ShopifySmsMarketingConsent.fromJson(json);
+    }
   }
 }
 
@@ -417,28 +293,10 @@ class DefaultAddressModel {
   });
 
   factory DefaultAddressModel.fromJson(Map<String, dynamic> json) {
-    return DefaultAddressModel(
-      id: json['id'] ?? DefaultValues.defaultInt,
-      customerId: json['customer_id'] ?? DefaultValues.defaultInt,
-      firstName: json['first_name'] ?? DefaultValues.defaultString,
-      lastName: json['last_name'] ?? DefaultValues.defaultString,
-      address1: json['address1'] ?? DefaultValues.defaultString,
-      city: json['city'] ?? DefaultValues.defaultString,
-      province: AppConfigure.bigCommerce
-          ? json['state_or_province'] ?? DefaultValues.defaultString
-          : json['province'] ?? DefaultValues.defaultString,
-      country: json['country'] ?? DefaultValues.defaultString,
-      zip: AppConfigure.bigCommerce
-          ? json['postal_code'] ?? DefaultValues.defaultString
-          : json['zip'] ?? DefaultValues.defaultString,
-      phone: json['phone'] ?? DefaultValues.defaultString,
-      name: json['name'] ?? DefaultValues.defaultString,
-      provinceCode: json['province_code'] ?? DefaultValues.defaultString,
-      countryCode: json['country_code'] ?? DefaultValues.defaultString,
-      countryName: AppConfigure.bigCommerce
-          ? json['country'] ?? DefaultValues.defaultString
-          : json['country_name'] ?? DefaultValues.defaultString,
-      defaultAddress: json['default'] ?? false,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceDefaultAddressModel.fromJson(json);
+    } else {
+      return ShopifyDefaultAddressModel.fromJson(json);
+    }
   }
 }

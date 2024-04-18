@@ -908,6 +908,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
           ElevatedButton(
               onPressed: () async {
                 isLogin().then((value) {
+                  print("$value");
                   if (value == true) {
                     CommonAlert.show_loading_alert(context);
                     if ((selectedVariant != null &&
@@ -991,43 +992,41 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           }
                         });
                       } else {
-                        {
-                          ProductRepository()
-                              .addToCart(
-                                  variantId != null
-                                      ? variantId.toString()
-                                      : productModel.variants[0].id.toString(),
-                                  quantity.toString())
-                              .then((value) async {
-                            Navigator.of(context).pop();
-                            if (value == AppString.success) {
-                              setState(() {
-                                error = "";
-                                isLoading = false;
-                              });
-                              ref.refresh(cartDetailsDataProvider);
-                              ref.refresh(productDetailsProvider(widget.uid));
-                              Fluttertoast.showToast(
-                                  msg: AppLocalizations.of(context)!
-                                      .addToCartSuccess,
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 0,
-                                  backgroundColor: AppColors.green,
-                                  textColor: AppColors.whiteColor,
-                                  fontSize: 16.0);
-                            } else {
-                              setState(() {
-                                error = AppLocalizations.of(context)!.oops;
-                                isLoading = false;
-                              });
-                            }
-                          });
-                        }
+                        ProductRepository()
+                            .addToCart(
+                                variantId != null
+                                    ? variantId.toString()
+                                    : productModel.variants[0].id.toString(),
+                                quantity.toString())
+                            .then((value) async {
+                          Navigator.of(context).pop();
+                          if (value == AppString.success) {
+                            setState(() {
+                              error = "";
+                              isLoading = false;
+                            });
+                            ref.refresh(cartDetailsDataProvider);
+                            ref.refresh(productDetailsProvider(widget.uid));
+                            Fluttertoast.showToast(
+                                msg: AppLocalizations.of(context)!
+                                    .addToCartSuccess,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 0,
+                                backgroundColor: AppColors.green,
+                                textColor: AppColors.whiteColor,
+                                fontSize: 16.0);
+                          } else {
+                            setState(() {
+                              error = AppLocalizations.of(context)!.oops;
+                              isLoading = false;
+                            });
+                          }
+                        });
                       }
-                    } else {
-                      CommonAlert.showAlertAndNavigateToLogin(context);
                     }
+                  } else {
+                    CommonAlert.showAlertAndNavigateToLogin(context);
                   }
                 });
               },
