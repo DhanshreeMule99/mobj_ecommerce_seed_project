@@ -1,7 +1,7 @@
 // RepeatOrderScreen
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mobj_project/models/shopifyModel/product/draftOrderModel.dart';
+import 'package:mobj_project/models/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 

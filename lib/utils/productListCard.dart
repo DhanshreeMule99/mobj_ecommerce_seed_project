@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../utils/appColors.dart';
-import '../models/shopifyModel/shared_preferences/SharedPreference.dart';
+import '../models/shared_preferences/SharedPreference.dart';
 import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
 import 'appDimension.dart';
 import 'appString.dart';

@@ -3,7 +3,7 @@ import 'dart:developer';
 // import 'dart:math';
 import 'package:flutter/foundation.dart';
 
-import '../../../utils/appConfiguer.dart';
+import '../../utils/appConfiguer.dart';
 
 ReviewProductModels reviewProductModelsFromJson(String str) =>
     ReviewProductModels.fromJson(json.decode(str));

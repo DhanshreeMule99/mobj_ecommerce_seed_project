@@ -6,7 +6,7 @@ import 'package:mobj_project/module/profile/profileScreen.dart';
 import 'package:mobj_project/module/home/searchScreen.dart';
 import 'package:mobj_project/provider/User_provider.dart';
 import 'package:mobj_project/utils/themeProvider.dart';
-import '../models/shopifyModel/shared_preferences/SharedPreference.dart';
+import '../models/shared_preferences/SharedPreference.dart';
 import 'appColors.dart';
 import 'commonAlert.dart';
 
@@ -195,7 +195,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                       ),
                       (route) => route.isFirst);
                 }
-              }else{
+              } else {
                 CommonAlert.showAlertAndNavigateToLogin(context);
               }
             });

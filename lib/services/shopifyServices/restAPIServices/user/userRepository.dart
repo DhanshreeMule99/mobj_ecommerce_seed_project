@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../../../models/shopifyModel/product/draftOrderModel.dart';
+import '../../../../models/product/draftOrderModel.dart';
 import '../../../../utils/api.dart';
 
 class UserRepository {
@@ -38,11 +38,11 @@ class UserRepository {
         final uid = await SharedPreferenceManager().getUserId();
         final response = await ApiManager.get("$BASE_URL/customers?id:in=$uid");
         if (response.statusCode == APIConstants.successCode) {
-          
-    // ref.refresh(profileDataProvider);
+          // ref.refresh(profileDataProvider);
           final result = jsonDecode(response.body)['data'][0];
-await SharedPreferenceManager().setname(result['first_name'].toString());
-await SharedPreferenceManager().setemail(result['email'].toString());
+          await SharedPreferenceManager()
+              .setname(result['first_name'].toString());
+          await SharedPreferenceManager().setemail(result['email'].toString());
           log('result is this $result');
           return CustomerModel.fromJson(result);
         } else {

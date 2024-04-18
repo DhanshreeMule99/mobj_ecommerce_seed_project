@@ -5,8 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:html/parser.dart' as htmlParser;
 
-import '../../models/shopifyModel/product/productReviewWiseModel.dart';
-import '../../models/shopifyModel/product/recommendedProduct.dart';
+import '../../models/product/productReviewWiseModel.dart';
+import '../../models/product/recommendedProduct.dart';
 import '../../utils/imageDialog.dart';
 
 class ProductDetailsScreen extends ConsumerStatefulWidget {

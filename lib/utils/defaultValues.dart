@@ -1,7 +1,7 @@
 // defaultValues
 import 'package:mobj_project/utils/appConfiguer.dart';
 
-import '../models/shopifyModel/product/productModel.dart';
+import '../models/product/productModel.dart';
 
 class DefaultValues {
   static int defaultId = 0;

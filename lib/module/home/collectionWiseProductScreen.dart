@@ -5,7 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import '../../models/shopifyModel/product/collectionProductModel.dart';
+import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
 
 class CollectionWiseProductScreen extends ConsumerStatefulWidget {
@@ -202,7 +202,8 @@ class _CollectionWiseProductScreenState
                                                     left: 15,
                                                     right: 15),
                                                 child: Text(
-                                                  AppLocalizations.of(context)!.selectPrice,
+                                                  AppLocalizations.of(context)!
+                                                      .selectPrice,
                                                   style: TextStyle(
                                                     fontSize: 0.04 *
                                                         MediaQuery.of(context)
@@ -289,7 +290,10 @@ class _CollectionWiseProductScreenState
                                                           FontStyle.normal,
                                                     ),
                                                   ),
-                                                  child: Text(AppLocalizations.of(context)!.clear,
+                                                  child: Text(
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .clear,
                                                       style: TextStyle(
                                                           color: AppColors
                                                               .blackColor,
@@ -340,7 +344,9 @@ class _CollectionWiseProductScreenState
                                                     ),
                                                   ),
                                                   child: Text(
-                                                      AppLocalizations.of(context)!.applyFilter,
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .applyFilter,
                                                       style: TextStyle(
                                                           color: AppColors
                                                               .blackColor,
@@ -397,7 +403,10 @@ class _CollectionWiseProductScreenState
                         child: Row(
                           children: [
                             FilterChip(
-                              label:  Text(AppLocalizations.of(context)!.price,style: TextStyle(color: AppColors.whiteColor),),
+                              label: Text(
+                                AppLocalizations.of(context)!.price,
+                                style: TextStyle(color: AppColors.whiteColor),
+                              ),
                               backgroundColor: AppColors.blue,
                               onSelected: (selected) {},
                             ),
@@ -511,7 +520,9 @@ class _CollectionWiseProductScreenState
                                         child: ErrorHandling(
                                       error_type: AppString.noDataError,
                                     )),
-                                    Text(AppLocalizations.of(context)!.emptyProduct,
+                                    Text(
+                                        AppLocalizations.of(context)!
+                                            .emptyProduct,
                                         style: TextStyle(
                                             fontSize: MediaQuery.of(context)
                                                     .size
@@ -537,7 +548,7 @@ class _CollectionWiseProductScreenState
                               onPressed: () {
                                 ref.refresh(productDataProvider);
                               },
-                              child:  Text(
+                              child: Text(
                                 AppLocalizations.of(context)!.refresh,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -563,120 +574,113 @@ class _CollectionWiseProductScreenState
                                       itemBuilder: (context, index) {
                                         final product = products[index];
                                         return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5,
-                                                    left: 15,
-                                                    right: 15),
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .push(
-                                                        PageRouteBuilder(
-                                                          pageBuilder: (context,
-                                                                  animation1,
-                                                                  animation2) =>
-                                                              ProductDetailsScreen(
-                                                            uid: product.id
-                                                                .replaceAll(
-                                                                    "gid://shopify/Product/",
-                                                                    "")
-                                                                .toString(),
-                                                          ),
-                                                          transitionDuration:
-                                                              Duration.zero,
-                                                          reverseTransitionDuration:
-                                                              Duration.zero,
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Card(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              bottom: 10),
-                                                      elevation: 2,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
+                                            padding: const EdgeInsets.only(
+                                                top: 5, left: 15, right: 15),
+                                            child: InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    PageRouteBuilder(
+                                                      pageBuilder: (context,
+                                                              animation1,
+                                                              animation2) =>
+                                                          ProductDetailsScreen(
+                                                        uid: product.id
+                                                            .replaceAll(
+                                                                "gid://shopify/Product/",
+                                                                "")
+                                                            .toString(),
                                                       ),
-                                                      child: Padding(
+                                                      transitionDuration:
+                                                          Duration.zero,
+                                                      reverseTransitionDuration:
+                                                          Duration.zero,
+                                                    ),
+                                                  );
+                                                },
+                                                child: Card(
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 10),
+                                                  elevation: 2,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    // Add padding to the Card
+                                                    child: ListTile(
+                                                      contentPadding:
+                                                          EdgeInsets.all(0),
+                                                      // Remove default ListTile padding
+                                                      title: Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                .all(10),
-                                                        // Add padding to the Card
-                                                        child: ListTile(
-                                                          contentPadding:
-                                                              EdgeInsets.all(0),
-                                                          // Remove default ListTile padding
-                                                          title: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    bottom: 8),
-                                                            // Add padding to the title
-                                                            child: Text(
-                                                                product.title),
+                                                                .only(
+                                                                bottom: 8),
+                                                        // Add padding to the title
+                                                        child:
+                                                            Text(product.title),
+                                                      ),
+                                                      leading: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(right: 8),
+                                                        // Add padding to the leading widget
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: product
+                                                                  .imageUrls
+                                                                  .isNotEmpty
+                                                              ? product
+                                                                  .imageUrls[0]
+                                                                  .toString()
+                                                              : "" ?? "",
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Container(
+                                                            height: 50,
+                                                            width: 50,
+                                                            color: AppColors
+                                                                .greyShade,
                                                           ),
-                                                          leading: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 8),
-                                                            // Add padding to the leading widget
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: product
-                                                                      .imageUrls
-                                                                      .isNotEmpty
-                                                                  ? product
-                                                                      .imageUrls[
-                                                                          0]
-                                                                      .toString()
-                                                                  : "" ?? "",
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      Container(
-                                                                height: 50,
-                                                                width: 50,
-                                                                color: AppColors
-                                                                    .greyShade,
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                              width: 50,
-                                                              height: 50,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
-                                                          trailing: Text(
-                                                              '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.contain,
                                                         ),
                                                       ),
-                                                    )));
-
+                                                      trailing: Text(
+                                                          '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
+                                                    ),
+                                                  ),
+                                                )));
                                       },
                                     )
-                                  :  Column(
+                                  : Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-
                                         const Center(
                                           child: ErrorHandling(
                                             error_type: AppString.noDataError,
                                           ),
                                         ),
-                                        Text(AppLocalizations.of(context)!.emptyProduct,
+                                        Text(
+                                            AppLocalizations.of(context)!
+                                                .emptyProduct,
                                             style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * 0.05,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
                                                 fontWeight: FontWeight.bold)),
                                       ],
                                     ));
@@ -697,7 +701,7 @@ class _CollectionWiseProductScreenState
                               onPressed: () {
                                 ref.refresh(productDataProvider);
                               },
-                              child:  Text(
+                              child: Text(
                                 AppLocalizations.of(context)!.refresh,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -735,7 +739,7 @@ class _CollectionWiseProductScreenState
                   onPressed: () {
                     ref.refresh(productDataProvider);
                   },
-                  child:  Text(
+                  child: Text(
                     AppLocalizations.of(context)!.refresh,
                     style: TextStyle(
                       fontSize: 16,
@@ -891,19 +895,19 @@ class _CollectionWiseProductScreenState
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title:  Text(AppLocalizations.of(context)!.lowToHigh),
+                title: Text(AppLocalizations.of(context)!.lowToHigh),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title:  Text(AppString.highToLow),
+                title: Text(AppString.highToLow),
                 onTap: () {
                   Navigator.pop(context);
                 },
               ),
               ListTile(
-                title:  Text(AppLocalizations.of(context)!.lowToHigh),
+                title: Text(AppLocalizations.of(context)!.lowToHigh),
                 onTap: () {
                   Navigator.pop(context);
                 },

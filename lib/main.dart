@@ -15,7 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //TODO wake lock
 // import 'package:wakelock/wakelock.dart';
-import 'models/shopifyModel/constants/APIConstants.dart';
+import 'models/constants/APIConstants.dart';
 import 'module/notificationservice/notificationservice.dart';
 import 'module/splash screen/Splash_screen.dart';
 import 'utils/appColors.dart';

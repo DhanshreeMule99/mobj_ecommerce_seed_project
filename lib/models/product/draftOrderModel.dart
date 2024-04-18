@@ -1,6 +1,6 @@
 import 'package:mobj_project/utils/appConfiguer.dart';
 
-import '../../../utils/defaultValues.dart';
+import '../../utils/defaultValues.dart';
 
 class DraftOrderModel {
   final dynamic id;

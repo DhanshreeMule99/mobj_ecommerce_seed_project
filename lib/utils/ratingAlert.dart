@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/shopifyModel/shared_preferences/SharedPreference.dart';
+import '../models/shared_preferences/SharedPreference.dart';
 import '../provider/productProvider.dart';
 import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
 import 'appColors.dart';
@@ -33,8 +33,6 @@ class RatingAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-     
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.rateUs),
       content: Column(
@@ -80,34 +78,32 @@ class RatingAlert extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-             String customername = await SharedPreferenceManager().getname();
-               String customeremail = await SharedPreferenceManager().getemail();
+            String customername = await SharedPreferenceManager().getname();
+            String customeremail = await SharedPreferenceManager().getemail();
             String uid = await SharedPreferenceManager().getUserId();
             CommonAlert.show_loading_alert(context);
-              Map<String, dynamic> body = AppConfigure.bigCommerce
-            ?
-            {
-              "title": review.text,
-              "text": header.text,
-              "status": "pending",
-              "rating": rating,
-              "email": customeremail,
-              "name": customername,
-              "date_reviewed": "2019-03-24T14:15:22Z"
-              }
-            
-            : {
-              "data": {
-                "body": review.text,
-                "heading": header.text,
-                "state": "approved",
-                "is_verified": true,
-                "customer_id": uid.toString(),
-                "external_product_id": pid,
-                "rating": rating
-              }
-            };
-            ProductRepository().addProductReview(body, pid ).then((value) async {
+            Map<String, dynamic> body = AppConfigure.bigCommerce
+                ? {
+                    "title": review.text,
+                    "text": header.text,
+                    "status": "pending",
+                    "rating": rating,
+                    "email": customeremail,
+                    "name": customername,
+                    "date_reviewed": "2019-03-24T14:15:22Z"
+                  }
+                : {
+                    "data": {
+                      "body": review.text,
+                      "heading": header.text,
+                      "state": "approved",
+                      "is_verified": true,
+                      "customer_id": uid.toString(),
+                      "external_product_id": pid,
+                      "rating": rating
+                    }
+                  };
+            ProductRepository().addProductReview(body, pid).then((value) async {
               Navigator.of(context).pop();
               if (value == AppString.success) {
                 ref.refresh(cartDetailsDataProvider);
@@ -124,8 +120,7 @@ class RatingAlert extends StatelessWidget {
                     backgroundColor: AppColors.green,
                     textColor: AppColors.whiteColor,
                     fontSize: 16.0);
-  ref.refresh(productReviewsProvider(pid));
-
+                ref.refresh(productReviewsProvider(pid));
               } else {
                 Navigator.of(context).pop();
 

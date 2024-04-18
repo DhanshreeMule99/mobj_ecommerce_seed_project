@@ -1,7 +1,8 @@
-import 'package:mobj_project/utils/appConfiguer.dart';
 import 'package:mobj_project/utils/defaultValues.dart';
 
-class ProductModel {
+import '../../models/product/productModel.dart';
+
+class ShopifyProductModel implements ProductModel {
   final int id;
   final String title;
   final String bodyHtml;
@@ -16,12 +17,12 @@ class ProductModel {
   final String tags;
   final String status;
   final String adminGraphqlApiId;
-  final List<ProductVariant> variants;
-  final List<ProductOption> options;
-  final List<ProductImage> images;
-  final ProductImage image;
+  final List<ShopifyProductVariant> variants;
+  final List<ShopifyProductOption> options;
+  final List<ShopifyProductImage> images;
+  final ShopifyProductImage image;
 
-  ProductModel({
+  ShopifyProductModel({
     required this.id,
     required this.title,
     required this.bodyHtml, // Default value for bodyHtml
@@ -42,77 +43,49 @@ class ProductModel {
     required this.image,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      id: AppConfigure.bigCommerce == true
-          ? json['id']
-          : json['id'] ?? DefaultValues.defaultId,
+  factory ShopifyProductModel.fromJson(Map<String, dynamic> json) {
+    return ShopifyProductModel(
+      id: json['id'] ?? DefaultValues.defaultId,
       // Default value for id
-      title: AppConfigure.bigCommerce == true
-          ? json['name']
-          : json['title'] ?? DefaultValues.defaultTitle,
+      title: json['title'] ?? DefaultValues.defaultTitle,
       // Default value for title
-      bodyHtml: AppConfigure.bigCommerce == true
-          ? json['description']
-          : json['body_html'] ?? DefaultValues.defaultBodyHtml,
-      vendor: AppConfigure.bigCommerce == true
-          ? DefaultValues.defaultVendor
-          : json['vendor'] ?? DefaultValues.defaultVendor,
-      productType: AppConfigure.bigCommerce == true
-          ? json['type']
-          : json['product_type'] ?? DefaultValues.defaultProductType,
-      createdAt: AppConfigure.bigCommerce == true
-          ? json['date_created']
-          : json['created_at'] ?? DefaultValues.defaultCreatedAt,
-      handle: AppConfigure.bigCommerce == true
-          ? json['name']
-          : json['handle'] ?? DefaultValues.defaultHandle,
-      updatedAt: AppConfigure.bigCommerce == true
-          ? json['date_modified']
-          : json['updated_at'] ?? DefaultValues.defaultUpdatedAt,
-      publishedAt: AppConfigure.bigCommerce == true
-          ? json['date_created']
-          : json['published_at'] ?? DefaultValues.defaultPublishedAt,
-      templateSuffix: AppConfigure.bigCommerce == true
-          ? DefaultValues.defaultTemplateSuffix
-          : json['template_suffix'] ?? DefaultValues.defaultTemplateSuffix,
-      publishedScope: AppConfigure.bigCommerce == true
-          ? DefaultValues.defaultPublishedScope
-          : json['published_scope'] ?? DefaultValues.defaultPublishedScope,
-      tags: AppConfigure.bigCommerce == true
-          ? DefaultValues.defaultTags
-          : json['tags'] ?? DefaultValues.defaultTags,
-      status: AppConfigure.bigCommerce == true
-          ? json['is_visible'].toString()
-          : json['status'] ?? DefaultValues.defaultStatus,
-      adminGraphqlApiId: AppConfigure.bigCommerce == true
-          ? json['custom_url']['url']
-          : json['admin_graphql_api_id'] ??
-              DefaultValues.defaultAdminGraphqlApiId,
+      bodyHtml: json['body_html'] ?? DefaultValues.defaultBodyHtml,
+      vendor: json['vendor'] ?? DefaultValues.defaultVendor,
+      productType: json['product_type'] ?? DefaultValues.defaultProductType,
+      createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
+      handle: json['handle'] ?? DefaultValues.defaultHandle,
+      updatedAt: json['updated_at'] ?? DefaultValues.defaultUpdatedAt,
+      publishedAt: json['published_at'] ?? DefaultValues.defaultPublishedAt,
+      templateSuffix:
+          json['template_suffix'] ?? DefaultValues.defaultTemplateSuffix,
+      publishedScope:
+          json['published_scope'] ?? DefaultValues.defaultPublishedScope,
+      tags: json['tags'] ?? DefaultValues.defaultTags,
+      status: json['status'] ?? DefaultValues.defaultStatus,
+      adminGraphqlApiId: json['admin_graphql_api_id'] ??
+          DefaultValues.defaultAdminGraphqlApiId,
       variants: (json['variants'] as List<dynamic>?)
-              ?.map((variantJson) =>
-                  ProductVariant.fromJson(variantJson as Map<String, dynamic>))
+              ?.map((variantJson) => ShopifyProductVariant.fromJson(
+                  variantJson as Map<String, dynamic>))
               .toList() ??
-          DefaultValues.defaultVariants,
+          DefaultValues.defaultVariants.cast<ShopifyProductVariant>(),
       options: (json['options'] as List<dynamic>?)
-              ?.map((optionJson) =>
-                  ProductOption.fromJson(optionJson as Map<String, dynamic>))
+              ?.map((optionJson) => ShopifyProductOption.fromJson(
+                  optionJson as Map<String, dynamic>))
               .toList() ??
-          DefaultValues.defaultOptions,
+          DefaultValues.defaultOptions.cast<ShopifyProductOption>(),
       images: (json['images'] as List<dynamic>?)
-              ?.map((imageJson) =>
-                  ProductImage.fromJson(imageJson as Map<String, dynamic>))
+              ?.map((imageJson) => ShopifyProductImage.fromJson(
+                  imageJson as Map<String, dynamic>))
               .toList() ??
-          DefaultValues.defaultImages,
-      image: AppConfigure.bigCommerce == true
-          ? ProductImage.fromJson(
-              json['images'][0] as Map<String, dynamic>? ?? {})
-          : ProductImage.fromJson(json['image'] as Map<String, dynamic>? ?? {}),
+          DefaultValues.defaultImages.cast<ShopifyProductImage>(),
+      image: ShopifyProductImage.fromJson(
+          json['image'] as Map<String, dynamic>? ?? {}),
     );
   }
 }
 
-class ProductVariant {
+class ShopifyProductVariant implements ProductVariant {
   final int id;
   final int productId;
   final String title;
@@ -140,7 +113,7 @@ class ProductVariant {
   final bool requiresShipping;
   final String adminGraphqlApiId;
 
-  ProductVariant({
+  ShopifyProductVariant({
     required this.id,
     required this.productId,
     required this.title,
@@ -169,36 +142,23 @@ class ProductVariant {
     required this.adminGraphqlApiId,
   });
 
-  factory ProductVariant.fromJson(Map<String, dynamic> json) {
-    return ProductVariant(
+  factory ShopifyProductVariant.fromJson(Map<String, dynamic> json) {
+    return ShopifyProductVariant(
       id: json['id'] ?? DefaultValues.defaultId,
       productId: json['product_id'] ?? DefaultValues.defaultProductId,
       title: json['title'] ?? DefaultValues.defaultTitle,
-      price: AppConfigure.bigCommerce == true
-          ? json['calculated_price'].toString()
-          : json['price'] ?? DefaultValues.defaultPrice,
-      sku: AppConfigure.bigCommerce == true
-          ? json['sku_id'].toString()
-          : json['sku'] ?? DefaultValues.defaultSku,
+      price: json['price'] ?? DefaultValues.defaultPrice,
+      sku: json['sku'] ?? DefaultValues.defaultSku,
       position: json['position'] ?? DefaultValues.defaultPosition,
       inventoryPolicy:
           json['inventory_policy'] ?? DefaultValues.defaultInventoryPolicy,
-      compareAtPrice: AppConfigure.bigCommerce == true
-          ? json['retail_price'].toString() ??
-              DefaultValues.defaultCompareAtPrice
-          : json['compare_at_price'] ?? DefaultValues.defaultCompareAtPrice,
-      fulfillmentService: AppConfigure.bigCommerce == true
-          ? ""
-          : json['fulfillment_service'] ??
-              DefaultValues.defaultFulfillmentService,
-      inventoryManagement: AppConfigure.bigCommerce == true
-          ? ""
-          : json['inventory_management'] ??
-              DefaultValues.defaultInventoryManagement,
-      option1: AppConfigure.bigCommerce == true
-          ? DefaultValues.defaultOption1
-          // json['option_values'][0]['label'] ?? DefaultValues.defaultOption1
-          : json['option1'] ?? DefaultValues.defaultOption1,
+      compareAtPrice:
+          json['compare_at_price'] ?? DefaultValues.defaultCompareAtPrice,
+      fulfillmentService: json['fulfillment_service'] ??
+          DefaultValues.defaultFulfillmentService,
+      inventoryManagement: json['inventory_management'] ??
+          DefaultValues.defaultInventoryManagement,
+      option1: json['option1'] ?? DefaultValues.defaultOption1,
       option2: json['option2'] ?? DefaultValues.defaultOption2,
       option3: json['option3'] ?? DefaultValues.defaultOption3,
       createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
@@ -206,39 +166,31 @@ class ProductVariant {
       taxable: json['taxable'] ?? DefaultValues.defaultTaxable,
       barcode: json['barcode'] ?? DefaultValues.defaultBarcode,
       grams: json['grams'] ?? DefaultValues.defaultGrams,
-      imageId: AppConfigure.bigCommerce == true
-          ? json['image_url']
-          : json['image_id'] ?? DefaultValues.defaultImageId,
-      weight: json['weight'] == null
-          ? DefaultValues.defaultWeight
-          : json['weight'].toDouble(),
+      imageId: json['image_id'] ?? DefaultValues.defaultImageId,
+      weight: json['weight'] ?? DefaultValues.defaultWeight,
       weightUnit: json['weight_unit'] ?? DefaultValues.defaultWeightUnit,
       inventoryItemId:
           json['inventory_item_id'] ?? DefaultValues.defaultInventoryItemId,
-      inventoryQuantity: AppConfigure.bigCommerce == true
-          ? json['inventory_level']
-          : json['inventory_quantity'] ??
-              DefaultValues.defaultInventoryQuantity,
+      inventoryQuantity:
+          json['inventory_quantity'] ?? DefaultValues.defaultInventoryQuantity,
       oldInventoryQuantity: json['old_inventory_quantity'] ??
           DefaultValues.defaultOldInventoryQuantity,
       requiresShipping:
           json['requires_shipping'] ?? DefaultValues.defaultRequiresShipping,
-      adminGraphqlApiId: AppConfigure.bigCommerce == true
-          ? json['sku']
-          : json['admin_graphql_api_id'] ??
-              DefaultValues.defaultAdminGraphqlApiId,
+      adminGraphqlApiId: json['admin_graphql_api_id'] ??
+          DefaultValues.defaultAdminGraphqlApiId,
     );
   }
 }
 
-class ProductOption {
+class ShopifyProductOption implements ProductOption {
   final int id;
   final int productId;
   final String name;
   final int position;
   final List<String> values;
 
-  ProductOption({
+  ShopifyProductOption({
     required this.id,
     required this.productId,
     required this.name,
@@ -246,25 +198,21 @@ class ProductOption {
     required this.values,
   });
 
-  factory ProductOption.fromJson(Map<String, dynamic> json) {
-    return ProductOption(
+  factory ShopifyProductOption.fromJson(Map<String, dynamic> json) {
+    return ShopifyProductOption(
       id: json['id'] ?? DefaultValues.defaultOptionId,
       productId: json['product_id'] ?? DefaultValues.defaultOptionProductId,
       name: json['name'] ?? DefaultValues.defaultOptionName,
       position: json['position'] ?? DefaultValues.defaultOptionPosition,
-      values: AppConfigure.bigCommerce == true
-          ? (json['option_values'] as List<dynamic>)
-              .map((optionValue) => optionValue['label'] as String)
-              .toList()
-          : (json['values'] as List<dynamic>?)
-                  ?.map((value) => value.toString())
-                  .toList() ??
-              DefaultValues.defaultOptionValues,
+      values: (json['values'] as List<dynamic>?)
+              ?.map((value) => value.toString())
+              .toList() ??
+          DefaultValues.defaultOptionValues,
     );
   }
 }
 
-class ProductImage {
+class ShopifyProductImage implements ProductImage {
   final int id;
   final int productId;
   final int position;
@@ -277,7 +225,7 @@ class ProductImage {
   final List<int> variantIds;
   final String adminGraphqlApiId;
 
-  ProductImage({
+  ShopifyProductImage({
     required this.id,
     required this.productId,
     required this.position,
@@ -291,8 +239,8 @@ class ProductImage {
     required this.adminGraphqlApiId,
   });
 
-  factory ProductImage.fromJson(Map<String, dynamic> json) {
-    return ProductImage(
+  factory ShopifyProductImage.fromJson(Map<String, dynamic> json) {
+    return ShopifyProductImage(
       id: json['id'] ?? DefaultValues.defaultImagesId,
       productId: json['product_id'] ?? DefaultValues.defaultImagesProductId,
       position: json['position'] ?? DefaultValues.defaultImagesPosition,
@@ -301,9 +249,7 @@ class ProductImage {
       alt: json['alt'] ?? DefaultValues.defaultImagesAlt,
       width: json['width'] ?? DefaultValues.defaultImagesWidth,
       height: json['height'] ?? DefaultValues.defaultImagesHeight,
-      src: AppConfigure.bigCommerce == true
-          ? json['url_thumbnail']
-          : json['src'] ?? DefaultValues.defaultImagesSrc,
+      src: json['src'] ?? DefaultValues.defaultImagesSrc,
       variantIds: (json['variant_ids'] as List<dynamic>?)
               ?.map((id) => id as int)
               .toList() ??
