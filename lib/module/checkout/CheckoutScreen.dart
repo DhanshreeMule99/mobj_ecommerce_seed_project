@@ -285,7 +285,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                           log('calling put api ');
                                                                           var response = await api.sendRequest.put(
-                                                                              'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                              '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                               data: {
                                                                                 "line_item": {
                                                                                   "id": orderList.id,
@@ -301,7 +301,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                           // Response
                                                                           //     response =
-                                                                          //     await ApiManager.put('https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                          //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                           //         body);
 
                                                                           ref.refresh(
@@ -383,7 +383,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                         log('calling put api ');
                                                                         var response = await api.sendRequest.put(
-                                                                            'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                            '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                             data: {
                                                                               "line_item": {
                                                                                 "id": orderList.id,
@@ -400,7 +400,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                         // Response
                                                                         //     response =
-                                                                        //     await ApiManager.put('https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}',
+                                                                        //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                         //         body);
 
                                                                         ref.refresh(
@@ -525,7 +525,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               var response =
                                                                   await ApiManager
                                                                       .delete(
-                                                                          'https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId/items/${orderList.id}');
+                                                                          '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
 
                                                               ref.refresh(
                                                                   cartDetailsDataProvider);

@@ -21,7 +21,7 @@ class ProductRepository {
           APIConstants.product);
 
       // final response = await ApiManager.get(
-      //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+      //     '${AppConfigure.bigcommerceUrl}/catalog/products?include=images,variants,options');
 
       if (response.statusCode == APIConstants.successCode) {
         final List result = AppConfigure.bigCommerce == true
@@ -118,12 +118,12 @@ class ProductRepository {
 
     if (AppConfigure.bigCommerce) {
       try {
-        Response response = await api.sendRequest.get(
-            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/$pid/reviews',
-            options: Options(headers: {
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
-              'Content-Type': 'application/json',
-            }));
+        Response response = await api.sendRequest
+            .get('${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews',
+                options: Options(headers: {
+                  "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+                  'Content-Type': 'application/json',
+                }));
         if (response.statusCode == APIConstants.successCode) {
           var result = response.data;
           return ReviewProductModels.fromJson(result);
@@ -568,8 +568,7 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           var response;
           response = await ApiManager.post(
-              "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/orders",
-              {});
+              "${AppConfigure.bigcommerceUrl}/checkouts/$draftId/orders", {});
           var data = jsonDecode(response.body);
           log("${response.body} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
@@ -643,7 +642,7 @@ class ProductRepository {
           String draftId = await SharedPreferenceManager().getDraftId();
 
           final response = await ApiManager.get(
-              "https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId");
+              "${AppConfigure.bigcommerceUrl}/carts/$draftId");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             log("${response.body}");

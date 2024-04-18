@@ -350,62 +350,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  // Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-  //   GraphQLClient client = graphQLConfig.clientToQuery();
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-  //   try {
-  //     QueryResult result = await client.query(QueryOptions(
-  //       fetchPolicy: FetchPolicy.noCache,
-  //       document: gql('''
-  //       mutation SignInWithEmailAndPassword(\$email: String!, \$password: String!) {
-  //         customerAccessTokenCreate(input: { email: \$email, password: \$password }) {
-  //           customerAccessToken {
-  //             accessToken
-  //             expiresAt
-  //           }
-  //           customerUserErrors {
-  //             code
-  //             message
-  //           }
-  //         }
-  //       }
-  //     '''),
-  //       variables: {"email": email.text.trim(), "password": pass.text.trim()},
-  //     ));
-
-  //     if (result.hasException) {
-  //       setState(() {
-  //         error = AppLocalizations.of(context)!.oops;
-  //         isLoading = false;
-  //       });
-  //     } else {
-  //       if (result.data?["customerAccessTokenCreate"] != null &&
-  //           result.data?["customerAccessTokenCreate"]['customerAccessToken'] !=
-  //               null) {
-  //         getCustomerDetails(result.data!["customerAccessTokenCreate"]
-  //                 ['customerAccessToken']['accessToken']
-  //             .toString());
-  //       } else {
-  //         setState(() {
-  //           error = AppLocalizations.of(context)!.invalidCred;
-  //           isLoading = false;
-  //         });
-  //       }
-
-  //       // if (res == null || res.isEmpty) {
-  //       //   return [];
-  //       // }
-  //     }
-  //   } catch (errors) {
-  //     // return [];
-  //     setState(() {
-  //       error = AppLocalizations.of(context)!.oops;
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
+ 
 
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
     if (AppConfigure.bigCommerce) {
@@ -485,68 +430,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Exception occurred, show error message
         print('Error occurred: $e');
       }
-    }
-
-//  if (AppConfigure.bigCommerce) {
-//     // Login with BigCommerce
-//     String bigCommerceUrl = AppConfigure.bigcommerceUrl;
-//     try {
-//       setState(() {
-//         isLoading = true;
-//       });
-//       final response = await http.post(
-//         Uri.parse('$bigCommerceUrl/customers/validate-credentials'),
-//         headers: <String, String>{
-//           "Content-Type": "application/json",
-//           "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
-//         },
-//         body: jsonEncode(<String, String>{
-//           'email': email.text.trim(),
-//           'password': pass.text.trim(),
-//         }),
-//       );
-//       print('BigCommerce Response: ${response.body}');
-//       if (response.statusCode == 200) {
-//         // If the server returns a 200 OK response, parse the JSON.
-//         final Map<String, dynamic> responseData = json.decode(response.body);
-//         final bool? isValid = responseData['is_valid'];
-//         if (isValid != null && isValid) {
-//           // Success, continue with customer details retrieval
-//           final String? customerId = responseData['customer_id']?.toString();
-//           if (customerId != null) {
-//             getCustomerDetails(customerId);
-//           } else {
-//             // Customer ID is null or not a string, handle error
-//             setState(() {
-//               error = 'Error: Customer ID is null or invalid';
-//               isLoading = false;
-//             });
-//           }
-//         } else {
-//           // Failure, show error message
-//            setState(() {
-//           error = AppLocalizations.of(context)!.oops;
-//           isLoading = false;
-//         });
-//         }
-//       } else {
-//         // If the server did not return a 200 OK response, show error message
-//         setState(() {
-//           error = AppLocalizations.of(context)!.oops;
-//           isLoading = false;
-//         });
-//       }
-//     } catch (e) {
-//       // Exception occurred, show error message
-//       print('Error occurred: $e');
-//       setState(() {
-//         error = 'An error occurred: $e';
-//         isLoading = false;
-//       });
-//     }
-//   }
-
-    else {
+    } else {
       // Login with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       setState(() {

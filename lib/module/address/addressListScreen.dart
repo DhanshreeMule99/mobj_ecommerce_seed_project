@@ -697,7 +697,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                               Response response = await api
                                                                   .sendRequest
                                                                   .post(
-                                                                      'https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/consignments?include=consignments.available_shipping_options',
+                                                                      '${AppConfigure.bigcommerceUrl}/checkouts/$draftId/consignments?include=consignments.available_shipping_options',
                                                                       options:
                                                                           Options(
                                                                               headers: {
@@ -740,7 +740,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                   await api
                                                                       .sendRequest
                                                                       .put(
-                                                                          'https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/consignments/$consignmentId',
+                                                                          '${AppConfigure.bigcommerceUrl}/checkouts/$draftId/consignments/$consignmentId',
                                                                           options: Options(headers: {
                                                                             "X-auth-Token":
                                                                                 "${AppConfigure.bigCommerceAccessToken}",

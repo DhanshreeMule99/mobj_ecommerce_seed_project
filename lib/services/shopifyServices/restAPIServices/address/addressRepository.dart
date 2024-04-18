@@ -19,7 +19,7 @@ class AddressRepository {
     if (AppConfigure.bigCommerce) {
       try {
         final response = await ApiManager.get(
-            "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?customer_id:in=$uid");
+            "${AppConfigure.bigcommerceUrl}/customers/addresses?customer_id:in=$uid");
         if (response.statusCode == APIConstants.successCode) {
           log("body is this ${response.body} $uid");
           final List result = jsonDecode(response.body)['data'];
@@ -143,10 +143,10 @@ class AddressRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           // final response = addId.isEmpty
           //     ? await ApiManager.post(
-          //         "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?id:in=$uid",
+          //         "${AppConfigure.bigcommerceUrl}/customers/addresses?id:in=$uid",
           //         body)
           //     : await ApiManager.put(
-          //         "https://api.bigcommerce.com/stores/05vrtqkend/v3/customers/addresses?id:in=$addId",
+          //         "${AppConfigure.bigcommerceUrl}/customers/addresses?id:in=$addId",
           //         body);
 
           final response;
@@ -300,14 +300,14 @@ class AddressRepository {
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         Response response = await api.sendRequest.post(
-            "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$cartId/billing-address",
+            "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
             data: addId,
             options: Options(headers: {
               "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
               'Content-Type': 'application/json',
             }));
         // final response = await ApiManager.post(
-        //     "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$cartId/billing-address",
+        //     "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
         //     addId);
         // var data = jsonDecode(response.body);
         if (response.statusCode == APIConstants.successCode) {
