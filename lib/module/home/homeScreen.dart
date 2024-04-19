@@ -1,4 +1,6 @@
 // homeScreen
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
@@ -62,15 +64,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<dynamic> data = [];
 
   Future<void> fetchCategories() async {
-    final response =
-        await ApiManager.get(AppConfigure.baseUrl + APIConstants.collection);
-    if (response.statusCode == APIConstants.successCode) {
-      final apiData = json.decode(response.body)['collections'];
-      setState(() {
-        data = apiData;
-      });
+    if (AppConfigure.bigCommerce) {
+      log('In bigCommerAPI');
+      final response = await ApiManager.get(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/trees/categories");
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body)['data'];
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
     } else {
-      throw Exception('Failed to fetch categories');
+      final response =
+          await ApiManager.get(AppConfigure.baseUrl + APIConstants.collection);
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body)['collections'];
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
     }
   }
 
@@ -168,7 +184,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                             padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                             label: Text(
-                              data[index]['title'],
+                              AppConfigure.bigCommerce
+                                  ? data[index]["name"]
+                                  : data[index]['title'],
                               style: TextStyle(
                                 fontSize:
                                     0.04 * MediaQuery.of(context).size.width,
@@ -185,13 +203,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             onSelected: (bool selected) {
                               Navigator.of(context).push(
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation1,
-                                          animation2) =>
-                                      CollectionWiseProductScreen(
-                                          category:
-                                              data[index]['id'].toString(),
-                                          categoryName:
-                                              data[index]['title'].toString()),
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          CollectionWiseProductScreen(
+                                    category: data[index]['id'].toString(),
+                                    categoryName: AppConfigure.bigCommerce
+                                        ? data[index]["name"]
+                                        : data[index]['title'],
+                                  ),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),
@@ -549,7 +568,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       //   ),
                       // );
                     },
-                    child:  Text(
+                    child: Text(
                       AppLocalizations.of(context)!.refresh,
                       style: TextStyle(
                         fontSize: 16,
@@ -581,7 +600,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onPressed: () {
                     ref.refresh(productDataProvider);
                   },
-                  child:  Text(
+                  child: Text(
                     AppLocalizations.of(context)!.refresh,
                     style: TextStyle(
                       fontSize: 16,
