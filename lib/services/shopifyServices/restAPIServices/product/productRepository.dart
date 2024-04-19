@@ -14,7 +14,7 @@ class ProductRepository {
 
   Future<List<ProductModel>> getProducts() async {
     try {
-      log('calling api');
+      debugPrint('calling api');
       final response = await ApiManager.get(AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
@@ -30,16 +30,16 @@ class ProductRepository {
 
         return result.map((e) => ProductModel.fromJson(e)).toList();
       } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        log("empty data here");
+        debugPrint("empty data here");
         throw (AppString.noDataError);
       } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        log("empty data here unauthorized");
+        debugPrint("empty data here unauthorized");
         throw AppString.unAuthorized;
       } else {
         return empty;
       }
     } catch (error, stackTrace) {
-      log("error is this $error $stackTrace");
+      debugPrint("error is this $error $stackTrace");
       throw error;
     }
   }
@@ -75,7 +75,7 @@ class ProductRepository {
           : AppConfigure.baseUrl +
               APIConstants.apiForAdminURL +
               APIConstants.apiURL;
-      log(BASE_URL + pid);
+      debugPrint(BASE_URL + pid);
       final response = AppConfigure.bigCommerce == true
           ? await ApiManager.get(
               "$BASE_URL/products/$pid?include=images,variants,options,images")
@@ -129,7 +129,7 @@ class ProductRepository {
         throw (AppString.noDataError);
       }
     } catch (error, stackTrace) {
-      log('print error is this $error $stackTrace');
+      debugPrint('print error is this $error $stackTrace');
       throw error;
     }
   }
@@ -195,7 +195,7 @@ class ProductRepository {
   addToCart(String variantId, String quantity) async {
     String exceptionString = "";
     String uid = await SharedPreferenceManager().getUserId();
-    log('$uid $variantId');
+    debugPrint('$uid $variantId');
 
     var body = jsonEncode({
       "draft_order": {
@@ -209,11 +209,11 @@ class ProductRepository {
     String BASE_URL = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL;
-    log(BASE_URL + '${APIConstants.draftProduct}');
+    debugPrint(BASE_URL + '${APIConstants.draftProduct}');
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         String draftId = await SharedPreferenceManager().getDraftId();
-        log('darftId is this $draftId');
+        debugPrint('darftId is this $draftId');
         var response;
         if (draftId == "") {
           response = await ApiManager.post(
@@ -224,7 +224,7 @@ class ProductRepository {
               value.toString() != AppString.noDataError) {
             if (value.lineItems.isNotEmpty) {
               final lineItemsList = value.lineItems;
-              log('values lineItemslist is this $lineItemsList');
+              debugPrint('values lineItemslist is this $lineItemsList');
               for (int i = 0; i <= value.lineItems.length - 1; i++) {
                 decodedBody["draft_order"]["line_items"].add({
                   "variant_id": lineItemsList[i].variantId,
@@ -260,7 +260,7 @@ class ProductRepository {
             response = await ApiManager.put(
                 "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json",
                 body);
-            log('add to cart response is this $response');
+            debugPrint('add to cart response is this $response');
           }
         }
         var data = jsonDecode(response.body);
@@ -287,7 +287,7 @@ class ProductRepository {
       String price, String productId) async {
     String exceptionString = "";
     String uid = await SharedPreferenceManager().getUserId();
-    log('$uid $variantId');
+    debugPrint('$uid $variantId');
 
     var body = jsonEncode({
       "customer_id": int.parse(uid),
@@ -305,11 +305,11 @@ class ProductRepository {
     });
     var decodedBody = jsonDecode(body);
     String BASE_URL = AppConfigure.baseUrl;
-    log(BASE_URL + '${APIConstants.draftProduct}');
+    debugPrint(BASE_URL + '${APIConstants.draftProduct}');
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         String draftId = await SharedPreferenceManager().getDraftId();
-        log('darftId is this $draftId');
+        debugPrint('darftId is this $draftId');
         var response;
         if (draftId == "") {
           response = await ApiManager.post("$BASE_URL/carts", body);
@@ -318,14 +318,15 @@ class ProductRepository {
               await ApiManager.post("$BASE_URL/carts/$draftId/items", body);
         }
         var data = jsonDecode(response.body);
-        log('add to cart data is this $data');
+        debugPrint('add to cart data is this $data');
 
         if (response.statusCode == APIConstants.successCode ||
             response.statusCode == APIConstants.successCreateCode) {
           if (draftId == "") {
             await SharedPreferenceManager()
                 .setDraftId(data["data"]["id"].toString());
-            log('cart id is this bigcommerce ${data["data"]["id"].toString()}');
+            debugPrint(
+                'cart id is this bigcommerce ${data["data"]["id"].toString()}');
           }
           return AppString.success;
         } else {
@@ -375,7 +376,7 @@ class ProductRepository {
     API api = API();
 
     //if (AppConfigure.bigCommerce) {
-    log("adding review for products");
+    debugPrint("adding review for products");
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         final response = await api.sendRequest.post(
@@ -505,7 +506,7 @@ class ProductRepository {
           response = await ApiManager.post(
               "${AppConfigure.bigcommerceUrl}/checkouts/$draftId/orders", {});
           var data = jsonDecode(response.body);
-          log("${response.body} ${response.statusCode}");
+          debugPrint("${response.body} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             await SharedPreferenceManager().setDraftId("");
@@ -515,7 +516,7 @@ class ProductRepository {
           }
         }
       } catch (error) {
-        log('error is this $error');
+        debugPrint('error is this $error');
         exceptionString = AppString.oops;
         return exceptionString;
       }
@@ -532,7 +533,7 @@ class ProductRepository {
               "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId/${APIConstants.complete}.json",
               {});
           var data = jsonDecode(response.body);
-          log("${response.body} ${response.statusCode}");
+          debugPrint("${response.body} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             await SharedPreferenceManager().setDraftId("");
@@ -542,7 +543,7 @@ class ProductRepository {
           }
         }
       } catch (error) {
-        log('error is this $error');
+        debugPrint('error is this $error');
         exceptionString = AppString.oops;
         return exceptionString;
       }
@@ -580,9 +581,9 @@ class ProductRepository {
               "${AppConfigure.bigcommerceUrl}/carts/$draftId");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
-            log("${response.body}");
+            debugPrint("${response.body}");
             final result = jsonDecode(response.body)['data'];
-            log("result is this ${result}");
+            debugPrint("result is this ${result}");
 
             return DraftOrderModel.fromJson(result);
           } else {
@@ -592,7 +593,7 @@ class ProductRepository {
           throw (AppString.error);
         }
       } catch (error, stackTrace) {
-        log('error is this $error $stackTrace');
+        debugPrint('error is this $error $stackTrace');
         throw (error);
       }
     } else {
@@ -715,8 +716,8 @@ class ProductRepository {
           throw (AppString.noDataError);
         }
       } catch (error, stackTrace) {
-        log("error is this: $stackTrace");
-        log("error is this: $error");
+        debugPrint("error is this: $stackTrace");
+        debugPrint("error is this: $error");
         rethrow;
       }
     } else {

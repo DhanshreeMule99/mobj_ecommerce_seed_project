@@ -295,7 +295,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           'accessToken': accessToken,
         },
       ));
-      log("$result");
+      debugPrint("$result");
 
       if (result.hasException) {
         setState(() {
@@ -310,7 +310,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             error = "";
             isLoading = false;
           });
-          log("Customer id is this -- ${result.data!['customer']['id'].toString().replaceAll("gid://shopify/Customer/", "")}");
+          debugPrint(
+              "Customer id is this -- ${result.data!['customer']['id'].toString().replaceAll("gid://shopify/Customer/", "")}");
           await SharedPreferenceManager().setUserId(result.data!['customer']
                   ['id']
               .toString()
@@ -349,8 +350,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
     }
   }
-
- 
 
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
     if (AppConfigure.bigCommerce) {

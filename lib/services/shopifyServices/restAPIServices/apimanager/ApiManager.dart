@@ -45,7 +45,7 @@ class ApiManager {
     final response = await http.post(url,
         headers: headers, body: body.toString() != "{}" ? body : null);
 
-    log(" add to cart ${response.statusCode}");
+    debugPrint(" add to cart ${response.statusCode}");
     if (response.statusCode == APIConstants.unAuthorizedCode ||
         response.statusCode == APIConstants.forbiddenCode) {
       await logout();

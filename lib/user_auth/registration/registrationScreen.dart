@@ -207,7 +207,8 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       loadingSignup = true;
     });
 
-    log("this is data ${widget.isOtp} \n ${email.text} \n ${firstName.text}\n${lastName.text} \n${mobNo.text},\n${password.text}");
+    debugPrint(
+        "this is data ${widget.isOtp} \n ${email.text} \n ${firstName.text}\n${lastName.text} \n${mobNo.text},\n${password.text}");
 
     if (AppConfigure.bigCommerce == true) {
       //Signing wih bigCommerce
@@ -235,7 +236,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           }),
         );
 
-        log('status code is ${response.statusCode}');
+        debugPrint('status code is ${response.statusCode}');
         var data = response.data;
         if (response.statusCode == APIConstants.successCode ||
             response.statusCode == APIConstants.successCreateCode) {
@@ -297,7 +298,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
               textColor: AppColors.whiteColor,
               fontSize: 16.0);
         }
-        log("error: $error");
+        debugPrint("error: $error");
         setState(() {
           loadingSignup = false;
         });

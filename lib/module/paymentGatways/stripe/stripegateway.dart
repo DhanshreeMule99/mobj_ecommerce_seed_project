@@ -18,7 +18,7 @@ class StripePaymentService {
         msg: "${AppString.successPayment}: ", timeInSecForIosWeb: 4);
 
     final checkout = await ProductRepository().checkout("asdfjdfgadfhsdf");
-    log("checkout is this $checkout");
+    debugPrint("checkout is this $checkout");
     if (checkout == AppString.success) {
       Navigator.pop(context);
 
@@ -85,12 +85,12 @@ class StripePaymentService {
   displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
-        log("Payment Successfully $value");
+        debugPrint("Payment Successfully $value");
         handlePaymentSuccess();
       });
       print('done');
     } catch (e) {
-      log('failed to present payment sheet');
+      debugPrint('failed to present payment sheet');
     }
   }
 

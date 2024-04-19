@@ -21,9 +21,9 @@ class AddressRepository {
         final response = await ApiManager.get(
             "${AppConfigure.bigcommerceUrl}/customers/addresses?customer_id:in=$uid");
         if (response.statusCode == APIConstants.successCode) {
-          log("body is this ${response.body} $uid");
+          debugPrint("body is this ${response.body} $uid");
           final List result = jsonDecode(response.body)['data'];
-          log("body is this ${result} $uid");
+          debugPrint("body is this ${result} $uid");
           if (result.isEmpty) {
             throw (AppString.noDataError);
           } else {
@@ -44,7 +44,7 @@ class AddressRepository {
         final response =
             await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
         if (response.statusCode == APIConstants.successCode) {
-          log("body is this ${response.body} $uid");
+          debugPrint("body is this ${response.body} $uid");
           final List result = jsonDecode(response.body)['addresses'];
           if (result.isEmpty) {
             throw (AppString.noDataError);
@@ -151,7 +151,7 @@ class AddressRepository {
 
           final response;
           if (addId == "") {
-            log("calling null addressid api");
+            debugPrint("calling null addressid api");
             var body1 = jsonEncode({"address": body});
             response = await api.sendRequest.post(
               "/customers/addresses",
@@ -162,7 +162,7 @@ class AddressRepository {
               }),
             );
           } else {
-            log("calling not null addressid api");
+            debugPrint("calling not null addressid api");
             response = await api.sendRequest.put(
               "/customers/addresses",
               data: [body],
@@ -225,11 +225,11 @@ class AddressRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final response;
           if (addId == "") {
-            log("calling null addressid api");
+            debugPrint("calling null addressid api");
             response = await ApiManager.post(
                 "$BASE_URL$uid/${APIConstants.address}.json", body1);
           } else {
-            log("calling not null addressid api");
+            debugPrint("calling not null addressid api");
             response = await ApiManager.put(
                 "$BASE_URL$uid/${APIConstants.address}/$addId.json", body1);
           }

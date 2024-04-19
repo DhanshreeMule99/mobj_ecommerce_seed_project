@@ -30,9 +30,9 @@ class UserRepository {
   }
 
   Future<CustomerModel> getProfile() async {
-    log('calling profile api');
+    debugPrint('calling profile api');
     if (AppConfigure.bigCommerce) {
-      log('calling bigcommerce profile api');
+      debugPrint('calling bigcommerce profile api');
       try {
         String BASE_URL = AppConfigure.baseUrl;
         final uid = await SharedPreferenceManager().getUserId();
@@ -43,13 +43,13 @@ class UserRepository {
           await SharedPreferenceManager()
               .setname(result['first_name'].toString());
           await SharedPreferenceManager().setemail(result['email'].toString());
-          log('result is this $result');
+          debugPrint('result is this $result');
           return CustomerModel.fromJson(result);
         } else {
           throw Exception(response.reasonPhrase);
         }
       } catch (error) {
-        log('profile data error is this $error');
+        debugPrint('profile data error is this $error');
         throw error;
       }
     } else {
@@ -92,7 +92,7 @@ class UserRepository {
   editProfile(Map<String, dynamic> body) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    log('getting 2');
+    debugPrint('getting 2');
     API api = API();
     if (AppConfigure.bigCommerce) {
       String BASE_URL = AppConfigure.baseUrl +

@@ -231,11 +231,13 @@ class _ProductListCardstate extends State<ProductListCard> {
                     child: widget.stock > 0
                         ? ElevatedButton(
                             onPressed: () async {
-                              log("varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
+                              debugPrint(
+                                  "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
                               isLogin().then((value) {
                                 if (value == true) {
                                   CommonAlert.show_loading_alert(context);
-                                  log("varient id is this ${widget.variantId}");
+                                  debugPrint(
+                                      "varient id is this ${widget.variantId}");
                                   if (AppConfigure.bigCommerce) {
                                     ProductRepository()
                                         .addToCartBigcommerce(

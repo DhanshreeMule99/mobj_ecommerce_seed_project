@@ -13,8 +13,8 @@ import 'package:mobj_project/utils/themeProvider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//TODO wake lock
-// import 'package:wakelock/wakelock.dart';
+
+
 import 'models/constants/APIConstants.dart';
 import 'module/notificationservice/notificationservice.dart';
 import 'module/splash screen/Splash_screen.dart';

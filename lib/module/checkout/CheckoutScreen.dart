@@ -84,7 +84,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   final orderList =
                                       productlist.lineItems[index];
 
-                                  log('products are this $bigcommerceOrderedItems');
+                                  debugPrint(
+                                      'products are this $bigcommerceOrderedItems');
                                   return productlist.lineItems != []
                                       ? Padding(
                                           padding: const EdgeInsets.fromLTRB(
@@ -281,9 +282,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               .quantity--;
                                                                           setState(
                                                                               () {});
-                                                                          log('add maps');
+                                                                          debugPrint(
+                                                                              'add maps');
 
-                                                                          log('calling put api ');
+                                                                          debugPrint(
+                                                                              'calling put api ');
                                                                           var response = await api.sendRequest.put(
                                                                               '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                               data: {
@@ -307,10 +310,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           ref.refresh(
                                                                               cartDetailsDataProvider);
 
-                                                                          log('cart updated successfully ${response.statusCode}');
+                                                                          debugPrint(
+                                                                              'cart updated successfully ${response.statusCode}');
                                                                         } on Exception catch (e) {
-                                                                          log(e
-                                                                              .toString());
+                                                                          debugPrint(
+                                                                              e.toString());
                                                                         } finally {
                                                                           Navigator.of(context)
                                                                               .pop();
@@ -379,9 +383,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                             .quantity++;
                                                                         setState(
                                                                             () {});
-                                                                        log('add maps');
+                                                                        debugPrint(
+                                                                            'add maps');
 
-                                                                        log('calling put api ');
+                                                                        debugPrint(
+                                                                            'calling put api ');
                                                                         var response = await api.sendRequest.put(
                                                                             '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                             data: {
@@ -406,10 +412,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                         ref.refresh(
                                                                             cartDetailsDataProvider);
 
-                                                                        log('cart updated successfully ${response.statusCode}');
+                                                                        debugPrint(
+                                                                            'cart updated successfully ${response.statusCode}');
                                                                       } on Exception catch (e) {
-                                                                        log(e
-                                                                            .toString());
+                                                                        debugPrint(
+                                                                            e.toString());
                                                                       } finally {
                                                                         Navigator.of(context)
                                                                             .pop();
@@ -473,7 +480,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                         icon: const Icon(
                                                             Icons.delete),
                                                         onPressed: () async {
-                                                          log('id is this ${orderList.id}');
+                                                          debugPrint(
+                                                              'id is this ${orderList.id}');
                                                           String draftId =
                                                               await SharedPreferenceManager()
                                                                   .getDraftId();
@@ -532,7 +540,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               Navigator.of(
                                                                       context)
                                                                   .pop();
-                                                              log("cart item deleted successfully ${response.statusCode}");
+                                                              debugPrint(
+                                                                  "cart item deleted successfully ${response.statusCode}");
                                                             } else {
                                                               ProductRepository()
                                                                   .updateCart(

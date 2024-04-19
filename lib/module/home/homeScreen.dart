@@ -65,7 +65,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> fetchCategories() async {
     if (AppConfigure.bigCommerce) {
-      log('In bigCommerAPI');
+      debugPrint('In bigCommerAPI');
       final response = await ApiManager.get(
           "https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/trees/categories");
       if (response.statusCode == APIConstants.successCode) {

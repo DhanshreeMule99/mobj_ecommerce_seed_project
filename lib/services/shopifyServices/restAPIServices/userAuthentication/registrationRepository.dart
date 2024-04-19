@@ -63,7 +63,7 @@ class RegistrationRepository {
               "X-Shopify-Storefront-Access-Token": AppConfigure.storeFrontToken
             }));
 
-        log('status code is ${response.statusCode}');
+        debugPrint('status code is ${response.statusCode}');
         var data = response.data;
         if (response.statusCode == APIConstants.successCode ||
             response.statusCode == APIConstants.successCreateCode) {
