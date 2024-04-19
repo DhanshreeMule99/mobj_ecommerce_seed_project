@@ -116,38 +116,21 @@ class ProductRepository {
   Future<ReviewProductModels> getProductReviews(String pid) async {
     API api = API();
 
-    if (AppConfigure.bigCommerce) {
-      try {
-        Response response = await api.sendRequest
-            .get('${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews',
-                options: Options(headers: {
-                  "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
-                  'Content-Type': 'application/json',
-                }));
-        if (response.statusCode == APIConstants.successCode) {
-          var result = response.data;
-          return ReviewProductModels.fromJson(result);
-        } else {
-          throw (AppString.noDataError);
-        }
-      } catch (error, stackTrace) {
-        log('print error is this $error $stackTrace');
-        throw error;
+    try {
+      Response response = await api.sendRequest.get(
+        AppConfigure.bigCommerce
+            ? '${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews'
+            : "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com",
+      );
+      if (response.statusCode == APIConstants.successCode) {
+        var result = response.data;
+        return ReviewProductModels.fromJson(result);
+      } else {
+        throw (AppString.noDataError);
       }
-    } else {
-      try {
-        String BASE_URL = AppConfigure.feraUrl;
-        final response = await ApiManager.get(
-            "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com");
-        if (response.statusCode == APIConstants.successCode) {
-          var result = jsonDecode(response.body);
-          return ReviewProductModels.fromJson(result);
-        } else {
-          throw (AppString.noDataError);
-        }
-      } catch (error) {
-        throw error;
-      }
+    } catch (error, stackTrace) {
+      log('print error is this $error $stackTrace');
+      throw error;
     }
   }
 
@@ -333,47 +316,6 @@ class ProductRepository {
         } else {
           response =
               await ApiManager.post("$BASE_URL/carts/$draftId/items", body);
-          // var value = await getCartDetails(); // await the result here
-          // if (value.toString() != AppString.error ||
-          //     value.toString() != AppString.noDataError) {
-          //   if (value.lineItems.isNotEmpty) {
-          //     final lineItemsList = value.lineItems;
-          //     for (int i = 0; i <= value.lineItems.length - 1; i++) {
-          //       decodedBody["draft_order"]["line_items"].add({
-          //         "variant_id": lineItemsList[i].variantId,
-          //         "quantity": lineItemsList[i].quantity
-          //       });
-          //     }
-          //     final lineItems = decodedBody['draft_order']['line_items'];
-          //     final uniqueVariants = {};
-          //     lineItems.forEach((item) {
-          //       int variantId = int.parse(item['variant_id'].toString());
-          //       int quantity = int.parse(item['quantity'].toString());
-          //       //
-          //       if (uniqueVariants.containsKey(variantId)) {
-          //         // If the variant ID already exists, add the quantity
-          //         uniqueVariants[variantId] =
-          //             uniqueVariants[variantId]! + quantity;
-          //       } else {
-          //         // If the variant ID is new, add it to the map
-          //         uniqueVariants[variantId] = quantity;
-          //       }
-          //     });
-          //     // // Clear the original line items
-          //     lineItems.clear();
-          //     uniqueVariants.forEach((variantId, quantity) {
-          //       lineItems.add({
-          //         'variant_id': variantId,
-          //         'quantity': quantity,
-          //       });
-          //     });
-          //   }
-
-          //   body = jsonEncode(decodedBody);
-          //   response = await ApiManager.put(
-          //       "$BASE_URL${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json",
-          //       body);
-          // }
         }
         var data = jsonDecode(response.body);
         log('add to cart data is this $data');
@@ -428,66 +370,59 @@ class ProductRepository {
     }
   }
 
-  addProductReview(reqBody, String pid) async {
+  addProductReview(addReviewBody, String pid) async {
     String exceptionString = "";
-
     API api = API();
-    if (AppConfigure.bigCommerce) {
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          // print("$BASE_URL/${APIConstants.reviewProduct}");
 
-          var body1 = jsonEncode({"address": reqBody});
+    //if (AppConfigure.bigCommerce) {
+    log("adding review for products");
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        final response = await api.sendRequest.post(
+          "/catalog/products/$pid/reviews",
+          data: addReviewBody,
+        );
 
-          final response = await api.sendRequest.post(
-            "/catalog/products/$pid/reviews",
-            data: reqBody,
-            options: Options(headers: {
-              'Content-Type': 'application/json',
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-            }),
-          );
-          // var data = jsonDecode(response.reqBody);
-
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            return AppString.success;
-          } else if (response.statusCode == APIConstants.alreadyExistCode) {
-            return AppString.alreadyReview;
-          } else {
-            exceptionString = AppString.oops;
-            return exceptionString;
-          }
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          return AppString.success;
+        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+          return AppString.alreadyReview;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
         }
-      } catch (error) {
-        exceptionString = AppString.oops;
-        return exceptionString;
       }
-    } else {
-      var body = jsonEncode(reqBody);
-      String BASE_URL = AppConfigure.feraUrl;
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          print("$BASE_URL/${APIConstants.reviewProduct}");
-          final response = await ApiManager.post(
-              "$BASE_URL/${APIConstants.reviewProduct}", body);
-          var data = jsonDecode(response.body);
-
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            return AppString.success;
-          } else if (response.statusCode == APIConstants.alreadyExistCode) {
-            return AppString.alreadyReview;
-          } else {
-            exceptionString = AppString.oops;
-            return exceptionString;
-          }
-        }
-      } catch (error) {
-        exceptionString = AppString.oops;
-        return exceptionString;
-      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
     }
+    // }
+    //  else {
+    //   var body = jsonEncode(addReviewBody);
+    //   String BASE_URL = AppConfigure.feraUrl;
+    //   try {
+    //     if (await ConnectivityUtils.isNetworkConnected()) {
+    //       print("$BASE_URL/${APIConstants.reviewProduct}");
+    //       final response = await ApiManager.post(
+    //           "$BASE_URL/${APIConstants.reviewProduct}", body);
+    //       var data = jsonDecode(response.body);
+
+    //       if (response.statusCode == APIConstants.successCode ||
+    //           response.statusCode == APIConstants.successCreateCode) {
+    //         return AppString.success;
+    //       } else if (response.statusCode == APIConstants.alreadyExistCode) {
+    //         return AppString.alreadyReview;
+    //       } else {
+    //         exceptionString = AppString.oops;
+    //         return exceptionString;
+    //       }
+    //     }
+    //   } catch (error) {
+    //     exceptionString = AppString.oops;
+    //     return exceptionString;
+    //   }
+    // }
   }
 
   updateCart(List<dynamic> reqBody) async {
