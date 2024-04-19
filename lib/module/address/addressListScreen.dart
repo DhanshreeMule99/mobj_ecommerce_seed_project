@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -13,7 +11,6 @@ import '../../provider/addressProvider.dart';
 import '../../utils/api.dart';
 import '../paymentGatways/phonePePay/phonePeGateway.dart';
 import '../paymentGatways/razorpay/paymentHandler.dart';
-import '../paymentGatways/stripe/stripegateway.dart';
 import 'addAddressScreen.dart';
 
 class AddressListScreen extends ConsumerStatefulWidget {
@@ -110,7 +107,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
     return degree * (3.141592653589793 / 180.0);
   }
 
-  var _razorpay = Razorpay();
+  final _razorpay = Razorpay();
 
   @override
   void initState() {
@@ -119,14 +116,14 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
     //     widget!.mobile ?? DefaultValues.defaultCustomerEmail);
     //Razor pay integration
 
-    _razorpay?.on(
+    _razorpay.on(
       Razorpay.EVENT_PAYMENT_SUCCESS,
-      PaymentHandler(_razorpay!, context, ref).handlePaymentSuccess,
+      PaymentHandler(_razorpay, context, ref).handlePaymentSuccess,
     );
-    _razorpay?.on(Razorpay.EVENT_PAYMENT_ERROR,
-        PaymentHandler(_razorpay!, context, ref).handlePaymentError);
-    _razorpay?.on(Razorpay.EVENT_EXTERNAL_WALLET,
-        PaymentHandler(_razorpay!, context, ref).handleExternalWallet);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR,
+        PaymentHandler(_razorpay, context, ref).handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+        PaymentHandler(_razorpay, context, ref).handleExternalWallet);
     ref.read(addressDataProvider).when(
           data: (addressList) {
             selectedDefaultIndex =
@@ -702,7 +699,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                           Options(
                                                                               headers: {
                                                                             "X-auth-Token":
-                                                                                "${AppConfigure.bigCommerceAccessToken}",
+                                                                                AppConfigure.bigCommerceAccessToken,
                                                                             'Content-Type':
                                                                                 'application/json',
                                                                           }),
@@ -743,7 +740,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                           '${AppConfigure.bigcommerceUrl}/checkouts/$draftId/consignments/$consignmentId',
                                                                           options: Options(headers: {
                                                                             "X-auth-Token":
-                                                                                "${AppConfigure.bigCommerceAccessToken}",
+                                                                                AppConfigure.bigCommerceAccessToken,
                                                                             'Content-Type':
                                                                                 'application/json',
                                                                           }),
@@ -756,7 +753,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
 
                                                               //  Razor payment service
                                                               PaymentHandler(
-                                                                _razorpay!,
+                                                                _razorpay,
                                                                 context,
                                                                 ref,
                                                               ).openPaymentPortal(
@@ -801,7 +798,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                               //                 .toString()));
                                                               //Razor payment service
                                                               PaymentHandler(
-                                                                _razorpay!,
+                                                                _razorpay,
                                                                 context,
                                                                 ref,
                                                               ).openPaymentPortal(
@@ -913,7 +910,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                       : Container()
                                 ],
                               ),
-                              loading: () => SkeletonLoaderWidget(),
+                              loading: () => const SkeletonLoaderWidget(),
                             )
                           : Container(),
                     ]),
@@ -956,7 +953,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                     : Container()
               ],
             ),
-            loading: () => SkeletonLoaderWidget(),
+            loading: () => const SkeletonLoaderWidget(),
           ))
         ]),
       ),

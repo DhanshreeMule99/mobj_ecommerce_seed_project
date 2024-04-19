@@ -1,9 +1,10 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:order_tracker/order_tracker.dart';
 
-import '../../../utils/defaultValues.dart';
 
 class OrderTrackingScreen extends StatefulWidget {
+  const OrderTrackingScreen({super.key});
+
   @override
   _OrderTrackingScreenState createState() => _OrderTrackingScreenState();
 }

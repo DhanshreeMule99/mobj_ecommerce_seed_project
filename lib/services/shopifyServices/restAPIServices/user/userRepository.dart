@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../../../models/product/draftOrderModel.dart';
 import '../../../../utils/api.dart';
 
 class UserRepository {
@@ -11,9 +9,9 @@ class UserRepository {
 
   Future<List<UserModel>> getUsers() async {
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
-      final response = await ApiManager.get(BASE_URL);
+      final response = await ApiManager.get(baseUrl);
       if (response.statusCode == APIConstants.successCode) {
         final List result = jsonDecode(response.body)['data'];
         return result.map((e) => UserModel.fromJson(e)).toList();
@@ -34,9 +32,9 @@ class UserRepository {
     if (AppConfigure.bigCommerce) {
       debugPrint('calling bigcommerce profile api');
       try {
-        String BASE_URL = AppConfigure.baseUrl;
+        String baseUrl = AppConfigure.baseUrl;
         final uid = await SharedPreferenceManager().getUserId();
-        final response = await ApiManager.get("$BASE_URL/customers?id:in=$uid");
+        final response = await ApiManager.get("$baseUrl/customers?id:in=$uid");
         if (response.statusCode == APIConstants.successCode) {
           // ref.refresh(profileDataProvider);
           final result = jsonDecode(response.body)['data'][0];
@@ -50,16 +48,16 @@ class UserRepository {
         }
       } catch (error) {
         debugPrint('profile data error is this $error');
-        throw error;
+        rethrow;
       }
     } else {
       try {
-        String BASE_URL = AppConfigure.baseUrl +
+        String baseUrl = AppConfigure.baseUrl +
             APIConstants.apiForAdminURL +
             APIConstants.apiURL +
             APIConstants.customer;
         final uid = await SharedPreferenceManager().getUserId();
-        final response = await ApiManager.get("$BASE_URL$uid.json");
+        final response = await ApiManager.get("$baseUrl$uid.json");
         if (response.statusCode == APIConstants.successCode) {
           final result = jsonDecode(response.body)['customer'];
           return CustomerModel.fromJson(result);
@@ -67,16 +65,16 @@ class UserRepository {
           throw Exception(response.reasonPhrase);
         }
       } catch (error) {
-        throw error;
+        rethrow;
       }
     }
   }
 
   Future<ProfileModel> getUserInfo(String uid) async {
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
-      final response = await ApiManager.get("$BASE_URL${uid}/$uid");
+      final response = await ApiManager.get("$baseUrl$uid/$uid");
       if (response.statusCode == APIConstants.successCode) {
         final userData = json.decode(response.body)['data'];
 
@@ -85,7 +83,7 @@ class UserRepository {
         throw Exception(response.reasonPhrase);
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -95,7 +93,7 @@ class UserRepository {
     debugPrint('getting 2');
     API api = API();
     if (AppConfigure.bigCommerce) {
-      String BASE_URL = AppConfigure.baseUrl +
+      String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
@@ -108,7 +106,7 @@ class UserRepository {
             data: [body],
             options: Options(headers: {
               'Content-Type': 'application/json',
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+              "X-auth-Token": AppConfigure.bigCommerceAccessToken
             }),
           );
 
@@ -130,7 +128,7 @@ class UserRepository {
         return exceptionString;
       }
     } else {
-      String BASE_URL = AppConfigure.baseUrl +
+      String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
@@ -138,7 +136,7 @@ class UserRepository {
       var body1 = jsonEncode({"customer": body});
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          final response = await ApiManager.put("$BASE_URL$uid.json", body1);
+          final response = await ApiManager.put("$baseUrl$uid.json", body1);
           var data = jsonDecode(response.body);
           if (response.statusCode == APIConstants.successCode) {
             return data;

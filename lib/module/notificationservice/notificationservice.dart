@@ -41,6 +41,6 @@ class LocalNotificationService {
         notificationDetails,
         payload: message.data['nid'],
       );
-    } on Exception catch (e) {}
+    } on Exception {}
   }
 }

@@ -1,10 +1,7 @@
 // registrationScreen
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobj_project/user_auth/login/loginScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -185,8 +182,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   void _toggleObscured() {
     setState(() {
       _obscured = !_obscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -195,8 +193,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   void _toggleObscuredForConfirmPass() {
     setState(() {
       _confirmObscured = !_confirmObscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -408,7 +407,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   top: 15, left: 15, bottom: 10),
                               child: Text(
                                 AppLocalizations.of(context)!.signUp,
@@ -443,7 +442,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                             children: [
                                               Text(AppLocalizations.of(context)!
                                                   .firstName),
-                                              Text(
+                                              const Text(
                                                 '*',
                                                 style: TextStyle(
                                                     color: AppColors.red,
@@ -516,7 +515,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                             children: [
                                               Text(AppLocalizations.of(context)!
                                                   .lastName),
-                                              Text(
+                                              const Text(
                                                 '*',
                                                 style: TextStyle(
                                                     color: AppColors.red,
@@ -589,7 +588,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                       children: [
                                         Text(AppLocalizations.of(context)!
                                             .email),
-                                        Text(
+                                        const Text(
                                           '*',
                                           style: TextStyle(
                                               color: AppColors.red,
@@ -647,7 +646,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                       children: [
                                         Text(AppLocalizations.of(context)!
                                             .mobileNo),
-                                        Text(
+                                        const Text(
                                           '*',
                                           style: TextStyle(
                                               color: AppColors.red,
@@ -697,7 +696,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         children: [
                                           Text(AppLocalizations.of(context)!
                                               .password),
-                                          Text(
+                                          const Text(
                                             '*',
                                             style: TextStyle(
                                                 color: AppColors.red,
@@ -760,7 +759,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                         children: [
                                           Text(AppLocalizations.of(context)!
                                               .confirmPass),
-                                          Text(
+                                          const Text(
                                             '*',
                                             style: TextStyle(
                                                 color: AppColors.red,
@@ -810,7 +809,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                     return Validation().validateConfirmPassword(
                                         value!, password.text);
                                   })),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           error != ""
@@ -838,7 +837,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             appInfo.primaryColorValue,
-                                        minimumSize: Size.fromHeight(50),
+                                        minimumSize: const Size.fromHeight(50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                                 AppDimension.buttonRadius)),
@@ -883,7 +882,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                       PageRouteBuilder(
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
-                                              LoginScreen()));
+                                              const LoginScreen()));
                                 },
                               )
                             ],

@@ -1,5 +1,4 @@
 // editProfileScreen
-import 'dart:io';
 
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -123,10 +122,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               selcted_icon_color: AppColors.buttonColor,
               unselcted_icon_color: AppColors.blackColor,
               selectedPage: 3,
-              screen1: HomeScreen(),
-              screen2: SearchWidget(),
-              screen3: HomeScreen(),
-              screen4: ProfileScreen(),
+              screen1: const HomeScreen(),
+              screen2: const SearchWidget(),
+              screen3: const HomeScreen(),
+              screen4: const ProfileScreen(),
               ref: ref,
             ),
             body: SingleChildScrollView(
@@ -135,7 +134,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       return Form(
                           key: formKey, //key for form
                           child: Column(children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             // profilePic != null && profilePic != ""
@@ -223,7 +222,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                                 Text(AppLocalizations.of(
                                                         context)!
                                                     .firstName),
-                                                Text(
+                                                const Text(
                                                   '*',
                                                   style: TextStyle(
                                                       color: AppColors.red,
@@ -297,7 +296,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                                 Text(AppLocalizations.of(
                                                         context)!
                                                     .lastName),
-                                                Text(
+                                                const Text(
                                                   '*',
                                                   style: TextStyle(
                                                       color: AppColors.red,
@@ -444,7 +443,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                         children: [
                                           Text(AppLocalizations.of(context)!
                                               .mobileNo),
-                                          Text(
+                                          const Text(
                                             '*',
                                             style: TextStyle(
                                                 color: AppColors.red,
@@ -493,7 +492,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   ))
                                 : Container(),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(10, 35, 10, 15),
+                              padding: const EdgeInsets.fromLTRB(10, 35, 10, 15),
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate() &&
@@ -520,7 +519,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: appInfo.primaryColorValue,
-                                  minimumSize: Size.fromHeight(50),
+                                  minimumSize: const Size.fromHeight(50),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
                                           AppDimension.buttonRadius)),

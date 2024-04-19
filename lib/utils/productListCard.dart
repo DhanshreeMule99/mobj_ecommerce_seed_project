@@ -1,17 +1,8 @@
 // productListCard
 
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import '../../utils/appColors.dart';
-import '../models/shared_preferences/SharedPreference.dart';
-import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
-import 'appDimension.dart';
-import 'appString.dart';
 import 'cmsConfigue.dart';
-import 'commonAlert.dart';
 
 class ProductListCard extends StatefulWidget {
   final Color tileColor;
@@ -98,7 +89,7 @@ class _ProductListCardstate extends State<ProductListCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-              padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
               child: Align(
                   alignment: Alignment.bottomRight,
                   child: Wrap(
@@ -203,7 +194,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(
-                          "${widget.productName}",
+                          widget.productName,
                           style: TextStyle(
                             fontSize: 0.04 * MediaQuery.of(context).size.width,
                             fontWeight: FontWeight.w400,
@@ -227,7 +218,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                           : Container(),
                     ])),
                 Padding(
-                    padding: EdgeInsets.only(right: 15),
+                    padding: const EdgeInsets.only(right: 15),
                     child: widget.stock > 0
                         ? ElevatedButton(
                             onPressed: () async {
@@ -326,7 +317,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                               AppLocalizations.of(context)!
                                   .addToCart
                                   .toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: AppColors.whiteColor,
                                   // fontSize:
                                   //     MediaQuery.of(context).size.width * 0.05,

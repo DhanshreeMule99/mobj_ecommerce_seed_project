@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +31,7 @@ class StripePaymentService {
       ref.refresh(cartDetailsDataProvider);
       ref.refresh(orderDataProvider);
     } else {
-      Fluttertoast.showToast(msg: "${AppString.error}", timeInSecForIosWeb: 4);
+      Fluttertoast.showToast(msg: AppString.error, timeInSecForIosWeb: 4);
       // Navigate to the error screen
       Navigator.of(context).pushReplacement(PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
@@ -62,7 +60,7 @@ class StripePaymentService {
       print('1');
       paymentIntent = await createPaymentIntent(name, contact, email, amount);
       print('2');
-      var gpay = PaymentSheetGooglePay(
+      var gpay = const PaymentSheetGooglePay(
           merchantCountryCode: "IN",
           currencyCode: "INR",
           testEnv: true,

@@ -1,9 +1,10 @@
 // helpCenterScreen
 import 'package:flutter_tawk/flutter_tawk.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:mobj_project/utils/defaultValues.dart';
 
 class HelpCenterScreen extends ConsumerWidget {
+  const HelpCenterScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appInfoAsyncValue = ref.watch(appInfoProvider);
@@ -69,14 +70,14 @@ class HelpCenterScreen extends ConsumerWidget {
                             },
                             child:  Text(
                               AppLocalizations.of(context)!.refresh,
-                              style: TextStyle(fontSize: 16,
+                              style: const TextStyle(fontSize: 16,
                                 color: AppColors.whiteColor,),
 
                             ),
                           )
                         ],
                       ),
-                  loading: () => SkeletonLoaderWidget())
+                  loading: () => const SkeletonLoaderWidget())
               ),
             ));
   }

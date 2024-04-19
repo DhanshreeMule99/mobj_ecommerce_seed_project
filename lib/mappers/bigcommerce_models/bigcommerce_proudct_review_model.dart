@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import '../../models/product/productReviewWiseModel.dart';
 
@@ -9,8 +8,11 @@ import '../../models/product/productReviewWiseModel.dart';
 //     json.encode(data.toJson());
 
 class BigCommerceReviewProductModels implements ReviewProductModels {
+  @override
   int currentPage;
+  @override
   int perPage;
+  @override
   List<BigCommerceReview> reviews;
 
   BigCommerceReviewProductModels({
@@ -30,25 +32,45 @@ class BigCommerceReviewProductModels implements ReviewProductModels {
 }
 
 class BigCommerceReview implements Review {
+  @override
   int id;
+  @override
   String title;
+  @override
   String body;
+  @override
   int rating;
+  @override
   int productExternalId;
+  @override
   BigCommerceReviewer reviewer;
+  @override
   String source;
+  @override
   String curated;
+  @override
   bool published;
+  @override
   bool hidden;
+  @override
   String verified;
+  @override
   bool featured;
+  @override
   DateTime createdAt;
+  @override
   DateTime updatedAt;
+  @override
   bool hasPublishedPictures;
+  @override
   bool hasPublishedVideos;
+  @override
   List<dynamic> pictures;
+  @override
   String ipAddress;
+  @override
   String productTitle;
+  @override
   String productHandle;
 
   BigCommerceReview({
@@ -131,13 +153,21 @@ class BigCommerceReview implements Review {
 }
 
 class BigCommerceReviewer implements Reviewer {
+  @override
   int id;
+  @override
   dynamic externalId;
+  @override
   String email;
+  @override
   String name;
+  @override
   dynamic phone;
+  @override
   bool acceptsMarketing;
+  @override
   dynamic unsubscribedAt;
+  @override
   dynamic tags;
 
   BigCommerceReviewer({

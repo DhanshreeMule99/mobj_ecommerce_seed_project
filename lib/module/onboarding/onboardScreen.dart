@@ -1,12 +1,11 @@
 // onboardScreen
 // // onboardScreen
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:mobj_project/user_auth/login/loginScreen.dart';
-import 'package:mobj_project/user_auth/login/loginWithOTPScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:onboarding/onboarding.dart';
 
 class onboardScreen extends ConsumerStatefulWidget {
+  const onboardScreen({super.key});
+
   @override
   onboardScreenState createState() => onboardScreenState();
 }
@@ -101,11 +100,11 @@ class onboardScreenState extends ConsumerState<onboardScreen> {
                                 color: AppColors.greyShade200,
                               ),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 45.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -160,11 +159,11 @@ class onboardScreenState extends ConsumerState<onboardScreen> {
                                 color: AppColors.greyShade200,
                               ),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 45.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -219,11 +218,11 @@ class onboardScreenState extends ConsumerState<onboardScreen> {
                                 color: AppColors.greyShade200,
                               ),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 45.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(

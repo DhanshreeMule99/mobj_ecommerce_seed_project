@@ -4,7 +4,7 @@ import 'package:photo_view/photo_view.dart';
 class ImageDialog extends StatefulWidget {
   final String imageUrl;
 
-  ImageDialog({required this.imageUrl});
+  const ImageDialog({super.key, required this.imageUrl});
 
   @override
   _ImageDialogState createState() => _ImageDialogState();

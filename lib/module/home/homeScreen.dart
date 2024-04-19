@@ -1,13 +1,10 @@
 // homeScreen
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import '../paymentGatways/phonePePay/phonePeGateway.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -39,13 +36,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     FirebaseDynamicLinks.instance.onLink.listen(
       (pendingDynamicLinkData) {
         // Set up the `onLink` event listener next as it may be received here
-        if (pendingDynamicLinkData != null) {
-          final Uri deepLink = pendingDynamicLinkData.link;
-          handleMyLink(deepLink);
-          // Example of using the dynamic link to push the user to a different screen
-          // Navigator.pushNamed(context, deepLink.path);
-        }
-      },
+        final Uri deepLink = pendingDynamicLinkData.link;
+        handleMyLink(deepLink);
+        // Example of using the dynamic link to push the user to a different screen
+        // Navigator.pushNamed(context, deepLink.path);
+            },
     );
   }
 
@@ -159,14 +154,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 1,
-            screen1: HomeScreen(),
-            screen2: SearchWidget(),
-            screen3: HomeScreen(),
-            screen4: ProfileScreen(),
+            screen1: const HomeScreen(),
+            screen2: const SearchWidget(),
+            screen3: const HomeScreen(),
+            screen4: const ProfileScreen(),
             ref: ref,
           ),
           body: Column(children: [
-            data.length == 0
+            data.isEmpty
                 ? Container()
                 : Container(
                     height: 60,
@@ -176,13 +171,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(2),
                           child: FilterChip(
                             showCheckmark: false,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                             label: Text(
                               AppConfigure.bigCommerce
                                   ? data[index]["name"]
@@ -283,7 +278,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                           .id
                                                           .toString(),
                                                       productlist[index]
-                                                          .image!
+                                                          .image
                                                           .src
                                                           .toString(),
                                                       productlist[index]
@@ -325,7 +320,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                 tileColor:
                                                     appInfo.primaryColorValue,
                                                 logoPath: productlist[index]
-                                                    .image!
+                                                    .image
                                                     .src
                                                     .toString(),
                                                 productName: productlist[index]
@@ -335,9 +330,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     .bodyHtml
                                                     .toString(),
                                                 datetime:
-                                                    "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt!}",
+                                                    "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
                                                 productImage: productlist[index]
-                                                    .image!
+                                                    .image
                                                     .src
                                                     .toString(),
                                                 ratings: () {
@@ -459,7 +454,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                   // // );
                                                 },
                                                 productDetails:
-                                                    "\u{20B9}${productlist[index].variants![0].price}",
+                                                    "\u{20B9}${productlist[index].variants[0].price}",
                                                 status: productlist[index]
                                                     .variants
                                                     .toString(),
@@ -473,7 +468,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                         .variants
                                                         .isNotEmpty
                                                     ? productlist[index]
-                                                        .variants![0]
+                                                        .variants[0]
                                                         .price
                                                     : DefaultValues.defaultPrice
                                                         .toString(),
@@ -570,7 +565,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                     child: Text(
                       AppLocalizations.of(context)!.refresh,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: AppColors.whiteColor,
                       ),
@@ -578,7 +573,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   )
                 ],
               ),
-              loading: () => SkeletonLoaderWidget(),
+              loading: () => const SkeletonLoaderWidget(),
             ))
           ])),
       error: (error, s) => Column(
@@ -602,7 +597,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.whiteColor,
                     ),
@@ -611,7 +606,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               : Container()
         ],
       ),
-      loading: () => SkeletonLoaderWidget(),
+      loading: () => const SkeletonLoaderWidget(),
     );
   }
 }

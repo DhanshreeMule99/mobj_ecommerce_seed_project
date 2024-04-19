@@ -47,10 +47,11 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
 
     if (permissionStatus.isGranted) {
       _locationService.getCurrentAddress().then((value) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             address = value;
           });
+        }
       });
     } else {
       _showLocationPermissionAlert();

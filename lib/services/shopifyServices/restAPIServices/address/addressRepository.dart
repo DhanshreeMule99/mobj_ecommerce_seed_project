@@ -1,7 +1,7 @@
 // addressRepository
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:http/src/response.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../../../utils/api.dart';
@@ -23,7 +23,7 @@ class AddressRepository {
         if (response.statusCode == APIConstants.successCode) {
           debugPrint("body is this ${response.body} $uid");
           final List result = jsonDecode(response.body)['data'];
-          debugPrint("body is this ${result} $uid");
+          debugPrint("body is this $result $uid");
           if (result.isEmpty) {
             throw (AppString.noDataError);
           } else {
@@ -67,7 +67,7 @@ class AddressRepository {
   deleteAddress(String addId) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    String BASE_URL = AppConfigure.baseUrl +
+    String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL +
         APIConstants.customer;
@@ -80,7 +80,7 @@ class AddressRepository {
             "/customers/addresses?id:in=$addId",
             options: Options(headers: {
               'Content-Type': 'application/json',
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+              "X-auth-Token": AppConfigure.bigCommerceAccessToken
             }),
           );
           // var data = jsonDecode(response.body);
@@ -105,7 +105,7 @@ class AddressRepository {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final response = await ApiManager.delete(
-              "$BASE_URL$uid/${APIConstants.address}/$addId.json");
+              "$baseUrl$uid/${APIConstants.address}/$addId.json");
           var data = jsonDecode(response.body);
           if (response.statusCode == APIConstants.successCode) {
             return AppString.success;
@@ -130,7 +130,7 @@ class AddressRepository {
   editAddress(Map<String, dynamic> body, String addId) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    String BASE_URL = AppConfigure.baseUrl +
+    String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL +
         APIConstants.customer;
@@ -158,7 +158,7 @@ class AddressRepository {
               data: [body],
               options: Options(headers: {
                 'Content-Type': 'application/json',
-                "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+                "X-auth-Token": AppConfigure.bigCommerceAccessToken
               }),
             );
           } else {
@@ -168,7 +168,7 @@ class AddressRepository {
               data: [body],
               options: Options(headers: {
                 'Content-Type': 'application/json',
-                "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+                "X-auth-Token": AppConfigure.bigCommerceAccessToken
               }),
             );
           }
@@ -227,11 +227,11 @@ class AddressRepository {
           if (addId == "") {
             debugPrint("calling null addressid api");
             response = await ApiManager.post(
-                "$BASE_URL$uid/${APIConstants.address}.json", body1);
+                "$baseUrl$uid/${APIConstants.address}.json", body1);
           } else {
             debugPrint("calling not null addressid api");
             response = await ApiManager.put(
-                "$BASE_URL$uid/${APIConstants.address}/$addId.json", body1);
+                "$baseUrl$uid/${APIConstants.address}/$addId.json", body1);
           }
           print("body is this ${response.body}");
           var data = jsonDecode(response.body);
@@ -262,7 +262,7 @@ class AddressRepository {
   setDefaultAddress(String addId) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    String BASE_URL = AppConfigure.baseUrl +
+    String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL +
         APIConstants.customer;
@@ -270,7 +270,7 @@ class AddressRepository {
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         final response = await ApiManager.put(
-            "$BASE_URL$uid/${APIConstants.address}/$addId/${APIConstants.defaultAddress}.json",
+            "$baseUrl$uid/${APIConstants.address}/$addId/${APIConstants.defaultAddress}.json",
             {});
         var data = jsonDecode(response.body);
         if (response.statusCode == APIConstants.successCode) {
@@ -299,11 +299,11 @@ class AddressRepository {
     API api = API();
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
-        Response response = await api.sendRequest.post(
+        var response = await api.sendRequest.post(
             "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
             data: addId,
             options: Options(headers: {
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+              "X-auth-Token": AppConfigure.bigCommerceAccessToken,
               'Content-Type': 'application/json',
             }));
         // final response = await ApiManager.post(

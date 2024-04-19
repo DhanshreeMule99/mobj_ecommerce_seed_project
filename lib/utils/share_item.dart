@@ -15,12 +15,12 @@ class ShareItem {
         minimumVersion: 0,
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
-          description: itemname, imageUrl: Uri.parse("$image"), title: "Mobj"),
+          description: itemname, imageUrl: Uri.parse(image), title: "Mobj"),
     );
     final ShortDynamicLink dynamicUrl =
         await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
-    String? desc = '${dynamicUrl.shortUrl.toString()}';
+    String? desc = dynamicUrl.shortUrl.toString();
 
     await Share.share(desc);
   }

@@ -1,8 +1,4 @@
 // forgotPasswordScreen
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:frontend/frontend.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -11,7 +7,7 @@ import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   final bool? isResetPass;
 
-  const ForgotPasswordScreen({this.isResetPass});
+  const ForgotPasswordScreen({super.key, this.isResetPass});
 
   @override
   ConsumerState<ForgotPasswordScreen> createState() =>
@@ -21,12 +17,12 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   String error = "";
   final formKey = GlobalKey<FormState>();
-  bool _obscured = true;
+  final bool _obscured = true;
   final textFieldFocusNode = FocusNode();
   bool isLoading = false;
   final email = TextEditingController();
   final pass = TextEditingController();
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
   GraphQlRepository graphQLConfig = GraphQlRepository();
 
   signUp() async {
@@ -146,7 +142,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(AppLocalizations.of(context)!.email),
-                                      Text(
+                                      const Text(
                                         '*',
                                         style: TextStyle(
                                             color: AppColors.red, fontSize: 20),
@@ -207,7 +203,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: appInfo.primaryColorValue,
-                                    minimumSize: Size.fromHeight(50),
+                                    minimumSize: const Size.fromHeight(50),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimension.buttonRadius)),

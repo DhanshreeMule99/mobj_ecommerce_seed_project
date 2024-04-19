@@ -4,18 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:mobj_project/services/shopifyServices/graphQLServices/graphQlRespository.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
-import 'package:mobj_project/utils/appString.dart';
 import 'package:mobj_project/utils/appRoutes.dart';
 import 'package:mobj_project/utils/themeProvider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-import 'models/constants/APIConstants.dart';
 import 'module/notificationservice/notificationservice.dart';
 import 'module/splash screen/Splash_screen.dart';
 import 'utils/appColors.dart';

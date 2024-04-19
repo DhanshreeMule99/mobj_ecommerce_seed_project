@@ -129,7 +129,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: EdgeInsets.only(top: 25),
+                              padding: const EdgeInsets.only(top: 25),
                               child: Text(
                                 AppString.verificationCode,
                                 style: TextStyle(
@@ -139,7 +139,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                                     fontWeight: FontWeight.bold),
                               )),
                           Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                   top: 15, left: 15, bottom: 15, right: 15),
                               child: Text(
                                 AppString.otpInfo,
@@ -177,7 +177,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                           //     : Container(),
                           Padding(
                               padding:
-                                  EdgeInsets.only(top: 15, left: 0, bottom: 25),
+                                  const EdgeInsets.only(top: 15, left: 0, bottom: 25),
                               child: Center(
                                   child: Consumer(builder: (context, watch, _) {
                                 return PinCodeTextField(

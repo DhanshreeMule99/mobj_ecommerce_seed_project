@@ -1,26 +1,43 @@
-import 'package:mobj_project/utils/appConfiguer.dart';
 import 'package:mobj_project/utils/defaultValues.dart';
 
 import '../../models/product/productModel.dart';
 
 class BigCommerceProductModel implements ProductModel {
+  @override
   final int id;
+  @override
   final String title;
+  @override
   final String bodyHtml;
+  @override
   final String vendor;
+  @override
   final String productType;
+  @override
   final String createdAt;
+  @override
   final String handle;
+  @override
   final String updatedAt;
+  @override
   final String publishedAt;
+  @override
   final String templateSuffix;
+  @override
   final String publishedScope;
+  @override
   final String tags;
+  @override
   final String status;
+  @override
   final String adminGraphqlApiId;
+  @override
   final List<BigCommerceProductVariant> variants;
+  @override
   final List<BigCommerceProductOption> options;
+  @override
   final List<BigCommerceProductImage> images;
+  @override
   final BigCommerceProductImage image;
 
   BigCommerceProductModel({
@@ -82,31 +99,57 @@ class BigCommerceProductModel implements ProductModel {
 }
 
 class BigCommerceProductVariant implements ProductVariant {
+  @override
   final int id;
+  @override
   final int productId;
+  @override
   final String title;
+  @override
   final String price;
+  @override
   final String sku;
+  @override
   final int position;
+  @override
   final String inventoryPolicy;
+  @override
   final String compareAtPrice;
+  @override
   final String fulfillmentService;
+  @override
   final String inventoryManagement;
+  @override
   final String option1;
+  @override
   final String option2;
+  @override
   final String option3;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final bool taxable;
+  @override
   final String barcode;
+  @override
   final int grams;
+  @override
   var imageId;
+  @override
   final double weight;
+  @override
   final String weightUnit;
+  @override
   final int inventoryItemId;
+  @override
   final int inventoryQuantity;
+  @override
   final int oldInventoryQuantity;
+  @override
   final bool requiresShipping;
+  @override
   final String adminGraphqlApiId;
 
   BigCommerceProductVariant({
@@ -182,10 +225,15 @@ class BigCommerceProductVariant implements ProductVariant {
 }
 
 class BigCommerceProductOption implements ProductOption {
+  @override
   final int id;
+  @override
   final int productId;
+  @override
   final String name;
+  @override
   final int position;
+  @override
   final List<String> values;
 
   BigCommerceProductOption({
@@ -211,16 +259,27 @@ class BigCommerceProductOption implements ProductOption {
 }
 
 class BigCommerceProductImage implements ProductImage {
+  @override
   final int id;
+  @override
   final int productId;
+  @override
   final int position;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final String alt;
+  @override
   final int width;
+  @override
   final int height;
+  @override
   final String src;
+  @override
   final List<int> variantIds;
+  @override
   final String adminGraphqlApiId;
 
   BigCommerceProductImage({

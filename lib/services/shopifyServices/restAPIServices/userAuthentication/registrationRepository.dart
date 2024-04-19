@@ -1,6 +1,5 @@
 // registrationRepository
 
-import 'dart:developer';
 
 //import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';

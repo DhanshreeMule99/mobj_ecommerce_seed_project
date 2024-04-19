@@ -1,9 +1,6 @@
 // LoginWithOTPScreen
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -103,7 +100,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
     super.dispose();
   }
 
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +187,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
                                             },
                                             children: {
                                               0: Padding(
-                                                  padding: EdgeInsets.all(10),
+                                                  padding: const EdgeInsets.all(10),
                                                   child: Text(
                                                     AppString.email,
                                                     style: TextStyle(
@@ -206,7 +203,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
                                                             FontWeight.bold),
                                                   )),
                                               1: Padding(
-                                                  padding: EdgeInsets.all(10),
+                                                  padding: const EdgeInsets.all(10),
                                                   child: Text(
                                                     AppString.mobileNo,
                                                     style: TextStyle(
@@ -354,7 +351,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
                                 ? Center(
                                     child: Text(
                                     error,
-                                    style: TextStyle(color: AppColors.red),
+                                    style: const TextStyle(color: AppColors.red),
                                   ))
                                 : Container(),
                             Padding(
@@ -409,7 +406,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: appInfo.primaryColorValue,
-                                        minimumSize: Size.fromHeight(50),
+                                        minimumSize: const Size.fromHeight(50),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                                 AppDimension.buttonRadius)),
@@ -451,7 +448,7 @@ class _LoginWithOTPState extends ConsumerState<LoginWithOTP> {
                                     Navigator.of(context).push(PageRouteBuilder(
                                         pageBuilder: (context, animation1,
                                                 animation2) =>
-                                            RegistrationScreen(isOtp: true)));
+                                            const RegistrationScreen(isOtp: true)));
                                   },
                                 )
                               ],

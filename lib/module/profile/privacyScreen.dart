@@ -6,7 +6,7 @@ import 'package:mobj_project/utils/cmsConfigue.dart';
 class PrivacyScreen extends ConsumerStatefulWidget {
   final bool? logout;
 
-  PrivacyScreen({Key? key, this.logout}) : super(key: key);
+  const PrivacyScreen({Key? key, this.logout}) : super(key: key);
 
   @override
   ConsumerState<PrivacyScreen> createState() => _PrivacyScreenState();
@@ -97,7 +97,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                 ),
                               );
                             },
-                            loading: () => SkeletonLoaderWidget(),
+                            loading: () => const SkeletonLoaderWidget(),
                             error: (error, stackTrace) => Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,7 +128,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                       },
                                       child:  Text(
                                         AppLocalizations.of(context)!.refresh,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           color: AppColors.whiteColor,
                                         ),
@@ -143,7 +143,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                   },
                   error: (error, s) =>
                       const ErrorHandling(error_type: AppString.error),
-                  loading: () => SkeletonLoaderWidget()),
+                  loading: () => const SkeletonLoaderWidget()),
             ),
         error: (error, s) => const SizedBox(),
         loading: () => const SizedBox());

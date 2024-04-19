@@ -37,10 +37,10 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
         selcted_icon_color: AppColors.buttonColor,
         unselcted_icon_color: AppColors.blackColor,
         selectedPage: 3,
-        screen1: HomeScreen(),
-        screen2: SearchWidget(),
-        screen3: HomeScreen(),
-        screen4: ProfileScreen(),
+        screen1: const HomeScreen(),
+        screen2: const SearchWidget(),
+        screen3: const HomeScreen(),
+        screen4: const ProfileScreen(),
         ref: ref,
       ),
       body: ref.watch(profileDataProvider).when(
@@ -254,7 +254,7 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 15),
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
                 child: ElevatedButton(
                     onPressed: () {
                       _uploadImage();
@@ -321,7 +321,7 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
       if (croppedFile != null) {
         setState(() {
           _croppedFile = croppedFile;
-          profilePic = croppedFile!.path;
+          profilePic = croppedFile.path;
         });
         // await SharedPreferenceManager().setProfile(croppedFile.path!);
       }
@@ -343,7 +343,7 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
     Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => ProfileScreen(),
+          pageBuilder: (context, animation1, animation2) => const ProfileScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),

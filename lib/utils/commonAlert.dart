@@ -10,8 +10,8 @@ class CommonAlert {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16.0),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16.0),
               Text(AppLocalizations.of(context)!.pleaseWait),
             ],
           ),
