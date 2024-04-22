@@ -130,14 +130,22 @@ class _CollectionWiseProductScreenState
 
           // }
 
+       String graphQLQuery = '';
+  for (int i = 0; i < data.length; i++) {
+    graphQLQuery += '''
+      product$i: product(entityId: ${data[i]['product_id']}) {
+        ...ProductFields
+      }
+    ''';
+  }
+
+log("query is this $graphQLQuery string");
+
           String query = '''
 query {
- site{ product1: product(entityId: 113) {
-    ...ProductFields
+ site{ 
+    $graphQLQuery
   }
-  product2: product(entityId: 115) {
-    ...ProductFields
-  }}
 }
 
 fragment ProductFields on Product {
