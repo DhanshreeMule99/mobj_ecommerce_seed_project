@@ -1,6 +1,5 @@
 // registrationRepository
 
-
 //import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/api.dart';
@@ -24,7 +23,8 @@ class RegistrationRepository {
         \$email: String!, 
         \$password: String!,  
         \$firstName: String!, 
-        \$lastName: String!, 
+        \$lastName: String!,
+        \$phone: String!, 
         \$acceptsMarketing: Boolean = false,
          ) {
         customerCreate(input: {
@@ -32,6 +32,7 @@ class RegistrationRepository {
             password: \$password, 
             firstName: \$firstName, 
             lastName: \$lastName,
+            phone: \$phone
             acceptsMarketing: \$acceptsMarketing, 
               }) {
             customer {

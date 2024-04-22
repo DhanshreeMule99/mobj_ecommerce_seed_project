@@ -309,7 +309,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
               "firstName": firstName.text,
               "lastName": lastName.text,
               "email": email.text,
-              "phone": mobNo.text,
+              "phone": "+91${mobNo.text}",
               "password": password.text,
               "isOtp": widget.isOtp
             }
@@ -318,7 +318,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
               "password": password.text,
               "firstName": firstName.text,
               "lastName": lastName.text,
-              "phone": mobNo.text,
+              "phone": "+91${mobNo.text}",
               'acceptsMarketing': true,
             };
 

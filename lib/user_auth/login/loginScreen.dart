@@ -1,6 +1,8 @@
 // LoginScreen
 
 // import 'package:flutter/material.dart';
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -306,6 +308,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             error = "";
             isLoading = false;
           });
+          log("customer details are this $result $accessToken");
           debugPrint(
               "Customer id is this -- ${result.data!['customer']['id'].toString().replaceAll("gid://shopify/Customer/", "")}");
           await SharedPreferenceManager().setUserId(result.data!['customer']
@@ -368,8 +371,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
         print('BigCommerce Response: ${response.body}');
         if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData =
-              json.decode(response.body);
+          final Map<String, dynamic> responseData = json.decode(response.body);
           if (responseData['is_valid'] == true) {
             await SharedPreferenceManager().setEmail(
               email.text.trim(),
@@ -406,7 +408,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               isLoading = false;
             });
           }
-                } else {
+        } else {
           // If the server did not return a 200 OK response, show error message
           setState(() {
             error = AppLocalizations.of(context)!.oops;

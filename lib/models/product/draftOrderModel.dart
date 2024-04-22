@@ -166,7 +166,7 @@ class NoteAttribute {
 }
 
 class CustomerModel {
-  final int id;
+  final dynamic id;
   final String email;
   final bool acceptsMarketing;
   final String createdAt;

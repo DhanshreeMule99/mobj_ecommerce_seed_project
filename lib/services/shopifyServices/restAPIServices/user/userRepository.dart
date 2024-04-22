@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -28,6 +29,7 @@ class UserRepository {
   }
 
   Future<CustomerModel> getProfile() async {
+    API api = API();
     debugPrint('calling profile api');
     if (AppConfigure.bigCommerce) {
       debugPrint('calling bigcommerce profile api');
@@ -57,14 +59,45 @@ class UserRepository {
             APIConstants.apiURL +
             APIConstants.customer;
         final uid = await SharedPreferenceManager().getUserId();
-        final response = await ApiManager.get("$baseUrl$uid.json");
+        final accessToken = await SharedPreferenceManager().getToken();
+
+        String query = '''
+query {
+  customer(customerAccessToken: "$accessToken") {
+    id
+    firstName
+    lastName
+    email
+    phone
+    createdAt
+    updatedAt
+    numberOfOrders
+    
+    defaultAddress {
+      id
+      address1
+      city
+      province
+      country
+      zip
+    }
+  }
+}
+''';
+
+        Response response = await api.sendRequest.post(
+            'https://pyvaidyas.myshopify.com/api/2023-10/graphql.json',
+            data: {"query": query});
+
+        log('shopify customer details reuslt is this ${response.data['data']['customer']}');
         if (response.statusCode == APIConstants.successCode) {
-          final result = jsonDecode(response.body)['customer'];
+          final result = response.data['data']['customer'];
           return CustomerModel.fromJson(result);
         } else {
-          throw Exception(response.reasonPhrase);
+          throw Exception("something went wrong");
         }
-      } catch (error) {
+      } catch (error, stackTrace) {
+        debugPrint('profile error is this $error $stackTrace');
         rethrow;
       }
     }

@@ -1,6 +1,5 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-
 class ShopifyDraftOrderModel implements DraftOrderModel {
   @override
   final dynamic id;
@@ -267,7 +266,7 @@ class ShopifyNoteAttribute implements NoteAttribute {
 
 class ShopifyCustomerModel implements CustomerModel {
   @override
-  final int id;
+  final dynamic id;
   @override
   final String email;
   @override
@@ -331,8 +330,11 @@ class ShopifyCustomerModel implements CustomerModel {
       acceptsMarketing: json['accepts_marketing'] ?? false,
       createdAt: json['created_at'] ?? DefaultValues.defaultString,
       updatedAt: json['updated_at'] ?? DefaultValues.defaultString,
-      firstName: json['first_name'] ?? DefaultValues.defaultString,
-      lastName: json['last_name'] ?? DefaultValues.defaultString,
+      firstName: json['firstName'] ??
+          json['first_name'] ??
+          DefaultValues.defaultString,
+      lastName:
+          json['lastName'] ?? json['first_name'] ?? DefaultValues.defaultString,
       ordersCount: json['orders_count'] ?? DefaultValues.defaultInt,
       state: json['state'] ?? DefaultValues.defaultString,
       totalSpent: json['total_spent'] ?? DefaultValues.defaultString,
