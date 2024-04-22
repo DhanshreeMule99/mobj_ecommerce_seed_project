@@ -201,12 +201,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             selected: selectedChipIndex == index.toString(),
                             selectedColor: appInfo.primaryColorValue,
                             onSelected: (bool selected) {
+                            
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   pageBuilder:
                                       (context, animation1, animation2) =>
                                           CollectionWiseProductScreen(
-                                    category: data[index]['id'].toString(),
+                                    category: AppConfigure.bigCommerce
+                                        ? data[index]['category_id'].toString()
+                                        : data[index]['id'].toString(),
                                     categoryName: AppConfigure.bigCommerce
                                         ? data[index]["name"]
                                         : data[index]['title'],

@@ -1,12 +1,16 @@
 // collectionWiseProductScreen
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
+import '../../utils/api.dart';
 
 class CollectionWiseProductScreen extends ConsumerStatefulWidget {
   final String category;
@@ -51,9 +55,11 @@ class _CollectionWiseProductScreenState
   final productsProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    final graphqlClient = ref.read(graphqlClientProvider);
-    final QueryResult result = await graphqlClient.query(QueryOptions(
-      document: gql('''
+    if (AppConfigure.bigCommerce) {
+    } else {
+      final graphqlClient = ref.read(graphqlClientProvider);
+      final QueryResult result = await graphqlClient.query(QueryOptions(
+        document: gql('''
       query Price(\$handle: String) {
         collection(handle: \$handle) {
           handle
@@ -89,24 +95,121 @@ class _CollectionWiseProductScreenState
         }
       }
     '''),
-      variables: {'handle': pid},
-    ));
-    if (result.hasException) {
-      throw Exception(result.exception.toString());
-    }
-    final List<ProductCollectionModel> products =
-        (result.data?['collection']['products']['edges'] as List)
-            .map((edge) => ProductCollectionModel.fromJson(edge['node']))
-            .toList();
+        variables: {'handle': pid},
+      ));
+      if (result.hasException) {
+        throw Exception(result.exception.toString());
+      }
+      final List<ProductCollectionModel> products =
+          (result.data?['collection']['products']['edges'] as List)
+              .map((edge) => ProductCollectionModel.fromJson(edge['node']))
+              .toList();
 
-    return products;
+      return products;
+    }
+    throw Error();
   });
   final collectionWiseProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    final graphqlClient = ref.read(graphqlClientProvider);
-    final QueryResult result = await graphqlClient.query(QueryOptions(
-      document: gql('''
+    if (AppConfigure.bigCommerce) {
+      API api = API();
+      try {
+        final response = await ApiManager.get(
+            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/categories/$pid/products/sort-order');
+
+        if (response.statusCode == APIConstants.successCode) {
+          // Parse the response body
+          final Map<String, dynamic> responseBody = json.decode(response.body);
+          final List<dynamic> data = responseBody['data'] ?? [];
+
+          // Extract product IDs from the response
+          // List<int> productIds = [];
+          // for (var productData in data)
+          //  {
+          //   final int productId = productData['product_id'];
+
+          // }
+
+          String query = '''
+query {
+ site{ product1: product(entityId: 113) {
+    ...ProductFields
+  }
+  product2: product(entityId: 115) {
+    ...ProductFields
+  }}
+}
+
+fragment ProductFields on Product {
+  id
+  entityId
+  sku
+  path
+  name
+  description
+  addToCartUrl
+  upc
+  mpn
+  gtin
+  prices(currencyCode: INR) {
+    price {
+      ...PriceFields
+    }
+    salePrice {
+      ...PriceFields
+    }
+    basePrice {
+      ...PriceFields
+    }
+    retailPrice {
+      ...PriceFields
+    }
+  }
+   defaultImage {
+        url (width: 100)
+        urlOriginal
+        altText
+        isDefault
+      }
+}
+
+fragment PriceFields on Money {               
+  currencyCode
+  value
+}
+
+''';
+          var result = await api.sendRequest.post(
+              "https://store-05vrtqkend.mybigcommerce.com/graphql",
+              data: {"query": query});
+
+
+   final List<ProductCollectionModel> products = [];
+   int productIndex = 1;
+while (result.data['data']['site']['product$productIndex'] != null) {
+  var productJson = result.data['data']['site']['product$productIndex'];
+  products.add(ProductCollectionModel.fromJson(productJson));
+  productIndex++;
+}
+log("$products");
+          
+          return products;
+        } else {
+          // Handle API error response
+          List<ProductCollectionModel> products = [];
+          return products;
+        }
+      } catch (error,stackTrac) {
+        // Handle error
+        print('Error: $error $stackTrac');
+        List<ProductCollectionModel> products = [];
+        return products;
+      }
+    } else {
+      final graphqlClient = ref.read(graphqlClientProvider);
+      final QueryResult result = await graphqlClient.query(QueryOptions(
+        document: gql('''
       query getProductsByCollectionId(\$collectionId: ID!, \$limit: Int) {
             collection(id: \$collectionId) {
               title
@@ -141,21 +244,22 @@ class _CollectionWiseProductScreenState
             }
           }
     '''),
-      variables: {
-        'collectionId': 'gid://shopify/Collection/$pid',
-        'limit': 100
-      },
-    ));
+        variables: {
+          'collectionId': 'gid://shopify/Collection/$pid',
+          'limit': 100
+        },
+      ));
 
-    if (result.hasException) {
-      throw Exception(result.exception.toString());
+      if (result.hasException) {
+        throw Exception(result.exception.toString());
+      }
+
+      final List<ProductCollectionModel> products =
+          (result.data?['collection']['products']['nodes'] as List)
+              .map((edge) => ProductCollectionModel.fromJson(edge))
+              .toList();
+      return products;
     }
-
-    final List<ProductCollectionModel> products =
-        (result.data?['collection']['products']['nodes'] as List)
-            .map((edge) => ProductCollectionModel.fromJson(edge))
-            .toList();
-    return products;
   });
 
   @override
