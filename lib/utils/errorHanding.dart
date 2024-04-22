@@ -1,14 +1,13 @@
 // skeleton_loader
 
 import 'package:flutter/material.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
 
 import 'appString.dart';
 
 class ErrorHandling extends StatefulWidget {
   final String error_type;
 
-  const ErrorHandling({
+  const ErrorHandling({ 
     Key? key,
     required this.error_type,
   });

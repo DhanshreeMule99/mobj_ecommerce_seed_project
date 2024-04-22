@@ -1,8 +1,6 @@
 // profileScreen
-import 'dart:io';
 
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:mobj_project/utils/defaultValues.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
@@ -220,7 +218,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                EditProfileScreen()));
+                                                                const EditProfileScreen()));
                                                   },
                                                   icon: const Icon(
                                                     Icons.edit,
@@ -269,7 +267,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        OrderListScreen(),
+                                        const OrderListScreen(),
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,
                               ),
@@ -322,7 +320,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.whiteColor,
                             ),
@@ -330,7 +328,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         )
                       ],
                     ),
-                loading: () => SkeletonLoaderWidget())),
+                loading: () => const SkeletonLoaderWidget())),
         error: (error, s) => const SizedBox(),
         loading: () => const SizedBox());
   }
@@ -340,7 +338,7 @@ class ProfileOptionButton extends StatelessWidget {
   final String title;
   final Function onTap;
 
-  ProfileOptionButton({super.key, required this.title, required this.onTap});
+  const ProfileOptionButton({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

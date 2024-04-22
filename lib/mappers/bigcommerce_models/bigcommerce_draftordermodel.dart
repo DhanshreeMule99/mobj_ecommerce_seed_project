@@ -1,36 +1,62 @@
-import 'package:mobj_project/utils/appConfiguer.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../utils/defaultValues.dart';
 
 class BigCommerceDraftOrderModel implements DraftOrderModel {
+  @override
   final dynamic id;
+  @override
   final String note;
+  @override
   final String email;
+  @override
   final bool taxesIncluded;
+  @override
   final String currency;
+  @override
   final String invoiceSentAt;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final bool taxExempt;
+  @override
   final String completedAt;
+  @override
   final String name;
+  @override
   final String status;
+  @override
   final List<BigCommerceLineItem> lineItems;
+  @override
   final String shippingAddress;
+  @override
   final String billingAddress;
+  @override
   final String invoiceUrl;
+  @override
   final String appliedDiscount;
+  @override
   final int orderId;
+  @override
   final String shippingLine;
+  @override
   final List<BigCommerceTaxLine> taxLines;
+  @override
   final String tags;
+  @override
   final List<BigCommerceNoteAttribute> noteAttributes;
+  @override
   late double totalPrice;
+  @override
   final String subtotalPrice;
+  @override
   final String totalTax;
+  @override
   final String paymentTerms;
+  @override
   final String adminGraphqlApiId;
+  @override
   final BigCommerceCustomerModel customer;
 
   BigCommerceDraftOrderModel({
@@ -123,25 +149,45 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
 }
 
 class BigCommerceLineItem implements LineItem {
+  @override
   final dynamic id;
+  @override
   late final int variantId;
+  @override
   final int productId;
+  @override
   final String title;
+  @override
   final String variantTitle;
+  @override
   final String sku;
+  @override
   final String vendor;
+  @override
   late int quantity;
+  @override
   final bool requiresShipping;
+  @override
   final bool taxable;
+  @override
   final bool giftCard;
+  @override
   final String fulfillmentService;
+  @override
   final int grams;
+  @override
   final List<BigCommerceTaxLine> taxLines;
+  @override
   final dynamic appliedDiscount;
+  @override
   final String name;
+  @override
   final List<dynamic> properties;
+  @override
   final bool custom;
+  @override
   final String price;
+  @override
   final String adminGraphqlApiId;
 
   BigCommerceLineItem({
@@ -195,8 +241,11 @@ class BigCommerceLineItem implements LineItem {
 }
 
 class BigCommerceTaxLine implements TaxLine {
+  @override
   final double rate;
+  @override
   final String title;
+  @override
   final String price;
 
   BigCommerceTaxLine({
@@ -215,7 +264,9 @@ class BigCommerceTaxLine implements TaxLine {
 }
 
 class BigCommerceNoteAttribute implements NoteAttribute {
+  @override
   final dynamic key;
+  @override
   final dynamic value;
 
   BigCommerceNoteAttribute({
@@ -232,23 +283,41 @@ class BigCommerceNoteAttribute implements NoteAttribute {
 }
 
 class BigCommerceCustomerModel implements CustomerModel {
+  @override
   final int id;
+  @override
   final String email;
+  @override
   final bool acceptsMarketing;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final String firstName;
+  @override
   final String lastName;
+  @override
   final int ordersCount;
+  @override
   final String state;
+  @override
   final String totalSpent;
+  @override
   final int lastOrderId;
+  @override
   final dynamic note;
+  @override
   final bool taxExempt;
+  @override
   final String tags;
+  @override
   final String lastOrderName;
+  @override
   final String currency;
+  @override
   final String phone;
+  @override
   final String adminGraphqlApiId;
 
   BigCommerceCustomerModel({
@@ -298,8 +367,11 @@ class BigCommerceCustomerModel implements CustomerModel {
 }
 
 class BigCommerceEmailMarketingConsent implements EmailMarketingConsent {
+  @override
   final String state;
+  @override
   final String optInLevel;
+  @override
   final dynamic consentUpdatedAt;
 
   BigCommerceEmailMarketingConsent({
@@ -319,9 +391,13 @@ class BigCommerceEmailMarketingConsent implements EmailMarketingConsent {
 }
 
 class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
+  @override
   final String state;
+  @override
   final String optInLevel;
+  @override
   final dynamic consentUpdatedAt;
+  @override
   final String consentCollectedFrom;
 
   BigCommerceSmsMarketingConsent({
@@ -344,20 +420,35 @@ class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
 }
 
 class BigCommerceDefaultAddressModel implements DefaultAddressModel {
+  @override
   final int id;
+  @override
   final int customerId;
+  @override
   final String firstName;
+  @override
   final String lastName;
+  @override
   final String address1;
+  @override
   late String city;
+  @override
   final String province;
+  @override
   final String country;
+  @override
   final String zip;
+  @override
   final String phone;
+  @override
   final String name;
+  @override
   final String provinceCode;
+  @override
   final String countryCode;
+  @override
   final String countryName;
+  @override
   late bool defaultAddress;
 
   BigCommerceDefaultAddressModel({

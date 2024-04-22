@@ -1,9 +1,5 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../models/product/collectionProductModel.dart';
-import '../models/product/productReviewWiseModel.dart';
-import '../models/product/recommendedProduct.dart';
-import '../module/home/collectionWiseProductScreen.dart';
 
 final productDataProvider = FutureProvider<List<ProductModel>>((ref) async {
   return ref.watch(productsProvider).getProducts();

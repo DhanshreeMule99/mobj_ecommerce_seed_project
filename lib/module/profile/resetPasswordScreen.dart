@@ -100,8 +100,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   void _toggleObscuredForConfirmPass() {
     setState(() {
       _confirmObscured = !_confirmObscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -110,8 +111,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
   void _toggleoldForPass() {
     setState(() {
       _oldObscured = !_confirmObscured;
-      if (textFieldFocusNode.hasPrimaryFocus)
+      if (textFieldFocusNode.hasPrimaryFocus) {
         return; // If focus is on text field, dont unfocus
+      }
       textFieldFocusNode.canRequestFocus =
           false; // Prevents focus if tap on eye
     });
@@ -170,7 +172,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(AppLocalizations.of(context)!.oldPass),
-                                        Text(
+                                        const Text(
                                           '*',
                                           style: TextStyle(
                                               color: AppColors.red,
@@ -231,7 +233,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(AppLocalizations.of(context)!.password),
-                                        Text(
+                                        const Text(
                                           '*',
                                           style: TextStyle(
                                               color: AppColors.red,
@@ -292,7 +294,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(AppLocalizations.of(context)!.confirmPass),
-                                        Text(
+                                        const Text(
                                           '*',
                                           style: TextStyle(
                                               color: AppColors.red,
@@ -367,7 +369,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: appInfo.primaryColorValue,
-                                    minimumSize: Size.fromHeight(50),
+                                    minimumSize: const Size.fromHeight(50),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
                                             AppDimension.buttonRadius)),

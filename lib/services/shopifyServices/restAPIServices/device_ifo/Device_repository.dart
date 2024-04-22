@@ -1,8 +1,6 @@
 // Device_repository
 import 'package:device_info_plus/device_info_plus.dart';
 
-import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';

@@ -1,17 +1,6 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/shared_preferences/SharedPreference.dart';
-import '../provider/productProvider.dart';
-import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
-import 'appColors.dart';
-import 'appString.dart';
 import 'cmsConfigue.dart';
-import 'commonAlert.dart';
 
 class RatingAlert extends StatelessWidget {
   final Function(double rating) onRatingSelected;
@@ -59,7 +48,7 @@ class RatingAlert extends StatelessWidget {
             direction: Axis.horizontal,
             allowHalfRating: false,
             itemCount: 5,
-            itemBuilder: (context, _) => Icon(
+            itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),

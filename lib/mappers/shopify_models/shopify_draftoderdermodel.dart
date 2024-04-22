@@ -1,35 +1,62 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../utils/defaultValues.dart';
 
 class ShopifyDraftOrderModel implements DraftOrderModel {
+  @override
   final dynamic id;
+  @override
   final String note;
+  @override
   final String email;
+  @override
   final bool taxesIncluded;
+  @override
   final String currency;
+  @override
   final String invoiceSentAt;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final bool taxExempt;
+  @override
   final String completedAt;
+  @override
   final String name;
+  @override
   final String status;
+  @override
   final List<ShopifyLineItem> lineItems;
+  @override
   final String shippingAddress;
+  @override
   final String billingAddress;
+  @override
   final String invoiceUrl;
+  @override
   final String appliedDiscount;
+  @override
   final int orderId;
+  @override
   final String shippingLine;
+  @override
   final List<ShopifyTaxLine> taxLines;
+  @override
   final String tags;
+  @override
   final List<ShopifyNoteAttribute> noteAttributes;
+  @override
   late double totalPrice;
+  @override
   final String subtotalPrice;
+  @override
   final String totalTax;
+  @override
   final String paymentTerms;
+  @override
   final String adminGraphqlApiId;
+  @override
   final ShopifyCustomerModel customer;
 
   ShopifyDraftOrderModel({
@@ -103,25 +130,45 @@ class ShopifyDraftOrderModel implements DraftOrderModel {
 }
 
 class ShopifyLineItem implements LineItem {
+  @override
   final dynamic id;
+  @override
   late final int variantId;
+  @override
   final int productId;
+  @override
   final String title;
+  @override
   final String variantTitle;
+  @override
   final String sku;
+  @override
   final String vendor;
+  @override
   late int quantity;
+  @override
   final bool requiresShipping;
+  @override
   final bool taxable;
+  @override
   final bool giftCard;
+  @override
   final String fulfillmentService;
+  @override
   final int grams;
+  @override
   final List<ShopifyTaxLine> taxLines;
+  @override
   final dynamic appliedDiscount;
+  @override
   final String name;
+  @override
   final List<dynamic> properties;
+  @override
   final bool custom;
+  @override
   final String price;
+  @override
   final String adminGraphqlApiId;
 
   ShopifyLineItem({
@@ -177,8 +224,11 @@ class ShopifyLineItem implements LineItem {
 }
 
 class ShopifyTaxLine implements TaxLine {
+  @override
   final double rate;
+  @override
   final String title;
+  @override
   final String price;
 
   ShopifyTaxLine({
@@ -197,7 +247,9 @@ class ShopifyTaxLine implements TaxLine {
 }
 
 class ShopifyNoteAttribute implements NoteAttribute {
+  @override
   final dynamic key;
+  @override
   final dynamic value;
 
   ShopifyNoteAttribute({
@@ -214,23 +266,41 @@ class ShopifyNoteAttribute implements NoteAttribute {
 }
 
 class ShopifyCustomerModel implements CustomerModel {
+  @override
   final int id;
+  @override
   final String email;
+  @override
   final bool acceptsMarketing;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
+  @override
   final String firstName;
+  @override
   final String lastName;
+  @override
   final int ordersCount;
+  @override
   final String state;
+  @override
   final String totalSpent;
+  @override
   final int lastOrderId;
+  @override
   final dynamic note;
+  @override
   final bool taxExempt;
+  @override
   final String tags;
+  @override
   final String lastOrderName;
+  @override
   final String currency;
+  @override
   final String phone;
+  @override
   final String adminGraphqlApiId;
 
   ShopifyCustomerModel({
@@ -280,8 +350,11 @@ class ShopifyCustomerModel implements CustomerModel {
 }
 
 class ShopifyEmailMarketingConsent implements EmailMarketingConsent {
+  @override
   final String state;
+  @override
   final String optInLevel;
+  @override
   final dynamic consentUpdatedAt;
 
   ShopifyEmailMarketingConsent({
@@ -301,9 +374,13 @@ class ShopifyEmailMarketingConsent implements EmailMarketingConsent {
 }
 
 class ShopifySmsMarketingConsent implements SmsMarketingConsent {
+  @override
   final String state;
+  @override
   final String optInLevel;
+  @override
   final dynamic consentUpdatedAt;
+  @override
   final String consentCollectedFrom;
 
   ShopifySmsMarketingConsent({
@@ -326,20 +403,35 @@ class ShopifySmsMarketingConsent implements SmsMarketingConsent {
 }
 
 class ShopifyDefaultAddressModel implements DefaultAddressModel {
+  @override
   final int id;
+  @override
   final int customerId;
+  @override
   final String firstName;
+  @override
   final String lastName;
+  @override
   final String address1;
+  @override
   late String city;
+  @override
   final String province;
+  @override
   final String country;
+  @override
   final String zip;
+  @override
   final String phone;
+  @override
   final String name;
+  @override
   final String provinceCode;
+  @override
   final String countryCode;
+  @override
   final String countryName;
+  @override
   late bool defaultAddress;
 
   ShopifyDefaultAddressModel({

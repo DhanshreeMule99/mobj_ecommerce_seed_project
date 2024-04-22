@@ -6,6 +6,8 @@ import 'package:skeleton_loader/skeleton_loader.dart';
 import 'appColors.dart';
 
 class SkeletonLoaderWidget extends StatefulWidget {
+  const SkeletonLoaderWidget({super.key});
+
   @override
   State<SkeletonLoaderWidget> createState() => _SkeletonLoaderWidgetState();
 }
@@ -16,14 +18,14 @@ class _SkeletonLoaderWidgetState extends State<SkeletonLoaderWidget> {
     return SingleChildScrollView(
         child: SkeletonLoader(
       builder: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(
           children: <Widget>[
-            CircleAvatar(
+            const CircleAvatar(
               backgroundColor: AppColors.whiteColor,
               radius: 30,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 children: <Widget>[
@@ -32,7 +34,7 @@ class _SkeletonLoaderWidgetState extends State<SkeletonLoaderWidget> {
                     height: 10,
                     color: AppColors.whiteColor,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
                     width: double.infinity,
                     height: 12,
@@ -45,7 +47,7 @@ class _SkeletonLoaderWidgetState extends State<SkeletonLoaderWidget> {
         ),
       ),
       items: 10,
-      period: Duration(seconds: 2),
+      period: const Duration(seconds: 2),
       highlightColor: AppColors.grey,
       direction: SkeletonDirection.ltr,
     ));

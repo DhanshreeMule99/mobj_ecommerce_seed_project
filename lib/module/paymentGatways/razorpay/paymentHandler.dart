@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -32,7 +30,7 @@ class PaymentHandler {
       ref.refresh(cartDetailsDataProvider);
       ref.refresh(orderDataProvider);
     } else {
-      Fluttertoast.showToast(msg: "${AppString.error}", timeInSecForIosWeb: 4);
+      Fluttertoast.showToast(msg: AppString.error, timeInSecForIosWeb: 4);
       // Navigate to the error screen
       Navigator.of(context).pushReplacement(PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) =>
@@ -77,7 +75,7 @@ class PaymentHandler {
     try {
       _razorpay.open(options);
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 }

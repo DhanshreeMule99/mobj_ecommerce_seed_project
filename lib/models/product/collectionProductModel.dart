@@ -31,7 +31,7 @@ class ProductCollectionModel {
     List<String> imageUrlList =AppConfigure.bigCommerce ? [""] : imageEdges
             ?.map((edge) => edge?['node']['url'] ?? "")
             .cast<String>()
-            ?.toList() ??
+            .toList() ??
         [];
     return ProductCollectionModel(
       handle: json['handle'] ?? DefaultValues.defaultHandle,

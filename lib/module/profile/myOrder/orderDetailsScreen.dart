@@ -1,10 +1,8 @@
 // OrderdetailsScreen
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intl/intl.dart';
 import 'package:mobj_project/module/profile/myOrder/repeatOrder.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class OrderdetailsScreen extends ConsumerStatefulWidget {
   final String oId;
@@ -46,7 +44,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
             title: Text(
               AppLocalizations.of(context)!.orderDetailsTitle,
             ),
-            actions: [],
+            actions: const [],
           ),
           body: SingleChildScrollView(
               child: Column(children: [
@@ -70,7 +68,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   Padding(
@@ -84,7 +82,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
@@ -116,7 +114,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                                 '${AppLocalizations.of(context)!.orderDate}: ${convertDate(order.createdAt)} '),
                                           ],
                                         ),
-                                        trailing: OrderStatus(
+                                        trailing: const OrderStatus(
                                             orderStatus:
                                                 AppString.orderStatus2),
                                       )),
@@ -253,7 +251,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                     )));
                           }).toList(),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         )
                       ]),
@@ -280,7 +278,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.whiteColor,
                             ),
@@ -289,7 +287,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                       : Container()
                 ],
               ),
-              loading: () => SkeletonLoaderWidget(),
+              loading: () => const SkeletonLoaderWidget(),
             )
           ])),
           bottomNavigationBar: BottomAppBar(
@@ -321,7 +319,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => OrderTrackingScreen()),
+                                builder: (context) => const OrderTrackingScreen()),
                           );
                         },
                       ),
@@ -415,7 +413,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
 class OrderStatus extends StatelessWidget {
   final String orderStatus;
 
-  OrderStatus({required this.orderStatus});
+  const OrderStatus({super.key, required this.orderStatus});
 
   @override
   Widget build(BuildContext context) {

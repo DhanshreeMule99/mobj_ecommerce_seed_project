@@ -16,7 +16,7 @@ if (await ConnectivityUtils.isNetworkConnected()) {
       final response = await api.sendRequest.delete(
           "/customers?id:in=$uid",
           options: Options(headers: {
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+              "X-auth-Token": AppConfigure.bigCommerceAccessToken,
             
             }) );
       // var data = response.data;
@@ -34,13 +34,13 @@ if (await ConnectivityUtils.isNetworkConnected()) {
 else
 
    { if (await ConnectivityUtils.isNetworkConnected()) {
-      String BASE_URL = AppConfigure.baseUrl +
+      String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
       final uid = await SharedPreferenceManager().getUserId();
       final response = await ApiManager.delete(
-          "$BASE_URL$uid.json");
+          "$baseUrl$uid.json");
       var data = jsonDecode(response.body);
       if (response.statusCode == APIConstants.successCode) {
         return true;

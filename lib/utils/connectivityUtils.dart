@@ -8,22 +8,23 @@ class ConnectivityUtils {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       return (true && (await isInternetConnected()));
-    } else
+    } else {
       return ((connectivityResult == ConnectivityResult.wifi) &&
           (await isInternetConnected()));
+    }
   }
 
   ///For checking actual internet
   static Future<bool> isInternetConnected() async {
     try {
       final result = await InternetAddress.lookup('google.com')
-          .timeout(Duration(seconds: 10));
+          .timeout(const Duration(seconds: 10));
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         return true;
       } else {
         return false;
       }
-    } on SocketException catch (e) {
+    } on SocketException {
       return false;
     }
   }

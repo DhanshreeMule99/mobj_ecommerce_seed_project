@@ -1,6 +1,5 @@
 // registrationRepository
 
-import 'dart:developer';
 
 //import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -63,7 +62,7 @@ class RegistrationRepository {
               "X-Shopify-Storefront-Access-Token": AppConfigure.storeFrontToken
             }));
 
-        log('status code is ${response.statusCode}');
+        debugPrint('status code is ${response.statusCode}');
         var data = response.data;
         if (response.statusCode == APIConstants.successCode ||
             response.statusCode == APIConstants.successCreateCode) {

@@ -1,9 +1,6 @@
 // OrderListScreen
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:intl/intl.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class OrderListScreen extends ConsumerStatefulWidget {
   final bool? isCheckout;
@@ -33,17 +30,17 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
           title: Text(
             AppLocalizations.of(context)!.myOrders,
           ),
-          actions: [],
+          actions: const [],
         ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
           selcted_icon_color: AppColors.buttonColor,
           unselcted_icon_color: AppColors.blackColor,
           selectedPage: 3,
-          screen1: OrderListScreen(),
-          screen2: SearchWidget(),
-          screen3: OrderListScreen(),
-          screen4: ProfileScreen(),
+          screen1: const OrderListScreen(),
+          screen2: const SearchWidget(),
+          screen3: const OrderListScreen(),
+          screen4: const ProfileScreen(),
           ref: ref,
         ),
         body: Column(children: [
@@ -86,7 +83,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                 ),
                                 child: Column(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     ListTile(
@@ -98,12 +95,12 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                                 '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order[index].totalPrice).toStringAsFixed(2)} '),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
@@ -124,10 +121,10 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                           ),
                                         );
                                       },
-                                      trailing: OrderStatus(
+                                      trailing: const OrderStatus(
                                           orderStatus: AppString.orderStatus2),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                   ],
@@ -196,7 +193,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                         },
                         child: Text(
                           AppLocalizations.of(context)!.refresh,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: AppColors.whiteColor,
                           ),
@@ -205,7 +202,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                     : Container()
               ],
             ),
-            loading: () => SkeletonLoaderWidget(),
+            loading: () => const SkeletonLoaderWidget(),
           ))
         ]),
       ),
@@ -218,7 +215,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
 class OrderStatus extends StatelessWidget {
   final String orderStatus;
 
-  OrderStatus({required this.orderStatus});
+  const OrderStatus({super.key, required this.orderStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +237,7 @@ class OrderStatus extends StatelessWidget {
       ),
       child: Text(
         orderStatus,
-        style: TextStyle(color: AppColors.whiteColor),
+        style: const TextStyle(color: AppColors.whiteColor),
       ),
     );
   }

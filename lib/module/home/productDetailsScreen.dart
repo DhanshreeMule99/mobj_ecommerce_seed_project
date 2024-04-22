@@ -5,8 +5,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:html/parser.dart' as htmlParser;
 
-import '../../models/product/productReviewWiseModel.dart';
-import '../../models/product/recommendedProduct.dart';
 import '../../utils/imageDialog.dart';
 
 class ProductDetailsScreen extends ConsumerStatefulWidget {
@@ -169,7 +167,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.whiteColor,
                                 ),
@@ -177,10 +175,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                             )
                           ],
                         ),
-                    loading: () => SkeletonLoaderWidget())),
+                    loading: () => const SkeletonLoaderWidget())),
         error: (error, s) => const SizedBox(),
         loading: () => const SizedBox());
-    ;
   }
 
   Widget buildContent(
@@ -196,7 +193,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       data: (appInfo) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           AppConfigure.bigCommerce == true
@@ -711,7 +708,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ),
                           Text('$quantity'),
                           IconButton(
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                             onPressed: () {
                               setState(() {
                                 if (selectedVariant != null) {
@@ -775,7 +772,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ),
                           Text('$quantity'),
                           IconButton(
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                             onPressed: () {
                               setState(() {
                                 if (selectedVariant != null) {
@@ -821,7 +818,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               ? const SizedBox(
                   height: 10,
                 )
-              : SizedBox(),
+              : const SizedBox(),
           productModel.bodyHtml != ""
               ? Text(
                   extractTextContent(productModel.bodyHtml).isNotEmpty
@@ -837,7 +834,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               ? const SizedBox(
                   height: 10,
                 )
-              : SizedBox(
+              : const SizedBox(
                   height: 10,
                 ),
           productModel.tags.toString() != ""
@@ -898,7 +895,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       error,
                       style: const TextStyle(color: AppColors.red),
                     )),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     )
                   ],
@@ -917,7 +914,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       setState(() {
                         isLoading = true;
                       });
-                      var variantId;
+                      int? variantId;
                       List<ProductVariant> filteredVariants =
                           productModel.variants.where((variant) {
                         if ((variant.option1 != DefaultValues.defaultOption1) &&
@@ -950,9 +947,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       }).toList();
 
                       // Display the filtered variants
-                      filteredVariants.forEach((variant) {
+                      for (var variant in filteredVariants) {
                         variantId = variant.id;
-                      });
+                      }
 
                       if (AppConfigure.bigCommerce) {
                         ProductRepository()
@@ -1088,7 +1085,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       CarouselSlider(
@@ -1099,7 +1096,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           enableInfiniteScroll: productModel.images.length > 1,
                           viewportFraction: 1,
                           enlargeCenterPage: false,
-                          autoPlayInterval: Duration(seconds: 4),
+                          autoPlayInterval: const Duration(seconds: 4),
                           onPageChanged: (index, reason) {
                             setState(() {
                               currentIndex = index;
@@ -1167,7 +1164,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                       address:
                                           productlist.description.toString(),
                                       datetime:
-                                          "${AppLocalizations.of(context)!.deliverAt} ${productlist.createdAt.toString()}/${productlist.createdAt}/${productlist.createdAt!}",
+                                          "${AppLocalizations.of(context)!.deliverAt} ${productlist.createdAt.toString()}/${productlist.createdAt}/${productlist.createdAt}",
                                       productImage: !productlist.featuredImage
                                               .toString()
                                               .contains("http")
@@ -1179,7 +1176,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                         // Handle rating logic here
                                       },
                                       productDetails:
-                                          "\u{20B9}${productlist.variants![0].price}",
+                                          "\u{20B9}${productlist.variants[0].price}",
                                       status: productlist.variants.toString(),
                                       isLiked: "-1",
                                       ratingCount: num.parse("5.5"),
@@ -1226,7 +1223,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               );
             },
             error: (error, s) => Container(),
-            loading: () => SkeletonLoaderWidget(),
+            loading: () => const SkeletonLoaderWidget(),
           ),
           ratingProduct.when(
             data: (product) {
@@ -1243,7 +1240,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               height: 0,
                             ),
                             Row(
@@ -1375,7 +1372,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                                     .size
                                                                     .width,
                                                           ),
-                                                          SizedBox(
+                                                          const SizedBox(
                                                             width: 3,
                                                           ),
                                                           Text(
@@ -1433,7 +1430,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                   ]),
                             if (product.reviews.length > 1)
                               Padding(
-                                  padding: EdgeInsets.only(bottom: 15),
+                                  padding: const EdgeInsets.only(bottom: 15),
                                   child: InkWell(
                                     onTap: () {
                                       showReviewsBottomSheet(
@@ -1615,7 +1612,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       ),
       child: Text(
         AppLocalizations.of(context)!.outOfStock,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -1648,7 +1645,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               height: 0,
                             ),
                             Padding(
@@ -1657,7 +1654,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.close),
+                                    icon: const Icon(Icons.close),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
@@ -1728,7 +1725,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                                         .size
                                                                         .width,
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                 width: 3,
                                                               ),
                                                               Text(
@@ -1791,7 +1788,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               );
             },
             error: (error, s) => Container(),
-            loading: () => SkeletonLoaderWidget(),
+            loading: () => const SkeletonLoaderWidget(),
           ),
         );
       },

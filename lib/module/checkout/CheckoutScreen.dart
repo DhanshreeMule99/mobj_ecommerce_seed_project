@@ -1,22 +1,15 @@
 // CheckoutScreen
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:mobj_project/models/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../main.dart';
 import '../../utils/api.dart';
-import '../address/addAddressScreen.dart';
 import '../address/addressListScreen.dart';
-import '../paymentGatways/phonePePay/phonePeGateway.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
-  CheckoutScreen({super.key});
+  const CheckoutScreen({super.key});
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -53,19 +46,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               selcted_icon_color: AppColors.buttonColor,
               unselcted_icon_color: AppColors.blackColor,
               selectedPage: 2,
-              screen1: HomeScreen(),
-              screen2: SearchWidget(),
-              screen3: HomeScreen(),
-              screen4: ProfileScreen(),
+              screen1: const HomeScreen(),
+              screen2: const SearchWidget(),
+              screen3: const HomeScreen(),
+              screen4: const ProfileScreen(),
               ref: ref,
             ),
             body: product.when(
               data: (product) {
                 DraftOrderModel productlist = product;
-                productlist.lineItems.forEach((element) {
+                for (var element in productlist.lineItems) {
                   bigcommerceOrderedItems.add(
                       {"item_id": element.id, "quantity": element.quantity});
-                });
+                }
 
                 return RefreshIndicator(
                   // Wrap the list in a RefreshIndicator widget
@@ -84,7 +77,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   final orderList =
                                       productlist.lineItems[index];
 
-                                  log('products are this $bigcommerceOrderedItems');
+                                  debugPrint(
+                                      'products are this $bigcommerceOrderedItems');
                                   return productlist.lineItems != []
                                       ? Padding(
                                           padding: const EdgeInsets.fromLTRB(
@@ -281,9 +275,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               .quantity--;
                                                                           setState(
                                                                               () {});
-                                                                          log('add maps');
+                                                                          debugPrint(
+                                                                              'add maps');
 
-                                                                          log('calling put api ');
+                                                                          debugPrint(
+                                                                              'calling put api ');
                                                                           var response = await api.sendRequest.put(
                                                                               '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                               data: {
@@ -295,7 +291,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                                 }
                                                                               },
                                                                               options: Options(headers: {
-                                                                                "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+                                                                                "X-auth-Token": AppConfigure.bigCommerceAccessToken,
                                                                                 'Content-Type': 'application/json',
                                                                               }));
 
@@ -307,10 +303,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           ref.refresh(
                                                                               cartDetailsDataProvider);
 
-                                                                          log('cart updated successfully ${response.statusCode}');
+                                                                          debugPrint(
+                                                                              'cart updated successfully ${response.statusCode}');
                                                                         } on Exception catch (e) {
-                                                                          log(e
-                                                                              .toString());
+                                                                          debugPrint(
+                                                                              e.toString());
                                                                         } finally {
                                                                           Navigator.of(context)
                                                                               .pop();
@@ -379,9 +376,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                             .quantity++;
                                                                         setState(
                                                                             () {});
-                                                                        log('add maps');
+                                                                        debugPrint(
+                                                                            'add maps');
 
-                                                                        log('calling put api ');
+                                                                        debugPrint(
+                                                                            'calling put api ');
                                                                         var response = await api.sendRequest.put(
                                                                             '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
                                                                             data: {
@@ -394,7 +393,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                             },
                                                                             options:
                                                                                 Options(headers: {
-                                                                              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+                                                                              "X-auth-Token": AppConfigure.bigCommerceAccessToken,
                                                                               'Content-Type': 'application/json',
                                                                             }));
 
@@ -406,10 +405,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                         ref.refresh(
                                                                             cartDetailsDataProvider);
 
-                                                                        log('cart updated successfully ${response.statusCode}');
+                                                                        debugPrint(
+                                                                            'cart updated successfully ${response.statusCode}');
                                                                       } on Exception catch (e) {
-                                                                        log(e
-                                                                            .toString());
+                                                                        debugPrint(
+                                                                            e.toString());
                                                                       } finally {
                                                                         Navigator.of(context)
                                                                             .pop();
@@ -473,7 +473,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                         icon: const Icon(
                                                             Icons.delete),
                                                         onPressed: () async {
-                                                          log('id is this ${orderList.id}');
+                                                          debugPrint(
+                                                              'id is this ${orderList.id}');
                                                           String draftId =
                                                               await SharedPreferenceManager()
                                                                   .getDraftId();
@@ -532,7 +533,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               Navigator.of(
                                                                       context)
                                                                   .pop();
-                                                              log("cart item deleted successfully ${response.statusCode}");
+                                                              debugPrint(
+                                                                  "cart item deleted successfully ${response.statusCode}");
                                                             } else {
                                                               ProductRepository()
                                                                   .updateCart(
@@ -594,7 +596,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -619,7 +621,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -728,7 +730,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.whiteColor,
                             ),
@@ -737,7 +739,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       : Container()
                 ],
               ),
-              loading: () => SkeletonLoaderWidget(),
+              loading: () => const SkeletonLoaderWidget(),
             ),
           );
         },

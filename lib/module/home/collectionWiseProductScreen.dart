@@ -6,7 +6,6 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
@@ -409,7 +408,7 @@ log("$products");
                                                           fontWeight:
                                                               FontWeight.bold)),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 15,
                                                 ),
                                                 ElevatedButton(
@@ -487,10 +486,10 @@ log("$products");
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 1,
-            screen1: SearchWidget(),
-            screen2: SearchWidget(),
-            screen3: SearchWidget(),
-            screen4: ProfileScreen(),
+            screen1: const SearchWidget(),
+            screen2: const SearchWidget(),
+            screen3: const SearchWidget(),
+            screen4: const ProfileScreen(),
             ref: ref,
           ),
           body: Column(
@@ -509,7 +508,7 @@ log("$products");
                             FilterChip(
                               label: Text(
                                 AppLocalizations.of(context)!.price,
-                                style: TextStyle(color: AppColors.whiteColor),
+                                style: const TextStyle(color: AppColors.whiteColor),
                               ),
                               backgroundColor: AppColors.blue,
                               onSelected: (selected) {},
@@ -575,7 +574,7 @@ log("$products");
                                                 // Add padding to the Card
                                                 child: ListTile(
                                                   contentPadding:
-                                                      EdgeInsets.all(0),
+                                                      const EdgeInsets.all(0),
                                                   // Remove default ListTile padding
                                                   title: Padding(
                                                     padding:
@@ -620,7 +619,7 @@ log("$products");
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Center(
+                                    const Center(
                                         child: ErrorHandling(
                                       error_type: AppString.noDataError,
                                     )),
@@ -654,7 +653,7 @@ log("$products");
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.whiteColor,
                                 ),
@@ -662,7 +661,7 @@ log("$products");
                             )
                           ],
                         ),
-                        loading: () => SkeletonLoaderWidget(),
+                        loading: () => const SkeletonLoaderWidget(),
                       ))
                     : Expanded(
                         child: productByCollection.when(
@@ -717,7 +716,7 @@ log("$products");
                                                     // Add padding to the Card
                                                     child: ListTile(
                                                       contentPadding:
-                                                          EdgeInsets.all(0),
+                                                          const EdgeInsets.all(0),
                                                       // Remove default ListTile padding
                                                       title: Padding(
                                                         padding:
@@ -807,7 +806,7 @@ log("$products");
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.whiteColor,
                                 ),
@@ -815,7 +814,7 @@ log("$products");
                             )
                           ],
                         ),
-                        loading: () => SkeletonLoaderWidget(),
+                        loading: () => const SkeletonLoaderWidget(),
                       ))
               ])),
       error: (error, s) => Column(
@@ -845,7 +844,7 @@ log("$products");
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.whiteColor,
                     ),
@@ -854,7 +853,7 @@ log("$products");
               : Container()
         ],
       ),
-      loading: () => SkeletonLoaderWidget(),
+      loading: () => const SkeletonLoaderWidget(),
     );
   }
 
@@ -947,7 +946,7 @@ log("$products");
                                     MediaQuery.of(context).size.width * 0.04,
                                 fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       ElevatedButton(
@@ -994,7 +993,7 @@ log("$products");
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1005,7 +1004,7 @@ log("$products");
                 },
               ),
               ListTile(
-                title: Text(AppString.highToLow),
+                title: const Text(AppString.highToLow),
                 onTap: () {
                   Navigator.pop(context);
                 },

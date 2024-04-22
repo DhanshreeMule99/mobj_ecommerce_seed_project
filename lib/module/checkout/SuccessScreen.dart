@@ -1,11 +1,7 @@
 // SuccessScreen
-import 'dart:async';
 
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../utils/defaultValues.dart';
-import '../paymentGatways/razorpay/paymentHandler.dart';
 
 class SuccessScreen extends ConsumerStatefulWidget {
   final String status;
@@ -26,7 +22,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
     Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => HomeScreen(),
+          pageBuilder: (context, animation1, animation2) => const HomeScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
@@ -45,7 +41,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
           Navigator.pushAndRemoveUntil(
               context,
               PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) => HomeScreen(),
+                pageBuilder: (context, animation1, animation2) => const HomeScreen(),
                 transitionDuration: Duration.zero,
                 reverseTransitionDuration: Duration.zero,
               ),
@@ -91,7 +87,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
                 widget.status == AppString.success
                     ?  Text(
                   AppLocalizations.of(context)!.thankYou,
-                        style: TextStyle(fontSize: 16.0),
+                        style: const TextStyle(fontSize: 16.0),
                       )
                     : Container(),
                 const SizedBox(height: 20.0),

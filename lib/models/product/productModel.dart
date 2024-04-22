@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'package:mobj_project/mappers/bigcommerce_models/bigcommerce_proudct_model.dart';
 import 'package:mobj_project/mappers/shopify_models/shopify_proudct_model.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
-import 'package:mobj_project/utils/defaultValues.dart';
 
 class ProductModel {
   final int id;

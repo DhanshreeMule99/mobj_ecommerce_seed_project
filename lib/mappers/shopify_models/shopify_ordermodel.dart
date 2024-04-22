@@ -1,34 +1,55 @@
 import 'package:mobj_project/mappers/shopify_models/shopify_draftoderdermodel.dart';
 import 'package:mobj_project/models/order/orderModel.dart';
-import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../utils/defaultValues.dart';
 
 class ShopifyOrderModel implements OrderModel{
+  @override
   final int id;
+  @override
   final String adminGraphqlApiId;
+  @override
   final int appId;
+  @override
   final String browserIp;
+  @override
   final bool buyerAcceptsMarketing;
+  @override
   final String? cancelReason;
+  @override
   final String? cancelledAt;
+  @override
   final String? cartToken;
+  @override
   final String? firstname;
+  @override
   final String? lastname;
+  @override
   final String? phone;
+  @override
   final int checkoutId;
+  @override
   final String checkoutToken;
+  @override
   final bool confirmed;
+  @override
   final String contactEmail;
+  @override
   final String createdAt;
+  @override
   final String currency;
+  @override
   final String currentSubtotalPrice;
+  @override
   final String totalPrice;
+  @override
   final String currentTotalTax;
 
   // Add other attributes as needed
 
+  @override
   final ShopifyCustomerModel customer;
+  @override
   final List<ShopifyLineItem> lineItems;
 
   ShopifyOrderModel({

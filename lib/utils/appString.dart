@@ -67,8 +67,8 @@ class AppString {
       "Please grant location permission in app settings to use this feature.";
   static const locationPermissionReq = "Location Permission Required";
   static const cancel = "Cancel";
-  static const pleaseLogin = "Please Log In";
-  static const needLogin = "You need to log in to access this feature.";
+  static const pleaseLogin = "Please debugPrint In";
+  static const needLogin = "You need to debugPrint in to access this feature.";
   static const skip = "Skip";
   static const done = "Done";
   static const refresh = "Refresh";
@@ -85,8 +85,10 @@ class AppString {
   static const useMy = "Use My Location";
   static const contactDetails = "Contact Details";
   static const addAddress = "Add Address";
-  static const extraDelivery = "Above 6 Km away: Extra delivery charges will apply.";
-  static const standardDelivery = "Within 6 Km: Standard delivery charges will apply.";
+  static const extraDelivery =
+      "Above 6 Km away: Extra delivery charges will apply.";
+  static const standardDelivery =
+      "Within 6 Km: Standard delivery charges will apply.";
   static const updateProfile = "Update profile";
   static const updateProfileSuccess = "Profile updated successfully";
   static const locRadius = "Radius";
@@ -194,7 +196,8 @@ class AppString {
   static const error = "error";
   static const searchProduct = "Search Product";
   static const success = "success";
-  static const alreadyReview = "You already submitted a review for this product";
+  static const alreadyReview =
+      "You already submitted a review for this product";
   static const continueShopping = "Continue Shopping";
   static const liked = "liked";
   static const successPayment = "Success payment";
@@ -229,7 +232,9 @@ class AppString {
   static const sortBy = 'Sort By';
   static const setting = 'Settings';
   static const readMore = 'View All';
-  static const locationError = 'Product delivery is available only in Pune, India.';
+  static const locationError =
+      'Product delivery is available only in Pune, India.';
   static const locationReq = 'Location Permission Required';
-  static const grantPermission = "Please grant location permission in app settings to use this feature.";
+  static const grantPermission =
+      "Please grant location permission in app settings to use this feature.";
 }
