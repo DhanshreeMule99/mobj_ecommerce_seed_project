@@ -13,10 +13,11 @@ class ProductRepository {
   Future<List<ProductModel>> getProducts() async {
     try {
       debugPrint('calling api');
-      final response = await ApiManager.get(AppConfigure.baseUrl +
+      String productUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
-          APIConstants.product);
+          APIConstants.product;
+      final response = await ApiManager.get(productUrl);
 
       // final response = await ApiManager.get(
       //     '${AppConfigure.bigcommerceUrl}/catalog/products?include=images,variants,options');

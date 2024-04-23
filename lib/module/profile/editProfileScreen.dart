@@ -43,6 +43,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     editProfile() async {
       //ref.read(isLoading.notifier).state = true;
       final uid = await SharedPreferenceManager().getUserId();
+      final accessToken = await SharedPreferenceManager().getToken();
       Map<String, dynamic> body = AppConfigure.bigCommerce
           ? {
               "first_name": ref.read(fNameProvider),
@@ -52,10 +53,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               "id": int.parse(uid)
             }
           : {
-              "first_name": ref.read(fNameProvider),
-              "last_name": ref.read(lNameProvider),
-              // "email": ref.read(emailProvider),
-              "phone": ref.read(phoneProvider),
+              "customerAccessToken": "$accessToken",
+              "customer": {
+                "firstName": ref.read(fNameProvider),
+                "lastName": ref.read(lNameProvider),
+                "phone": "+91${ref.read(phoneProvider)}"
+              }
             };
 
       final register = UserRepository();
@@ -492,7 +495,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   ))
                                 : Container(),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 35, 10, 15),
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 35, 10, 15),
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate() &&

@@ -1,5 +1,7 @@
 // ignore_for_file: unused_result
 
+import 'dart:developer';
+
 import 'package:mobj_project/main.dart';
 import 'package:mobj_project/module/address/addressListScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -133,6 +135,8 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
             cityController.text.trim().toLowerCase() == "pune" &&
             selectedAddressIndex == 1)) {
       final uid = await SharedPreferenceManager().getUserId();
+      final accessToken = await SharedPreferenceManager().getToken();
+      log('access token is this $accessToken');
       Map<String, dynamic> body = AppConfigure.bigCommerce
           ? {
               "first_name": firstNameController.text,
@@ -154,29 +158,50 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                   : int.tryParse(widget.addressId) ?? 0,
             }
           : {
-              "address1": selectedAddressIndex == 1
-                  ? addressController.text
-                  : residence,
-              "address2": "",
-              "Company": "",
-              "first_name": firstNameController.text,
-              "last_name": selectedOption,
-              "city": selectedAddressIndex == 1 ? cityController.text : city,
-
-              "phone": phoneController.text,
-              "province": "",
-              "country":
-                  selectedAddressIndex == 1 ? countryController.text : country,
-              "zip":
-                  selectedAddressIndex == 1 ? zipController.text : postalCode,
-              "name": "",
-              "province_code": "",
-              "country_code": "IN",
-              "country_name":
-                  selectedAddressIndex == 1 ? countryController.text : country,
-              "default": true
-              // "name":nickAddressController.text
+              "address": {
+                "address1": selectedAddressIndex == 1
+                    ? addressController.text
+                    : residence,
+                "address2": "",
+                "city": selectedAddressIndex == 1 ? cityController.text : city,
+                "company": "",
+                "country": selectedAddressIndex == 1
+                    ? countryController.text
+                    : country,
+                "firstName": firstNameController.text,
+                "lastName": selectedOption,
+                "phone": "+91${phoneController.text}",
+                "province": "",
+                "zip":
+                    selectedAddressIndex == 1 ? zipController.text : postalCode,
+              },
+              "customerAccessToken": "$accessToken"
             };
+
+      //  {
+      //     "address1": selectedAddressIndex == 1
+      //         ? addressController.text
+      //         : residence,
+      //     "address2": "",
+      //     "Company": "",
+      //     "first_name": firstNameController.text,
+      //     "last_name": selectedOption,
+      //     "city": selectedAddressIndex == 1 ? cityController.text : city,
+
+      //     "phone": phoneController.text,
+      //     "province": "",
+      //     "country":
+      //         selectedAddressIndex == 1 ? countryController.text : country,
+      //     "zip":
+      //         selectedAddressIndex == 1 ? zipController.text : postalCode,
+      //     "name": "",
+      //     "province_code": "",
+      //     "country_code": "IN",
+      //     "country_name":
+      //         selectedAddressIndex == 1 ? countryController.text : country,
+      //     "default": true
+      //     // "name":nickAddressController.text
+      //   };
       print('sending this address id ${widget.addressId}');
       AddressRepository()
           .editAddress(

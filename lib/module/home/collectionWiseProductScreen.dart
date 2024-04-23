@@ -130,16 +130,16 @@ class _CollectionWiseProductScreenState
 
           // }
 
-       String graphQLQuery = '';
-  for (int i = 0; i < data.length; i++) {
-    graphQLQuery += '''
+          String graphQLQuery = '';
+          for (int i = 0; i < data.length; i++) {
+            graphQLQuery += '''
       product$i: product(entityId: ${data[i]['product_id']}) {
         ...ProductFields
       }
     ''';
-  }
+          }
 
-log("query is this $graphQLQuery string");
+          log("query is this $graphQLQuery string");
 
           String query = '''
 query {
@@ -191,23 +191,23 @@ fragment PriceFields on Money {
               "https://store-05vrtqkend.mybigcommerce.com/graphql",
               data: {"query": query});
 
+          final List<ProductCollectionModel> products = [];
+          int productIndex = 0;
+          while (result.data['data']['site']['product$productIndex'] != null) {
+            var productJson =
+                result.data['data']['site']['product$productIndex'];
+            products.add(ProductCollectionModel.fromJson(productJson));
+            productIndex++;
+          }
+          log("proudcts are this $products");
 
-   final List<ProductCollectionModel> products = [];
-   int productIndex = 1;
-while (result.data['data']['site']['product$productIndex'] != null) {
-  var productJson = result.data['data']['site']['product$productIndex'];
-  products.add(ProductCollectionModel.fromJson(productJson));
-  productIndex++;
-}
-log("$products");
-          
           return products;
         } else {
           // Handle API error response
           List<ProductCollectionModel> products = [];
           return products;
         }
-      } catch (error,stackTrac) {
+      } catch (error, stackTrac) {
         // Handle error
         print('Error: $error $stackTrac');
         List<ProductCollectionModel> products = [];
@@ -516,7 +516,8 @@ log("$products");
                             FilterChip(
                               label: Text(
                                 AppLocalizations.of(context)!.price,
-                                style: const TextStyle(color: AppColors.whiteColor),
+                                style: const TextStyle(
+                                    color: AppColors.whiteColor),
                               ),
                               backgroundColor: AppColors.blue,
                               onSelected: (selected) {},
@@ -724,7 +725,8 @@ log("$products");
                                                     // Add padding to the Card
                                                     child: ListTile(
                                                       contentPadding:
-                                                          const EdgeInsets.all(0),
+                                                          const EdgeInsets.all(
+                                                              0),
                                                       // Remove default ListTile padding
                                                       title: Padding(
                                                         padding:

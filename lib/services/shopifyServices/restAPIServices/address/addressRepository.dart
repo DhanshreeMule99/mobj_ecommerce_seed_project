@@ -220,23 +220,46 @@ class AddressRepository {
         }
       }
     } else {
-      var body1 = jsonEncode({"address": body});
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          final response;
+          var response;
           if (addId == "") {
             debugPrint("calling null addressid api");
-            response = await ApiManager.post(
-                "$baseUrl$uid/${APIConstants.address}.json", body1);
+            String query = '''
+mutation customerAddressCreate(\$customerAccessToken: String!, \$address: MailingAddressInput!) {
+  customerAddressCreate(customerAccessToken: \$customerAccessToken, address: \$address) {
+    customerUserErrors {
+      code
+      field
+      message
+    }
+    customerAddress {
+      id
+    }
+  }
+}
+
+''';
+
+            Map<String, dynamic> variables = body;
+
+            response = await api.sendRequest.post(
+              "https://pyvaidyas.myshopify.com/api/2021-04/graphql.json",
+              data: {
+                'query': query,
+                'variables': variables,
+              },
+            );
           } else {
-            debugPrint("calling not null addressid api");
-            response = await ApiManager.put(
-                "$baseUrl$uid/${APIConstants.address}/$addId.json", body1);
+            // debugPrint("calling not null addressid api");
+            // response = await ApiManager.put(
+            //     "$baseUrl$uid/${APIConstants.address}/$addId.json", body1);
           }
-          print("body is this ${response.body}");
-          var data = jsonDecode(response.body);
+          print("body is this ${response.data}");
+          var data = response.data;
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
+            print("address added successfully");
             return data;
           } else if (response.statusCode == APIConstants.unAuthorizedCode) {
             exceptionString = AppString.unAuthorized;
@@ -252,7 +275,8 @@ class AddressRepository {
           var exceptionString = AppString.checkInternet;
           return exceptionString;
         }
-      } catch (error) {
+      } catch (error, stackTrace) {
+        print('object $error $stackTrace');
         exceptionString = AppString.serverError;
         return exceptionString;
       }

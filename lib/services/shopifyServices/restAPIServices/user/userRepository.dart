@@ -169,8 +169,34 @@ query {
       var body1 = jsonEncode({"customer": body});
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          final response = await ApiManager.put("$baseUrl$uid.json", body1);
-          var data = jsonDecode(response.body);
+          String query = '''
+            mutation customerUpdate(\$customerAccessToken: String!, \$customer: CustomerUpdateInput!) {
+  customerUpdate(customerAccessToken: \$customerAccessToken, customer: \$customer) {
+    customer {
+      id
+      firstName
+      lastName
+      phone
+      # Add other fields you want to update
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+          ''';
+
+          Map<String, dynamic> variables = body;
+          Response response = await api.sendRequest.post(
+            "https://pyvaidyas.myshopify.com/api/2023-10/graphql.json",
+            data: {
+              'query': query,
+              'variables': variables,
+            },
+          );
+          var data = response.data;
           if (response.statusCode == APIConstants.successCode) {
             return data;
           } else if (response.statusCode == APIConstants.unAuthorizedCode) {
