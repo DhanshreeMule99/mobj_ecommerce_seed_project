@@ -105,6 +105,7 @@ dependencies:
   dio: ^5.4.1
   flutter_stripe: ^9.6.0
   connectivity_plus: ^5.0.0
+  like_button: ^2.0.5
 
 dev_dependencies:
   flutter_test:

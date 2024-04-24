@@ -9,6 +9,7 @@ class SharedPreferenceManager {
   static const String draftId = 'draftId';
   static const String name = 'name';
   static const String email = 'email';
+  static const String wishlistId = 'wishlistId';
 
   static final SharedPreferenceManager _instance =
       SharedPreferenceManager._internal();
@@ -112,5 +113,15 @@ class SharedPreferenceManager {
   Future<bool> setemail(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(email, tokens);
+  }
+
+   Future<String> getwishlistID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(wishlistId) ?? "";
+  }
+
+  Future<bool> setWishlistId(String tokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(wishlistId, tokens);
   }
 }

@@ -1,9 +1,8 @@
 // productRepository
 
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-
+import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
@@ -21,14 +20,16 @@ class ProductRepository {
           APIConstants.product);
 
       // final response = await ApiManager.get(
-      //     '${AppConfigure.bigcommerceUrl}/catalog/products?include=images,variants,options');
+      //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
 
       if (response.statusCode == APIConstants.successCode) {
+        log("product details: $response");
         final List result = AppConfigure.bigCommerce == true
             ? jsonDecode(response.body)['data']
             : jsonDecode(response.body)['products'];
 
         return result.map((e) => ProductModel.fromJson(e)).toList();
+        
       } else if (response.statusCode == APIConstants.dataNotFoundCode) {
         log("empty data here");
         throw (AppString.noDataError);
@@ -43,6 +44,12 @@ class ProductRepository {
       throw error;
     }
   }
+
+
+
+
+
+
 
   Future<ProductVariant> getProductsByVariantId(String vid, String pid) async {
     try {
@@ -118,12 +125,12 @@ class ProductRepository {
 
     if (AppConfigure.bigCommerce) {
       try {
-        Response response = await api.sendRequest
-            .get('${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews',
-                options: Options(headers: {
-                  "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
-                  'Content-Type': 'application/json',
-                }));
+        Response response = await api.sendRequest.get(
+            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products/112/reviews',
+            options: Options(headers: {
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}",
+              'Content-Type': 'application/json',
+            }));
         if (response.statusCode == APIConstants.successCode) {
           var result = response.data;
           return ReviewProductModels.fromJson(result);
@@ -568,7 +575,8 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           var response;
           response = await ApiManager.post(
-              "${AppConfigure.bigcommerceUrl}/checkouts/$draftId/orders", {});
+              "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/orders",
+              {});
           var data = jsonDecode(response.body);
           log("${response.body} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
@@ -642,7 +650,7 @@ class ProductRepository {
           String draftId = await SharedPreferenceManager().getDraftId();
 
           final response = await ApiManager.get(
-              "${AppConfigure.bigcommerceUrl}/carts/$draftId");
+              "https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             log("${response.body}");
@@ -774,10 +782,10 @@ class ProductRepository {
           throw (AppString.noDataError);
         } else if (response.statusCode == APIConstants.unAuthorizedCode) {
           // throw AppString.unAuthorized;
-          throw (AppString.noDataError);
+            throw (AppString.noDataError);
         } else {
           // throw AppString.serverError;
-          throw (AppString.noDataError);
+            throw (AppString.noDataError);
         }
       } catch (error, stackTrace) {
         log("error is this: $stackTrace");
@@ -812,6 +820,52 @@ class ProductRepository {
       }
     }
   }
+
+ 
+  // Future<List<WishlistModel>> getallwishlistProducts() async {
+  //   try {
+  //     log('calling api');
+  //       final uid = await SharedPreferenceManager().getUserId();
+  //     final response = await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists?customer_id=$uid");
+
+  //     // final response = await ApiManager.get(
+  //     //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+
+  //     if (response.statusCode == APIConstants.successCode) {
+  //       // final List result = AppConfigure.bigCommerce == true
+  //       //     ? jsonDecode(response.body)['data']
+  //       //     : jsonDecode(response.body)['products'];
+  // final List result = response.data;
+  //        return result.map((e) => WishlistModel.fromJson(e)).toList();
+  //       // return AppString.serverError;
+  //           //     Fluttertoast.showToast(
+  //           // msg: "your product added to Wishlist",
+  //           // toastLength: Toast.LENGTH_SHORT,
+  //           // gravity: ToastGravity.BOTTOM,
+  //           // timeInSecForIosWeb: 0,
+  //           // backgroundColor: AppColors.green,
+  //           // textColor: AppColors.whiteColor,
+  //           // fontSize: 16.0);
+
+  //     } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+  //       log("empty data here");
+  //       throw (AppString.noDataError);
+  //     } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+  //       log("empty data here unauthorized");
+  //       throw AppString.unAuthorized;
+  //     } else {
+  //       // return empty;
+  //     }
+  //   } catch (error, stackTrace) {
+  //     log("error is this $error $stackTrace");
+  //     throw error;
+  //   }
+  // }
+
+
+
+
+  
 }
 
 final productsProvider =

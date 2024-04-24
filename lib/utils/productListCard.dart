@@ -1,17 +1,22 @@
+
 // productListCard
 
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:like_button/like_button.dart';
+import 'package:mobj_project/utils/api.dart';
 import '../../utils/appColors.dart';
-import '../models/shared_preferences/SharedPreference.dart';
 import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
 import 'appDimension.dart';
 import 'appString.dart';
 import 'cmsConfigue.dart';
 import 'commonAlert.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ProductListCard extends StatefulWidget {
   final Color tileColor;
@@ -27,6 +32,7 @@ class ProductListCard extends StatefulWidget {
   final String? isLiked;
   final GestureTapCallback? ratings;
   final Function addToCart;
+  final GestureTapCallback? wishlist;
   final GestureTapCallback? shareProduct;
   final GestureTapCallback? onLiked;
   final num ratingCount;
@@ -34,6 +40,7 @@ class ProductListCard extends StatefulWidget {
   final Widget? list;
   final String productId;
   final int stock;
+
   final WidgetRef ref;
 
   const ProductListCard({
@@ -46,6 +53,7 @@ class ProductListCard extends StatefulWidget {
     required this.productImage,
     required this.addToCart,
     this.shareProduct,
+    this.wishlist,
     this.status,
     this.isLiked,
     required this.ratingCount,
@@ -67,17 +75,223 @@ class ProductListCard extends StatefulWidget {
 
 class _ProductListCardstate extends State<ProductListCard> {
   double ratings = 0.0;
+ bool isLiked = false;
+ List<Map<String, dynamic>> favoriteProducts = [];
+  // List<String> likedProductIds = [];
+
+
+
+//  Future<void> toggleLikeStatus()async {
+//     setState(() {
+//       // Toggle the liked state
+//       isLiked = !isLiked;
+//       // Update the liked list accordingly
+//       if (isLiked) {
+//         likedProductIds.add(widget.productId);
+//       } else {
+//         likedProductIds.remove(widget.productId);
+//       }
+//     });
+//   }
+  
+  // Function to toggle the like status
+  Future<void> toggleLikeStatus() async {
+    try {
+      if (isLiked) {
+        // Remove from wishlist
+        
+        Fluttertoast.showToast(
+          msg: "Removed this product from wishlist",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+      } else {
+        // Check if wishlist ID is available
+       
+        String wislistId = await SharedPreferenceManager().getwishlistID();
+
+        if (wislistId != "") {
+        try { log("this is wislis ID : $wislistId");
+          // If wishlist ID is available, add product to wishlist
+           log("adding product to wislist");
+             
+         await addproductTowishlist();
+          Fluttertoast.showToast(
+            msg: "Added this product to wishlist",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );} catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+        log("error is this: $error");
+        rethrow;
+      }
+        } else {
+          // If wishlist ID is not available, create a new wishlist and add product to it
+           log("creating wislist.........");
+          await createwishlist();
+          Fluttertoast.showToast(
+            msg: "Added this product to wishlist",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
+        }
+      }
+      setState(() {
+        isLiked = !isLiked;
+      });
+    } catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+        log("error is this: $error");
+        rethrow;
+      }
+  }
+
+
+Future<void> addproductTowishlist() async {
+    API api = API();
+      String WishlistID = await SharedPreferenceManager().getwishlistID();
+                  log(" product Id... $widget.productId");
+              Map<String, dynamic> newProduct ={
+                "items": [
+                  {
+                    "product_id":  int.parse(widget.productId),
+                    "variant_id": int.parse(widget.variantId),
+                  }
+                ]
+              };
+    try
+      {  final response = await api.sendRequest.post(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$WishlistID/items",
+          data: newProduct,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+          }),);
+        if (response.statusCode == 201 || response.statusCode == 200  ) {
+         log("Added to wishlist : $response");
+           final result = response.data['data'];
+          await SharedPreferenceManager()
+              .setWishlistId(result['id'].toString());
+              String WishlistID = await SharedPreferenceManager().getwishlistID();
+              log("wishlist id : $WishlistID");
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            throw (AppString.noDataError);
+        } else {
+            throw (AppString.noDataError);
+        }}
+        catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+        log("error is this: $error");
+        rethrow;
+      }
+  }
+
+
+
+  deleteAddress() async {
+    String exceptionString = "";
+    final uid = await SharedPreferenceManager().getUserId();
+   final WishlistID = await SharedPreferenceManager().getwishlistID();
+    API api = API();
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          final response = await api.sendRequest.delete(
+            "https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$WishlistID/items/4",
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+            }),
+          );
+          // var data = jsonDecode(response.body);
+          if (response.statusCode == 204) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      } catch (error) {
+        exceptionString = AppString.serverError;
+        return exceptionString;
+      }
+ 
+  }
+Future<void> createwishlist() async {
+    API api = API();
+      final uid = await SharedPreferenceManager().getUserId();
+log("product Id : $widget.productId");
+       Map<String, dynamic> wishlistData = {
+  "customer_id": int.parse(uid),
+  "is_public": false,
+  "name": "new list",
+  "items": [
+    {
+      "product_id": int.parse(widget.productId),
+      "variant_id": int.parse(widget.variantId),
+    }
+  ]
+};
+      try {
+        final response = await api.sendRequest.post(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists",
+          data: wishlistData,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            "Accept": "application/json",
+            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+          }),
+        );
+        if (response.statusCode == 201 || response.statusCode == 200  ) {
+          
+         log("create wishlist : $response");
+           final result = response.data['data'];
+          await SharedPreferenceManager()
+              .setWishlistId(result['id'].toString());
+              String WishlistID = await SharedPreferenceManager().getwishlistID();
+              log("wishlist id : $WishlistID");
+
+              setState(() {
+                isLiked = true;
+     
+    });
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+         
+            throw (AppString.noDataError);
+        } else {
+      
+            throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+        log("error is this: $error");
+        rethrow;
+      }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // isLiked = likedProductIds.contains(widget.productId);
   }
 
   String jwt_token = "";
   String userid = "";
-
+API api= API();
   Future<bool> isLogin() async {
+    String wislistId = await SharedPreferenceManager().getwishlistID();
     final jwt = await SharedPreferenceManager().getToken();
     jwt_token = jwt;
     final uid = await SharedPreferenceManager().getUserId();
@@ -101,63 +315,35 @@ class _ProductListCardstate extends State<ProductListCard> {
               padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
               child: Align(
                   alignment: Alignment.bottomRight,
-                  child: Wrap(
-                    // spacing: -10,
-                    // space between two icons
-                    runAlignment: WrapAlignment.end,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.end,
-                    children: <Widget>[
-                      //TODO list after API integration of wishlist
-                      // Text(widget.issaved.toString()),
-                      // // Text(widget.issavefortoggele.toString()),
-                      // widget.issaved != "true" || widget.issaved == "null"
-                      //     ? IconButton(
-                      //   // padding: EdgeInsets.zero,
-                      //     onPressed: widget.onsaved,
-                      //     icon: widget.issavefortoggele != "-1"
-                      //         ? Icon(
-                      //       Icons.bookmark,
-                      //       size: 25,
-                      //     )
-                      //         : Icon(
-                      //       Icons.bookmark_add_outlined,
-                      //       size: 25,
-                      //     ))
-                      //     : IconButton(
-                      //   // padding: EdgeInsets.zero,
-                      //     onPressed: widget.onsaved,
-                      //     icon: widget.issavefortoggele == "-1"
-                      //         ? Icon(
-                      //       Icons.bookmark,
-                      //       size: 25,
-                      //     )
-                      //         : Icon(
-                      //       Icons.bookmark_add_outlined,
-                      //       size: 25,
-                      //     )),
-                      // IconButton(
-                      //     // padding: EdgeInsets.zero,
-                      //     onPressed: widget.onLiked,
-                      //     icon: widget.isLiked != "-1"
-                      //         ? const Icon(
-                      //             Icons.favorite,
-                      //             size: 25,
-                      //             color: Colors.red,
-                      //           )
-                      //         : const Icon(
-                      //             Icons.favorite_border,
-                      //             size: 25,
-                      //           )),
-                      IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: widget.shareProduct,
-                          icon: const Icon(
-                            Icons.share,
-                            size: 25,
-                          )),
-                    ],
-                  ))),
+                  child:
+            
+                                              Wrap(
+                                                runAlignment: WrapAlignment.end,
+                                                crossAxisAlignment: WrapCrossAlignment.center,
+                                                alignment: WrapAlignment.end,
+                                                children: <Widget>[
+                                                  // Share Button
+                                                  IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    onPressed: widget.shareProduct,
+                                                    icon: const Icon(
+                                                      Icons.share,
+                                                      size: 25,
+                                                    ),
+                                                  ),
+                                                    LikeButton(
+                                                   mainAxisAlignment: MainAxisAlignment.end,
+                                                     isLiked: isLiked,
+                                                     
+                                                     onTap: (isLiked) async {await toggleLikeStatus();return !isLiked;},
+                                                    likeBuilder: (bool isLiked) {return Icon(Icons.favorite,
+                                                        color: isLiked ? Colors.red : Colors.black,size: 25,);},),
+
+                                                ],
+                                              )
+                                           )
+                                           ),
+    
           CachedNetworkImage(
             imageUrl: widget.productImage,
             imageBuilder: (context, imageProvider) => Container(
@@ -199,7 +385,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: [ 
                       Padding(
                         padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(

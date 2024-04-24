@@ -2,20 +2,23 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:like_button/like_button.dart';
+import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
-import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
+import 'package:mobj_project/services/shopifyServices/restAPIServices/wishlist/wishlistRepository.dart';
+import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../paymentGatways/phonePePay/phonePeGateway.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class WishlistScreen extends ConsumerStatefulWidget {
+   WishlistScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<WishlistScreen> createState() => _WishlistScreenState();
 }
 
 final selectedCategoryProvider = StateProvider((ref) => "-1");
@@ -25,10 +28,10 @@ final bookmarkedProductProvider =
     StateNotifierProvider<BookmarkedProductNotifier, List<ProductModel>>(
         (ref) => BookmarkedProductNotifier());
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   final LocationMobj _locationService = LocationMobj();
   String address = "";
-
+  bool loader = false;
   void initDynamicLinks() async {
     // Check if you received the link via `getInitialLink` first
     final PendingDynamicLinkData? initialLink =
@@ -62,55 +65,128 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-List<int> wishlistProductIds =[];
+
   List<dynamic> data = [];
-  Future getWishlistproduct() async {
-    wishlistProductIds.clear();
- String wishlidtId = await SharedPreferenceManager().getwishlistID();
+   List<ProductModel> wishlistProducts = [];
+final List<WishlistProductModel> products = [];
+ 
+
+
+Future<void> getallWishlist() async {
+  API api=API();
+ setState(() {
+      loader = true;
+    });
+
+  log("Get all wishlist details............");
+  String wishlidtId = await SharedPreferenceManager().getwishlistID();
   try
   {  final response = await ApiManager.get(
             'https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$wishlidtId');
     if (response.statusCode == APIConstants.successCode) {
-  final Map<String, dynamic> responseBody = json.decode(response.body);
-  List productList = responseBody["data"]["items"];
 
-  for(int i=0; i < productList.length;i++ ){
-wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      // final List result = jsonDecode(response.body)['data'];
+     
+List productList = responseBody["data"]["items"];
+     log("body is this one ${responseBody["data"]["items"][0]["product_id"]}");
+
+          
+          String graphQLQuery = '';
+          for (int i = 0; i < productList.length; i++) {
+            graphQLQuery += '''
+      product$i: product(entityId: ${responseBody["data"]["items"][i]["product_id"]}) {
+        ...ProductFields
+      }
+    ''';
+
+          }
+
+        await  Future.delayed(Duration(seconds: 1));
+
+          log("query is this $graphQLQuery string");
+
+          String query = '''
+query {
+ site{ 
+    $graphQLQuery
   }
-  log("list wishlist $wishlistProductIds");
+}
+
+fragment ProductFields on Product {
+  id
+  entityId
+  name
+  prices(currencyCode: INR) {
+    price {
+      ...PriceFields
     }
-    }catch(e){
+    salePrice {
+      ...PriceFields
+    }
+    basePrice {
+      ...PriceFields
+    }
+    retailPrice {
+      ...PriceFields
+    }
+  }
+   defaultImage {
+        url (width: 100)
+        urlOriginal
+        altText
+        isDefault
+      }
+}
+
+fragment PriceFields on Money {               
+  currencyCode
+  value
+}
+
+''';
+          var result = await api.sendRequest.post(
+              "https://store-05vrtqkend.mybigcommerce.com/graphql",
+              data: {"query": query});
+
+          
+            int productIndex = 0;
+            while (result.data['data']['site']['product$productIndex'] != null) {
+              var productJson =
+                  result.data['data']['site']['product$productIndex'];
+              products.add(WishlistProductModel.fromJson(productJson));
+              productIndex++;
+            }
+             await  Future.delayed(Duration(seconds: 1));
+            log("result is this ${products.length}");
+              setState(() {
+            loader = false;
+          });
+
+        } else {
+        
+     
+        }
+    } catch (error, stackTrace) {
+        log("error is this: $stackTrace");
+      log("error is this: $error");
       rethrow;
-    }
-  }
-
-  Future<void> fetchCategories() async {
-    final response =
-        await ApiManager.get(AppConfigure.baseUrl + APIConstants.collection);
-    if (response.statusCode == APIConstants.successCode) {
-      final apiData = json.decode(response.body)['collections'];
-      setState(() {
-        data = apiData;
-      });
-    } else {
-      throw Exception('Failed to fetch categories');
-    }
+      }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     initDynamicLinks();
-    getWishlistproduct();
-    fetchCategories();
+  getallWishlist();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     //TODO use read insted of read and dispose the provider
-    final product = ref.watch(productDataProvider);
-    
+   
+    final wishlist = ref.watch(productDataProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final selectedChipIndex = ref.watch(selectedChipIndexProvider);
     final productByCollection =
@@ -119,66 +195,13 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
     final bookmarkedProduct = ref.watch(bookmarkedProductProvider);
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
-          appBar: AppBar(
-              elevation: 2,
-              actions: [
-                 IconButton(
-                    onPressed: () {
-                           Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                      WishlistScreen(),
-                                transitionDuration: Duration.zero,
-                                reverseTransitionDuration: Duration.zero,
-                              ),
-                            );
-                    },
-                    icon: const Icon(
-                      Icons.favorite,
-                    )),
-
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const SearchWidget()));
-                    },
-                    icon: const Icon(
-                      Icons.search,
-                    )),
-              ],
-              title: Row(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: appInfo.logoImagePath,
-                    imageBuilder: (context, imageProvider) => Container(
-                      height: 35,
-                      width: 35,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          //image size fill
-                          image: imageProvider,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => Container(
-                      height: 35,
-                      width: 35,
-                      color: AppColors.greyShade,
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                        height: 35, width: 35, color: AppColors.greyShade),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    appInfo.appName,
-                  )
-                ],
-              )),
+          appBar:  AppBar(
+          elevation: 2,
+          title: const Text(
+              "Wishlist"
+          ),
+          
+        ),
           bottomNavigationBar: MobjBottombar(
             bgcolor: AppColors.whiteColor,
             selcted_icon_color: AppColors.buttonColor,
@@ -190,86 +213,32 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
             screen4: ProfileScreen(),
             ref: ref,
           ),
-          body: Column(children: [
-            data.length == 0
-                ? Container()
-                : Container(
-                    height: 60,
-                    margin: const EdgeInsets.only(left: 5),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.all(2),
-                          child: FilterChip(
-                            showCheckmark: false,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                            label: Text(
-                              data[index]['title'],
-                              style: TextStyle(
-                                fontSize:
-                                    0.04 * MediaQuery.of(context).size.width,
-                                fontWeight: FontWeight.w700,
-                                // color: selectedChipIndex == index.toString()
-                                //     ? AppColors.whiteColor
-                                //     : AppColors.blackColor
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            selected: selectedChipIndex == index.toString(),
-                            selectedColor: appInfo.primaryColorValue,
-                            onSelected: (bool selected) {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation1,
-                                          animation2) =>
-                                      CollectionWiseProductScreen(
-                                          category:
-                                              data[index]['id'].toString(),
-                                          categoryName:
-                                              data[index]['title'].toString()),
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    )),
+          body: 
+          Column(children: [
             Expanded(
-                child: product.when(
-              data: (product) {
-                List<ProductModel> productlist = product.map((e) => e).toList();
-                final post = product;
-
-                return RefreshIndicator(
-                  // Wrap the list in a RefreshIndicator widget
-                  onRefresh: () async {
-                    ref.refresh(productDataProvider);
-                  },
+                child:
+                 RefreshIndicator(
+                          onRefresh: () async { },
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Expanded(
-                            child: ListView.builder(
-                                itemCount: productlist.length,
+                            child: 
+                            ListView.builder(
+                                itemCount: products.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   final isBookmarked =
                                       bookmarkedProduct.indexWhere(
-                                          (p) => p.id == post[index].id);
+                                          (p) => p.id == products[index].id);
+                                   final int staticStock = 10; // Example static value for stock
+                                  final String staticVariantId = "static_variant_id"; 
                                   return Padding(
                                       padding: const EdgeInsets.only(
                                           top: 5, left: 15, right: 15),
                                       child: InkWell(
                                           onTap: () {
                                             ref.refresh(productDetailsProvider(
-                                                productlist[index]
+                                                products[index]
                                                     .id
                                                     .toString()));
                                             Navigator.of(context).push(
@@ -278,10 +247,10 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                         animation1,
                                                         animation2) =>
                                                     ProductDetailsScreen(
-                                                  uid: productlist[index]
+                                                  uid: products[index]
                                                       .id
                                                       .toString(),
-                                                  product: productlist[index],
+                                                  // product: products[index],
                                                 ),
                                                 transitionDuration:
                                                     Duration.zero,
@@ -299,30 +268,29 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                     BorderRadius.circular(15),
                                               ),
                                               child: ProductListCard(
-                                                
                                                 shareProduct: () async {
                                                   ShareItem().buildDynamicLinks(
-                                                      productlist[index]
+                                                      products[index]
                                                           .id
                                                           .toString(),
-                                                      productlist[index]
-                                                          .image!
-                                                          .src
+                                                      products[index]
+                                                          .defaultImage
+                                                       
                                                           .toString(),
-                                                      productlist[index]
-                                                          .title
+                                                      products[index]
+                                                          .name
                                                           .toString());
                                                 },
-                                          
-                                                
+                                                   
+
                                                 isLikedToggle: "true",
                                                 onLiked: () async {
-                                                  ref
-                                                      .read(
-                                                          bookmarkedProductProvider
-                                                              .notifier)
-                                                      .toggleBookmark(
-                                                          post[index]);
+                                                  // ref
+                                                  //     .read(
+                                                  //         bookmarkedProductProvider
+                                                  //             .notifier)
+                                                  //     .toggleBookmark(
+                                                  //         products[index]);
                                                   //TODO list API integration of like
                                                   // debouncer.run(() {
                                                   // if ((productlist[index]
@@ -349,21 +317,18 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                 },
                                                 tileColor:
                                                     appInfo.primaryColorValue,
-                                                logoPath: productlist[index]
-                                                    .image!
-                                                    .src
+                                                logoPath: products[index]
+                                                    .defaultImage
                                                     .toString(),
-                                                productName: productlist[index]
-                                                    .title
+                                                productName: products[index].name.toString(),
+                                                address: products[index]
+                                                    .name
                                                     .toString(),
-                                                address: productlist[index]
-                                                    .bodyHtml
-                                                    .toString(),
-                                                datetime:
-                                                    "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt!}",
-                                                productImage: productlist[index]
-                                                    .image!
-                                                    .src
+                                                datetime: products[index].name.toString(),
+                                                    // "${AppString.deliverAt} ${products[index].createdAt.toString()}/${products[index].createdAt}/${products[index].createdAt!}",
+                                                productImage: products[index]
+                                                    .defaultImage
+                                                   .urlOriginal
                                                     .toString(),
                                                 ratings: () {
                                                   //TODO list product rating
@@ -483,25 +448,28 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                   // // ),
                                                   // // );
                                                 },
-                                                productDetails:
-                                                    "\u{20B9}${productlist[index].variants![0].price}",
-                                                status: productlist[index]
-                                                    .variants
-                                                    .toString(),
+                                                productDetails:staticVariantId,
+                                                    // "\u{20B9}${products[index].variants![0].price}",
+                                                status: staticVariantId,
+                                                
+                                                // products[index]
+                                                //     .variants
+                                                //     .toString(),
                                                 isLiked:
                                                     isBookmarked.toString(),
                                                 ratingCount: num.parse("5.5"),
-                                                productId: productlist[index]
+                                                productId: products[index]
                                                     .id
                                                     .toString(),
-                                                productPrice: productlist[index]
-                                                        .variants
-                                                        .isNotEmpty
-                                                    ? productlist[index]
-                                                        .variants![0]
-                                                        .price
-                                                    : DefaultValues.defaultPrice
-                                                        .toString(),
+                                                productPrice:  products[index].prices.basePrice.value.toString(),
+                                                // products[index]
+                                                //         .prices
+                                                //     //     .isEmpty
+                                                //     // ? products[index]
+                                                //     //     .variants![0]
+                                                //     //     .price
+                                                //     // : DefaultValues.defaultPrice
+                                                //         .toString(),
                                                 addToCart: () {
                                                   // CommonAlert
                                                   //     .show_loading_alert(
@@ -552,60 +520,27 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                   //   }
                                                   // });
                                                 },
-                                                variantId: productlist[index]
-                                                    .variants[0]
-                                                    .id
-                                                    .toString(),
-                                                stock: productlist[index]
-                                                    .variants[0]
-                                                    .inventoryQuantity,
-                                                ref: ref, 
+                                                  variantId: staticVariantId, // Assign static value to variantId
+                                                  stock: staticStock,
+                                                // variantId: products[index]
+                                                //     .variants[0]
+                                                //     .id
+                                                //     .toString(),
+                                                // stock: products[index]
+                                                //     .variants[0]
+                                                //     .inventoryQuantity,
+                                                ref: ref,
                                               ))));
-                                })),
-                      ]),
-                );
-              },
-              error: (error, s) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Center(
-                    child: ErrorHandling(
-                      error_type: AppString.error,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.buttonColor,
-                    ),
-                    onPressed: () {
-                      ref.refresh(productDataProvider);
-                      // Navigator.of(context).push(
-                      //   PageRouteBuilder(
-                      //     pageBuilder:
-                      //         (context, animation1, animation2) =>
-                      //         PhonePeGatewayScreen(
-                      //           // isCheckout: true,
-                      //         ),
-                      //     transitionDuration: Duration.zero,
-                      //     reverseTransitionDuration:
-                      //     Duration.zero,
-                      //   ),
-                      // );
-                    },
-                    child:  Text(
-                      AppLocalizations.of(context)!.refresh,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.whiteColor,
+                                })
+                                ),
+                      ]
                       ),
-                    ),
-                  )
-                ],
-              ),
-              loading: () => SkeletonLoaderWidget(),
-            ))
-          ])),
+                )
+            
+            )
+          ]
+          
+          )),
       error: (error, s) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -640,4 +575,3 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
     );
   }
 }
-
