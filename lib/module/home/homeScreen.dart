@@ -7,9 +7,7 @@ import 'package:like_button/like_button.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import '../paymentGatways/phonePePay/phonePeGateway.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -41,13 +39,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     FirebaseDynamicLinks.instance.onLink.listen(
       (pendingDynamicLinkData) {
         // Set up the `onLink` event listener next as it may be received here
-        if (pendingDynamicLinkData != null) {
-          final Uri deepLink = pendingDynamicLinkData.link;
-          handleMyLink(deepLink);
-          // Example of using the dynamic link to push the user to a different screen
-          // Navigator.pushNamed(context, deepLink.path);
-        }
-      },
+        final Uri deepLink = pendingDynamicLinkData.link;
+        handleMyLink(deepLink);
+        // Example of using the dynamic link to push the user to a different screen
+        // Navigator.pushNamed(context, deepLink.path);
+            },
     );
   }
 
@@ -85,15 +81,29 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
   }
 
   Future<void> fetchCategories() async {
-    final response =
-        await ApiManager.get(AppConfigure.baseUrl + APIConstants.collection);
-    if (response.statusCode == APIConstants.successCode) {
-      final apiData = json.decode(response.body)['collections'];
-      setState(() {
-        data = apiData;
-      });
+    if (AppConfigure.bigCommerce) {
+      debugPrint('In bigCommerAPI');
+      final response = await ApiManager.get(
+          "https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/trees/categories");
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body)['data'];
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
     } else {
-      throw Exception('Failed to fetch categories');
+      final response =
+          await ApiManager.get(AppConfigure.baseUrl + APIConstants.collection);
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body)['collections'];
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
     }
   }
 
@@ -184,14 +194,14 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 1,
-            screen1: HomeScreen(),
-            screen2: SearchWidget(),
-            screen3: HomeScreen(),
-            screen4: ProfileScreen(),
+            screen1: const HomeScreen(),
+            screen2: const SearchWidget(),
+            screen3: const HomeScreen(),
+            screen4: const ProfileScreen(),
             ref: ref,
           ),
           body: Column(children: [
-            data.length == 0
+            data.isEmpty
                 ? Container()
                 : Container(
                     height: 60,
@@ -201,15 +211,17 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(2),
                           child: FilterChip(
                             showCheckmark: false,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                             label: Text(
-                              data[index]['title'],
+                              AppConfigure.bigCommerce
+                                  ? data[index]["name"]
+                                  : data[index]['title'],
                               style: TextStyle(
                                 fontSize:
                                     0.04 * MediaQuery.of(context).size.width,
@@ -224,15 +236,19 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                             selected: selectedChipIndex == index.toString(),
                             selectedColor: appInfo.primaryColorValue,
                             onSelected: (bool selected) {
+                            
                               Navigator.of(context).push(
                                 PageRouteBuilder(
-                                  pageBuilder: (context, animation1,
-                                          animation2) =>
-                                      CollectionWiseProductScreen(
-                                          category:
-                                              data[index]['id'].toString(),
-                                          categoryName:
-                                              data[index]['title'].toString()),
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          CollectionWiseProductScreen(
+                                    category: AppConfigure.bigCommerce
+                                        ? data[index]['category_id'].toString()
+                                        : data[index]['id'].toString(),
+                                    categoryName: AppConfigure.bigCommerce
+                                        ? data[index]["name"]
+                                        : data[index]['title'],
+                                  ),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),
@@ -306,7 +322,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                           .id
                                                           .toString(),
                                                       productlist[index]
-                                                          .image!
+                                                          .image
                                                           .src
                                                           .toString(),
                                                       productlist[index]
@@ -350,7 +366,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                 tileColor:
                                                     appInfo.primaryColorValue,
                                                 logoPath: productlist[index]
-                                                    .image!
+                                                    .image
                                                     .src
                                                     .toString(),
                                                 productName: productlist[index]
@@ -360,9 +376,9 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                     .bodyHtml
                                                     .toString(),
                                                 datetime:
-                                                    "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt!}",
+                                                    "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
                                                 productImage: productlist[index]
-                                                    .image!
+                                                    .image
                                                     .src
                                                     .toString(),
                                                 ratings: () {
@@ -484,7 +500,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                   // // );
                                                 },
                                                 productDetails:
-                                                    "\u{20B9}${productlist[index].variants![0].price}",
+                                                    "\u{20B9}${productlist[index].variants[0].price}",
                                                 status: productlist[index]
                                                     .variants
                                                     .toString(),
@@ -498,7 +514,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                         .variants
                                                         .isNotEmpty
                                                     ? productlist[index]
-                                                        .variants![0]
+                                                        .variants[0]
                                                         .price
                                                     : DefaultValues.defaultPrice
                                                         .toString(),
@@ -593,9 +609,9 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                       //   ),
                       // );
                     },
-                    child:  Text(
+                    child: Text(
                       AppLocalizations.of(context)!.refresh,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: AppColors.whiteColor,
                       ),
@@ -603,7 +619,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                   )
                 ],
               ),
-              loading: () => SkeletonLoaderWidget(),
+              loading: () => const SkeletonLoaderWidget(),
             ))
           ])),
       error: (error, s) => Column(
@@ -625,9 +641,9 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                   onPressed: () {
                     ref.refresh(productDataProvider);
                   },
-                  child:  Text(
+                  child: Text(
                     AppLocalizations.of(context)!.refresh,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.whiteColor,
                     ),
@@ -636,7 +652,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
               : Container()
         ],
       ),
-      loading: () => SkeletonLoaderWidget(),
+      loading: () => const SkeletonLoaderWidget(),
     );
   }
 }

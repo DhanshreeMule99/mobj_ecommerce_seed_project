@@ -5,10 +5,10 @@ class LoginRepository {
   signIn(Map<String, dynamic> body) async {
     String exceptionString = "";
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
       if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await http.post(Uri.parse(BASE_URL),
+        final response = await http.post(Uri.parse(baseUrl),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(body));
         var data = jsonDecode(response.body);
@@ -37,10 +37,10 @@ class LoginRepository {
     String exceptionString = "";
 
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
       if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await http.post(Uri.parse(BASE_URL),
+        final response = await http.post(Uri.parse(baseUrl),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(body));
 
@@ -70,10 +70,10 @@ class LoginRepository {
     String exceptionString = "";
 
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
       if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await http.post(Uri.parse(BASE_URL),
+        final response = await http.post(Uri.parse(baseUrl),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(body));
 
@@ -102,10 +102,10 @@ class LoginRepository {
   forgotPassword(Map<String, dynamic> body) async {
     String exceptionString = "";
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
       if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await http.patch(Uri.parse(BASE_URL),
+        final response = await http.patch(Uri.parse(baseUrl),
             headers: {"Content-Type": "application/json"},
             body: jsonEncode(body));
 

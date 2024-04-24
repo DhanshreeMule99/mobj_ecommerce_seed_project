@@ -155,6 +155,7 @@ class NotificationSettingScreenState
     extends ConsumerState<NotificationSettingScreen> {
   bool isFetching = true;
 
+  @override
   @protected
   @mustCallSuper
   void initState() {
@@ -176,7 +177,7 @@ class NotificationSettingScreenState
         data: (appInfo) => Scaffold(
               appBar: AppBar(
                 elevation: 0,
-                actions: [],
+                actions: const [],
                 title:  Text(
                   AppLocalizations.of(context)!.notificationSetting,
                 ),
@@ -201,14 +202,14 @@ class NotificationSettingScreenState
   }
 
   Widget _buildLoader() {
-    return Center(
+    return const Center(
       child: SkeletonLoaderWidget(),
     );
   }
 
   Widget _buildPreferencesList(Color? color) {
     return Padding(
-      padding: EdgeInsets.all(0),
+      padding: const EdgeInsets.all(0),
       child: Consumer(
         builder: (context, watch, _) {
           final notification = ref.watch(notificationSettingProvider);
@@ -262,7 +263,7 @@ class NotificationSettingScreenState
                 },
               ),
               Padding(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 child: ElevatedButton(
                     onPressed: notification.isLoading
                         ? null
@@ -271,7 +272,7 @@ class NotificationSettingScreenState
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: color,
-                      minimumSize: Size.fromHeight(50),
+                      minimumSize: const Size.fromHeight(50),
                       shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(AppDimension.buttonRadius)),
@@ -281,7 +282,7 @@ class NotificationSettingScreenState
                           fontStyle: FontStyle.normal),
                     ),
                     child: notification.isLoading
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Text(
                       AppLocalizations.of(context)!.savePref.toUpperCase(),
                             style: TextStyle(

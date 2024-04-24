@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-import '../../../../models/product/draftOrderModel.dart';
 import '../../../../utils/api.dart';
 
 class UserRepository {
@@ -11,9 +10,9 @@ class UserRepository {
 
   Future<List<UserModel>> getUsers() async {
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
-      final response = await ApiManager.get(BASE_URL);
+      final response = await ApiManager.get(baseUrl);
       if (response.statusCode == APIConstants.successCode) {
         final List result = jsonDecode(response.body)['data'];
         return result.map((e) => UserModel.fromJson(e)).toList();
@@ -30,53 +29,85 @@ class UserRepository {
   }
 
   Future<CustomerModel> getProfile() async {
-    log('calling profile api');
+    API api = API();
+    debugPrint('calling profile api');
     if (AppConfigure.bigCommerce) {
-      log('calling bigcommerce profile api');
+      debugPrint('calling bigcommerce profile api');
       try {
-        String BASE_URL = AppConfigure.baseUrl;
+        String baseUrl = AppConfigure.baseUrl;
         final uid = await SharedPreferenceManager().getUserId();
-        final response = await ApiManager.get("$BASE_URL/customers?id:in=$uid");
+        final response = await ApiManager.get("$baseUrl/customers?id:in=$uid");
         if (response.statusCode == APIConstants.successCode) {
           // ref.refresh(profileDataProvider);
           final result = jsonDecode(response.body)['data'][0];
           await SharedPreferenceManager()
               .setname(result['first_name'].toString());
           await SharedPreferenceManager().setemail(result['email'].toString());
-          log('result is this $result');
+          debugPrint('result is this $result');
           return CustomerModel.fromJson(result);
         } else {
           throw Exception(response.reasonPhrase);
         }
       } catch (error) {
-        log('profile data error is this $error');
-        throw error;
+        debugPrint('profile data error is this $error');
+        rethrow;
       }
     } else {
       try {
-        String BASE_URL = AppConfigure.baseUrl +
+        String baseUrl = AppConfigure.baseUrl +
             APIConstants.apiForAdminURL +
             APIConstants.apiURL +
             APIConstants.customer;
         final uid = await SharedPreferenceManager().getUserId();
-        final response = await ApiManager.get("$BASE_URL$uid.json");
+        final accessToken = await SharedPreferenceManager().getToken();
+
+        String query = '''
+query {
+  customer(customerAccessToken: "$accessToken") {
+    id
+    firstName
+    lastName
+    email
+    phone
+    createdAt
+    updatedAt
+    numberOfOrders
+    
+    defaultAddress {
+      id
+      address1
+      city
+      province
+      country
+      zip
+    }
+  }
+}
+''';
+
+        Response response = await api.sendRequest.post(
+            'https://pyvaidyas.myshopify.com/api/2023-10/graphql.json',
+            data: {"query": query});
+
+        log('shopify customer details reuslt is this ${response.data['data']['customer']}');
         if (response.statusCode == APIConstants.successCode) {
-          final result = jsonDecode(response.body)['customer'];
+          final result = response.data['data']['customer'];
           return CustomerModel.fromJson(result);
         } else {
-          throw Exception(response.reasonPhrase);
+          throw Exception("something went wrong");
         }
-      } catch (error) {
-        throw error;
+      } catch (error, stackTrace) {
+        debugPrint('profile error is this $error $stackTrace');
+        rethrow;
       }
     }
   }
 
   Future<ProfileModel> getUserInfo(String uid) async {
     try {
-      String BASE_URL = AppConfigure.baseUrl + APIConstants.apiURL;
+      String baseUrl = AppConfigure.baseUrl + APIConstants.apiURL;
 
-      final response = await ApiManager.get("$BASE_URL${uid}/$uid");
+      final response = await ApiManager.get("$baseUrl$uid/$uid");
       if (response.statusCode == APIConstants.successCode) {
         final userData = json.decode(response.body)['data'];
 
@@ -85,17 +116,17 @@ class UserRepository {
         throw Exception(response.reasonPhrase);
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
   editProfile(Map<String, dynamic> body) async {
     String exceptionString = "";
     final uid = await SharedPreferenceManager().getUserId();
-    log('getting 2');
+    debugPrint('getting 2');
     API api = API();
     if (AppConfigure.bigCommerce) {
-      String BASE_URL = AppConfigure.baseUrl +
+      String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
@@ -108,7 +139,7 @@ class UserRepository {
             data: [body],
             options: Options(headers: {
               'Content-Type': 'application/json',
-              "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+              "X-auth-Token": AppConfigure.bigCommerceAccessToken
             }),
           );
 
@@ -130,7 +161,7 @@ class UserRepository {
         return exceptionString;
       }
     } else {
-      String BASE_URL = AppConfigure.baseUrl +
+      String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
@@ -138,8 +169,34 @@ class UserRepository {
       var body1 = jsonEncode({"customer": body});
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          final response = await ApiManager.put("$BASE_URL$uid.json", body1);
-          var data = jsonDecode(response.body);
+          String query = '''
+            mutation customerUpdate(\$customerAccessToken: String!, \$customer: CustomerUpdateInput!) {
+  customerUpdate(customerAccessToken: \$customerAccessToken, customer: \$customer) {
+    customer {
+      id
+      firstName
+      lastName
+      phone
+      # Add other fields you want to update
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+          ''';
+
+          Map<String, dynamic> variables = body;
+          Response response = await api.sendRequest.post(
+            "https://pyvaidyas.myshopify.com/api/2023-10/graphql.json",
+            data: {
+              'query': query,
+              'variables': variables,
+            },
+          );
+          var data = response.data;
           if (response.statusCode == APIConstants.successCode) {
             return data;
           } else if (response.statusCode == APIConstants.unAuthorizedCode) {

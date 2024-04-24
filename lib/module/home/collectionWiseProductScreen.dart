@@ -1,12 +1,15 @@
 // collectionWiseProductScreen
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
+import '../../utils/api.dart';
 
 class CollectionWiseProductScreen extends ConsumerStatefulWidget {
   final String category;
@@ -51,9 +54,11 @@ class _CollectionWiseProductScreenState
   final productsProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    final graphqlClient = ref.read(graphqlClientProvider);
-    final QueryResult result = await graphqlClient.query(QueryOptions(
-      document: gql('''
+    if (AppConfigure.bigCommerce) {
+    } else {
+      final graphqlClient = ref.read(graphqlClientProvider);
+      final QueryResult result = await graphqlClient.query(QueryOptions(
+        document: gql('''
       query Price(\$handle: String) {
         collection(handle: \$handle) {
           handle
@@ -89,24 +94,129 @@ class _CollectionWiseProductScreenState
         }
       }
     '''),
-      variables: {'handle': pid},
-    ));
-    if (result.hasException) {
-      throw Exception(result.exception.toString());
-    }
-    final List<ProductCollectionModel> products =
-        (result.data?['collection']['products']['edges'] as List)
-            .map((edge) => ProductCollectionModel.fromJson(edge['node']))
-            .toList();
+        variables: {'handle': pid},
+      ));
+      if (result.hasException) {
+        throw Exception(result.exception.toString());
+      }
+      final List<ProductCollectionModel> products =
+          (result.data?['collection']['products']['edges'] as List)
+              .map((edge) => ProductCollectionModel.fromJson(edge['node']))
+              .toList();
 
-    return products;
+      return products;
+    }
+    throw Error();
   });
   final collectionWiseProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    final graphqlClient = ref.read(graphqlClientProvider);
-    final QueryResult result = await graphqlClient.query(QueryOptions(
-      document: gql('''
+    if (AppConfigure.bigCommerce) {
+      API api = API();
+      try {
+        final response = await ApiManager.get(
+            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/categories/$pid/products/sort-order');
+
+        if (response.statusCode == APIConstants.successCode) {
+          // Parse the response body
+          final Map<String, dynamic> responseBody = json.decode(response.body);
+          final List<dynamic> data = responseBody['data'] ?? [];
+
+          // Extract product IDs from the response
+          // List<int> productIds = [];
+          // for (var productData in data)
+          //  {
+          //   final int productId = productData['product_id'];
+
+          // }
+
+          String graphQLQuery = '';
+          for (int i = 0; i < data.length; i++) {
+            graphQLQuery += '''
+      product$i: product(entityId: ${data[i]['product_id']}) {
+        ...ProductFields
+      }
+    ''';
+          }
+
+          log("query is this $graphQLQuery string");
+
+          String query = '''
+query {
+ site{ 
+    $graphQLQuery
+  }
+}
+
+fragment ProductFields on Product {
+  id
+  entityId
+  sku
+  path
+  name
+  description
+  addToCartUrl
+  upc
+  mpn
+  gtin
+  prices(currencyCode: INR) {
+    price {
+      ...PriceFields
+    }
+    salePrice {
+      ...PriceFields
+    }
+    basePrice {
+      ...PriceFields
+    }
+    retailPrice {
+      ...PriceFields
+    }
+  }
+   defaultImage {
+        url (width: 100)
+        urlOriginal
+        altText
+        isDefault
+      }
+}
+
+fragment PriceFields on Money {               
+  currencyCode
+  value
+}
+
+''';
+          var result = await api.sendRequest.post(
+              "https://store-05vrtqkend.mybigcommerce.com/graphql",
+              data: {"query": query});
+
+          final List<ProductCollectionModel> products = [];
+          int productIndex = 0;
+          while (result.data['data']['site']['product$productIndex'] != null) {
+            var productJson =
+                result.data['data']['site']['product$productIndex'];
+            products.add(ProductCollectionModel.fromJson(productJson));
+            productIndex++;
+          }
+          log("proudcts are this $products");
+
+          return products;
+        } else {
+          // Handle API error response
+          List<ProductCollectionModel> products = [];
+          return products;
+        }
+      } catch (error, stackTrac) {
+        // Handle error
+        print('Error: $error $stackTrac');
+        List<ProductCollectionModel> products = [];
+        return products;
+      }
+    } else {
+      final graphqlClient = ref.read(graphqlClientProvider);
+      final QueryResult result = await graphqlClient.query(QueryOptions(
+        document: gql('''
       query getProductsByCollectionId(\$collectionId: ID!, \$limit: Int) {
             collection(id: \$collectionId) {
               title
@@ -141,21 +251,22 @@ class _CollectionWiseProductScreenState
             }
           }
     '''),
-      variables: {
-        'collectionId': 'gid://shopify/Collection/$pid',
-        'limit': 100
-      },
-    ));
+        variables: {
+          'collectionId': 'gid://shopify/Collection/$pid',
+          'limit': 100
+        },
+      ));
 
-    if (result.hasException) {
-      throw Exception(result.exception.toString());
+      if (result.hasException) {
+        throw Exception(result.exception.toString());
+      }
+
+      final List<ProductCollectionModel> products =
+          (result.data?['collection']['products']['nodes'] as List)
+              .map((edge) => ProductCollectionModel.fromJson(edge))
+              .toList();
+      return products;
     }
-
-    final List<ProductCollectionModel> products =
-        (result.data?['collection']['products']['nodes'] as List)
-            .map((edge) => ProductCollectionModel.fromJson(edge))
-            .toList();
-    return products;
   });
 
   @override
@@ -305,7 +416,7 @@ class _CollectionWiseProductScreenState
                                                           fontWeight:
                                                               FontWeight.bold)),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 15,
                                                 ),
                                                 ElevatedButton(
@@ -383,10 +494,10 @@ class _CollectionWiseProductScreenState
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 1,
-            screen1: SearchWidget(),
-            screen2: SearchWidget(),
-            screen3: SearchWidget(),
-            screen4: ProfileScreen(),
+            screen1: const SearchWidget(),
+            screen2: const SearchWidget(),
+            screen3: const SearchWidget(),
+            screen4: const ProfileScreen(),
             ref: ref,
           ),
           body: Column(
@@ -405,7 +516,8 @@ class _CollectionWiseProductScreenState
                             FilterChip(
                               label: Text(
                                 AppLocalizations.of(context)!.price,
-                                style: TextStyle(color: AppColors.whiteColor),
+                                style: const TextStyle(
+                                    color: AppColors.whiteColor),
                               ),
                               backgroundColor: AppColors.blue,
                               onSelected: (selected) {},
@@ -471,7 +583,7 @@ class _CollectionWiseProductScreenState
                                                 // Add padding to the Card
                                                 child: ListTile(
                                                   contentPadding:
-                                                      EdgeInsets.all(0),
+                                                      const EdgeInsets.all(0),
                                                   // Remove default ListTile padding
                                                   title: Padding(
                                                     padding:
@@ -516,7 +628,7 @@ class _CollectionWiseProductScreenState
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Center(
+                                    const Center(
                                         child: ErrorHandling(
                                       error_type: AppString.noDataError,
                                     )),
@@ -550,7 +662,7 @@ class _CollectionWiseProductScreenState
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.whiteColor,
                                 ),
@@ -558,7 +670,7 @@ class _CollectionWiseProductScreenState
                             )
                           ],
                         ),
-                        loading: () => SkeletonLoaderWidget(),
+                        loading: () => const SkeletonLoaderWidget(),
                       ))
                     : Expanded(
                         child: productByCollection.when(
@@ -613,7 +725,8 @@ class _CollectionWiseProductScreenState
                                                     // Add padding to the Card
                                                     child: ListTile(
                                                       contentPadding:
-                                                          EdgeInsets.all(0),
+                                                          const EdgeInsets.all(
+                                                              0),
                                                       // Remove default ListTile padding
                                                       title: Padding(
                                                         padding:
@@ -703,7 +816,7 @@ class _CollectionWiseProductScreenState
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColors.whiteColor,
                                 ),
@@ -711,7 +824,7 @@ class _CollectionWiseProductScreenState
                             )
                           ],
                         ),
-                        loading: () => SkeletonLoaderWidget(),
+                        loading: () => const SkeletonLoaderWidget(),
                       ))
               ])),
       error: (error, s) => Column(
@@ -741,7 +854,7 @@ class _CollectionWiseProductScreenState
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.whiteColor,
                     ),
@@ -750,7 +863,7 @@ class _CollectionWiseProductScreenState
               : Container()
         ],
       ),
-      loading: () => SkeletonLoaderWidget(),
+      loading: () => const SkeletonLoaderWidget(),
     );
   }
 
@@ -843,7 +956,7 @@ class _CollectionWiseProductScreenState
                                     MediaQuery.of(context).size.width * 0.04,
                                 fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       ElevatedButton(
@@ -890,7 +1003,7 @@ class _CollectionWiseProductScreenState
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -901,7 +1014,7 @@ class _CollectionWiseProductScreenState
                 },
               ),
               ListTile(
-                title: Text(AppString.highToLow),
+                title: const Text(AppString.highToLow),
                 onTap: () {
                   Navigator.pop(context);
                 },

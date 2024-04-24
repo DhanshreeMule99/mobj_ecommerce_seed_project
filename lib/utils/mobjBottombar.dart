@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobj_project/module/checkout/CheckoutScreen.dart';
 import 'package:mobj_project/module/home/homeScreen.dart';
 import 'package:mobj_project/module/profile/profileScreen.dart';
-import 'package:mobj_project/module/home/searchScreen.dart';
 import 'package:mobj_project/provider/User_provider.dart';
 import 'package:mobj_project/utils/themeProvider.dart';
 import '../models/shared_preferences/SharedPreference.dart';
@@ -21,7 +20,7 @@ class MobjBottombar extends StatefulWidget {
   final Widget screen4;
   final WidgetRef? ref;
 
-  MobjBottombar(
+  const MobjBottombar(
       {Key? key,
       this.bgcolor,
       required this.selectedPage,
@@ -143,7 +142,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            CheckoutScreen(),
+                            const CheckoutScreen(),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),
@@ -177,7 +176,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            ProfileScreen(),
+                            const ProfileScreen(),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),
@@ -189,7 +188,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            ProfileScreen(),
+                            const ProfileScreen(),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),

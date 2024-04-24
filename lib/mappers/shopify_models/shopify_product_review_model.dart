@@ -1,11 +1,12 @@
-import 'dart:convert';
 import 'package:mobj_project/models/product/productReviewWiseModel.dart';
 
-import '../../utils/appConfiguer.dart';
 
 class ShopifyReviewProductModels implements ReviewProductModels {
+  @override
   int currentPage;
+  @override
   int perPage;
+  @override
   List<ShopifyReview> reviews;
 
   ShopifyReviewProductModels({
@@ -30,25 +31,45 @@ class ShopifyReviewProductModels implements ReviewProductModels {
 }
 
 class ShopifyReview implements Review {
+  @override
   int id;
+  @override
   String title;
+  @override
   String body;
+  @override
   int rating;
+  @override
   int productExternalId;
+  @override
   ShopifyReviewer reviewer;
+  @override
   String source;
+  @override
   String curated;
+  @override
   bool published;
+  @override
   bool hidden;
+  @override
   String verified;
+  @override
   bool featured;
+  @override
   DateTime createdAt;
+  @override
   DateTime updatedAt;
+  @override
   bool hasPublishedPictures;
+  @override
   bool hasPublishedVideos;
+  @override
   List<dynamic> pictures;
+  @override
   String ipAddress;
+  @override
   String productTitle;
+  @override
   String productHandle;
 
   ShopifyReview({
@@ -122,13 +143,21 @@ class ShopifyReview implements Review {
 }
 
 class ShopifyReviewer implements Reviewer {
+  @override
   int id;
+  @override
   dynamic externalId;
+  @override
   String email;
+  @override
   String name;
+  @override
   dynamic phone;
+  @override
   bool acceptsMarketing;
+  @override
   dynamic unsubscribedAt;
+  @override
   dynamic tags;
 
   ShopifyReviewer({

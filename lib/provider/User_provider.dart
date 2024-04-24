@@ -1,5 +1,4 @@
 // User_provider
-import 'package:mobj_project/models/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 final userDataProvider = FutureProvider<List<UserModel>>((ref) async {

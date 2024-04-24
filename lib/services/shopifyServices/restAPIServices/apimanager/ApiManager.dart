@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiManager {
   static Future<http.Response> get(String apiName) async {
@@ -11,7 +9,7 @@ class ApiManager {
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
 
     final headers = AppConfigure.bigCommerce == true
-        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        ? {"X-auth-Token": AppConfigure.bigCommerceAccessToken}
         : {
             'X-Shopify-Access-Token': '$token',
             "X-Shopify-Storefront-Access-Token": storeFrontToken,
@@ -34,7 +32,7 @@ class ApiManager {
     final String? token = (await getToken());
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
     final headers = AppConfigure.bigCommerce == true
-        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        ? {"X-auth-Token": AppConfigure.bigCommerceAccessToken}
         : {
             'X-Shopify-Access-Token': '$token',
             "X-Shopify-Storefront-Access-Token": storeFrontToken,
@@ -45,7 +43,7 @@ class ApiManager {
     final response = await http.post(url,
         headers: headers, body: body.toString() != "{}" ? body : null);
 
-    log(" add to cart ${response.statusCode}");
+    debugPrint(" add to cart ${response.statusCode}");
     if (response.statusCode == APIConstants.unAuthorizedCode ||
         response.statusCode == APIConstants.forbiddenCode) {
       await logout();
@@ -59,7 +57,7 @@ class ApiManager {
     final String? token = (await getToken());
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
     final headers = AppConfigure.bigCommerce == true
-        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        ? {"X-auth-Token": AppConfigure.bigCommerceAccessToken}
         : {
             'X-Shopify-Access-Token': '$token',
             "X-Shopify-Storefront-Access-Token": storeFrontToken,
@@ -81,7 +79,7 @@ class ApiManager {
     final String? token = (await getToken());
     final String storeFrontToken = (await getStoreFrontToken() ?? "");
     final headers = AppConfigure.bigCommerce == true
-        ? {"X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"}
+        ? {"X-auth-Token": AppConfigure.bigCommerceAccessToken}
         : {
             'X-Shopify-Access-Token': '$token',
             "X-Shopify-Storefront-Access-Token": storeFrontToken,
@@ -121,7 +119,7 @@ class ApiManager {
   }
 
   static Future<String?> getToken() async {
-    const String? token = AppConfigure.accessToken;
+    const String token = AppConfigure.accessToken;
     return token;
   }
 

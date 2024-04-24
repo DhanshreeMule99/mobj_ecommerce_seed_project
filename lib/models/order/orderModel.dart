@@ -2,7 +2,6 @@ import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_ordemodel.dart';
 import '../../mappers/shopify_models/shopify_ordermodel.dart';
-import '../../utils/defaultValues.dart';
 import '../product/draftOrderModel.dart';
 
 class OrderModel {

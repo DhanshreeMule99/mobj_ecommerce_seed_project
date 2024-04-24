@@ -22,8 +22,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   int splashtime = 3;
 
   Future<void> getDeviceTokenToSendNotification() async {
-    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-    final token = await _fcm.getToken();
+    final FirebaseMessaging fcm = FirebaseMessaging.instance;
+    final token = await fcm.getToken();
     deviceTokenToSendPushNotification = token.toString();
   }
 
@@ -71,6 +71,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     );
   }
 
+  @override
   @protected
   @mustCallSuper
   void initState() {
@@ -167,6 +168,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     });
   }
 
+  @override
   @protected
   @mustCallSuper
   void dispose() {

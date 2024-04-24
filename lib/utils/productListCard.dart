@@ -312,7 +312,7 @@ API api= API();
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-              padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
               child: Align(
                   alignment: Alignment.bottomRight,
                   child:
@@ -389,7 +389,7 @@ API api= API();
                       Padding(
                         padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                         child: Text(
-                          "${widget.productName}",
+                          widget.productName,
                           style: TextStyle(
                             fontSize: 0.04 * MediaQuery.of(context).size.width,
                             fontWeight: FontWeight.w400,
@@ -413,15 +413,17 @@ API api= API();
                           : Container(),
                     ])),
                 Padding(
-                    padding: EdgeInsets.only(right: 15),
+                    padding: const EdgeInsets.only(right: 15),
                     child: widget.stock > 0
                         ? ElevatedButton(
                             onPressed: () async {
-                              log("varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
+                              debugPrint(
+                                  "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
                               isLogin().then((value) {
                                 if (value == true) {
                                   CommonAlert.show_loading_alert(context);
-                                  log("varient id is this ${widget.variantId}");
+                                  debugPrint(
+                                      "varient id is this ${widget.variantId}");
                                   if (AppConfigure.bigCommerce) {
                                     ProductRepository()
                                         .addToCartBigcommerce(
@@ -510,7 +512,7 @@ API api= API();
                               AppLocalizations.of(context)!
                                   .addToCart
                                   .toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: AppColors.whiteColor,
                                   // fontSize:
                                   //     MediaQuery.of(context).size.width * 0.05,

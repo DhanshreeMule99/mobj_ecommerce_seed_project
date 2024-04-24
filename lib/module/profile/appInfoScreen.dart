@@ -88,7 +88,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                     ),
                   );
                 },
-                loading: () => SkeletonLoaderWidget(),
+                loading: () => const SkeletonLoaderWidget(),
                 error: (error, stackTrace) => Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,7 +114,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                           },
                           child:  Text(
                             AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.whiteColor,
                             ),

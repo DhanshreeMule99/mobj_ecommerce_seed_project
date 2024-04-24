@@ -31,10 +31,10 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
         if (searchQuery.isNotEmpty) {
           return product
               .where((user) =>
-                  user.title!
+                  user.title
                       .toLowerCase()
                       .contains(searchQuery.toLowerCase()) ||
-                  user.bodyHtml!
+                  user.bodyHtml
                       .toLowerCase()
                       .contains(searchQuery.toLowerCase()))
               .toList();
@@ -60,16 +60,16 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                 selcted_icon_color: AppColors.buttonColor,
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 1,
-                screen1: HomeScreen(),
-                screen2: SearchWidget(),
-                screen3: HomeScreen(),
-                screen4: ProfileScreen(),
+                screen1: const HomeScreen(),
+                screen2: const SearchWidget(),
+                screen3: const HomeScreen(),
+                screen4: const ProfileScreen(),
                 ref: ref,
               ),
               body: Column(
                 children: [
                   Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)!.searchProduct,
@@ -132,7 +132,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                       );
                                     },
                                     child: Card(
-                                        margin: EdgeInsets.only(bottom: 10),
+                                        margin: const EdgeInsets.only(bottom: 10),
                                         elevation: 2,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -143,7 +143,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                               ShareItem().buildDynamicLinks(
                                                   product[index].id.toString(),
                                                   product[index]
-                                                      .image!
+                                                      .image
                                                       .src
                                                       .toString(),
                                                   product[index]
@@ -227,7 +227,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                             tileColor:
                                                 appInfo.primaryColorValue,
                                             logoPath: product[index]
-                                                .image!
+                                                .image
                                                 .src
                                                 .toString(),
                                             productName:
@@ -236,9 +236,9 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                                 .bodyHtml
                                                 .toString(),
                                             datetime:
-                                                "${AppLocalizations.of(context)!.deliverAt} ${product[index].createdAt!.toString()}/${product[index].createdAt}/${product[index].createdAt!}",
+                                                "${AppLocalizations.of(context)!.deliverAt} ${product[index].createdAt.toString()}/${product[index].createdAt}/${product[index].createdAt}",
                                             productImage: product[index]
-                                                .image!
+                                                .image
                                                 .src
                                                 .toString(),
                                             ratings: () {
@@ -348,7 +348,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                               // );
                                             },
                                             productDetails:
-                                                "\u{20B9}${product[index].variants![0].price}",
+                                                "\u{20B9}${product[index].variants[0].price}",
                                             status: product[index]
                                                 .variants
                                                 .toString(),
@@ -360,7 +360,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                                     .variants
                                                     .isNotEmpty
                                                 ? product[index]
-                                                    .variants![0]
+                                                    .variants[0]
                                                     .price
                                                 : "35",
                                             addToCart: () {},
@@ -377,6 +377,6 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
               ),
             ),
         error: (error, s) => const ErrorHandling(error_type: AppString.error),
-        loading: () => SkeletonLoaderWidget());
+        loading: () => const SkeletonLoaderWidget());
   }
 }

@@ -1,10 +1,7 @@
 // SettingScreen
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
@@ -236,10 +233,10 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 selcted_icon_color: AppColors.buttonColor,
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 3,
-                screen1: HomeScreen(),
-                screen2: SearchWidget(),
-                screen3: HomeScreen(),
-                screen4: ProfileScreen(),
+                screen1: const HomeScreen(),
+                screen2: const SearchWidget(),
+                screen3: const HomeScreen(),
+                screen4: const ProfileScreen(),
                 ref: ref,
               ),
               body: Column(
@@ -261,23 +258,23 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   ),
                   appInfo.tawkURL != "" || appInfo.tawkURL.isNotEmpty
                       ? MobjListTile(
-                          leading: Icon(Icons.help),
+                          leading: const Icon(Icons.help),
                           title: AppLocalizations.of(context)!.help,
                           onTap: () {
                             Navigator.of(context).push(
                               PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        HelpCenterScreen(),
+                                        const HelpCenterScreen(),
                                 transitionDuration: Duration.zero,
                                 reverseTransitionDuration: Duration.zero,
                               ),
                             );
                           },
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                   MobjListTile(
-                    leading: Icon(Icons.vpn_key),
+                    leading: const Icon(Icons.vpn_key),
                     title: AppLocalizations.of(context)!.resetPass,
                     onTap: () async {
                       Navigator.of(context).push(
@@ -293,7 +290,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     },
                   ),
                   MobjListTile(
-                    leading: Icon(Icons.lightbulb_outline),
+                    leading: const Icon(Icons.lightbulb_outline),
                     title: AppLocalizations.of(context)!.themeChange,
                     trailing: Switch(
                       value: theme,
@@ -303,7 +300,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     onTap: () {},
                   ),
                   ListTile(
-                    leading: Icon(Icons.language),
+                    leading: const Icon(Icons.language),
                     title: Text(AppLocalizations.of(context)!.changeLanguage),
                     onTap: () {
                       _showLanguageDialog(context, languageProviders);
@@ -324,13 +321,13 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   //   },
                   // ),
                   MobjListTile(
-                    leading: Icon(Icons.info),
+                    leading: const Icon(Icons.info),
                     title: AppLocalizations.of(context)!.privacyPolicy,
                     onTap: () {
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           pageBuilder: (context, animation1, animation2) =>
-                              PrivacyScreen(),
+                              const PrivacyScreen(),
                           transitionDuration: Duration.zero,
                           reverseTransitionDuration: Duration.zero,
                         ),
@@ -338,7 +335,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     },
                   ),
                   MobjListTile(
-                    leading: Icon(Icons.star),
+                    leading: const Icon(Icons.star),
                     title: AppLocalizations.of(context)!.rateUs,
                     onTap: () async {
                       LaunchReview.launch(
@@ -347,7 +344,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     },
                   ),
                   MobjListTile(
-                    leading: Icon(Icons.logout),
+                    leading: const Icon(Icons.logout),
                     title: AppLocalizations.of(context)!.logout,
                     onTap: () async {
                       bool? logoutConfirmed =
@@ -422,7 +419,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.selectLanguage),
-          content: Container(
+          content: SizedBox(
             height: calculateContentHeight(),
             width: 150,
             child: ListView.builder(

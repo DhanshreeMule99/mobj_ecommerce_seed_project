@@ -1,16 +1,13 @@
 // RepeatOrderScreen
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:mobj_project/models/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../../main.dart';
 import '../../address/addressListScreen.dart';
 
 class RepeatOrderScreen extends ConsumerStatefulWidget {
   final String orderId;
-  RepeatOrderScreen({
+  const RepeatOrderScreen({
     super.key,
     required this.orderId,
   });
@@ -49,10 +46,10 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
               selcted_icon_color: AppColors.buttonColor,
               unselcted_icon_color: AppColors.blackColor,
               selectedPage: 2,
-              screen1: HomeScreen(),
-              screen2: SearchWidget(),
-              screen3: HomeScreen(),
-              screen4: ProfileScreen(),
+              screen1: const HomeScreen(),
+              screen2: const SearchWidget(),
+              screen3: const HomeScreen(),
+              screen4: const ProfileScreen(),
               ref: ref,
             ),
             body: product.when(
@@ -506,7 +503,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -531,7 +528,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -640,7 +637,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.refresh,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: AppColors.whiteColor,
                             ),
@@ -649,7 +646,7 @@ class _RepeatOrderScreenState extends ConsumerState<RepeatOrderScreen> {
                       : Container()
                 ],
               ),
-              loading: () => SkeletonLoaderWidget(),
+              loading: () => const SkeletonLoaderWidget(),
             ),
           );
         },

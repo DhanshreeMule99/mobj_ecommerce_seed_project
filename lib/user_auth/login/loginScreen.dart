@@ -2,15 +2,13 @@
 
 // import 'package:flutter/material.dart';
 import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import '../../main.dart';
 import '../../provider/addressProvider.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
 
@@ -295,7 +293,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           'accessToken': accessToken,
         },
       ));
-      log("$result");
+      debugPrint("$result");
 
       if (result.hasException) {
         setState(() {
@@ -310,7 +308,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             error = "";
             isLoading = false;
           });
-          log("Customer id is this -- ${result.data!['customer']['id'].toString().replaceAll("gid://shopify/Customer/", "")}");
+          log("customer details are this $result $accessToken");
+          debugPrint(
+              "Customer id is this -- ${result.data!['customer']['id'].toString().replaceAll("gid://shopify/Customer/", "")}");
           await SharedPreferenceManager().setUserId(result.data!['customer']
                   ['id']
               .toString()
@@ -350,8 +350,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
- 
-
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
     if (AppConfigure.bigCommerce) {
       // Login with BigCommerce
@@ -373,47 +371,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         );
         print('BigCommerce Response: ${response.body}');
         if (response.statusCode == 200) {
-          if (response.body != null) {
-            final Map<String, dynamic> responseData =
-                json.decode(response.body);
-            if (responseData['is_valid'] == true) {
-              await SharedPreferenceManager().setEmail(
-                email.text.trim(),
-              );
-              await SharedPreferenceManager().setUserId(
-                  responseData['customer_id']
-                      .toString()
-                      .replaceAll("gid://shopify/Customer/", ""));
-              await SharedPreferenceManager()
-                  .setToken(AppConfigure.bigCommerceAccessToken);
-              ref.refresh(addressDataProvider);
-              ref.refresh(orderDataProvider);
-              ref.refresh(profileDataProvider);
-              Fluttertoast.showToast(
-                  msg: AppLocalizations.of(context)!.loginSuccess,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 0,
-                  backgroundColor: AppColors.green,
-                  textColor: AppColors.whiteColor,
-                  fontSize: 16.0);
-              Navigator.of(context).pushAndRemoveUntil(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        const HomeScreen(),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                  (route) => route.isCurrent);
-            } else {
-              // Failure, show error message
-              setState(() {
-                error = AppLocalizations.of(context)!.invalidCred;
-                isLoading = false;
-              });
-            }
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          if (responseData['is_valid'] == true) {
+            await SharedPreferenceManager().setEmail(
+              email.text.trim(),
+            );
+            await SharedPreferenceManager().setUserId(
+                responseData['customer_id']
+                    .toString()
+                    .replaceAll("gid://shopify/Customer/", ""));
+            await SharedPreferenceManager()
+                .setToken(AppConfigure.bigCommerceAccessToken);
+            ref.refresh(addressDataProvider);
+            ref.refresh(orderDataProvider);
+            ref.refresh(profileDataProvider);
+            Fluttertoast.showToast(
+                msg: AppLocalizations.of(context)!.loginSuccess,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 0,
+                backgroundColor: AppColors.green,
+                textColor: AppColors.whiteColor,
+                fontSize: 16.0);
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const HomeScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (route) => route.isCurrent);
           } else {
-            // If body is null, show error message
+            // Failure, show error message
             setState(() {
               error = AppLocalizations.of(context)!.invalidCred;
               isLoading = false;
@@ -519,7 +508,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   MediaQuery.of(context).size.width * 0.07,
                               fontWeight: FontWeight.w600),
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     SizedBox(
@@ -549,7 +538,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(AppLocalizations.of(context)!.email),
-                                  Text(
+                                  const Text(
                                     '*',
                                     style: TextStyle(
                                         color: AppColors.red, fontSize: 20),
@@ -599,7 +588,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   children: [
                                     Text(
                                         AppLocalizations.of(context)!.password),
-                                    Text(
+                                    const Text(
                                       '*',
                                       style: TextStyle(
                                           color: AppColors.red, fontSize: 20),
@@ -670,7 +659,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: appInfo.primaryColorValue,
-                                minimumSize: Size.fromHeight(50),
+                                minimumSize: const Size.fromHeight(50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         AppDimension.buttonRadius)),
@@ -716,7 +705,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             Navigator.of(context).push(PageRouteBuilder(
                                 pageBuilder:
                                     (context, animation1, animation2) =>
-                                        RegistrationScreen()));
+                                        const RegistrationScreen()));
                           },
                         )
                       ],
@@ -735,7 +724,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         //signup screen
                         Navigator.of(context).push(PageRouteBuilder(
                             pageBuilder: (context, animation1, animation2) =>
-                                ForgotPasswordScreen()));
+                                const ForgotPasswordScreen()));
                       },
                     ),
                     //ToDo list login with google
