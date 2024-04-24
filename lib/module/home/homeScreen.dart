@@ -8,6 +8,7 @@ import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../../mappers/bigcommerce_models/bigcommerce_getwishlistModel.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +44,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         handleMyLink(deepLink);
         // Example of using the dynamic link to push the user to a different screen
         // Navigator.pushNamed(context, deepLink.path);
-            },
+      },
     );
   }
 
@@ -58,24 +59,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-List<int> wishlistProductIds =[];
+
+  List<BigcommerceGetWishlistModel> wishlistProductIds = [];
   List<dynamic> data = [];
   Future getWishlistproduct() async {
     wishlistProductIds.clear();
- String wishlidtId = await SharedPreferenceManager().getwishlistID();
-  try
-  {  final response = await ApiManager.get(
-            'https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$wishlidtId');
-    if (response.statusCode == APIConstants.successCode) {
-  final Map<String, dynamic> responseBody = json.decode(response.body);
-  List productList = responseBody["data"]["items"];
+    String wishlidtId = await SharedPreferenceManager().getwishlistID();
+    try {
+      final response = await ApiManager.get(
+          'https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$wishlidtId');
+      if (response.statusCode == APIConstants.successCode) {
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+        List productList = responseBody["data"]["items"];
 
-  for(int i=0; i < productList.length;i++ ){
-wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
-  }
-  log("list wishlist $wishlistProductIds");
-    }
-    }catch(e){
+        for (int i = 0; i < productList.length; i++) {
+          wishlistProductIds.add(BigcommerceGetWishlistModel(
+              id: responseBody["data"]["items"][i]["id"],
+              productId: responseBody["data"]["items"][i]["product_id"]));
+        }
+        log("list wishlist $wishlistProductIds");
+      }
+    } catch (e) {
       rethrow;
     }
   }
@@ -120,7 +124,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
   Widget build(BuildContext context) {
     //TODO use read insted of read and dispose the provider
     final product = ref.watch(productDataProvider);
-    
+
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final selectedChipIndex = ref.watch(selectedChipIndexProvider);
     final productByCollection =
@@ -132,22 +136,20 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
           appBar: AppBar(
               elevation: 2,
               actions: [
-                 IconButton(
+                IconButton(
                     onPressed: () {
-                           Navigator.of(context).push(
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                      WishlistScreen(),
-                                transitionDuration: Duration.zero,
-                                reverseTransitionDuration: Duration.zero,
-                              ),
-                            );
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              WishlistScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
                     },
                     icon: const Icon(
                       Icons.favorite,
                     )),
-
                 IconButton(
                     onPressed: () {
                       Navigator.of(context).push(PageRouteBuilder(
@@ -236,7 +238,6 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                             selected: selectedChipIndex == index.toString(),
                             selectedColor: appInfo.primaryColorValue,
                             onSelected: (bool selected) {
-                            
                               Navigator.of(context).push(
                                 PageRouteBuilder(
                                   pageBuilder:
@@ -315,7 +316,13 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                     BorderRadius.circular(15),
                                               ),
                                               child: ProductListCard(
-                                                
+                                                getwishlistIDHere: wishlistProductIds ,
+                                                isWhislisted: wishlistProductIds
+                                                    .any((element) =>
+                                                        element.productId ==
+                                                        productlist[index].id),
+                                                // wishlistProductIds.contains(
+                                                //     productlist[index].id),
                                                 shareProduct: () async {
                                                   ShareItem().buildDynamicLinks(
                                                       productlist[index]
@@ -329,8 +336,6 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                           .title
                                                           .toString());
                                                 },
-                                          
-                                                
                                                 isLikedToggle: "true",
                                                 onLiked: () async {
                                                   ref
@@ -575,7 +580,7 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
                                                 stock: productlist[index]
                                                     .variants[0]
                                                     .inventoryQuantity,
-                                                ref: ref, 
+                                                ref: ref,
                                               ))));
                                 })),
                       ]),
@@ -656,4 +661,3 @@ wishlistProductIds.add(responseBody["data"]["items"][i]["product_id"]);
     );
   }
 }
-
