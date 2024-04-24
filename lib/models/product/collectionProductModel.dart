@@ -2,6 +2,9 @@
 
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../../mappers/bigcommerce_models/bigcommerce_collectionproudctmodel.dart';
+import '../../mappers/shopify_models/shopify_collectionproudctmode.dart';
+
 class ProductCollectionModel {
   final String handle;
   final String title;
@@ -26,41 +29,10 @@ class ProductCollectionModel {
   });
 
   factory ProductCollectionModel.fromJson(Map<String, dynamic> json) {
-    final priceRange = AppConfigure.bigCommerce ? "" : json['priceRange'];
-    var imageEdges =AppConfigure.bigCommerce ? [] : json['images']['edges'] as List;
-    List<String> imageUrlList =AppConfigure.bigCommerce ? [""] : imageEdges
-            ?.map((edge) => edge?['node']['url'] ?? "")
-            .cast<String>()
-            .toList() ??
-        [];
-    return ProductCollectionModel(
-      handle: json['handle'] ?? DefaultValues.defaultHandle,
-      title: AppConfigure.bigCommerce
-          ? json['name']
-          : json['title'] ?? DefaultValues.defaultTitle,
-      description: json['description'] ?? DefaultValues.defaultTitle,
-      featuredImage: AppConfigure.bigCommerce
-          ? json['defaultImage']['urlOriginal']
-          : json['featuredImage'] != null
-              ? json['featuredImage']['src']
-              : DefaultValues.defaultTitle,
-      minPrice: AppConfigure.bigCommerce
-          ? json['prices']['price']['value']
-          : double.parse(priceRange['minVariantPrice']['amount']) ??
-              DefaultValues.defaultMinPrice,
-      maxPrice: AppConfigure.bigCommerce
-          ? json['prices']['price']['value']
-          : double.parse(priceRange['maxVariantPrice']['amount']) ??
-              DefaultValues.defaultMinPrice,
-      currencyCode: AppConfigure.bigCommerce
-          ? json['prices']['price']['currencyCode']
-          : priceRange['minVariantPrice']['currencyCode'] ??
-              DefaultValues.defaultTitle,
-      id: AppConfigure.bigCommerce
-          ? json['entityId'].toString()
-          : json['id'] ?? DefaultValues.defaultTitle,
-      imageUrls:AppConfigure.bigCommerce? [json['defaultImage']['urlOriginal']]
-      :  imageUrlList,
-    );
+    if (AppConfigure.bigCommerce) {
+      return BigCommerceProductCollectionModel.fromJson(json);
+    } else {
+      return ShopifyProductCollectionModel.fromJson(json);
+    }
   }
 }
