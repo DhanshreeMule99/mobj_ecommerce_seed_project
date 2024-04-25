@@ -209,9 +209,13 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     debugPrint(
         "this is data ${widget.isOtp} \n ${email.text} \n ${firstName.text}\n${lastName.text} \n${mobNo.text},\n${password.text}");
 
-    if (AppConfigure.bigCommerce == true) {
-      //Signing wih bigCommerce
-      final body = [
+
+
+
+ if (AppConfigure.bigCommerce == true) {
+    // Signing with BigCommerce
+   
+final body = [
         {
           "email": email.text,
           "first_name": firstName.text,
@@ -302,9 +306,91 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           loadingSignup = false;
         });
       }
-    } else {
-      // Perform login using existing login logic
-      final body = widget.isOtp == true
+
+
+  } 
+  else if (AppConfigure.wooCommerce == true) {
+    // Signing with WooCommerce
+   
+final body = 
+        {
+  "email": email.text,
+  "first_name": firstName.text,
+  "last_name": lastName.text,
+  "password": password.text,
+  "phone": mobNo.text,
+};
+      try {
+        final response = await api.sendRequest.post(
+          'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3/customers',
+          data: body,
+         
+        );
+        debugPrint('status code is ${response.statusCode}');
+        var data = response.data;
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          setState(() {
+            loadingSignup = false;
+          });
+          // Handle successful registration here
+          Fluttertoast.showToast(
+              msg: "Registration successful",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  const LoginScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+          // Optionally, you can navigate to another screen or perform any additional action here
+        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+          setState(() {
+            loadingSignup = false;
+          });
+          Fluttertoast.showToast(
+              msg: "User Already Exist",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        } else {
+          setState(() {
+            error = "Registration failed";
+            loadingSignup = false;
+          });
+        }
+      } on DioException catch (error) {
+        if (error.response!.statusCode == APIConstants.alreadyExistCode) {
+          Fluttertoast.showToast(
+              msg: "${error.response!.data["errors"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        }
+        debugPrint("error: $error");
+        setState(() {
+          loadingSignup = false;
+        });
+      }
+
+  } 
+  else {
+    // Perform login using existing login logic
+
+     final body = widget.isOtp == true
           ? {
               "firstName": firstName.text,
               "lastName": lastName.text,
@@ -321,7 +407,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
               "phone": "+91${mobNo.text}",
               'acceptsMarketing': true,
             };
-
       final login = RegistrationRepository();
       login.signIn(body).then((value) async {
         if (value.runtimeType != String) {
@@ -382,8 +467,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           });
         }
       });
-    }
+    
   }
+}
+
 
   @override
   void dispose() {
