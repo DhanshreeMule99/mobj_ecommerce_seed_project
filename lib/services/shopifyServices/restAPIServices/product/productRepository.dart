@@ -21,7 +21,7 @@ class ProductRepository {
       final response = await ApiManager.get(productUrl);
 
       // final response = await ApiManager.get(
-      //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+      //     'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/products?include=images,variants,options');
 
       if (response.statusCode == APIConstants.successCode) {
         log("product details: $response");
@@ -512,7 +512,7 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           http.Response response;
           response = await ApiManager.post(
-              "https://api.bigcommerce.com/stores/05vrtqkend/v3/checkouts/$draftId/orders",
+              "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/checkouts/$draftId/orders",
               {});
           var data = jsonDecode(response.body);
           debugPrint("${response.body} ${response.statusCode}");
@@ -587,7 +587,7 @@ class ProductRepository {
           String draftId = await SharedPreferenceManager().getDraftId();
 
           final response = await ApiManager.get(
-              "https://api.bigcommerce.com/stores/05vrtqkend/v3/carts/$draftId");
+              "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/carts/$draftId");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             debugPrint(response.body);
@@ -660,7 +660,7 @@ class ProductRepository {
     if (AppConfigure.bigCommerce) {
       try {
         final response = await api.sendRequest.get(
-          "https://api.bigcommerce.com/stores/05vrtqkend/v2/orders/$pid",
+          "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v2/orders/$pid",
           options: Options(headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
@@ -701,7 +701,7 @@ class ProductRepository {
       final uid = await SharedPreferenceManager().getUserId();
       try {
         final response = await api.sendRequest.get(
-          "https://api.bigcommerce.com/stores/05vrtqkend/v2/orders?customer_id=$uid",
+          "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v2/orders?customer_id=$uid",
           options: Options(headers: {
             'Content-Type': 'application/json',
             "Accept": "application/json",
@@ -763,10 +763,10 @@ class ProductRepository {
   //   try {
   //     log('calling api');
   //       final uid = await SharedPreferenceManager().getUserId();
-  //     final response = await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists?customer_id=$uid");
+  //     final response = await api.sendRequest.get("https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists?customer_id=$uid");
 
   //     // final response = await ApiManager.get(
-  //     //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+  //     //     'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/products?include=images,variants,options');
 
   //     if (response.statusCode == APIConstants.successCode) {
   //       // final List result = AppConfigure.bigCommerce == true

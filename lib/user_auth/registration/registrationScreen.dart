@@ -313,21 +313,33 @@ final body = [
     // Signing with WooCommerce
    
 final body = 
-        {
+//         {
+//   "email": email.text,
+//   "first_name": firstName.text,
+//   "last_name": lastName.text,
+//   "password": password.text,
+//   "phone": mobNo.text,
+// };
+{
   "email": email.text,
-  "first_name": firstName.text,
+  "first_name":firstName.text,
   "last_name": lastName.text,
   "password": password.text,
-  "phone": mobNo.text,
+   "billing": {
+
+        "phone":  mobNo.text
+    }
 };
       try {
+          String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
         final response = await api.sendRequest.post(
-          '/wp-json/wc/v3/customers?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf',
+          '/wp-json/wc/v3/customers?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
           data: body,
           options: Options(headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": "basic ck_db1d729eb2978c28ae46451d36c1ca02da112cb3:cs_c5cc06675e8ffa375b084acd40987fec142ec8cf"
+            "Authorization": "basic $cunsumerKey:$cumsumerSecret"
           }),
         );
         debugPrint('status code is ${response.statusCode}');

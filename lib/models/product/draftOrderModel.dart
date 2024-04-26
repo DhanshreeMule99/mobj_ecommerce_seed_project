@@ -2,6 +2,7 @@ import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_draftordermodel.dart';
 import '../../mappers/shopify_models/shopify_draftoderdermodel.dart';
+import '../../mappers/woocommerce/woocommerce_draftmodel.dart';
 import '../../utils/defaultValues.dart';
 
 class DraftOrderModel {
@@ -209,6 +210,8 @@ class CustomerModel {
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceCustomerModel.fromJson(json);
+    }else if(AppConfigure.wooCommerce){
+       return WooCustomerModel.fromJson(json);
     } else {
       return ShopifyCustomerModel.fromJson(json);
     }

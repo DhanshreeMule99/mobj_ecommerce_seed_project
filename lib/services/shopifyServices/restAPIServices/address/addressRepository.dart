@@ -39,7 +39,36 @@ class AddressRepository {
       } catch (error) {
         rethrow;
       }
-    } else {
+    } 
+    else if ( AppConfigure.wooCommerce){
+ API api = API();
+       try {
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+        final response = await api.sendRequest.get(
+            "/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret");
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.data} $uid");
+          final List result = jsonDecode(response.data)['data'];
+          debugPrint("body is this $result $uid");
+          if (result.isEmpty) {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error) {
+        rethrow;
+      }
+    }
+    
+    else {
       try {
         final response =
             await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
@@ -219,7 +248,68 @@ class AddressRepository {
               fontSize: 16.0);
         }
       }
-    } else {
+    } else if (AppConfigure.wooCommerce)
+{
+   try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+         
+          final response;
+          if (addId == "") {
+            debugPrint("calling null addressid api");
+            var body1 = jsonEncode({"address": body});
+            response = await api.sendRequest.post(
+              "/customers/addresses",
+              data: body,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                "X-auth-Token": AppConfigure.bigCommerceAccessToken
+              }),
+            );
+          } else {
+            debugPrint("calling not null addressid api");
+            response = await api.sendRequest.put(
+              "/customers/addresses",
+              data: body,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                "X-auth-Token": AppConfigure.bigCommerceAccessToken
+              }),
+            );
+          }
+          if (response.statusCode == APIConstants.successCode) {
+            return response;
+
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            exceptionString = AppString.alreadyExist;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      }
+      on DioException catch (error) {
+        if (error.response!.statusCode == APIConstants.alreadyExistCode) {
+          Fluttertoast.showToast(
+              msg: "${error.response!.data["errors"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        }
+      }
+
+}    
+    
+    else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           var response;

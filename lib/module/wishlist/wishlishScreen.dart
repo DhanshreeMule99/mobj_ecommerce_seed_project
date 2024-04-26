@@ -81,7 +81,7 @@ Future<void> getallWishlist() async {
   String wishlidtId = await SharedPreferenceManager().getwishlistID();
   try
   {  final response = await ApiManager.get(
-            'https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$wishlidtId');
+            'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$wishlidtId');
     if (response.statusCode == APIConstants.successCode) {
 
       final Map<String, dynamic> responseBody = json.decode(response.body);
@@ -145,7 +145,7 @@ fragment PriceFields on Money {
 
 ''';
           var result = await api.sendRequest.post(
-              "https://store-05vrtqkend.mybigcommerce.com/graphql",
+              "https://store-${AppConfigure.storeFront}.mybigcommerce.com/graphql",
               data: {"query": query});
 
           

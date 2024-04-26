@@ -39,10 +39,12 @@ class AppConfigure {
 
   ////bigcommerce urls
   static const bigCommerce = false;
- 
   static const bigcommerceUrl =
-      'https://api.bigcommerce.com/stores/05vrtqkend/v3';
-  static const bigCommerceAccessToken = 'ik5es3nwfm8pfhaywhdqlu8t2tw345z';
+      'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
+  static const storeFront = 'zwpg4jmenh';
+  static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
+ 
+ 
 
 
 // woo commerce url 

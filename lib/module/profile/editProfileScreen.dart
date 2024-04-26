@@ -44,22 +44,35 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       //ref.read(isLoading.notifier).state = true;
       final uid = await SharedPreferenceManager().getUserId();
       final accessToken = await SharedPreferenceManager().getToken();
-      Map<String, dynamic> body = AppConfigure.bigCommerce
-          ? {
-              "first_name": ref.read(fNameProvider),
-              "last_name": ref.read(lNameProvider),
-              "company": "setooooo",
-              "phone": ref.read(phoneProvider),
-              "id": int.parse(uid)
-            }
-          : {
-              "customerAccessToken": "$accessToken",
-              "customer": {
-                "firstName": ref.read(fNameProvider),
-                "lastName": ref.read(lNameProvider),
-                "phone": "+91${ref.read(phoneProvider)}"
-              }
-            };
+     Map<String, dynamic> body;
+
+if (AppConfigure.bigCommerce) {
+  body = {
+    "first_name": ref.read(fNameProvider),
+    "last_name": ref.read(lNameProvider),
+    "company": "setooooo",
+    "phone": ref.read(phoneProvider),
+    "id": int.parse(uid)
+  };
+} else if (AppConfigure.wooCommerce) {
+  body = {
+    "first_name": ref.read(fNameProvider),
+    "last_name": ref.read(lNameProvider),
+    "billing": {
+      "phone": ref.read(phoneProvider),
+    },
+    "id": int.parse(uid)
+  };
+} else {
+  body = {
+    "customerAccessToken": "${AppConfigure.accessToken}",
+    "customer": {
+      "firstName": ref.read(fNameProvider),
+      "lastName": ref.read(lNameProvider),
+      "phone": "+91${ref.read(phoneProvider)}"
+    }
+  };
+}
 
       final register = UserRepository();
       register.editProfile(body).then((value) async {

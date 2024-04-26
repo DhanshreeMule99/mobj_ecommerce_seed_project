@@ -348,11 +348,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-
-
-
-
-
     if (AppConfigure.bigCommerce) {
       // Login with BigCommerce
       String bigCommerceUrl = AppConfigure.bigcommerceUrl;
@@ -425,14 +420,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
 // login with Woo Commerce
 API api = API();
-  
-      
-        
-final body = 
-        {
-  "username": email.text,
-  "password": pass.text,
-};
+     
+          final body = 
+                  {
+            "username": email.text,
+            "password": pass.text,
+          };
       try {
           setState(() {
           isLoading = true;
@@ -453,18 +446,8 @@ final body =
       final int userId = responseData['data']['id'];
       final String token = responseData['data']['token'];
           if (responseData['success'] == true) {
-            // await SharedPreferenceManager().setEmail(
-            //   email.text.trim(),
-            // );
-            // await SharedPreferenceManager().setUserId(
-            //     responseData['id']
-            //         .toString()
-            //         .replaceAll("gid://shopify/Customer/", ""));
-            // await SharedPreferenceManager()
-            //     .setToken();
 
-
-await SharedPreferenceManager().setEmail(userEmail);
+        await SharedPreferenceManager().setEmail(userEmail);
         await SharedPreferenceManager().setUserId(userId.toString());
         await SharedPreferenceManager().setToken(token);
            
@@ -509,9 +492,7 @@ await SharedPreferenceManager().setEmail(userEmail);
         // Exception occurred, show error message
         print('Error occurred: $e');
       }
-
-    }
-  
+    } 
      else {
       // Login with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
