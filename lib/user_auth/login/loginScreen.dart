@@ -3,11 +3,13 @@
 // import 'package:flutter/material.dart';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import '../../provider/addressProvider.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
@@ -32,7 +34,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool loadingSignup = false;
 
-  // Future<void> _handleSignIn() async {
+  // Future<void> _handleSignIn() async 
   //   setState(() {
   //     loadingSignup = true;
   //   });
@@ -91,7 +93,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //                 textColor: AppColors.whiteColor,
   //                 fontSize: 16.0);
   //             DeviceRepository().deviceInfo(value['data']["_id"]);
-
   //             await SharedPreferenceManager()
   //                 .setToken(value['data']["token"].toString());
   //             await SharedPreferenceManager()
@@ -162,7 +163,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //       loadingSignup = false;
   //     });
   //     Navigator.pop(context);
-
   //     ScaffoldMessenger.of(context).showSnackBar(
   //       SnackBar(
   //         content: Text("${AppString.googleSignupError}: $error"),
@@ -170,13 +170,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //     );u
   //   }
   // }
-
   // signUp() async {
   //   setState(() {
   //     isLoading = true;
   //   });
   //   final body = {"email": email.text.trim(), "password": pass.text.trim()};
-
   //   final login = LoginRepository();
   //   login.signIn(body).then((value) async {
   //     if (value.runtimeType != String) {
@@ -199,7 +197,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   //       ref.refresh(addressDataProvider);
   //       ref.refresh(orderDataProvider);
   //       ref.refresh(profileDataProvider);
-
   //       Navigator.of(context).pushAndRemoveUntil(
   //           PageRouteBuilder(
   //             pageBuilder: (context, animation1, animation2) =>
@@ -351,6 +348,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
+
+
+
+
+
     if (AppConfigure.bigCommerce) {
       // Login with BigCommerce
       String bigCommerceUrl = AppConfigure.bigcommerceUrl;
@@ -419,7 +421,98 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Exception occurred, show error message
         print('Error occurred: $e');
       }
-    } else {
+    } else if (AppConfigure.wooCommerce) {
+
+// login with Woo Commerce
+API api = API();
+  
+      
+        
+final body = 
+        {
+  "username": email.text,
+  "password": pass.text,
+};
+      try {
+          setState(() {
+          isLoading = true;
+        });
+        final response = await api.sendRequest.post(
+          '/wp-json/jwt-auth/v1/token',
+          options: Options(headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          }),
+          data: body,
+         
+        );
+        print('wooCommerce Response: ${response.data}');
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = response.data;
+
+           final String userEmail = responseData['data']['email'];
+      final int userId = responseData['data']['id'];
+      final String token = responseData['data']['token'];
+          if (responseData['success'] == true) {
+            // await SharedPreferenceManager().setEmail(
+            //   email.text.trim(),
+            // );
+            // await SharedPreferenceManager().setUserId(
+            //     responseData['id']
+            //         .toString()
+            //         .replaceAll("gid://shopify/Customer/", ""));
+            // await SharedPreferenceManager()
+            //     .setToken();
+
+
+await SharedPreferenceManager().setEmail(userEmail);
+        await SharedPreferenceManager().setUserId(userId.toString());
+        await SharedPreferenceManager().setToken(token);
+           
+            ref.refresh(addressDataProvider);
+            ref.refresh(orderDataProvider);
+            ref.refresh(profileDataProvider);
+            Fluttertoast.showToast(
+                msg: AppLocalizations.of(context)!.loginSuccess,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 0,
+                backgroundColor: AppColors.green,
+                textColor: AppColors.whiteColor,
+                fontSize: 16.0);
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const HomeScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (route) => route.isCurrent);
+          } else {
+            // Failure, show error message
+            setState(() {
+              error = AppLocalizations.of(context)!.invalidCred;
+              isLoading = false;
+            });
+          }
+        } else {
+          // If the server did not return a 200 OK response, show error message
+          setState(() {
+            error = AppLocalizations.of(context)!.oops;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+         setState(() {
+              error = AppLocalizations.of(context)!.doesNotHaveAcc;
+              isLoading = false;
+            });
+        // Exception occurred, show error message
+        print('Error occurred: $e');
+      }
+
+    }
+  
+     else {
       // Login with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       setState(() {

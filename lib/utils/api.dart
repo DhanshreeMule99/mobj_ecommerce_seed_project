@@ -19,9 +19,9 @@ class API {
      }
       else if (AppConfigure.wooCommerce){
 
-      _dio.options.queryParameters["consumer key"] = "ck_8cab567f1391d7044d88564e4b932accbb6a560b" ;
-      _dio.options.queryParameters["consumer secret"] = "cs_3317a4f8d9fc8cc462dca3c059f3f0ff452553ae";
-     _dio.options.headers["Content-Type"] = "application/json";
+    //   _dio.options.queryParameters["consumer key"] = "ck_db1d729eb2978c28ae46451d36c1ca02da112cb3" ;
+    //   _dio.options.queryParameters["consumer secret"] = "cs_c5cc06675e8ffa375b084acd40987fec142ec8cf";
+    //  _dio.options.headers["Content-Type"] = "application/json";
     }
     else 
      {

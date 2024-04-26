@@ -322,9 +322,13 @@ final body =
 };
       try {
         final response = await api.sendRequest.post(
-          'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3/customers',
+          '/wp-json/wc/v3/customers?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf',
           data: body,
-         
+          options: Options(headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "basic ck_db1d729eb2978c28ae46451d36c1ca02da112cb3:cs_c5cc06675e8ffa375b084acd40987fec142ec8cf"
+          }),
         );
         debugPrint('status code is ${response.statusCode}');
         var data = response.data;
@@ -351,7 +355,7 @@ final body =
             ),
           );
           // Optionally, you can navigate to another screen or perform any additional action here
-        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+        } else if (response.statusCode == 400) {
           setState(() {
             loadingSignup = false;
           });
@@ -380,6 +384,14 @@ final body =
               textColor: AppColors.whiteColor,
               fontSize: 16.0);
         }
+          Fluttertoast.showToast(
+              msg: "User Already Exist",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
         debugPrint("error: $error");
         setState(() {
           loadingSignup = false;

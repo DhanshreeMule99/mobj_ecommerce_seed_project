@@ -49,10 +49,10 @@ class AppConfigure {
 
 
 static const wooCommerce = true;
-static const woocommerceUrl = 'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3';
+static const woocommerceUrl = 'https://ttf.setoo.org';
 
-    static const  consumerkey = 'ck_eea4e3e50e0a4d1cc22fbe6c891d445812bd61de';
-    static const consumersecret = 'cs_f0ddbc1d7655a5f5b3e7aea5e6847a77955f8b13';
+    static const  consumerkey = 'ck_db1d729eb2978c28ae46451d36c1ca02da112cb3';
+    static const consumersecret = 'cs_c5cc06675e8ffa375b084acd40987fec142ec8cf';
     
 
 }
