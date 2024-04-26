@@ -67,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String wishlidtId = await SharedPreferenceManager().getwishlistID();
     try {
       final response = await ApiManager.get(
-          'https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists/$wishlidtId');
+          'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$wishlidtId');
       if (response.statusCode == APIConstants.successCode) {
         final Map<String, dynamic> responseBody = json.decode(response.body);
         List productList = responseBody["data"]["items"];
@@ -88,7 +88,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (AppConfigure.bigCommerce) {
       debugPrint('In bigCommerAPI');
       final response = await ApiManager.get(
-          "https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/trees/categories");
+          "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/trees/categories");
       if (response.statusCode == APIConstants.successCode) {
         final apiData = json.decode(response.body)['data'];
         setState(() {
@@ -316,7 +316,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     BorderRadius.circular(15),
                                               ),
                                               child: ProductListCard(
-                                                getwishlistIDHere: wishlistProductIds ,
+                                                getwishlistIDHere:
+                                                    wishlistProductIds,
                                                 isWhislisted: wishlistProductIds
                                                     .any((element) =>
                                                         element.productId ==

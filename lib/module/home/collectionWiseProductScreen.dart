@@ -115,7 +115,7 @@ class _CollectionWiseProductScreenState
       API api = API();
       try {
         final response = await ApiManager.get(
-            'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/categories/$pid/products/sort-order');
+            '${AppConfigure.bigcommerceUrl}/catalog/categories/$pid/products/sort-order');
 
         if (response.statusCode == APIConstants.successCode) {
           // Parse the response body
@@ -188,7 +188,7 @@ fragment PriceFields on Money {
 
 ''';
           var result = await api.sendRequest.post(
-              "https://store-05vrtqkend.mybigcommerce.com/graphql",
+              "https://store-${AppConfigure.storeFront}.mybigcommerce.com/graphql",
               data: {"query": query});
 
           final List<ProductCollectionModel> products = [];

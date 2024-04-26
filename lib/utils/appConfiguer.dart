@@ -9,8 +9,8 @@ class AppConfigure {
   //     bigCommerce == true ? bigcommerceUrl : "https://b8507f-9a.myshopify.com/";
 
   static const baseUrl = bigCommerce
-    ? bigcommerceUrl
-    : (wooCommerce ? woocommerceUrl : "https://b8507f-9a.myshopify.com/");
+      ? bigcommerceUrl
+      : (wooCommerce ? woocommerceUrl : "https://b8507f-9a.myshopify.com/");
 
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
@@ -38,21 +38,19 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = false;
- 
+  static const bigCommerce = true;
+
   static const bigcommerceUrl =
-      'https://api.bigcommerce.com/stores/05vrtqkend/v3';
-  static const bigCommerceAccessToken = 'ik5es3nwfm8pfhaywhdqlu8t2tw345z';
+      'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
+  static const storeFront = 'zwpg4jmenh';
+  static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
 
+// woo commerce url
 
-// woo commerce url 
+  static const wooCommerce = false;
+  static const woocommerceUrl =
+      'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3';
 
-
-static const wooCommerce = true;
-static const woocommerceUrl = 'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3';
-
-    static const  consumerkey = 'ck_eea4e3e50e0a4d1cc22fbe6c891d445812bd61de';
-    static const consumersecret = 'cs_f0ddbc1d7655a5f5b3e7aea5e6847a77955f8b13';
-    
-
+  static const consumerkey = 'ck_eea4e3e50e0a4d1cc22fbe6c891d445812bd61de';
+  static const consumersecret = 'cs_f0ddbc1d7655a5f5b3e7aea5e6847a77955f8b13';
 }
