@@ -12,45 +12,73 @@ class ProductRepository {
   API api = API();
 
   Future<List<ProductModel>> getProducts() async {
-    try {
-      debugPrint('calling api');
-      String productUrl = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL +
-          APIConstants.product;
-      final response = await ApiManager.get(productUrl);
+    if (AppConfigure.wooCommerce) {
+      try {
+        log('calling api by wooCommerce');
+        String productUrl = AppConfigure.woocommerceUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL +
+            APIConstants.product;
+        final response = await ApiManager.get(
+            'https://ttf.setoo.org/wp-json/wc/v3/products?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
 
-      // final response = await ApiManager.get(
-      //     'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/products?include=images,variants,options');
+        // final response = await ApiManager.get(
+        //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
 
-      if (response.statusCode == APIConstants.successCode) {
-        log("product details: $response");
-        final List result = AppConfigure.bigCommerce == true
-            ? jsonDecode(response.body)['data']
-            : jsonDecode(response.body)['products'];
+        if (response.statusCode == APIConstants.successCode) {
+          log("product details: $response");
+          final List result = AppConfigure.wooCommerce == true
+              ? jsonDecode(response.body)
+              : jsonDecode(response.body)['products'];
 
-        return result.map((e) => ProductModel.fromJson(e)).toList();
-        
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        debugPrint("empty data here");
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        debugPrint("empty data here unauthorized");
-        throw AppString.unAuthorized;
-      } else {
-        return empty;
+          return result.map((e) => ProductModel.fromJson(e)).toList();
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          debugPrint("empty data here");
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          debugPrint("empty data here unauthorized");
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("error is this $error $stackTrace");
-      rethrow;
+    } else {
+      try {
+        log('calling api');
+        String productUrl = AppConfigure.baseUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL +
+            APIConstants.product;
+        final response = await ApiManager.get(productUrl);
+
+        // final response = await ApiManager.get(
+        //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+
+        if (response.statusCode == APIConstants.successCode) {
+          log("product details: $response");
+          final List result = AppConfigure.bigCommerce == true
+              ? jsonDecode(response.body)['data']
+              : jsonDecode(response.body)['products'];
+
+          return result.map((e) => ProductModel.fromJson(e)).toList();
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          debugPrint("empty data here");
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          debugPrint("empty data here unauthorized");
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
+      }
     }
   }
-
-
-
-
-
-
 
   Future<ProductVariant> getProductsByVariantId(String vid, String pid) async {
     try {
@@ -719,10 +747,10 @@ class ProductRepository {
           throw (AppString.noDataError);
         } else if (response.statusCode == APIConstants.unAuthorizedCode) {
           // throw AppString.unAuthorized;
-            throw (AppString.noDataError);
+          throw (AppString.noDataError);
         } else {
           // throw AppString.serverError;
-            throw (AppString.noDataError);
+          throw (AppString.noDataError);
         }
       } catch (error, stackTrace) {
         debugPrint("error is this: $stackTrace");
@@ -758,7 +786,6 @@ class ProductRepository {
     }
   }
 
- 
   // Future<List<WishlistModel>> getallwishlistProducts() async {
   //   try {
   //     log('calling api');
@@ -798,11 +825,6 @@ class ProductRepository {
   //     throw error;
   //   }
   // }
-
-
-
-
-  
 }
 
 final productsProvider =
