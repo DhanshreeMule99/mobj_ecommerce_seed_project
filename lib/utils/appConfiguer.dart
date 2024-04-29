@@ -51,7 +51,7 @@ class AppConfigure {
 
 
 static const wooCommerce = true;
-static const woocommerceUrl = 'https://ttf.setoo.org';
+static const woocommerceUrl = 'https://ttf.setoo.org/';
 
     static const  consumerkey = 'ck_db1d729eb2978c28ae46451d36c1ca02da112cb3';
     static const consumersecret = 'cs_c5cc06675e8ffa375b084acd40987fec142ec8cf';

@@ -85,7 +85,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> fetchCategories() async {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('Woo Commerce caetgorires');
+      final response = await ApiManager.get(
+          "https://ttf.setoo.org/wp-json/wc/v3/products/categories?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf");
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body);
+        log(response.body);
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
+    } else if (AppConfigure.bigCommerce) {
       debugPrint('In bigCommerAPI');
       final response = await ApiManager.get(
           "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/trees/categories");
@@ -222,8 +235,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                             label: Text(
                               AppConfigure.bigCommerce
-                                  ? data[index]["name"]
-                                  : data[index]['title'],
+                                  ? data[index]['name'].toString()
+                                  : (AppConfigure.wooCommerce
+                                      ? data[index]['name'].toString()
+                                      : data[index]['title'].toString()),
                               style: TextStyle(
                                 fontSize:
                                     0.04 * MediaQuery.of(context).size.width,
@@ -245,10 +260,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           CollectionWiseProductScreen(
                                     category: AppConfigure.bigCommerce
                                         ? data[index]['category_id'].toString()
-                                        : data[index]['id'].toString(),
+                                        : (AppConfigure.wooCommerce
+                                            ? data[index]['id'].toString()
+                                            : data[index]['id'].toString()),
                                     categoryName: AppConfigure.bigCommerce
-                                        ? data[index]["name"]
-                                        : data[index]['title'],
+                                        ? data[index]['name'].toString()
+                                        : (AppConfigure.wooCommerce
+                                            ? data[index]['name'].toString()
+                                            : data[index]['title'].toString()),
+                                    // AppConfigure.bigCommerce
+                                    //     ? data[index]["name"]
+                                    //     : data[index]['title'],
                                   ),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
@@ -316,7 +338,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     BorderRadius.circular(15),
                                               ),
                                               child: ProductListCard(
-                                                getwishlistIDHere: wishlistProductIds ,
+                                                getwishlistIDHere:
+                                                    wishlistProductIds,
                                                 isWhislisted: wishlistProductIds
                                                     .any((element) =>
                                                         element.productId ==
