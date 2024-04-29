@@ -69,6 +69,8 @@ class DraftOrderModel {
   factory DraftOrderModel.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceDraftOrderModel.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCommerceDraftOrderModel.fromJson(json);
     } else {
       return ShopifyDraftOrderModel.fromJson(json);
     }
@@ -123,6 +125,8 @@ class LineItem {
   factory LineItem.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceLineItem.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCommerceLineItem.fromJson(json);
     } else {
       return ShopifyLineItem.fromJson(json);
     }
@@ -210,8 +214,8 @@ class CustomerModel {
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceCustomerModel.fromJson(json);
-    }else if(AppConfigure.wooCommerce){
-       return WooCustomerModel.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCustomerModel.fromJson(json);
     } else {
       return ShopifyCustomerModel.fromJson(json);
     }
@@ -232,6 +236,8 @@ class EmailMarketingConsent {
   factory EmailMarketingConsent.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceEmailMarketingConsent.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCommerceEmailMarketingConsent.fromJson(json);
     } else {
       return ShopifyEmailMarketingConsent.fromJson(json);
     }
@@ -254,6 +260,8 @@ class SmsMarketingConsent {
   factory SmsMarketingConsent.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceSmsMarketingConsent.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCommerceSmsMarketingConsent.fromJson(json);
     } else {
       return ShopifySmsMarketingConsent.fromJson(json);
     }

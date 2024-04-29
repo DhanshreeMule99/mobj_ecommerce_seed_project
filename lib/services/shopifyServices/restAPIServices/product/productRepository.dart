@@ -376,6 +376,41 @@ class ProductRepository {
     }
   }
 
+  addToCartWooCommerce(String quantity, String productId) async {
+    String exceptionString = "";
+    String uid = await SharedPreferenceManager().getUserId();
+    //  debugPrint('$uid $variantId');
+
+    var body = jsonEncode({"id": productId, "quantity": quantity});
+    var decodedBody = jsonDecode(body);
+    String baseUrl = AppConfigure.baseUrl;
+    debugPrint(baseUrl);
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        String email = await SharedPreferenceManager().getemail();
+        debugPrint('email is this $email');
+        http.Response response;
+
+        response = await ApiManager.post(
+            "$baseUrl/wp-json/cocart/v2/cart/add-item?cart_key=$email", body);
+
+        var data = jsonDecode(response.body);
+        debugPrint('add to cart data is this $data');
+
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          return AppString.success;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+  }
+
   repeatOrder(Map<String, dynamic> reqBody) async {
     String exceptionString = "";
 
@@ -620,6 +655,30 @@ class ProductRepository {
               response.statusCode == APIConstants.successCreateCode) {
             debugPrint(response.body);
             final result = jsonDecode(response.body)['data'];
+            debugPrint("result is this $result");
+
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
+    } else if (AppConfigure.wooCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String email = await SharedPreferenceManager().getEmail();
+
+          final response = await ApiManager.get(
+              "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            debugPrint(response.body);
+            final result = jsonDecode(response.body);
             debugPrint("result is this $result");
 
             return DraftOrderModel.fromJson(result);
