@@ -258,7 +258,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
         body: Column(children: [
           Expanded(
               child: addressProviders.when(
-            data: (address) {
+              data: (address) {
               List<DefaultAddressModel> addressList =
                   address.map((e) => e).toList();
               return RefreshIndicator(
@@ -466,7 +466,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                     context);
                                                 AddressRepository()
                                                     .deleteAddress(
-                                                        addresses.id.toString())
+                                                        addresses.id.toString(),
+                                                        )
                                                     .then((subjectFromServer) {
                                                   Navigator.of(context).pop();
                                                   if (subjectFromServer ==

@@ -298,7 +298,13 @@ class DefaultAddressModel {
   factory DefaultAddressModel.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceDefaultAddressModel.fromJson(json);
-    } else {
+    } 
+    else 
+    if(AppConfigure.wooCommerce){
+       return WooCommerceDefaultAddressModel.fromJson(json);
+    }
+    
+    else {
       return ShopifyDefaultAddressModel.fromJson(json);
     }
   }
