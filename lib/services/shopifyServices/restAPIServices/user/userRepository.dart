@@ -60,7 +60,7 @@ class UserRepository {
             APIConstants.customer;
         final uid = await SharedPreferenceManager().getUserId();
         final accessToken = await SharedPreferenceManager().getToken();
-
+        log("access token is this $accessToken");
         String query = '''
 query {
   customer(customerAccessToken: "$accessToken") {
@@ -86,7 +86,7 @@ query {
 ''';
 
         Response response = await api.sendRequest.post(
-            'https://pyvaidyas.myshopify.com/api/2023-10/graphql.json',
+            'https://pyvaidyass.myshopify.com/api/2023-10/graphql.json',
             data: {"query": query});
 
         log('shopify customer details reuslt is this ${response.data['data']['customer']}');
@@ -190,7 +190,7 @@ query {
 
           Map<String, dynamic> variables = body;
           Response response = await api.sendRequest.post(
-            "https://pyvaidyas.myshopify.com/api/2023-10/graphql.json",
+            "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
             data: {
               'query': query,
               'variables': variables,

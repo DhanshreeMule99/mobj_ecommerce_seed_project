@@ -244,7 +244,7 @@ mutation customerAddressCreate(\$customerAccessToken: String!, \$address: Mailin
             Map<String, dynamic> variables = body;
 
             response = await api.sendRequest.post(
-              "https://pyvaidyas.myshopify.com/api/2021-04/graphql.json",
+              "https://pyvaidyass.myshopify.com/api/2021-04/graphql.json",
               data: {
                 'query': query,
                 'variables': variables,
