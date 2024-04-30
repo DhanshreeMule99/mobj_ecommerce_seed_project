@@ -214,32 +214,84 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
     final product = ref.watch(cartDetailsDataProvider);
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
-        appBar: AppBar(
-          elevation: 2,
-          title: const Text(
-            AppString.addressList,
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        AddressScreen(
-                      addressId: "",
-                      isCheckout: widget.isCheckout ?? false,
-                      amount: widget.amount,
-                      mobile: widget.mobile,
-                    ),
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add),
-            )
-          ],
+        appBar:
+        //  AppBar(
+        //   elevation: 2,
+        //   title: const Text(
+        //     AppString.addressList,
+        //   ),
+        //   actions: [
+        //     IconButton(
+        //       onPressed: () {
+        //         Navigator.of(context).pushReplacement(
+        //           PageRouteBuilder(
+        //             pageBuilder: (context, animation1, animation2) =>
+        //                 AddressScreen(
+        //               addressId: "",
+        //               isCheckout: widget.isCheckout ?? false,
+        //               amount: widget.amount,
+        //               mobile: widget.mobile,
+        //             ),
+        //             transitionDuration: Duration.zero,
+        //             reverseTransitionDuration: Duration.zero,
+        //           ),
+        //         );
+        //       },
+        //       icon: const Icon(Icons.add),
+        //     )
+        //   ],
+        // ),
+        AppBar(
+        elevation: 2,
+        title: const Text(
+          AppString.addressList,
         ),
+        // actions: [
+        //   // Conditionally show the add icon button based on the length of the address list
+        //   if (addressProviders is AsyncData<List<DefaultAddressModel>> &&
+        //       addressProviders.value.length != 1 )
+        //     IconButton(
+        //       onPressed: () {
+        //         Navigator.of(context).pushReplacement(
+        //           PageRouteBuilder(
+        //             pageBuilder: (context, animation1, animation2) => AddressScreen(
+        //               addressId: "",
+        //               isCheckout: widget.isCheckout ?? false,
+        //               amount: widget.amount,
+        //               mobile: widget.mobile,
+        //             ),
+        //             transitionDuration: Duration.zero,
+        //             reverseTransitionDuration: Duration.zero,
+        //           ),
+        //         );
+        //       },
+        //       icon: const Icon(Icons.add),
+        //     )
+        // ],
+                actions: addressProviders is AsyncData<List<DefaultAddressModel>> &&
+               addressProviders.value.length == 1 && AppConfigure.wooCommerce
+            ? null
+            : [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            AddressScreen(
+                          addressId: "",
+                          isCheckout: widget.isCheckout ?? false,
+                          amount: widget.amount,
+                          mobile: widget.mobile,
+                        ),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add),
+                )
+              ],
+           ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
           selcted_icon_color: AppColors.buttonColor,

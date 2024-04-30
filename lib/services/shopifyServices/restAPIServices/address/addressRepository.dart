@@ -1,5 +1,7 @@
 // addressRepository
 
+
+
 import 'package:dio/dio.dart';
 import 'package:http/src/response.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -55,7 +57,7 @@ class AddressRepository {
            
             // final result = response.data;
        //   debugPrint("body is this $result $uid");
-          if (response.data['billing']['first_name']=="") {
+          if (response.data['billing']['address_1']=="") {
             throw (AppString.noDataError);
             
           } else {
@@ -140,7 +142,93 @@ class AddressRepository {
       }
     }
     else if (AppConfigure.wooCommerce){
-      
+      API api = API();
+      // body = {
+      //           "billing": {
+      //             "first_name": "",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1": "",
+      //             "address_2": "",
+      //             "city": "",
+      //             "state": "MH",
+      //             "postcode": "",
+      //             "country": "IN",
+      //             // "email": "john.doe@example.com",
+      //             "phone":  "",
+      //           },
+      //           "shipping": {
+      //             "first_name":"",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1":  "",
+      //             "address_2": "",
+      //             "city":"",
+      //             "state": "MH",
+      //             "postcode":  "",
+      //             "country": "IN"
+      //           }
+
+      //         };
+           
+       try {
+        final response;
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+            debugPrint("calling null addressid api");
+            // var body1 = jsonEncode({"address": body});
+          response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: {
+                "billing": {
+                  "first_name": "",
+                  "last_name": "",
+                  "company": "",
+                  "address_1": "",
+                  "address_2": "",
+                  "city": "",
+                  "state": "",
+                  "postcode": "",
+                  "country": "",
+                  // "email": "john.doe@example.com",
+                  "phone":  "",
+                },
+                "shipping": {
+                  "first_name":"",
+                  "last_name": "",
+                  "company": "",
+                  "address_1":  "",
+                  "address_2": "",
+                  "city":"",
+                  "state": "",
+                  "postcode":  "",
+                  "country": ""
+                }
+
+              },
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.data} $uid");
+           
+       
+            // return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
+
+          return [null];
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        print("error for address is this $error $stackTrace");
+        rethrow;
+      }
 
 
       
