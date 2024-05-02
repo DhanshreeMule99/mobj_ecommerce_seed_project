@@ -988,6 +988,41 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 fontSize: 16.0);
                           }
                         });
+                      } else if (AppConfigure.wooCommerce) {
+                        //  log('product to ${widget.productId} ${widget.variantId}');
+                        ProductRepository()
+                            .addToCartWooCommerce(
+                          quantity.toString(),
+                          variantId != null
+                              ? variantId.toString()
+                              : productModel.variants[0].id.toString(),
+                        )
+                            .then((value) async {
+                          if (value == AppString.success) {
+                            Navigator.of(context).pop();
+                            ref.refresh(productDataProvider);
+                            ref.refresh(cartDetailsDataProvider);
+                            ref.refresh(productDetailsProvider(widget.uid));
+                            Fluttertoast.showToast(
+                                msg: AppString.addToCartSuccess,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 0,
+                                backgroundColor: AppColors.green,
+                                textColor: AppColors.whiteColor,
+                                fontSize: 16.0);
+                          } else {
+                            Navigator.of(context).pop();
+                            Fluttertoast.showToast(
+                                msg: AppString.oops,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 0,
+                                backgroundColor: AppColors.green,
+                                textColor: AppColors.whiteColor,
+                                fontSize: 16.0);
+                          }
+                        });
                       } else {
                         ProductRepository()
                             .addToCart(

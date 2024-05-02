@@ -610,7 +610,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                 .wooCommerce) {
                                                               String email =
                                                                   await SharedPreferenceManager()
-                                                                      .getemail();
+                                                                      .getCartToken();
                                                               var response =
                                                                   await ApiManager
                                                                       .delete(
