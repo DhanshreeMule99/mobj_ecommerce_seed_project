@@ -992,7 +992,7 @@ class ProductRepository {
       final uid = await SharedPreferenceManager().getUserId();
       try {
         final response = await api.sendRequest.get(
-          "${AppConfigure.woocommerceUrl}/wp-json/wc/v3/orders?customer=16&consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+          "${AppConfigure.woocommerceUrl}/wp-json/wc/v3/orders?customer=$uid&consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
         );
         if (response.statusCode == APIConstants.successCode) {
           final List result = response.data;
