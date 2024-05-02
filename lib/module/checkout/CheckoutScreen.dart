@@ -547,8 +547,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   .lineItems
                                                                   .length ==
                                                               1) {
-                                                            await SharedPreferenceManager()
-                                                                .setDraftId("");
+                                                            if (AppConfigure
+                                                                .wooCommerce) {
+                                                              await SharedPreferenceManager()
+                                                                  .setCartToken(
+                                                                      "");
+                                                            } else {
+                                                              await SharedPreferenceManager()
+                                                                  .setDraftId(
+                                                                      "");
+                                                            }
+
                                                             ref.refresh(
                                                                 cartDetailsDataProvider);
                                                             Navigator.of(

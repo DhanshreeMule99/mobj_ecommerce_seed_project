@@ -6,6 +6,7 @@ import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import '../../../../main.dart';
 
@@ -461,11 +462,18 @@ class ProductRepository {
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         String email = await SharedPreferenceManager().getemail();
+
+        var uuid = const Uuid();
+        String cartkey = await SharedPreferenceManager().getCartToken();
+        if (cartkey == "") {
+          cartkey = uuid.v4();
+          await SharedPreferenceManager().setCartToken(cartkey);
+        }
         debugPrint('email is this $email');
         http.Response response;
 
         response = await ApiManager.post(
-            "$baseUrl/wp-json/cocart/v2/cart/add-item?cart_key=$email", body);
+            "$baseUrl/wp-json/cocart/v2/cart/add-item?cart_key=$cartkey", body);
 
         var data = jsonDecode(response.body);
         debugPrint('add to cart data is this $data');
@@ -718,7 +726,7 @@ class ProductRepository {
           debugPrint("${response.data} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
-            await SharedPreferenceManager().setDraftId("");
+            await SharedPreferenceManager().setCartToken("");
             var service = await getPaymentDetails(paymentId);
             var gateWayMethod = service["method"];
             return AppString.success;
@@ -808,7 +816,7 @@ class ProductRepository {
     } else if (AppConfigure.wooCommerce) {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          String email = await SharedPreferenceManager().getEmail();
+          String email = await SharedPreferenceManager().getCartToken();
 
           final response = await ApiManager.get(
               "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
@@ -817,7 +825,9 @@ class ProductRepository {
             debugPrint(response.body);
             final result = jsonDecode(response.body);
             debugPrint("result is this $result");
-
+            if (result['item_count'] == 0) {
+              throw (AppString.noDataError);
+            }
             return DraftOrderModel.fromJson(result);
           } else {
             throw (AppString.noDataError);

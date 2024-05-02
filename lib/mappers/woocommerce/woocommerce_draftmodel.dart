@@ -230,7 +230,7 @@ class WooCommerceLineItem implements LineItem {
       giftCard: json['gift_card'] ?? false,
       fulfillmentService:
           json['fulfillment_service'] ?? DefaultValues.defaultString,
-      grams: json['meta']['weight'] ?? DefaultValues.defaultInt,
+      grams: json['meta']['weight'].round() ?? DefaultValues.defaultInt,
       taxLines: [WooCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
       appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       name: json['title'] ?? DefaultValues.defaultString,

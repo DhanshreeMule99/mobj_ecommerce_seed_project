@@ -10,6 +10,7 @@ class SharedPreferenceManager {
   static const String name = 'name';
   static const String email = 'email';
   static const String wishlistId = 'wishlistId';
+  static const String cartKey = 'cartkey';
 
   static final SharedPreferenceManager _instance =
       SharedPreferenceManager._internal();
@@ -65,6 +66,16 @@ class SharedPreferenceManager {
     return prefs.getString(token) ?? "";
   }
 
+  Future<bool> setCartToken(String tokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(cartKey, tokens);
+  }
+
+  Future<String> getCartToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(cartKey) ?? "";
+  }
+
   Future<bool> setGoogleToken(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(googleToken, tokens);
@@ -115,7 +126,7 @@ class SharedPreferenceManager {
     return prefs.setString(email, tokens);
   }
 
-   Future<String> getwishlistID() async {
+  Future<String> getwishlistID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(wishlistId) ?? "";
   }
