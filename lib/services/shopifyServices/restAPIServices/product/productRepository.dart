@@ -7,6 +7,8 @@ import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../main.dart';
+
 class ProductRepository {
   List<ProductModel> empty = [];
   API api = API();
@@ -564,7 +566,9 @@ class ProductRepository {
     }
   }
 
-  checkout(String paymentId) async {
+  checkout(
+    String paymentId,
+  ) async {
     if (AppConfigure.bigCommerce) {
       String exceptionString = "";
       String draftId = await SharedPreferenceManager().getDraftId();
@@ -579,6 +583,42 @@ class ProductRepository {
               {});
           var data = jsonDecode(response.body);
           debugPrint("${response.body} ${response.statusCode}");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            await SharedPreferenceManager().setDraftId("");
+            var service = await getPaymentDetails(paymentId);
+            var gateWayMethod = service["method"];
+            return AppString.success;
+          }
+        }
+      } catch (error) {
+        debugPrint('error is this $error');
+        exceptionString = AppString.oops;
+        return exceptionString;
+      }
+    } else if (AppConfigure.wooCommerce) {
+      API api = API();
+      String exceptionString = "";
+      String userId = await SharedPreferenceManager().getUserId();
+      String baseUrl = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response;
+          response = await api.sendRequest.post(
+              "wp-json/wc/v3/orders?consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+              data: {
+                "payment_method": "bacs",
+                "payment_method_title": "Direct Bank Transfer",
+                "customer_id": int.parse(userId),
+                "set_paid": true,
+                "billing": woocommerceaddressbody,
+                "shipping": woocommerceaddressbody,
+                "line_items": bigcommerceOrderedItems
+              });
+          var data = response.data;
+          debugPrint("${response.data} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             await SharedPreferenceManager().setDraftId("");

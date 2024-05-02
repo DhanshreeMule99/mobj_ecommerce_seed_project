@@ -56,8 +56,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               data: (product) {
                 DraftOrderModel productlist = product;
                 for (var element in productlist.lineItems) {
-                  bigcommerceOrderedItems.add(
-                      {"item_id": element.id, "quantity": element.quantity});
+                  bigcommerceOrderedItems.add(AppConfigure.wooCommerce
+                      ? {
+                          "product_id": element.productId,
+                          "quantity": element.quantity
+                        }
+                      : {"item_id": element.id, "quantity": element.quantity});
                 }
 
                 return RefreshIndicator(

@@ -215,83 +215,84 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
         appBar:
-        //  AppBar(
-        //   elevation: 2,
-        //   title: const Text(
-        //     AppString.addressList,
-        //   ),
-        //   actions: [
-        //     IconButton(
-        //       onPressed: () {
-        //         Navigator.of(context).pushReplacement(
-        //           PageRouteBuilder(
-        //             pageBuilder: (context, animation1, animation2) =>
-        //                 AddressScreen(
-        //               addressId: "",
-        //               isCheckout: widget.isCheckout ?? false,
-        //               amount: widget.amount,
-        //               mobile: widget.mobile,
-        //             ),
-        //             transitionDuration: Duration.zero,
-        //             reverseTransitionDuration: Duration.zero,
-        //           ),
-        //         );
-        //       },
-        //       icon: const Icon(Icons.add),
-        //     )
-        //   ],
-        // ),
-        AppBar(
-        elevation: 2,
-        title: const Text(
-          AppString.addressList,
-        ),
-        // actions: [
-        //   // Conditionally show the add icon button based on the length of the address list
-        //   if (addressProviders is AsyncData<List<DefaultAddressModel>> &&
-        //       addressProviders.value.length != 1 )
-        //     IconButton(
-        //       onPressed: () {
-        //         Navigator.of(context).pushReplacement(
-        //           PageRouteBuilder(
-        //             pageBuilder: (context, animation1, animation2) => AddressScreen(
-        //               addressId: "",
-        //               isCheckout: widget.isCheckout ?? false,
-        //               amount: widget.amount,
-        //               mobile: widget.mobile,
-        //             ),
-        //             transitionDuration: Duration.zero,
-        //             reverseTransitionDuration: Duration.zero,
-        //           ),
-        //         );
-        //       },
-        //       icon: const Icon(Icons.add),
-        //     )
-        // ],
-                actions: addressProviders is AsyncData<List<DefaultAddressModel>> &&
-               addressProviders.value.length == 1 && AppConfigure.wooCommerce
-            ? null
-            : [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            AddressScreen(
-                          addressId: "",
-                          isCheckout: widget.isCheckout ?? false,
-                          amount: widget.amount,
-                          mobile: widget.mobile,
+            //  AppBar(
+            //   elevation: 2,
+            //   title: const Text(
+            //     AppString.addressList,
+            //   ),
+            //   actions: [
+            //     IconButton(
+            //       onPressed: () {
+            //         Navigator.of(context).pushReplacement(
+            //           PageRouteBuilder(
+            //             pageBuilder: (context, animation1, animation2) =>
+            //                 AddressScreen(
+            //               addressId: "",
+            //               isCheckout: widget.isCheckout ?? false,
+            //               amount: widget.amount,
+            //               mobile: widget.mobile,
+            //             ),
+            //             transitionDuration: Duration.zero,
+            //             reverseTransitionDuration: Duration.zero,
+            //           ),
+            //         );
+            //       },
+            //       icon: const Icon(Icons.add),
+            //     )
+            //   ],
+            // ),
+            AppBar(
+          elevation: 2,
+          title: const Text(
+            AppString.addressList,
+          ),
+          // actions: [
+          //   // Conditionally show the add icon button based on the length of the address list
+          //   if (addressProviders is AsyncData<List<DefaultAddressModel>> &&
+          //       addressProviders.value.length != 1 )
+          //     IconButton(
+          //       onPressed: () {
+          //         Navigator.of(context).pushReplacement(
+          //           PageRouteBuilder(
+          //             pageBuilder: (context, animation1, animation2) => AddressScreen(
+          //               addressId: "",
+          //               isCheckout: widget.isCheckout ?? false,
+          //               amount: widget.amount,
+          //               mobile: widget.mobile,
+          //             ),
+          //             transitionDuration: Duration.zero,
+          //             reverseTransitionDuration: Duration.zero,
+          //           ),
+          //         );
+          //       },
+          //       icon: const Icon(Icons.add),
+          //     )
+          // ],
+          actions: addressProviders is AsyncData<List<DefaultAddressModel>> &&
+                  addressProviders.value.length == 1 &&
+                  AppConfigure.wooCommerce
+              ? null
+              : [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              AddressScreen(
+                            addressId: "",
+                            isCheckout: widget.isCheckout ?? false,
+                            amount: widget.amount,
+                            mobile: widget.mobile,
+                          ),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
                         ),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.add),
-                )
-              ],
-           ),
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                  )
+                ],
+        ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
           selcted_icon_color: AppColors.buttonColor,
@@ -310,7 +311,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
         body: Column(children: [
           Expanded(
               child: addressProviders.when(
-              data: (address) {
+            data: (address) {
               List<DefaultAddressModel> addressList =
                   address.map((e) => e).toList();
               return RefreshIndicator(
@@ -418,62 +419,108 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                               });
                                             },
                                           )
-                                        : Radio(
-                                            value: index,
-                                            groupValue: selectedDefaultIndex ==
-                                                    0
-                                                ? addressList.indexWhere(
-                                                    (address) =>
-                                                        address.defaultAddress)
-                                                : selectedDefaultIndex,
-                                            onChanged: (value) async {
-                                              setState(() {
-                                                selectedDefaultIndex =
-                                                    value as int;
-                                                getLocationFromAddress(
-                                                    "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
-                                              });
-                                              CommonAlert.show_loading_alert(
-                                                  context);
-                                              AddressRepository()
-                                                  .setDefaultAddress(
-                                                      addresses.id.toString())
-                                                  .then((subjectFromServer) {
-                                                Navigator.of(context).pop();
-                                                if (subjectFromServer ==
-                                                    AppString.success) {
-                                                  ref.refresh(
-                                                      addressDataProvider);
-                                                  Fluttertoast.showToast(
-                                                      msg: AppString
-                                                          .defaultAddressSuccess,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 0,
-                                                      backgroundColor:
-                                                          AppColors.green,
-                                                      textColor:
-                                                          AppColors.whiteColor,
-                                                      fontSize: 16.0);
-                                                } else {
-                                                  Fluttertoast.showToast(
-                                                      msg: AppString.oops,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 0,
-                                                      backgroundColor:
-                                                          AppColors.green,
-                                                      textColor:
-                                                          AppColors.whiteColor,
-                                                      fontSize: 16.0);
-                                                }
-                                              });
-                                            },
-                                          ),
+                                        : AppConfigure.wooCommerce
+                                            ? Radio(
+                                                value: index,
+                                                groupValue:
+                                                    bigCommerceAddressIndex,
+                                                onChanged: (value) async {
+                                                  String draftId =
+                                                      await SharedPreferenceManager()
+                                                          .getDraftId();
+                                                  print(draftId);
+                                                  String email =
+                                                      await SharedPreferenceManager()
+                                                          .getEmail();
+                                                  print(
+                                                      "$value ${addressList[index]}");
+                                                  addressbody = {
+                                                    "first_name":
+                                                        addresses.firstName,
+                                                    "last_name":
+                                                        addresses.lastName,
+                                                    "phone": addresses.phone,
+                                                    "email": email,
+                                                    "company": "setoo",
+                                                    "address_1":
+                                                        addresses.address1,
+                                                    "address_2": "string",
+                                                    "city": addresses.city,
+                                                    "state": addresses.province,
+                                                    // "state_or_province_code":
+                                                    //     addresses.provinceCode,
+                                                    "country":
+                                                        addresses.countryCode,
+                                                    "postcode": addresses.zip,
+                                                  };
+                                                  print(addressbody);
+                                                  setState(() {
+                                                    woocommerceaddressbody =
+                                                        addressbody;
+                                                    bigCommerceAddressIndex =
+                                                        index;
+                                                  });
+                                                },
+                                              )
+                                            : Radio(
+                                                value: index,
+                                                groupValue:
+                                                    selectedDefaultIndex == 0
+                                                        ? addressList.indexWhere(
+                                                            (address) => address
+                                                                .defaultAddress)
+                                                        : selectedDefaultIndex,
+                                                onChanged: (value) async {
+                                                  setState(() {
+                                                    selectedDefaultIndex =
+                                                        value as int;
+                                                    getLocationFromAddress(
+                                                        "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
+                                                  });
+                                                  CommonAlert
+                                                      .show_loading_alert(
+                                                          context);
+                                                  AddressRepository()
+                                                      .setDefaultAddress(
+                                                          addresses.id
+                                                              .toString())
+                                                      .then(
+                                                          (subjectFromServer) {
+                                                    Navigator.of(context).pop();
+                                                    if (subjectFromServer ==
+                                                        AppString.success) {
+                                                      ref.refresh(
+                                                          addressDataProvider);
+                                                      Fluttertoast.showToast(
+                                                          msg: AppString
+                                                              .defaultAddressSuccess,
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          timeInSecForIosWeb: 0,
+                                                          backgroundColor:
+                                                              AppColors.green,
+                                                          textColor: AppColors
+                                                              .whiteColor,
+                                                          fontSize: 16.0);
+                                                    } else {
+                                                      Fluttertoast.showToast(
+                                                          msg: AppString.oops,
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          timeInSecForIosWeb: 0,
+                                                          backgroundColor:
+                                                              AppColors.green,
+                                                          textColor: AppColors
+                                                              .whiteColor,
+                                                          fontSize: 16.0);
+                                                    }
+                                                  });
+                                                },
+                                              ),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -518,8 +565,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                     context);
                                                 AddressRepository()
                                                     .deleteAddress(
-                                                        addresses.id.toString(),
-                                                        )
+                                                  addresses.id.toString(),
+                                                )
                                                     .then((subjectFromServer) {
                                                   Navigator.of(context).pop();
                                                   if (subjectFromServer ==
@@ -805,6 +852,31 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                   'shipping address added succssfully ${responsedata.statusCode}');
 
                                                               //  Razor payment service
+                                                              PaymentHandler(
+                                                                _razorpay,
+                                                                context,
+                                                                ref,
+                                                              ).openPaymentPortal(
+                                                                  productlist
+                                                                          .customer
+                                                                          .firstName +
+                                                                      productlist
+                                                                          .customer
+                                                                          .lastName,
+                                                                  productlist
+                                                                      .customer
+                                                                      .phone,
+                                                                  productlist
+                                                                      .customer
+                                                                      .email,
+                                                                  double.parse(
+                                                                      productlist
+                                                                          .totalPrice
+                                                                          .toString()));
+                                                            } else if (AppConfigure
+                                                                .wooCommerce) {
+                                                              print(
+                                                                  woocommerceaddressbody);
                                                               PaymentHandler(
                                                                 _razorpay,
                                                                 context,
