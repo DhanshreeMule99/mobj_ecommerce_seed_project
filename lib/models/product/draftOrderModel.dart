@@ -121,6 +121,9 @@ class LineItem {
   });
 
   factory LineItem.fromJson(Map<String, dynamic> json) {
+    // if(AppConfigure.wooCommerce){
+
+    // }
     if (AppConfigure.bigCommerce) {
       return BigCommerceLineItem.fromJson(json);
     } else {
@@ -210,8 +213,8 @@ class CustomerModel {
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
     if (AppConfigure.bigCommerce) {
       return BigCommerceCustomerModel.fromJson(json);
-    }else if(AppConfigure.wooCommerce){
-       return WooCustomerModel.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
+      return WooCustomerModel.fromJson(json);
     } else {
       return ShopifyCustomerModel.fromJson(json);
     }

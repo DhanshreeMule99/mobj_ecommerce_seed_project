@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'cmsConfigue.dart';
@@ -67,31 +69,68 @@ class RatingAlert extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
+            String userid = await SharedPreferenceManager().getUserId();
+            log(userid);
             String customername = await SharedPreferenceManager().getname();
             String customeremail = await SharedPreferenceManager().getemail();
             String uid = await SharedPreferenceManager().getUserId();
             CommonAlert.show_loading_alert(context);
-            Map<String, dynamic> body = AppConfigure.bigCommerce
-                ? {
-                    "title": review.text,
-                    "text": header.text,
-                    "status": "pending",
-                    "rating": rating,
-                    "email": customeremail,
-                    "name": customername,
-                    "date_reviewed": "2019-03-24T14:15:22Z"
-                  }
-                : {
-                    "data": {
-                      "body": review.text,
-                      "heading": header.text,
-                      "state": "approved",
-                      "is_verified": true,
-                      "customer_id": uid.toString(),
-                      "external_product_id": pid,
-                      "rating": rating
-                    }
-                  };
+            Map<String, dynamic> body;
+            if (AppConfigure.wooCommerce) {
+              body = {
+                "product_id": pid,
+                "title": review.text,
+                "review": header.text,
+                "status": "approved",
+                "rating": rating,
+                "reviewer_email": customeremail,
+                "reviewer": customername,
+                "date_reviewed": "2019-03-24T14:15:22Z"
+              };
+            } else if (AppConfigure.bigCommerce) {
+              body = {
+                "title": review.text,
+                "text": header.text,
+                "status": "pending",
+                "rating": rating,
+                "email": customeremail,
+                "name": customername,
+                "date_reviewed": "2019-03-24T14:15:22Z"
+              };
+            } else {
+              body = {
+                "data": {
+                  "body": review.text,
+                  "heading": header.text,
+                  "state": "approved",
+                  "is_verified": true,
+                  "customer_id": uid.toString(),
+                  "external_product_id": pid,
+                  "rating": rating
+                }
+              };
+            }
+            // AppConfigure.bigCommerce
+            //     ? {
+            //         "title": review.text,
+            //         "text": header.text,
+            //         "status": "pending",
+            //         "rating": rating,
+            //         "email": customeremail,
+            //         "name": customername,
+            //         "date_reviewed": "2019-03-24T14:15:22Z"
+            //       }
+            //     : {
+            //         "data": {
+            //           "body": review.text,
+            //           "heading": header.text,
+            //           "state": "approved",
+            //           "is_verified": true,
+            //           "customer_id": uid.toString(),
+            //           "external_product_id": pid,
+            //           "rating": rating
+            //         }
+            // };
             ProductRepository().addProductReview(body, pid).then((value) async {
               Navigator.of(context).pop();
               if (value == AppString.success) {

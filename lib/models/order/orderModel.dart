@@ -1,3 +1,4 @@
+import 'package:mobj_project/mappers/woocommerce/woocommerce_order_model.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_ordemodel.dart';
@@ -57,7 +58,9 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      return WooCommerceOrderModel.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceOrderModel.fromJson(json);
     } else {
       return ShopifyOrderModel.fromJson(json);

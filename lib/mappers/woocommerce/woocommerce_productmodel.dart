@@ -33,7 +33,7 @@ class WooCommerceProductModel implements ProductModel {
   @override
   final List<WooCommerceProductVariant> variants;
   // @override
-  // final List<WooCommerceProductOption> options;
+  final List<WooCommerceProductOption> options;
   // @override
   // final List<WooCommerceProductImage> images;
   // @override
@@ -55,7 +55,7 @@ class WooCommerceProductModel implements ProductModel {
     required this.status,
     // required this.adminGraphqlApiId,
     required this.variants,
-    // required this.options,
+    required this.options,
     // required this.images,
     required this.image,
   });
@@ -119,11 +119,11 @@ class WooCommerceProductModel implements ProductModel {
         //     json['custom_url'][''] ?? DefaultValues.defaultAdminGraphqlApiId,
         variants: variants ??
             DefaultValues.defaultVariants.cast<WooCommerceProductVariant>(),
-        // options: (json['options'] as List<dynamic>?)
-        //         ?.map((optionJson) => WooCommerceProductOption.fromJson(
-        //             optionJson as Map<String, dynamic>))
-        //         .toList() ??
-        //     DefaultValues.defaultVariants.cast<WooCommerceProductOption>(),
+        options: (json['options'] as List<dynamic>?)
+                ?.map((optionJson) => WooCommerceProductOption.fromJson(
+                    optionJson as Map<String, dynamic>))
+                .toList() ??
+            DefaultValues.defaultVariants.cast<WooCommerceProductOption>(),
         // images: (json['images'] as List<dynamic>?)
         //         ?.map((imageJson) => WooCommerceProductImage.fromJson(imageJson as Map<String, dynamic>))
         //         .toList() ??
@@ -356,10 +356,10 @@ class WooCommerceProductOption implements ProductOption {
   factory WooCommerceProductOption.fromJson(Map<String, dynamic> json) {
     return WooCommerceProductOption(
       id: json['id'] ?? DefaultValues.defaultOptionId,
-      productId: json['product_id'] ?? DefaultValues.defaultOptionProductId,
+      productId: json['id'] ?? DefaultValues.defaultOptionProductId,
       name: json['name'] ?? DefaultValues.defaultOptionName,
       position: json['position'] ?? DefaultValues.defaultOptionPosition,
-      values: (json['option_values'] as List<dynamic>)
+      values: (json['has_options'] as List<dynamic>)
               .map((optionValue) => optionValue['label'] as String)
               .toList() ??
           DefaultValues.defaultOptionValues,
