@@ -1,5 +1,7 @@
 // addressRepository
 
+
+
 import 'package:dio/dio.dart';
 import 'package:http/src/response.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -40,21 +42,28 @@ class AddressRepository {
         rethrow;
       }
     } 
-    else if ( AppConfigure.wooCommerce){
+    else
+     if ( AppConfigure.wooCommerce){
  API api = API();
+           
        try {
+         debugPrint("calling get address list api0");
            String cunsumerKey = AppConfigure.consumerkey;
        String cumsumerSecret = AppConfigure.consumersecret;
         final response = await api.sendRequest.get(
             "/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret");
         if (response.statusCode == APIConstants.successCode) {
           debugPrint("body is this ${response.data} $uid");
-          final List result = jsonDecode(response.data)['data'];
-          debugPrint("body is this $result $uid");
-          if (result.isEmpty) {
+           
+            // final result = response.data;
+       //   debugPrint("body is this $result $uid");
+          if (response.data['billing']['address_1']=="") {
             throw (AppString.noDataError);
+            
           } else {
-            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+            
+            return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
+
           }
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
@@ -63,7 +72,8 @@ class AddressRepository {
         } else {
           return empty;
         }
-      } catch (error) {
+      } catch (error, stackTrace) {
+        print("error for address is this $error $stackTrace");
         rethrow;
       }
     }
@@ -130,7 +140,102 @@ class AddressRepository {
         exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } else {
+    }
+    else if (AppConfigure.wooCommerce){
+      API api = API();
+      // body = {
+      //           "billing": {
+      //             "first_name": "",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1": "",
+      //             "address_2": "",
+      //             "city": "",
+      //             "state": "MH",
+      //             "postcode": "",
+      //             "country": "IN",
+      //             // "email": "john.doe@example.com",
+      //             "phone":  "",
+      //           },
+      //           "shipping": {
+      //             "first_name":"",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1":  "",
+      //             "address_2": "",
+      //             "city":"",
+      //             "state": "MH",
+      //             "postcode":  "",
+      //             "country": "IN"
+      //           }
+
+      //         };
+           
+       try {
+        final response;
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+            debugPrint("calling null addressid api");
+            // var body1 = jsonEncode({"address": body});
+          response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: {
+                "billing": {
+                  "first_name": "",
+                  "last_name": "",
+                  "company": "",
+                  "address_1": "",
+                  "address_2": "",
+                  "city": "",
+                  "state": "",
+                  "postcode": "",
+                  "country": "",
+                  // "email": "john.doe@example.com",
+                  "phone":  "",
+                },
+                "shipping": {
+                  "first_name":"",
+                  "last_name": "",
+                  "company": "",
+                  "address_1":  "",
+                  "address_2": "",
+                  "city":"",
+                  "state": "",
+                  "postcode":  "",
+                  "country": ""
+                }
+
+              },
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.data} $uid");
+           
+       
+            // return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
+
+          return [null];
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        print("error for address is this $error $stackTrace");
+        rethrow;
+      }
+
+
+      
+    }
+    
+    
+     else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final response = await ApiManager.delete(
@@ -254,28 +359,19 @@ class AddressRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
          
           final response;
-          if (addId == "") {
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
             debugPrint("calling null addressid api");
             var body1 = jsonEncode({"address": body});
-            response = await api.sendRequest.post(
-              "/customers/addresses",
-              data: body,
-              options: Options(headers: {
-                'Content-Type': 'application/json',
-                "X-auth-Token": AppConfigure.bigCommerceAccessToken
-              }),
-            );
-          } else {
-            debugPrint("calling not null addressid api");
-            response = await api.sendRequest.put(
-              "/customers/addresses",
-              data: body,
-              options: Options(headers: {
-                'Content-Type': 'application/json',
-                "X-auth-Token": AppConfigure.bigCommerceAccessToken
-              }),
-            );
-          }
+          response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: body,
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+       
           if (response.statusCode == APIConstants.successCode) {
             return response;
 

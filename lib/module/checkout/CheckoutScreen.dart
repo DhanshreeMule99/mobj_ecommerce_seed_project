@@ -56,8 +56,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               data: (product) {
                 DraftOrderModel productlist = product;
                 for (var element in productlist.lineItems) {
-                  bigcommerceOrderedItems.add(
-                      {"item_id": element.id, "quantity": element.quantity});
+                  bigcommerceOrderedItems.add(AppConfigure.wooCommerce
+                      ? {
+                          "product_id": element.productId,
+                          "quantity": element.quantity
+                        }
+                      : {"item_id": element.id, "quantity": element.quantity});
                 }
 
                 return RefreshIndicator(
@@ -123,7 +127,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                             left: 5),
                                                     child: CachedNetworkImage(
                                                       imageUrl: AppConfigure
-                                                              .bigCommerce
+                                                                  .bigCommerce ||
+                                                              AppConfigure
+                                                                  .wooCommerce
                                                           ? orderList
                                                               .adminGraphqlApiId
                                                           : (ref.watch(productImageDataProvider(
@@ -314,40 +320,70 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                         }
                                                                       }
                                                                     }
-                                                                  : () {
-                                                                      if (orderList
-                                                                              .quantity >
-                                                                          1) {
-                                                                        setState(
-                                                                          () {
-                                                                            orderList.quantity--;
-                                                                            final lineItemsList =
-                                                                                productlist.lineItems;
-                                                                            var reqBody =
-                                                                                [];
-                                                                            for (int i = 0;
-                                                                                i <= productlist.lineItems.length - 1;
-                                                                                i++) {
-                                                                              reqBody.add({
-                                                                                "variant_id": lineItemsList[i].variantId,
-                                                                                "quantity": lineItemsList[i].quantity
-                                                                              });
-                                                                            }
+                                                                  : AppConfigure
+                                                                          .wooCommerce
+                                                                      ? () async {
+                                                                          if (orderList.quantity >
+                                                                              1) {
+                                                                            API api =
+                                                                                API();
+                                                                            try {
+                                                                              String draftId = await SharedPreferenceManager().getDraftId();
+                                                                              CommonAlert.show_loading_alert(context);
 
-                                                                            CommonAlert.show_loading_alert(context);
-                                                                            // getProductsByVariantId
+                                                                              orderList.quantity--;
+                                                                              setState(() {});
+                                                                              debugPrint('add maps');
 
-                                                                            ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                              debugPrint('calling put api ');
+                                                                              String email = await SharedPreferenceManager().getemail();
+
+                                                                              var response = await api.sendRequest.post(
+                                                                                'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email',
+                                                                                data: {
+                                                                                  "quantity": orderList.quantity.toString()
+                                                                                },
+                                                                              );
+
+                                                                              ref.refresh(cartDetailsDataProvider);
+
+                                                                              debugPrint('cart updated successfully ${response.statusCode}');
+                                                                            } on Exception catch (e) {
+                                                                              debugPrint(e.toString());
+                                                                            } finally {
                                                                               Navigator.of(context).pop();
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      : () {
+                                                                          if (orderList.quantity >
+                                                                              1) {
+                                                                            setState(
+                                                                              () {
+                                                                                orderList.quantity--;
+                                                                                final lineItemsList = productlist.lineItems;
+                                                                                var reqBody = [];
+                                                                                for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                  reqBody.add({
+                                                                                    "variant_id": lineItemsList[i].variantId,
+                                                                                    "quantity": lineItemsList[i].quantity
+                                                                                  });
+                                                                                }
 
-                                                                              if (subjectFromServer == AppString.success) {
-                                                                                ref.refresh(cartDetailsDataProvider);
-                                                                              }
-                                                                            });
-                                                                          },
-                                                                        );
-                                                                      }
-                                                                    },
+                                                                                CommonAlert.show_loading_alert(context);
+                                                                                // getProductsByVariantId
+
+                                                                                ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                                  Navigator.of(context).pop();
+
+                                                                                  if (subjectFromServer == AppString.success) {
+                                                                                    ref.refresh(cartDetailsDataProvider);
+                                                                                  }
+                                                                                });
+                                                                              },
+                                                                            );
+                                                                          }
+                                                                        },
                                                             ),
                                                             Text(
                                                                 '${orderList.quantity}'),
@@ -415,56 +451,82 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                             .pop();
                                                                       }
                                                                     }
-                                                                  : () {
-                                                                      final price = double.parse(orderList
-                                                                          .price
-                                                                          .toString());
-                                                                      CommonAlert
-                                                                          .show_loading_alert(
-                                                                              context);
-                                                                      ProductRepository()
-                                                                          .getProductsByVariantId(
-                                                                              orderList.variantId.toString(),
-                                                                              orderList.productId.toString())
-                                                                          .then((subjectFromServer) {
-                                                                        if (orderList.quantity <
-                                                                            subjectFromServer.inventoryQuantity) {
-                                                                          setState(
-                                                                            () {
-                                                                              orderList.quantity++;
-                                                                              final lineItemsList = productlist.lineItems;
-                                                                              var reqBody = [];
-                                                                              for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
-                                                                                reqBody.add({
-                                                                                  "variant_id": lineItemsList[i].variantId,
-                                                                                  "quantity": lineItemsList[i].quantity
-                                                                                });
-                                                                              }
+                                                                  : AppConfigure
+                                                                          .wooCommerce
+                                                                      ? () async {
+                                                                          API api =
+                                                                              API();
+                                                                          try {
+                                                                            String
+                                                                                draftId =
+                                                                                await SharedPreferenceManager().getDraftId();
+                                                                            CommonAlert.show_loading_alert(context);
 
-                                                                              ProductRepository().updateCart(reqBody).then((subjectFromServers) {
-                                                                                Navigator.of(context).pop();
+                                                                            orderList.quantity++;
+                                                                            setState(() {});
+                                                                            debugPrint('add maps');
 
-                                                                                if (subjectFromServers == AppString.success) {
-                                                                                  ref.refresh(cartDetailsDataProvider);
-                                                                                }
-                                                                              });
-                                                                            },
-                                                                          );
-                                                                        } else {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          Fluttertoast.showToast(
-                                                                              msg: "Only ${subjectFromServer.inventoryQuantity} left in stock",
-                                                                              toastLength: Toast.LENGTH_SHORT,
-                                                                              gravity: ToastGravity.BOTTOM,
-                                                                              timeInSecForIosWeb: 0,
-                                                                              backgroundColor: AppColors.blackColor,
-                                                                              textColor: AppColors.whiteColor,
-                                                                              fontSize: 16.0);
+                                                                            debugPrint('calling put api ');
+                                                                            String
+                                                                                email =
+                                                                                await SharedPreferenceManager().getemail();
+
+                                                                            var response =
+                                                                                await api.sendRequest.post(
+                                                                              'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email',
+                                                                              data: {
+                                                                                "quantity": orderList.quantity.toString()
+                                                                              },
+                                                                            );
+
+                                                                            ref.refresh(cartDetailsDataProvider);
+
+                                                                            debugPrint('cart updated successfully ${response.statusCode}');
+                                                                          } on Exception catch (e) {
+                                                                            debugPrint(e.toString());
+                                                                          } finally {
+                                                                            Navigator.of(context).pop();
+                                                                          }
                                                                         }
-                                                                        // });
-                                                                      });
-                                                                    },
+                                                                      : () {
+                                                                          final price = double.parse(orderList
+                                                                              .price
+                                                                              .toString());
+                                                                          CommonAlert.show_loading_alert(
+                                                                              context);
+                                                                          ProductRepository()
+                                                                              .getProductsByVariantId(orderList.variantId.toString(), orderList.productId.toString())
+                                                                              .then((subjectFromServer) {
+                                                                            if (orderList.quantity <
+                                                                                subjectFromServer.inventoryQuantity) {
+                                                                              setState(
+                                                                                () {
+                                                                                  orderList.quantity++;
+                                                                                  final lineItemsList = productlist.lineItems;
+                                                                                  var reqBody = [];
+                                                                                  for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                    reqBody.add({
+                                                                                      "variant_id": lineItemsList[i].variantId,
+                                                                                      "quantity": lineItemsList[i].quantity
+                                                                                    });
+                                                                                  }
+
+                                                                                  ProductRepository().updateCart(reqBody).then((subjectFromServers) {
+                                                                                    Navigator.of(context).pop();
+
+                                                                                    if (subjectFromServers == AppString.success) {
+                                                                                      ref.refresh(cartDetailsDataProvider);
+                                                                                    }
+                                                                                  });
+                                                                                },
+                                                                              );
+                                                                            } else {
+                                                                              Navigator.of(context).pop();
+                                                                              Fluttertoast.showToast(msg: "Only ${subjectFromServer.inventoryQuantity} left in stock", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 0, backgroundColor: AppColors.blackColor, textColor: AppColors.whiteColor, fontSize: 16.0);
+                                                                            }
+                                                                            // });
+                                                                          });
+                                                                        },
                                                             )
                                                           ],
                                                         ),
@@ -527,6 +589,23 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   await ApiManager
                                                                       .delete(
                                                                           '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
+
+                                                              ref.refresh(
+                                                                  cartDetailsDataProvider);
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              debugPrint(
+                                                                  "cart item deleted successfully ${response.statusCode}");
+                                                            } else if (AppConfigure
+                                                                .wooCommerce) {
+                                                              String email =
+                                                                  await SharedPreferenceManager()
+                                                                      .getemail();
+                                                              var response =
+                                                                  await ApiManager
+                                                                      .delete(
+                                                                          '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
 
                                                               ref.refresh(
                                                                   cartDetailsDataProvider);

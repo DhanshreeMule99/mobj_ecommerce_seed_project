@@ -479,8 +479,7 @@ class BigCommerceDefaultAddressModel implements DefaultAddressModel {
       city: json['city'] ?? DefaultValues.defaultString,
       province: json['state_or_province'] ?? DefaultValues.defaultString,
       country: json['country'] ?? DefaultValues.defaultString,
-      zip: json['postal_code'] ??
-          DefaultValues.defaultString ??
+      zip: json['postal_code'] ??DefaultValues.defaultString ??
           DefaultValues.defaultString,
       phone: json['phone'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
