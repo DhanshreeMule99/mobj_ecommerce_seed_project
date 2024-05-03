@@ -131,11 +131,11 @@ class _CollectionWiseProductScreenState
                   description: '',
                   handle: '',
                   featuredImage: e['images'][0]['src'],
-                  minPrice: 100,
-                  maxPrice: 100,
+                  minPrice: double.parse(e['price']),
+                  maxPrice: double.parse(e['price']),
                   currencyCode: '',
                   imageUrls: [e['images'][0]['src']],
-                  id: ''))
+                  id: e['id'].toString()))
               .toList();
           return products;
         } else {
@@ -725,7 +725,7 @@ fragment PriceFields on Money {
                                       itemCount: products.length,
                                       itemBuilder: (context, index) {
                                         final product = products[index];
-                                            log("image url is this ${product.featuredImage}");
+                                        log("image url is this ${product.featuredImage}");
                                         return Padding(
                                             padding: const EdgeInsets.only(
                                                 top: 5, left: 15, right: 15),
