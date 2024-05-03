@@ -40,16 +40,69 @@ class AddressRepository {
         rethrow;
       }
     } else {
-      try {
-        final response =
-            await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
-        if (response.statusCode == APIConstants.successCode) {
-          debugPrint("body is this ${response.body} $uid");
-          final List result = jsonDecode(response.body)['addresses'];
-          if (result.isEmpty) {
+
+ try {
+  String exceptionString = "";
+ API api = API();
+  final accessToken = await SharedPreferenceManager().getToken();
+      final response = await api.sendRequest.post(
+        "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
+        data: {
+          'query': '''
+          query {
+            customer(customerAccessToken: "$accessToken") {
+              id
+              addresses(first: 5) {
+                edges {
+                  node {
+                    id
+                    firstName
+                    lastName
+                    address1
+                    city
+                    province
+                    country
+                    zip
+                  }
+                }
+              }
+            }
+          }
+          ''',
+        },
+      );
+
+      if (response.statusCode == APIConstants.successCode) {
+         var data = response.data;
+        // final Map<String, dynamic> data = jsonDecode(response.data);
+final List<Map<String, dynamic>> add = data['data']['customer']['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node'] as Map<String, dynamic>).toList();
+
+
+
+//       API api = API();
+//       try {
+// var response;
+//   debugPrint("calling for get address api");
+//             String query = '''
+
+
+// ''';
+//             response = await api.sendRequest.post(
+//               "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
+//               data: {
+//                 'query': query,
+//               },
+//             );
+//         if (response.statusCode == APIConstants.successCode) {
+//           debugPrint("body is this ${response.data} $uid");
+
+
+          // final List result = json.decode(response.data)['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node']).toList();
+
+          if (add.isEmpty) {
             throw (AppString.noDataError);
           } else {
-            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+            return add.map((e) => DefaultAddressModel.fromJson(e)).toList();
           }
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
@@ -58,7 +111,9 @@ class AddressRepository {
         } else {
           return empty;
         }
-      } catch (error) {
+      }  catch (error, stackTrace) {
+        print('object $error $stackTrace');
+        
         rethrow;
       }
     }
@@ -104,9 +159,24 @@ class AddressRepository {
     } else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-          final response = await ApiManager.delete(
-              "$baseUrl$uid/${APIConstants.address}/$addId.json");
-          var data = jsonDecode(response.body);
+          final accessToken = await SharedPreferenceManager().getToken();
+         final response = await api.sendRequest.post(
+        "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
+        data: {
+          'query': '''
+         mutation {
+  customerAddressDelete(customerAccessToken: "$accessToken", id: "$addId") {
+    deletedCustomerAddressId
+    customerUserErrors {
+      field
+      message
+    }
+  }
+}
+          ''',
+        },
+      );
+          var data = jsonDecode(response.data);
           if (response.statusCode == APIConstants.successCode) {
             return AppString.success;
           } else if (response.statusCode == APIConstants.unAuthorizedCode) {
@@ -222,10 +292,15 @@ class AddressRepository {
     } else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
+            final accessToken = await SharedPreferenceManager().getToken();
           var response;
           if (addId == "") {
             debugPrint("calling null addressid api");
             String query = '''
+
+
+
+
 mutation customerAddressCreate(\$customerAccessToken: String!, \$address: MailingAddressInput!) {
   customerAddressCreate(customerAccessToken: \$customerAccessToken, address: \$address) {
     customerUserErrors {
@@ -239,6 +314,7 @@ mutation customerAddressCreate(\$customerAccessToken: String!, \$address: Mailin
   }
 }
 
+
 ''';
 
             Map<String, dynamic> variables = body;
@@ -247,15 +323,60 @@ mutation customerAddressCreate(\$customerAccessToken: String!, \$address: Mailin
               "https://pyvaidyass.myshopify.com/api/2021-04/graphql.json",
               data: {
                 'query': query,
-                'variables': variables,
+                 'variables': variables,
               },
             );
           } else {
-            // debugPrint("calling not null addressid api");
-            // response = await ApiManager.put(
-            //     "$baseUrl$uid/${APIConstants.address}/$addId.json", body1);
+            String city = body['address']['city'];
+ debugPrint("calling null addressid api");
+            String query = '''
+mutation {
+  customerAddressUpdate(
+    customerAccessToken: "$accessToken"
+    id: "$addId"
+    address: {
+      firstName: $body["address"]["firstName"]
+      lastName:$body["address"]["lastName"]
+      address1: $body["address"]["address1"]
+      city: "$body["addresss"]["city"]
+      province: ""
+      country: $body["address"]["country"]
+      zip:$body["address"]["zip"]
+    }
+  ) {
+    customerAddress {
+      id
+      firstName
+      lastName
+      address1
+      city
+      province
+      country
+      zip
+    }
+    customerUserErrors {
+      field
+      message
+    }
+  }
+}
+
+''';
+print(" body is here  : $body");
+
+             Map<String, dynamic> variables = body;
+
+            response = await api.sendRequest.post(
+              "https://pyvaidyass.myshopify.com/api/2021-04/graphql.json",
+              data: {
+                'query': query,
+                 'variables': variables,
+              },
+            );
+
+
           }
-          print("body is this ${response.data}");
+           print("body is this ${response.data}");
           var data = response.data;
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {

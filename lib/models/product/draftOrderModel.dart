@@ -258,7 +258,7 @@ class SmsMarketingConsent {
 }
 
 class DefaultAddressModel {
-  final int id;
+  final String id;
   final int customerId;
   final String firstName;
   final String lastName;

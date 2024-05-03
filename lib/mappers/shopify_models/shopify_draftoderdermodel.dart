@@ -406,7 +406,7 @@ class ShopifySmsMarketingConsent implements SmsMarketingConsent {
 
 class ShopifyDefaultAddressModel implements DefaultAddressModel {
   @override
-  final int id;
+  final String id;
   @override
   final int customerId;
   @override
@@ -456,10 +456,10 @@ class ShopifyDefaultAddressModel implements DefaultAddressModel {
 
   factory ShopifyDefaultAddressModel.fromJson(Map<String, dynamic> json) {
     return ShopifyDefaultAddressModel(
-      id: json['id'] ?? DefaultValues.defaultInt,
+      id: json['id']?? DefaultValues.defaultString,
       customerId: json['customer_id'] ?? DefaultValues.defaultInt,
-      firstName: json['first_name'] ?? DefaultValues.defaultString,
-      lastName: json['last_name'] ?? DefaultValues.defaultString,
+      firstName: json['firstName'] ?? DefaultValues.defaultString,
+      lastName: json['lastName'] ?? DefaultValues.defaultString,
       address1: json['address1'] ?? DefaultValues.defaultString,
       city: json['city'] ?? DefaultValues.defaultString,
       province: json['province'] ?? DefaultValues.defaultString,
@@ -473,4 +473,9 @@ class ShopifyDefaultAddressModel implements DefaultAddressModel {
       defaultAddress: json['default'] ?? false,
     );
   }
+
+
+ 
+
+
 }

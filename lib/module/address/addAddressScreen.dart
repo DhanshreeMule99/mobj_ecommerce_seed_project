@@ -162,7 +162,6 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                 "address1": selectedAddressIndex == 1
                     ? addressController.text
                     : residence,
-                "address2": "",
                 "city": selectedAddressIndex == 1 ? cityController.text : city,
                 "company": "",
                 "country": selectedAddressIndex == 1

@@ -421,7 +421,7 @@ class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
 
 class BigCommerceDefaultAddressModel implements DefaultAddressModel {
   @override
-  final int id;
+  final String id;
   @override
   final int customerId;
   @override
