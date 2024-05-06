@@ -63,6 +63,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         key: introKey,
         globalBackgroundColor: Colors.white,
         allowImplicitScrolling: true,
+        showNextButton: false,
         // autoScrollDuration: 3000,
         // infiniteAutoScroll: false,
         globalFooter: SizedBox(
@@ -91,15 +92,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           ),
           PageViewModel(
             title: "Easy Transcation And Payment",
-            body:
-                "Very safe and Secure payment transcations.",
+            body: "Very safe and Secure payment transcations.",
             image: _buildImage('splach2.jpg'),
             decoration: pageDecoration,
           ),
           PageViewModel(
             title: "Free Shipping",
-            body:
-                "Free shipping all over India.",
+            body: "Free shipping all over India.",
             image: _buildImage('shipping.jpg'),
             decoration: pageDecoration,
           ),
