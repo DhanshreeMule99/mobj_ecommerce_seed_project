@@ -1,311 +1,137 @@
-// onboardScreen
-// // onboardScreen
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:mobj_project/utils/cmsConfigue.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:mobj_project/module/home/homeScreen.dart';
 
-class onboardScreen extends ConsumerStatefulWidget {
-  const onboardScreen({super.key});
+void main() => runApp(const App());
+
+class App extends StatelessWidget {
+  const App({Key? key});
 
   @override
-  onboardScreenState createState() => onboardScreenState();
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
+    );
+
+    return MaterialApp(
+      title: 'Introduction screen',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      home: const OnBoardingPage(),
+    );
+  }
 }
 
-class onboardScreenState extends ConsumerState<onboardScreen> {
-  late Material materialButton;
-  late int index;
+class OnBoardingPage extends StatefulWidget {
+  const OnBoardingPage({Key? key});
 
   @override
-  void initState() {
-    super.initState();
-    materialButton = _skipButton();
-    index = 0;
-  }
+  _OnBoardingPageState createState() => _OnBoardingPageState();
+}
 
-  Material _skipButton({void Function(int)? setIndex}) {
-    return Material(
-      borderRadius: defaultSkipButtonBorderRadius,
-      color: defaultSkipButtonColor,
-      child: InkWell(
-        borderRadius: defaultSkipButtonBorderRadius,
-        onTap: () async {
-          await SharedPreferenceManager().setDeviceId(1);
-          Navigator.of(context).pushReplacement(PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                const HomeScreen(),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ));
-        },
-        child: const Padding(
-          padding: defaultSkipButtonPadding,
-          child: Text(
-            AppString.skip,
-            style: defaultSkipButtonTextStyle,
-          ),
-        ),
-      ),
+class _OnBoardingPageState extends State<OnBoardingPage> {
+  final introKey = GlobalKey<IntroductionScreenState>();
+
+  int _currentPage = 0;
+
+  void _onIntroEnd(context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
   }
 
-  Material get done {
-    return Material(
-      borderRadius: defaultProceedButtonBorderRadius,
-      color: AppColors.green,
-      child: InkWell(
-        borderRadius: defaultProceedButtonBorderRadius,
-        onTap: () async {
-          await SharedPreferenceManager().setDeviceId(1);
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        },
-        child: const Padding(
-          padding: defaultProceedButtonPadding,
-          child: Text(
-            AppString.done,
-            style: defaultProceedButtonTextStyle,
-          ),
-        ),
-      ),
-    );
+  Widget _buildImage(String assetName, [double width = 350]) {
+    return Image.asset('assets/$assetName', width: width);
   }
 
   @override
   Widget build(BuildContext context) {
-    final appInfoAsyncValue = ref.watch(appInfoProvider);
-    final onboardingPagesList = [
-      PageModel(
-          widget: appInfoAsyncValue.when(
-              data: (appInfo) => DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AppColors.blackColor,
-                      border: Border.all(
-                        width: 0.0,
-                        color: AppColors.transparent,
-                      ),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: ScrollController(),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 45.0,
-                              vertical: 90.0,
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: appInfo.logoImagePath,
-                              placeholder: (context, url) => Container(
-                                height: 200,
-                                width: 200,
-                                color: AppColors.greyShade200,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Product Insights'.toUpperCase(),
-                                style: pageTitleStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 45.0, vertical: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Get to know your desired products inside out. Our comprehensive product descriptions, accompanied by vibrant images, help you make informed decisions. Stay ahead of the curve with the latest trends and tech specs",
-                                style: pageInfoStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Container())),
-      PageModel(
-          widget: appInfoAsyncValue.when(
-              data: (appInfo) => DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AppColors.blackColor,
-                      border: Border.all(
-                        width: 0.0,
-                        color: AppColors.transparent,
-                      ),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: ScrollController(),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 45.0,
-                              vertical: 90.0,
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: appInfo.logoImagePath,
-                              placeholder: (context, url) => Container(
-                                height: 200,
-                                width: 200,
-                                color: AppColors.greyShade200,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Effortless Checkout'.toUpperCase(),
-                                style: pageTitleStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 45.0, vertical: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "We believe in a hassle-free checkout process. Enjoy a seamless transaction experience with multiple payment options and a secure payment gateway. Your satisfaction is our top priority.",
-                                style: pageInfoStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Container())),
-      PageModel(
-          widget: appInfoAsyncValue.when(
-              data: (appInfo) => DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AppColors.blackColor,
-                      border: Border.all(
-                        width: 0.0,
-                        color: AppColors.transparent,
-                      ),
-                    ),
-                    child: SingleChildScrollView(
-                      controller: ScrollController(),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 45.0,
-                              vertical: 90.0,
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: appInfo.logoImagePath,
-                              placeholder: (context, url) => Container(
-                                height: 200,
-                                width: 200,
-                                color: AppColors.greyShade200,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Exclusive Deals and Discounts'.toUpperCase(),
-                                style: pageTitleStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 45.0, vertical: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Unlock savings galore! Dive into a world of exclusive deals and discounts tailored just for you. Our app keeps you in the loop on the hottest offers, ensuring you never miss a chance to snag your favorite items at unbeatable prices.",
-                                style: pageInfoStyle,
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Container())),
-    ];
+    const bodyStyle = TextStyle(fontSize: 19.0);
+
+    const pageDecoration = PageDecoration(
+      titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
+      bodyTextStyle: bodyStyle,
+      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+      pageColor: Colors.white,
+      imagePadding: EdgeInsets.zero,
+    );
+
     return SafeArea(
-        child: appInfoAsyncValue.when(
-            data: (appInfo) => Scaffold(
-                  backgroundColor: AppColors.blackColor,
-                  body: Onboarding(
-                    pages: onboardingPagesList,
-                    onPageChange: (int pageIndex) {
-                      index = pageIndex;
-                    },
-                    startPageIndex: 0,
-                    footerBuilder:
-                        (context, dragDistance, pagesLength, setIndex) {
-                      return DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: AppColors.blackColor,
-                          border: Border.all(
-                            width: 0.0,
-                            color: AppColors.transparent,
-                          ),
-                        ),
-                        child: ColoredBox(
-                          color: AppColors.blackColor,
-                          child: Padding(
-                            padding: const EdgeInsets.all(45.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                CustomIndicator(
-                                  netDragPercent: dragDistance,
-                                  pagesLength: pagesLength,
-                                  indicator: Indicator(
-                                    activeIndicator: const ActiveIndicator(
-                                        color: AppColors.whiteColor,
-                                        borderWidth: 2.5),
-                                    closedIndicator: const ClosedIndicator(
-                                        color: AppColors.buttonColor,
-                                        borderWidth: 2.5),
-                                    indicatorDesign: IndicatorDesign.polygon(
-                                        polygonDesign: PolygonDesign(
-                                            polygon: DesignType.polygon_circle,
-                                            polygonRadius: 7)),
-                                  ),
-                                ),
-                                index == pagesLength - 1
-                                    ? done
-                                    : _skipButton(setIndex: setIndex)
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stackTrace) => Text('${AppString.error}: $error')));
+      child: IntroductionScreen(
+        key: introKey,
+        globalBackgroundColor: Colors.white,
+        allowImplicitScrolling: true,
+        // autoScrollDuration: 3000,
+        // infiniteAutoScroll: false,
+        globalFooter: SizedBox(
+          width: double.infinity,
+          height: 60,
+          child: ElevatedButton(
+            child: Text(_currentPage == 2 ? 'Done' : 'Next',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+            onPressed: () {
+              if (_currentPage < 2) {
+                introKey.currentState?.animateScroll(_currentPage + 1);
+                // _currentPage++;
+              } else {
+                _onIntroEnd(context);
+              }
+            },
+          ),
+        ),
+        pages: [
+          PageViewModel(
+            title: "Updated Products Everyday",
+            body:
+                "Don't worry you won't be outdated. Stay up-to-date everyday.",
+            image: _buildImage('women.jpg'),
+            decoration: pageDecoration,
+          ),
+          PageViewModel(
+            title: "Easy Transcation And Payment",
+            body:
+                "Very safe and Secure payment transcations.",
+            image: _buildImage('splach2.jpg'),
+            decoration: pageDecoration,
+          ),
+          PageViewModel(
+            title: "Free Shipping",
+            body:
+                "Free shipping all over India.",
+            image: _buildImage('shipping.jpg'),
+            decoration: pageDecoration,
+          ),
+        ],
+        onDone: () => _onIntroEnd(context),
+        showBackButton: false,
+        done: const Text('', style: TextStyle(fontWeight: FontWeight.w600)),
+        curve: Curves.fastLinearToSlowEaseIn,
+        controlsMargin: const EdgeInsets.all(16),
+        controlsPadding: kIsWeb
+            ? const EdgeInsets.all(12.0)
+            : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+        dotsDecorator: const DotsDecorator(
+          size: Size(10.0, 10.0),
+          color: Color(0xFFBDBDBD),
+          activeSize: Size(22.0, 10.0),
+          activeShape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0)),
+          ),
+        ),
+        dotsContainerDecorator: const ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          ),
+        ),
+        onChange: (value) {
+          setState(() {
+            _currentPage = value;
+          });
+        },
+      ),
+    );
   }
 }

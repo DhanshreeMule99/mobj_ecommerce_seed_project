@@ -20,7 +20,7 @@ class AppRoutes {
     RouteConstants.registration: (BuildContext context) => const RegistrationScreen(),
     //TODO list guest checkout functionality
     // RouteConstants.guestCheckout: (BuildContext context) => const GuestCheckoutScreen(),
-    RouteConstants.onboard: (BuildContext context) => const onboardScreen(),
+    RouteConstants.onboard: (BuildContext context) => const OnBoardingPage(),
     RouteConstants.forgotPassword: (BuildContext context) => const ForgotPasswordScreen(),
     // RouteConstants.otp: (BuildContext context) => const OtpScreen(),
     RouteConstants.home: (BuildContext context) => const HomeScreen(),
