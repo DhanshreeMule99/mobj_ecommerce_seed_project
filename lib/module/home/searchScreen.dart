@@ -1,6 +1,8 @@
 // Search_user
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../wishlist/wishlishScreen.dart';
+
 final searchQueryProvider = StateNotifierProvider<SearchQueryNotifier, String>(
     (ref) => SearchQueryNotifier());
 
@@ -62,7 +64,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                 selectedPage: 1,
                 screen1: const HomeScreen(),
                 screen2: const SearchWidget(),
-                screen3: const HomeScreen(),
+                screen3:  WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),

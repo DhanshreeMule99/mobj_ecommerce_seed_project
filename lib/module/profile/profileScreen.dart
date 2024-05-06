@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../address/addressListScreen.dart';
+import '../wishlist/wishlishScreen.dart';
 import 'myOrder/orderListScreen.dart';
 
 class ProfileState extends StateNotifier<bool> {
@@ -96,7 +97,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               selectedPage: 3,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-              screen3: const HomeScreen(),
+              screen3:  WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),

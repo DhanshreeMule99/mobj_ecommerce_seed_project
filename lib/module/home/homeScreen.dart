@@ -198,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             selectedPage: 1,
             screen1: const HomeScreen(),
             screen2: const SearchWidget(),
-            screen3: const HomeScreen(),
+            screen3: WishlistScreen(),
             screen4: const ProfileScreen(),
             ref: ref,
           ),

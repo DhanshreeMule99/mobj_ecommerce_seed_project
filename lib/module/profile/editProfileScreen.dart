@@ -2,6 +2,8 @@
 
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../wishlist/wishlishScreen.dart';
+
 final isLoading = StateProvider((ref) => false);
 final fNameProvider = StateProvider((ref) => "");
 final lNameProvider = StateProvider((ref) => "");
@@ -127,7 +129,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               selectedPage: 3,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-              screen3: const HomeScreen(),
+               screen3:  WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),

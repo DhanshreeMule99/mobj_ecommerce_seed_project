@@ -3,6 +3,8 @@ import 'package:amazon_like_filter/props/applied_filter_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../wishlist/wishlishScreen.dart';
+
 class PrivacyScreen extends ConsumerStatefulWidget {
   final bool? logout;
 
@@ -34,7 +36,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                 selectedPage: 3,
                 screen1: const HomeScreen(),
                 screen2: const SearchWidget(),
-                screen3: const HomeScreen(),
+                  screen3:  WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),

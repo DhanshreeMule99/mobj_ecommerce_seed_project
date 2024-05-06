@@ -1,5 +1,7 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../wishlist/wishlishScreen.dart';
+
 
 final notificationSettingProvider =
     ChangeNotifierProvider((ref) => NotificationProvider());
@@ -189,7 +191,7 @@ class NotificationSettingScreenState
                 selectedPage: 3,
                 screen1: const HomeScreen(),
                 screen2: const SearchWidget(),
-                screen3: const HomeScreen(),
+                 screen3:  WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),

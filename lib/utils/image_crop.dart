@@ -5,6 +5,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../module/wishlist/wishlishScreen.dart';
+
 class ImageCrop extends ConsumerStatefulWidget {
   const ImageCrop({super.key});
 
@@ -39,7 +41,7 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
         selectedPage: 3,
         screen1: const HomeScreen(),
         screen2: const SearchWidget(),
-        screen3: const HomeScreen(),
+         screen3:  WishlistScreen(),
         screen4: const ProfileScreen(),
         ref: ref,
       ),

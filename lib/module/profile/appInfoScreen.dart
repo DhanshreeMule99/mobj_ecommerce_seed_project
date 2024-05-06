@@ -2,6 +2,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
+import '../wishlist/wishlishScreen.dart';
+
 class AppInfoScreen extends ConsumerStatefulWidget {
   final bool? logout;
 
@@ -30,7 +32,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
           selectedPage: 1,
           screen1: const HomeScreen(),
           screen2: const SearchWidget(),
-          screen3: const HomeScreen(),
+          screen3:  WishlistScreen(),
           screen4: const ProfileScreen(),
           ref: ref,
         ),
