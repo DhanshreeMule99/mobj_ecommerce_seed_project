@@ -106,6 +106,7 @@ dependencies:
   flutter_stripe: ^9.6.0
   connectivity_plus: ^5.0.0
   like_button: ^2.0.5
+  introduction_screen: ^3.1.14
   font_awesome_flutter: ^10.7.0
   ionicons: ^0.2.2
   google_fonts: ^4.0.4

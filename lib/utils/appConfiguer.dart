@@ -1,6 +1,6 @@
 //// shopify configureation
 class AppConfigure {
-  static const appName = "P.Y.Vaidya";
+  static const appName = "MobJ";
   static const primaryColor = "#0000FF";
   static const secondaryColor = "#ADD8E6";
   static const logoImagePath =
