@@ -136,7 +136,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           fontSize: 13.sp,
                         ),
                         displayMedium: GoogleFonts.inter(
-                            fontWeight: FontWeight.normal,
+                            fontWeight: FontWeight.w500,
                             color: ConstColors.purple,
                             fontSize: 12.sp,
                             decoration: TextDecoration.underline,

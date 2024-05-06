@@ -1041,11 +1041,11 @@ void _toggleObscured() {
           
                 child:
                  Container(
-                    // height: MediaQuery.of(context).size.height * 0.6,
+                    //  height: MediaQuery.of(context).size.height * 0.6,
                   //  width: MediaQuery.of(context).size.width  ,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/loginBack.jpg"),
+                      image: AssetImage("assets/login.jpg"),
                   fit: BoxFit.cover, 
                     
                     ),
@@ -1058,8 +1058,8 @@ void _toggleObscured() {
               left: 0,
               right: 0,
               child: Container(
-                    // height: MediaQuery.of(context).size.height * 0.5,
-      // width: MediaQuery.of(context).size.width  ,
+                    //  height: MediaQuery.of(context).size.height * 0.5,
+                    // width: MediaQuery.of(context).size.width  ,
                 padding: EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -1089,6 +1089,10 @@ void _toggleObscured() {
                         padding:
                             const EdgeInsets.only(right: 10, left: 10, top: 25),
                         child: TextFormField(
+
+                          onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
                           
                           controller: email,
                           validator: (value) {
@@ -1096,6 +1100,7 @@ void _toggleObscured() {
                           },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
+                            errorStyle: TextStyle(fontSize: 12),
                              contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
                               label: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -1114,7 +1119,7 @@ void _toggleObscured() {
                                       Radius.circular(
                                           AppDimension.buttonRadius)),
                                   borderSide: BorderSide(
-                                    color: appInfo.primaryColorValue,
+                                    color: Theme.of(context).colorScheme.primary,
                                     width: 1.5,
                                   )),
                               // //normal border
@@ -1124,7 +1129,7 @@ void _toggleObscured() {
                                       Radius.circular(
                                           AppDimension.buttonRadius)),
                                   borderSide: BorderSide(
-                                    color: appInfo.primaryColorValue,
+                                   color: Theme.of(context).colorScheme.primary,
                                     width: 1.5,
                                   )
                                   ),
@@ -1133,7 +1138,7 @@ void _toggleObscured() {
                                       Radius.circular(
                                           AppDimension.buttonRadius)),
                                   borderSide: BorderSide(
-                                      color: appInfo.primaryColorValue,
+                                    color: Theme.of(context).colorScheme.primary,
                                       width: 1.5)
                                       )
                                       ),
@@ -1142,13 +1147,17 @@ void _toggleObscured() {
                     Padding(
                         padding: const EdgeInsets.all(10),
                         child: TextFormField(
+                          onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: _obscured,
                             controller: pass,
                             // focusNode: _focuspass,
-
                             autofocus: false,
                             decoration: InputDecoration(
+                          errorStyle: TextStyle(fontSize: 12),
+                
                                contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
                                 label: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -1167,7 +1176,7 @@ void _toggleObscured() {
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
                                     borderSide: BorderSide(
-                                      color: appInfo.primaryColorValue,
+                                      color: Theme.of(context).colorScheme.primary,
                                       width: 1.5,
                                     )),
                                 enabledBorder: OutlineInputBorder(
@@ -1176,7 +1185,7 @@ void _toggleObscured() {
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
                                     borderSide: BorderSide(
-                                      color: appInfo.primaryColorValue,
+                                      color: Theme.of(context).colorScheme.primary,
                                       width: 1.5,
                                     )),
                                 focusedBorder: OutlineInputBorder(
@@ -1185,7 +1194,7 @@ void _toggleObscured() {
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
                                     borderSide: BorderSide(
-                                        color: appInfo.primaryColorValue,
+                                      color: Theme.of(context).colorScheme.primary,
                                         width: 1.5)),
                                 suffixIcon: Padding(
                                   padding:
@@ -1197,7 +1206,8 @@ void _toggleObscured() {
                                             ? Icons.visibility_off_rounded
                                             : Icons.visibility_rounded,
                                         size: 25,
-                                        color: appInfo.primaryColorValue),
+                                      color: Theme.of(context).colorScheme.primary,
+                                        ),
                                   ),
                                 )),
                             validator: (value) {
@@ -1210,7 +1220,9 @@ void _toggleObscured() {
                         ? Center(
                             child: Text(
                             error,
-                            style: const TextStyle(color: AppColors.red),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.red),
                           ))
                         : Container(),
                     Padding(
@@ -1228,8 +1240,8 @@ void _toggleObscured() {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: appInfo.primaryColorValue,
-                                minimumSize: const Size.fromHeight(40),
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                minimumSize: const Size.fromHeight(50),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         AppDimension.buttonRadius)),
@@ -1278,7 +1290,8 @@ void _toggleObscured() {
                     ),
                         TextButton(
                       child: Text(
-                        AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.bodyLarge
+                        AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.displayMedium
+
                         
                       ),
                       onPressed: () {
