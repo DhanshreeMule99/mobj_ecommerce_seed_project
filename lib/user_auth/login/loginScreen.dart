@@ -494,7 +494,8 @@
 //                               fontSize:
 //                                   MediaQuery.of(context).size.width * 0.06,
 //                               fontWeight: FontWeight.w600),
-//                         )),
+//                         )
+//                         ),
 //                     const Divider(
 //                       thickness: 1.5,
 //                     ),
@@ -754,7 +755,11 @@
 //                 loading: () => const Center(child: CircularProgressIndicator()),
 //                 error: (error, stackTrace) => const Text(AppString.oops),
 //               );
-//             }))));
+//             }
+//             )
+//             )
+//             )
+//             );
 //   }
 // }
 
@@ -766,6 +771,7 @@
 
 import 'dart:developer';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -1029,45 +1035,31 @@ void _toggleObscured() {
         top: true,
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/download.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welocome',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+              Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.23),
+
+          
+                child:
+                 Container(
+                    // height: MediaQuery.of(context).size.height * 0.6,
+                  //  width: MediaQuery.of(context).size.width  ,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/loginBack.jpg"),
+                  fit: BoxFit.cover, 
+                    
                     ),
-                    Text(
-                      'Back',
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-             
-                   
-                  ],
+                  ), 
                 ),
-              ),
-            ),
+               ),
+                 
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.5,
+      // width: MediaQuery.of(context).size.width  ,
                 padding: EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -1077,67 +1069,202 @@ void _toggleObscured() {
                   ),
                 ),
                child:
-              //   Consumer(builder: (context, watch, child) {
-              // final appInfoAsyncValue = ref.watch(appInfoProvider);
-              // return appInfoAsyncValue.when(
-              //   data: (appInfo) => 
+                Consumer(builder: (context, watch, child) {
+              final appInfoAsyncValue = ref.watch(appInfoProvider);
+              return appInfoAsyncValue.when(
+                data: (appInfo) => 
                 Form(
                   key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      TextFormField(
-                        controller: email,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          return Validation().emailValidation(value);
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(),
-                        ),
+                      Padding(
+                       padding: const EdgeInsets.only( left: 10),
+                        child: Text(
+                            AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.headlineLarge,
+                          
+                          ),
                       ),
-                      SizedBox(height: 20.0),
-                      TextFormField(
-                        controller: pass,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        validator: (value) {
-                          return Validation().validatePassword(value!);
+                       Padding(
+                        padding:
+                            const EdgeInsets.only(right: 10, left: 10, top: 25),
+                        child: TextFormField(
+                          
+                          controller: email,
+                          validator: (value) {
+                            return Validation().emailValidation(value);
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                             contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
+                              label: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(AppLocalizations.of(context)!.email),
+                                  const Text(
+                                    '*',
+                                    style: TextStyle(
+                                        color: AppColors.red, fontSize: 20),
+                                  )
+                                ],
+                              ),
+                              border: OutlineInputBorder(
+                                  //Outline border type for TextFeild
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(
+                                          AppDimension.buttonRadius)),
+                                  borderSide: BorderSide(
+                                    color: appInfo.primaryColorValue,
+                                    width: 1.5,
+                                  )),
+                              // //normal border
+                              enabledBorder: OutlineInputBorder(
+                                  //Outline border type for TextFeild
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(
+                                          AppDimension.buttonRadius)),
+                                  borderSide: BorderSide(
+                                    color: appInfo.primaryColorValue,
+                                    width: 1.5,
+                                  )
+                                  ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(
+                                          AppDimension.buttonRadius)),
+                                  borderSide: BorderSide(
+                                      color: appInfo.primaryColorValue,
+                                      width: 1.5)
+                                      )
+                                      ),
+                          keyboardType: TextInputType.emailAddress,
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: TextFormField(
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: _obscured,
+                            controller: pass,
+                            // focusNode: _focuspass,
+
+                            autofocus: false,
+                            decoration: InputDecoration(
+                               contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
+                                label: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                        AppLocalizations.of(context)!.password),
+                                    const Text(
+                                      '*',
+                                      style: TextStyle(
+                                          color: AppColors.red, fontSize: 20),
+                                    )
+                                  ],
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                      color: appInfo.primaryColorValue,
+                                      width: 1.5,
+                                    )),
+                                enabledBorder: OutlineInputBorder(
+                                    //Outline border type for TextFeild
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                      color: appInfo.primaryColorValue,
+                                      width: 1.5,
+                                    )),
+                                focusedBorder: OutlineInputBorder(
+                                    //Outline border type for TextFeild
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                        color: appInfo.primaryColorValue,
+                                        width: 1.5)),
+                                suffixIcon: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                  child: GestureDetector(
+                                    onTap: _toggleObscured,
+                                    child: Icon(
+                                        _obscured
+                                            ? Icons.visibility_off_rounded
+                                            : Icons.visibility_rounded,
+                                        size: 25,
+                                        color: appInfo.primaryColorValue),
+                                  ),
+                                )),
+                            validator: (value) {
+                              return Validation().validatePassword(value!);
+                            })
+                            ),
+                     
+                     
+                         error != ""
+                        ? Center(
+                            child: Text(
+                            error,
+                            style: const TextStyle(color: AppColors.red),
+                          ))
+                        : Container(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Consumer(
+                        builder: (context, watch, _) {
+                          return ElevatedButton(
+                              onPressed: () async {
+                                if (isLoading == false) {
+                                  if (formKey.currentState!.validate()) {
+                                    _signInWithEmailAndPassword(context);
+
+                                    _focusNode.unfocus();
+                                  } else {}
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: appInfo.primaryColorValue,
+                                minimumSize: const Size.fromHeight(40),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        AppDimension.buttonRadius)),
+                                textStyle: const TextStyle(
+                                    color: AppColors.whiteColor,
+                                    fontSize: 10,
+                                    fontStyle: FontStyle.normal),
+                              ),
+                              child: isLoading == false
+                                  ? Text(
+                                      AppLocalizations.of(context)!
+                                          .login
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          color: AppColors.whiteColor,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  : const CircularProgressIndicator(
+                                      color: AppColors.whiteColor,
+                                    ));
                         },
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(),
-                        ),
                       ),
-                      SizedBox(height: 20.0),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (isLoading == false) {
-                            if (formKey.currentState!.validate()) {
-                              // Perform your login action
-                            }
-                          }
-                        },
-                        child: isLoading
-                            ? CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : Text('Login'),
-                      ),
-                      SizedBox(height: 20.0),
+                    ),
                        Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(AppLocalizations.of(context)!.notHaveAcc),
+                        Text(AppLocalizations.of(context)!.notHaveAcc,style: Theme.of(context).textTheme.bodyLarge),
                         TextButton(
                           child: Text(
-                            AppLocalizations.of(context)!.signUp,
-                            style: TextStyle(
-                              fontSize: 20,
-                              // color: appInfo.primaryColorValue,
-                              decoration: TextDecoration.underline,
-                            ),
+                            AppLocalizations.of(context)!.signUp,style: Theme.of(context).textTheme.displayMedium
+                         
                           ),
                           onPressed: () {
                             //signup screen
@@ -1151,12 +1278,8 @@ void _toggleObscured() {
                     ),
                         TextButton(
                       child: Text(
-                        AppLocalizations.of(context)!.forgetPass,
-                        style: TextStyle(
-                          fontSize: 14,
-                          // color: appInfo.primaryColorValue,
-                          decoration: TextDecoration.underline,
-                        ),
+                        AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.bodyLarge
+                        
                       ),
                       onPressed: () {
                         //signup screen
@@ -1165,60 +1288,15 @@ void _toggleObscured() {
                                 const ForgotPasswordScreen()));
                       },
                     ),
-                    //    error != ""
-                    //     ? Center(
-                    //         child: Text(
-                    //         error,
-                    //         style: const TextStyle(color: AppColors.red),
-                    //       ))
-                    //     : Container(),
-                    // Padding(
-                    //   padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                    //   child: Consumer(
-                    //     builder: (context, watch, _) {
-                    //       return ElevatedButton(
-                    //           onPressed: () async {
-                    //             if (isLoading == false) {
-                    //               if (formKey.currentState!.validate()) {
-                    //                 _signInWithEmailAndPassword(context);
-
-                    //                 _focusNode.unfocus();
-                    //               } else {}
-                    //             }
-                    //           },
-                    //           style: ElevatedButton.styleFrom(
-                    //             backgroundColor: appInfo.primaryColorValue,
-                    //             minimumSize: const Size.fromHeight(50),
-                    //             shape: RoundedRectangleBorder(
-                    //                 borderRadius: BorderRadius.circular(
-                    //                     AppDimension.buttonRadius)),
-                    //             textStyle: const TextStyle(
-                    //                 color: AppColors.whiteColor,
-                    //                 fontSize: 10,
-                    //                 fontStyle: FontStyle.normal),
-                    //           ),
-                    //           child: isLoading == false
-                    //               ? Text(
-                    //                   AppLocalizations.of(context)!
-                    //                       .login
-                    //                       .toUpperCase(),
-                    //                   style: TextStyle(
-                    //                       fontSize: MediaQuery.of(context)
-                    //                               .size
-                    //                               .width *
-                    //                           0.05,
-                    //                       color: AppColors.whiteColor,
-                    //                       fontWeight: FontWeight.bold),
-                    //                 )
-                    //               : const CircularProgressIndicator(
-                    //                   color: AppColors.whiteColor,
-                    //                 ));
-                    //     },
-                    //   ),
-                    // ),
+                    
                     ],
                   ),
                 ),
+                 loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) => const Text(AppString.oops),
+              );
+            }
+            )
               ),
             ),
           ],
