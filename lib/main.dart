@@ -3,13 +3,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
 import 'package:mobj_project/utils/appRoutes.dart';
 import 'package:mobj_project/utils/themeProvider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 import 'module/notificationservice/notificationservice.dart';
 import 'module/splash screen/Splash_screen.dart';
@@ -59,35 +60,168 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     final language = ref.watch(languageProvider);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    return MaterialApp(
-        navigatorKey: navigatorKey,
-        initialRoute: '/',
-        title: AppConfigure.appName,
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale(language),
-        theme: themes == false
-            ? ThemeData(
-                // Set the default colors for the light theme
-                brightness: Brightness.light,
-                iconTheme: const IconThemeData(color: AppColors.blackColor),
-                appBarTheme: const AppBarTheme(
-                    color: Colors.white,
-                    iconTheme: IconThemeData(color: AppColors.blackColor), // 1
-
-                    titleTextStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight
-                            .bold) // Set your AppBar color for light mode
+    return ScreenUtilInit(
+        designSize: const Size(360, 690),
+        // for web app
+        useInheritedMediaQuery: true, //for keyboard not overlapp
+        // //designSize: const Size(1080, 1920), //for android application
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return MaterialApp(
+              navigatorKey: navigatorKey,
+              initialRoute: '/',
+              title: AppConfigure.appName,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: Locale(language),
+              theme: themes == false
+                  ? ThemeData(
+                      // unselectedWidgetColor: Colors.black,
+                      useMaterial3: true,
+                      colorScheme: lightColorScheme,
+                      fontFamily: GoogleFonts.inter().fontFamily,
+                      textTheme: TextTheme(
+                        headlineLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.black,
+                          fontSize: 14.sp,
+                        ),
+                        headlineMedium: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          color: ConstColors.black,
+                          fontSize: 12.sp,
+                        ),
+                        headlineSmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          color: ConstColors.black,
+                          fontSize: 10.sp,
+                        ),
+                        bodyLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.black,
+                          fontSize: 14.sp,
+                        ),
+                        bodyMedium: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: ConstColors.black,
+                            fontSize: 14.sp,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ConstColors.black),
+                        bodySmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.darkGrey,
+                          fontSize: 18.sp,
+                        ),
+                        titleLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.darkGrey,
+                          fontSize: 14.sp,
+                        ),
+                        titleMedium: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.darkGrey,
+                          fontSize: 12.sp,
+                        ),
+                        titleSmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.normal,
+                          color: ConstColors.darkGrey,
+                          fontSize: 10.sp,
+                        ),
+                        displayLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.backgroundColor,
+                          fontSize: 13.sp,
+                        ),
+                        displayMedium: GoogleFonts.inter(
+                            fontWeight: FontWeight.normal,
+                            color: ConstColors.purple,
+                            fontSize: 13.sp,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ConstColors.purple),
+                        displaySmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13.sp,
+                          color: ConstColors.purple,
+                        ),
+                      )
+                      // brightness: Brightness.light,
+                      // colorSchemeSeed: Colors.blue,
+                      )
+                  : ThemeData(
+                      // unselectedWidgetColor: Colors.white,
+                      useMaterial3: true, colorScheme: darkColorScheme,
+                      fontFamily: GoogleFonts.inter().fontFamily,
+                      textTheme: TextTheme(
+                        headlineLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.lightGrey,
+                          fontSize: 14.sp,
+                        ),
+                        headlineMedium: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          color: ConstColors.lightGrey,
+                          fontSize: 12.sp,
+                        ),
+                        headlineSmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          color: ConstColors.lightGrey,
+                          fontSize: 10.sp,
+                        ),
+                        bodyLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.lightGrey,
+                          fontSize: 14.sp,
+                        ),
+                        bodyMedium: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            color: ConstColors.lightGrey,
+                            fontSize: 14.sp,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ConstColors.lightGrey),
+                        bodySmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.lightGrey,
+                          fontSize: 18.sp,
+                        ),
+                        titleLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.lightGrey,
+                          fontSize: 14.sp,
+                        ),
+                        titleMedium: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.lightGrey,
+                          fontSize: 12.sp,
+                        ),
+                        titleSmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.normal,
+                          color: ConstColors.lightGrey,
+                          fontSize: 10.sp,
+                        ),
+                        displayLarge: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.black,
+                          fontSize: 13.sp,
+                        ),
+                        displayMedium: GoogleFonts.inter(
+                            fontWeight: FontWeight.normal,
+                            color: ConstColors.purple,
+                            fontSize: 13.sp,
+                            decoration: TextDecoration.underline,
+                            decorationColor: ConstColors.purple),
+                        displaySmall: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13.sp,
+                          color: ConstColors.purple,
+                        ),
+                      ),
+                      // brightness: Brightness.dark,
+                      // colorSchemeSeed: Colors.blue,
                     ),
-                bottomAppBarTheme: const BottomAppBarTheme(
-                  color: Colors.white, // Set your AppBar color for light mode
-                ),
-              )
-            : ThemeData.dark(),
-        home: const SplashScreen(),
-        routes: AppRoutes.routes);
+              home: const SplashScreen(),
+              routes: AppRoutes.routes);
+        });
   }
 }

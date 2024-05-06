@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../main.dart';
@@ -48,7 +49,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               selectedPage: 2,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-              screen3: const HomeScreen(),
+              screen3:  WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),

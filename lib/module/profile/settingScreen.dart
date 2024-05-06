@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
+import '../wishlist/wishlishScreen.dart';
 
 class SettingScreen extends ConsumerStatefulWidget {
   final LanguageProvider languageProvider;
@@ -235,7 +236,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 selectedPage: 3,
                 screen1: const HomeScreen(),
                 screen2: const SearchWidget(),
-                screen3: const HomeScreen(),
+                screen3:  WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),
