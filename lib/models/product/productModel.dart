@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:mobj_project/mappers/bigcommerce_models/bigcommerce_proudct_model.dart';
 import 'package:mobj_project/mappers/shopify_models/shopify_proudct_model.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
+
+import '../../mappers/woocommerce/woocommerce_productmodel.dart';
+
+
 
 class ProductModel {
   final int id;
@@ -44,7 +50,15 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      try {
+      log('WooCommerce model');
+        return WooCommerceProductModel.fromJson(json);
+      } catch (e) {
+        log('Error is :$e');
+        rethrow;
+      }
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceProductModel.fromJson(json);
     } else {
       return ShopifyProductModel.fromJson(json);
@@ -110,7 +124,10 @@ class ProductVariant {
   });
 
   factory ProductVariant.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('WooCommerce model');
+      return WooCommerceProductVariant.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceProductVariant.fromJson(json);
     } else {
       return ShopifyProductVariant.fromJson(json);
@@ -134,7 +151,10 @@ class ProductOption {
   });
 
   factory ProductOption.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('WooCommerce model');
+      return WooCommerceProductOption.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceProductOption.fromJson(json);
     } else {
       return ShopifyProductOption.fromJson(json);
@@ -170,7 +190,10 @@ class ProductImage {
   });
 
   factory ProductImage.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('WooCommerce model');
+      return WooCommerceProductImage.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceProductImage.fromJson(json);
     } else {
       return ShopifyProductImage.fromJson(json);

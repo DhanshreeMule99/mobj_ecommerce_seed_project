@@ -6,42 +6,80 @@ import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
+
+import '../../../../main.dart';
 
 class ProductRepository {
   List<ProductModel> empty = [];
   API api = API();
 
   Future<List<ProductModel>> getProducts() async {
-    try {
-      debugPrint('calling api');
-      String productUrl = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL +
-          APIConstants.product;
-      final response = await ApiManager.get(productUrl);
+    if (AppConfigure.wooCommerce) {
+      try {
+        log('calling api by wooCommerce');
+        String productUrl = AppConfigure.woocommerceUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL +
+            APIConstants.product;
+        final response = await ApiManager.get(
+            'https://ttf.setoo.org/wp-json/wc/v3/products?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
 
-      // final response = await ApiManager.get(
-      //     'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/products?include=images,variants,options');
+        // final response = await ApiManager.get(
+        //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
 
-      if (response.statusCode == APIConstants.successCode) {
-        log("product details: $response");
-        final List result = AppConfigure.bigCommerce == true
-            ? jsonDecode(response.body)['data']
-            : jsonDecode(response.body)['products'];
+        if (response.statusCode == APIConstants.successCode) {
+          // log("product details: $response");
+          final List result = AppConfigure.wooCommerce == true
+              ? jsonDecode(response.body)
+              : jsonDecode(response.body)['products'];
 
-        return result.map((e) => ProductModel.fromJson(e)).toList();
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        debugPrint("empty data here");
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        debugPrint("empty data here unauthorized");
-        throw AppString.unAuthorized;
-      } else {
-        return empty;
+          return result.map((e) => ProductModel.fromJson(e)).toList();
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          debugPrint("empty data here");
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          debugPrint("empty data here unauthorized");
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("error is this $error $stackTrace");
-      rethrow;
+    } else {
+      try {
+        log('calling api');
+        String productUrl = AppConfigure.baseUrl +
+            APIConstants.apiForAdminURL +
+            APIConstants.apiURL +
+            APIConstants.product;
+        final response = await ApiManager.get(productUrl);
+
+        // final response = await ApiManager.get(
+        //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+
+        if (response.statusCode == APIConstants.successCode) {
+          // log("product details: $response");
+          final List result = AppConfigure.bigCommerce == true
+              ? jsonDecode(response.body)['data']
+              : jsonDecode(response.body)['products'];
+
+          return result.map((e) => ProductModel.fromJson(e)).toList();
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          debugPrint("empty data here");
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          debugPrint("empty data here unauthorized");
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
+      }
     }
   }
 
@@ -68,32 +106,51 @@ class ProductRepository {
   }
 
   Future<ProductModel> getProductInfo(String pid) async {
-    try {
-      String baseUrl = AppConfigure.bigCommerce == true
-          ? AppConfigure.baseUrl +
-              APIConstants.apiForAdminURL +
-              APIConstants.apiURL
-          : AppConfigure.baseUrl +
-              APIConstants.apiForAdminURL +
-              APIConstants.apiURL;
-      debugPrint(baseUrl + pid);
-      final response = AppConfigure.bigCommerce == true
-          ? await ApiManager.get(
-              "$baseUrl/products/$pid?include=images,variants,options,images")
-          : await ApiManager.get(
-              "$baseUrl${APIConstants.productDetails}/$pid.json");
-      if (response.statusCode == APIConstants.successCode) {
-        final userData = AppConfigure.bigCommerce == true
-            ? jsonDecode(response.body)['data']
-            : jsonDecode(response.body)['product'];
-        return ProductModel.fromJson(userData);
-      } else {
-        throw (AppString.noDataError);
+    if (AppConfigure.wooCommerce) {
+      try {
+        String baseUrl =
+            "https://ttf.setoo.org/wp-json/wc/v3/products/$pid?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf";
+        debugPrint(baseUrl + pid);
+        final response = await ApiManager.get(baseUrl);
+        // log(response.body);
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = jsonDecode(response.body);
+          return ProductModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (e) {
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      print("$error + $stackTrace");
-      rethrow;
+    } else {
+      try {
+        String baseUrl = AppConfigure.bigCommerce == true
+            ? AppConfigure.baseUrl +
+                APIConstants.apiForAdminURL +
+                APIConstants.apiURL
+            : AppConfigure.baseUrl +
+                APIConstants.apiForAdminURL +
+                APIConstants.apiURL;
+        debugPrint(baseUrl + pid);
+        final response = AppConfigure.bigCommerce == true
+            ? await ApiManager.get(
+                "$baseUrl/products/$pid?include=images,variants,options,images")
+            : await ApiManager.get(
+                "$baseUrl${APIConstants.productDetails}/$pid.json");
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = AppConfigure.bigCommerce == true
+              ? jsonDecode(response.body)['data']
+              : jsonDecode(response.body)['product'];
+          return ProductModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        print("$error + $stackTrace");
+        rethrow;
+      }
     }
+    // throw Exception('Unexpected error occurred while fetching product info.');
   }
 
   Future<ProductRatingModel> getProductRating(String pid) async {
@@ -116,22 +173,74 @@ class ProductRepository {
 
   Future<ReviewProductModels> getProductReviews(String pid) async {
     API api = API();
-
-    try {
-      Response response = await api.sendRequest.get(
-        AppConfigure.bigCommerce
-            ? '${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews'
-            : "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com",
-      );
-      if (response.statusCode == APIConstants.successCode) {
-        var result = response.data;
-        return ReviewProductModels.fromJson(result);
-      } else {
-        throw (AppString.noDataError);
+    if (AppConfigure.wooCommerce) {
+      log("WooCommerce product reviews");
+      try {
+        Response response = await api.sendRequest.get(
+            'https://ttf.setoo.org/wp-json/wc/v3/products/reviews?product=$pid&consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
+        if (response.statusCode == APIConstants.successCode) {
+          List result = response.data;
+          // log(result.runtimeType.toString());
+          return ReviewProductModels(
+              currentPage: 1,
+              perPage: 1,
+              reviews: result
+                  .map((e) => Review(
+                        id: e['id'],
+                        title: e['product_name'],
+                        body: e['review'],
+                        rating: e['rating'],
+                        productExternalId: 0,
+                        reviewer: Reviewer(
+                            id: 0,
+                            externalId: 0,
+                            email: e['reviewer_email'],
+                            name: e['reviewer'],
+                            phone: 1234567898,
+                            acceptsMarketing: true,
+                            unsubscribedAt: 'unsubscribedAt',
+                            tags: 'tags'),
+                        source: '',
+                        curated: '',
+                        published: true,
+                        hidden: true,
+                        verified: '',
+                        featured: true,
+                        createdAt: DateTime(2024),
+                        updatedAt: DateTime(2024),
+                        hasPublishedPictures: false,
+                        hasPublishedVideos: false,
+                        pictures: [],
+                        ipAddress: '',
+                        productTitle: '',
+                        productHandle: '',
+                      ))
+                  .toList());
+          // return [ReviewProductModels(currentPage: response.data['rating'], perPage: response.data['rating'], reviews: response.data['review'])];
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('print error is this $error $stackTrace');
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint('print error is this $error $stackTrace');
-      rethrow;
+    } else {
+      try {
+        Response response = await api.sendRequest.get(
+          AppConfigure.bigCommerce
+              ? '${AppConfigure.bigcommerceUrl}/catalog/products/$pid/reviews'
+              : "https://judge.me/api/v1/reviews?external_id=$pid&api_token=m44Byd6k-flMjTk63lQHuhkPsFs&shop_domain=b8507f-9a.myshopify.com",
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          var result = response.data;
+          return ReviewProductModels.fromJson(result);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('print error is this $error $stackTrace');
+        rethrow;
+      }
     }
   }
 
@@ -341,6 +450,48 @@ class ProductRepository {
     }
   }
 
+  addToCartWooCommerce(String quantity, String productId) async {
+    String exceptionString = "";
+    String uid = await SharedPreferenceManager().getUserId();
+    //  debugPrint('$uid $variantId');
+
+    var body = jsonEncode({"id": productId, "quantity": quantity});
+    var decodedBody = jsonDecode(body);
+    String baseUrl = AppConfigure.baseUrl;
+    debugPrint(baseUrl);
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        String email = await SharedPreferenceManager().getemail();
+
+        var uuid = const Uuid();
+        String cartkey = await SharedPreferenceManager().getCartToken();
+        if (cartkey == "") {
+          cartkey = uuid.v4();
+          await SharedPreferenceManager().setCartToken(cartkey);
+        }
+        debugPrint('email is this $email');
+        http.Response response;
+
+        response = await ApiManager.post(
+            "$baseUrl/wp-json/cocart/v2/cart/add-item?cart_key=$cartkey", body);
+
+        var data = jsonDecode(response.body);
+        debugPrint('add to cart data is this $data');
+
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          return AppString.success;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+  }
+
   repeatOrder(Map<String, dynamic> reqBody) async {
     String exceptionString = "";
 
@@ -377,27 +528,53 @@ class ProductRepository {
     API api = API();
 
     //if (AppConfigure.bigCommerce) {
-    debugPrint("adding review for products");
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await api.sendRequest.post(
-          "/catalog/products/$pid/reviews",
-          data: addReviewBody,
-        );
+    if (AppConfigure.wooCommerce) {
+      log("Adding review to wooCommerce api...");
+      log(pid);
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          final response = await api.sendRequest.post(
+            "${AppConfigure.woocommerceUrl}wp-json/wc/v3/products/reviews?consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+            data: addReviewBody,
+          );
 
-        if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-          return AppString.success;
-        } else if (response.statusCode == APIConstants.alreadyExistCode) {
-          return AppString.alreadyReview;
-        } else {
-          exceptionString = AppString.oops;
-          return exceptionString;
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            return AppString.alreadyReview;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
+          }
         }
+      } catch (error) {
+        exceptionString = AppString.oops;
+        return exceptionString;
       }
-    } catch (error) {
-      exceptionString = AppString.oops;
-      return exceptionString;
+    } else {
+      debugPrint("adding review for products");
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          final response = await api.sendRequest.post(
+            "/catalog/products/$pid/reviews",
+            data: addReviewBody,
+          );
+
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            return AppString.alreadyReview;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
+          }
+        }
+      } catch (error) {
+        exceptionString = AppString.oops;
+        return exceptionString;
+      }
     }
     // }
     //  else {
@@ -494,7 +671,9 @@ class ProductRepository {
     }
   }
 
-  checkout(String paymentId) async {
+  checkout(
+    String paymentId,
+  ) async {
     if (AppConfigure.bigCommerce) {
       String exceptionString = "";
       String draftId = await SharedPreferenceManager().getDraftId();
@@ -512,6 +691,42 @@ class ProductRepository {
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             await SharedPreferenceManager().setDraftId("");
+            var service = await getPaymentDetails(paymentId);
+            var gateWayMethod = service["method"];
+            return AppString.success;
+          }
+        }
+      } catch (error) {
+        debugPrint('error is this $error');
+        exceptionString = AppString.oops;
+        return exceptionString;
+      }
+    } else if (AppConfigure.wooCommerce) {
+      API api = API();
+      String exceptionString = "";
+      String userId = await SharedPreferenceManager().getUserId();
+      String baseUrl = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response;
+          response = await api.sendRequest.post(
+              "wp-json/wc/v3/orders?consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+              data: {
+                "payment_method": "bacs",
+                "payment_method_title": "Direct Bank Transfer",
+                "customer_id": int.parse(userId),
+                "set_paid": true,
+                "billing": woocommerceaddressbody,
+                "shipping": woocommerceaddressbody,
+                "line_items": bigcommerceOrderedItems
+              });
+          var data = response.data;
+          debugPrint("${response.data} ${response.statusCode}");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            await SharedPreferenceManager().setCartToken("");
             var service = await getPaymentDetails(paymentId);
             var gateWayMethod = service["method"];
             return AppString.success;
@@ -598,6 +813,32 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
+    } else if (AppConfigure.wooCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String email = await SharedPreferenceManager().getCartToken();
+
+          final response = await ApiManager.get(
+              "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            debugPrint(response.body);
+            final result = jsonDecode(response.body);
+            debugPrint("result is this $result");
+            if (result['item_count'] == 0) {
+              throw (AppString.noDataError);
+            }
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
     } else {
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
@@ -650,7 +891,65 @@ class ProductRepository {
   Future<OrderModel> getOrderInfo(String pid) async {
     final uid = await SharedPreferenceManager().getUserId();
     API api = API();
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      try {
+        final response = await api.sendRequest.get(
+          "${AppConfigure.woocommerceUrl}wp-json/wc/v3/orders?customer=$uid&consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = response.data;
+          log('order is $userData');
+          // return OrderModel.fromJson(userData);
+          return OrderModel(
+            id: userData[0]['id'],
+            adminGraphqlApiId: "adminGraphqlApiId",
+            appId: userData[0]['id'],
+            browserIp: "browserIp",
+            buyerAcceptsMarketing: false,
+            cancelReason: "cancelReason",
+            cancelledAt: "cancelledAt",
+            cartToken: "cartToken",
+            checkoutId: 1,
+            checkoutToken: "checkoutToken",
+            confirmed: false,
+            contactEmail: userData[0]['billing']['email'],
+            createdAt: userData[0]['date_created_gmt'],
+            currency: "",
+            currentSubtotalPrice: userData[0]['total'],
+            currentTotalTax: userData[0]['total_tax'],
+            totalPrice: userData[0]['total'],
+            customer: CustomerModel(
+                id: userData[0]['id'],
+                email: userData[0]['billing']['email'],
+                acceptsMarketing: false,
+                createdAt: "createdAt",
+                updatedAt: "updatedAt",
+                firstName: userData[0]['billing']['first_name'],
+                lastName: userData[0]['billing']['last_name'],
+                ordersCount: 0,
+                state: "state",
+                totalSpent: userData[0]['total'],
+                lastOrderId: 1,
+                note: "note",
+                taxExempt: false,
+                tags: "tags",
+                lastOrderName: "lastOrderName",
+                currency: userData[0]['currency_symbol'],
+                phone: "",
+                adminGraphqlApiId: "adminGraphqlApiId"),
+            lineItems: [],
+            firstname: userData[0]['billing']['first_name'],
+            lastname: userData[0]['billing']['last_name'],
+            phone: userData[0]['billing']['phone'],
+          );
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        log("Error is $stackTrace");
+        rethrow;
+      }
+    } else if (AppConfigure.bigCommerce) {
       try {
         final response = await api.sendRequest.get(
           "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v2/orders/$pid",
@@ -690,7 +989,34 @@ class ProductRepository {
 
   Future<List<OrderModel>> getOrder() async {
     API api = API();
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      final uid = await SharedPreferenceManager().getUserId();
+      try {
+        final response = await api.sendRequest.get(
+          "${AppConfigure.woocommerceUrl}/wp-json/wc/v3/orders?customer=$uid&consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}",
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          final List result = response.data;
+          if (result.isEmpty || result.toString() == "[]") {
+            throw (AppString.noDataError);
+          } else {
+            return result.map((e) => OrderModel.fromJson(e)).toList();
+          }
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          // throw AppString.unAuthorized;
+          throw (AppString.noDataError);
+        } else {
+          // throw AppString.serverError;
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
+    } else if (AppConfigure.bigCommerce) {
       final uid = await SharedPreferenceManager().getUserId();
       try {
         final response = await api.sendRequest.get(
@@ -755,10 +1081,10 @@ class ProductRepository {
   //   try {
   //     log('calling api');
   //       final uid = await SharedPreferenceManager().getUserId();
-  //     final response = await api.sendRequest.get("https://api.bigcommerce.com/stores/05vrtqkend/v3/wishlists?customer_id=$uid");
+  //     final response = await api.sendRequest.get("https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists?customer_id=$uid");
 
   //     // final response = await ApiManager.get(
-  //     //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');
+  //     //     'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/products?include=images,variants,options');
 
   //     if (response.statusCode == APIConstants.successCode) {
   //       // final List result = AppConfigure.bigCommerce == true

@@ -58,7 +58,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     //TODO list API integration
-    final user = ref.watch(profileDataProvider);
+    final 
+    user = ref.watch(profileDataProvider);
 
     final appInfoAsyncValue = ref.watch(appInfoProvider);
 

@@ -5,7 +5,8 @@ class AppConfigure {
   static const secondaryColor = "#ADD8E6";
   static const logoImagePath =
       "https://www.creativefabrica.com/wp-content/uploads/2019/03/Monogram-PY-Logo-Design-by-Greenlines-Studios-580x386.jpg";
-      static const loginbackimage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgiQwmsQRG7ghIW01bAZaTUGP5NLYyOL0EYIaOZCNYA&s";
+  static const loginbackimage =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgiQwmsQRG7ghIW01bAZaTUGP5NLYyOL0EYIaOZCNYA&s";
   // static const baseUrl =
   //     bigCommerce == true ? bigcommerceUrl : "https://b8507f-9a.myshopify.com/";
 
@@ -45,13 +46,20 @@ class AppConfigure {
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
   static const storeFront = 'zwpg4jmenh';
   static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
+      'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
+  static const storeFront = 'zwpg4jmenh';
+  static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
 
+// woo commerce url
 // woo commerce url
 
   static const wooCommerce = false;
   static const woocommerceUrl =
       'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3';
 
-  static const consumerkey = 'ck_eea4e3e50e0a4d1cc22fbe6c891d445812bd61de';
-  static const consumersecret = 'cs_f0ddbc1d7655a5f5b3e7aea5e6847a77955f8b13';
+  static const wooCommerce = true;
+  static const woocommerceUrl = 'https://ttf.setoo.org/';
+
+  static const consumerkey = 'ck_db1d729eb2978c28ae46451d36c1ca02da112cb3';
+  static const consumersecret = 'cs_c5cc06675e8ffa375b084acd40987fec142ec8cf';
 }

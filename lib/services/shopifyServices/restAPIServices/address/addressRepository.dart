@@ -1,5 +1,7 @@
 // addressRepository
 
+
+
 import 'package:dio/dio.dart';
 import 'package:http/src/response.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -39,67 +41,51 @@ class AddressRepository {
       } catch (error) {
         rethrow;
       }
-    } else {
-
- try {
-  String exceptionString = "";
+    } 
+    else
+     if ( AppConfigure.wooCommerce){
  API api = API();
-  final accessToken = await SharedPreferenceManager().getToken();
-      final response = await api.sendRequest.post(
-        "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
-        data: {
-          'query': '''
-          query {
-            customer(customerAccessToken: "$accessToken") {
-              id
-              addresses(first: 5) {
-                edges {
-                  node {
-                    id
-                    firstName
-                    lastName
-                    address1
-                    city
-                    province
-                    country
-                    zip
-                  }
-                }
-              }
-            }
+           
+       try {
+         debugPrint("calling get address list api0");
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+        final response = await api.sendRequest.get(
+            "/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret");
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.data} $uid");
+           
+            // final result = response.data;
+       //   debugPrint("body is this $result $uid");
+          if (response.data['billing']['address_1']=="") {
+            throw (AppString.noDataError);
+            
+          } else {
+            
+            return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
+
           }
-          ''',
-        },
-      );
-
-      if (response.statusCode == APIConstants.successCode) {
-         var data = response.data;
-        // final Map<String, dynamic> data = jsonDecode(response.data);
-final List<Map<String, dynamic>> add = data['data']['customer']['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node'] as Map<String, dynamic>).toList();
-
-
-
-//       API api = API();
-//       try {
-// var response;
-//   debugPrint("calling for get address api");
-//             String query = '''
-
-
-// ''';
-//             response = await api.sendRequest.post(
-//               "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
-//               data: {
-//                 'query': query,
-//               },
-//             );
-//         if (response.statusCode == APIConstants.successCode) {
-//           debugPrint("body is this ${response.data} $uid");
-
-
-          // final List result = json.decode(response.data)['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node']).toList();
-
-          if (add.isEmpty) {
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        print("error for address is this $error $stackTrace");
+        rethrow;
+      }
+    }
+    
+    else {
+      try {
+        final response =
+            await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.body} $uid");
+          final List result = jsonDecode(response.body)['addresses'];
+          if (result.isEmpty) {
             throw (AppString.noDataError);
           } else {
             return add.map((e) => DefaultAddressModel.fromJson(e)).toList();
@@ -156,7 +142,102 @@ final List<Map<String, dynamic>> add = data['data']['customer']['addresses']['ed
         exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } else {
+    }
+    else if (AppConfigure.wooCommerce){
+      API api = API();
+      // body = {
+      //           "billing": {
+      //             "first_name": "",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1": "",
+      //             "address_2": "",
+      //             "city": "",
+      //             "state": "MH",
+      //             "postcode": "",
+      //             "country": "IN",
+      //             // "email": "john.doe@example.com",
+      //             "phone":  "",
+      //           },
+      //           "shipping": {
+      //             "first_name":"",
+      //             "last_name": "",
+      //             "company": "",
+      //             "address_1":  "",
+      //             "address_2": "",
+      //             "city":"",
+      //             "state": "MH",
+      //             "postcode":  "",
+      //             "country": "IN"
+      //           }
+
+      //         };
+           
+       try {
+        final response;
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+            debugPrint("calling null addressid api");
+            // var body1 = jsonEncode({"address": body});
+          response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: {
+                "billing": {
+                  "first_name": "",
+                  "last_name": "",
+                  "company": "",
+                  "address_1": "",
+                  "address_2": "",
+                  "city": "",
+                  "state": "",
+                  "postcode": "",
+                  "country": "",
+                  // "email": "john.doe@example.com",
+                  "phone":  "",
+                },
+                "shipping": {
+                  "first_name":"",
+                  "last_name": "",
+                  "company": "",
+                  "address_1":  "",
+                  "address_2": "",
+                  "city":"",
+                  "state": "",
+                  "postcode":  "",
+                  "country": ""
+                }
+
+              },
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+        if (response.statusCode == APIConstants.successCode) {
+          debugPrint("body is this ${response.data} $uid");
+           
+       
+            // return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
+
+          return [null];
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        print("error for address is this $error $stackTrace");
+        rethrow;
+      }
+
+
+      
+    }
+    
+    
+     else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final accessToken = await SharedPreferenceManager().getToken();
@@ -289,7 +370,59 @@ final List<Map<String, dynamic>> add = data['data']['customer']['addresses']['ed
               fontSize: 16.0);
         }
       }
-    } else {
+    } else if (AppConfigure.wooCommerce)
+{
+   try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+         
+          final response;
+           String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+            debugPrint("calling null addressid api");
+            var body1 = jsonEncode({"address": body});
+          response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: body,
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+       
+          if (response.statusCode == APIConstants.successCode) {
+            return response;
+
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else if (response.statusCode == APIConstants.alreadyExistCode) {
+            exceptionString = AppString.alreadyExist;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      }
+      on DioException catch (error) {
+        if (error.response!.statusCode == APIConstants.alreadyExistCode) {
+          Fluttertoast.showToast(
+              msg: "${error.response!.data["errors"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        }
+      }
+
+}    
+    
+    else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
             final accessToken = await SharedPreferenceManager().getToken();

@@ -89,7 +89,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> fetchCategories() async {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('Woo Commerce caetgorires');
+      final response = await ApiManager.get(
+          "https://ttf.setoo.org/wp-json/wc/v3/products/categories?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf");
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body);
+        log(response.body);
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
+    } else if (AppConfigure.bigCommerce) {
       debugPrint('In bigCommerAPI');
       final response = await ApiManager.get(
           "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/trees/categories");

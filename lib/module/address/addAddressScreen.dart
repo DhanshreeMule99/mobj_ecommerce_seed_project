@@ -137,8 +137,11 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
       final uid = await SharedPreferenceManager().getUserId();
       final accessToken = await SharedPreferenceManager().getToken();
       log('access token is this $accessToken');
-      Map<String, dynamic> body = AppConfigure.bigCommerce
-          ? {
+      Map<String, dynamic> body ;
+      
+      if (AppConfigure.bigCommerce)
+      { 
+        body =    {
               "first_name": firstNameController.text,
               "last_name": selectedOption,
               "address1": selectedAddressIndex == 1
@@ -156,8 +159,47 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
               "id": widget.addressId.isEmpty
                   ? 0
                   : int.tryParse(widget.addressId) ?? 0,
+            };
             }
-          : {
+            else if (AppConfigure.wooCommerce){
+              body = {
+                  // "email": "anuj@setoo.co",
+                  "first_name":firstNameController.text,
+                  "last_name":selectedOption,
+                  // "phone" : "87888888888",
+                "billing": {
+                  "first_name": firstNameController.text,
+                  "last_name": selectedOption,
+                  "company": "",
+                  "address_1": selectedAddressIndex == 1
+                                ? addressController.text
+                                : residence,
+                  "address_2": "",
+                  "city": selectedAddressIndex == 1 ? cityController.text : city,
+                  "state": "MH",
+                  "postcode":   selectedAddressIndex == 1 ? zipController.text : postalCode,
+                  "country": "IN",
+                  // "email": "john.doe@example.com",
+                  "phone":  phoneController.text,
+                },
+                "shipping": {
+                  "first_name":firstNameController.text,
+                  "last_name": selectedOption,
+                  "company": "",
+                  "address_1":  selectedAddressIndex == 1
+                                ? addressController.text
+                                : residence,
+                  "address_2": "",
+                  "city":selectedAddressIndex == 1 ? cityController.text : city,
+                  "state": "MH",
+                  "postcode":  selectedAddressIndex == 1 ? zipController.text : postalCode,
+                  "country": "IN"
+                }
+
+              };
+            }
+          else 
+        {  body = {
               "address": {
                 "address1": selectedAddressIndex == 1
                     ? addressController.text
@@ -175,37 +217,13 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
                     selectedAddressIndex == 1 ? zipController.text : postalCode,
               },
               "customerAccessToken": "$accessToken"
-            };
+            };}
 
-      //  {
-      //     "address1": selectedAddressIndex == 1
-      //         ? addressController.text
-      //         : residence,
-      //     "address2": "",
-      //     "Company": "",
-      //     "first_name": firstNameController.text,
-      //     "last_name": selectedOption,
-      //     "city": selectedAddressIndex == 1 ? cityController.text : city,
-
-      //     "phone": phoneController.text,
-      //     "province": "",
-      //     "country":
-      //         selectedAddressIndex == 1 ? countryController.text : country,
-      //     "zip":
-      //         selectedAddressIndex == 1 ? zipController.text : postalCode,
-      //     "name": "",
-      //     "province_code": "",
-      //     "country_code": "IN",
-      //     "country_name":
-      //         selectedAddressIndex == 1 ? countryController.text : country,
-      //     "default": true
-      //     // "name":nickAddressController.text
-      //   };
       print('sending this address id ${widget.addressId}');
       AddressRepository()
           .editAddress(
         body,
-        widget.address != null ? widget.addressId.toString() : "",
+            AppConfigure.wooCommerce ? "" : (widget.address != null ? widget.addressId.toString() : ""),
       )
           .then((value) async {
         if (value.runtimeType != String) {

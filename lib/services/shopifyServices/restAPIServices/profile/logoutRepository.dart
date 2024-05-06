@@ -29,8 +29,38 @@ if (await ConnectivityUtils.isNetworkConnected()) {
       return false;
     }
 
-}
+} else 
 
+if (AppConfigure.wooCommerce) {
+// log out with Woo Commerce
+
+
+
+if (await ConnectivityUtils.isNetworkConnected()) {
+
+    String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+        final uid = await SharedPreferenceManager().getUserId();
+ 
+   
+      final response = await api.sendRequest.delete(
+          "/wp-json/wc/v3/customers/$uid?force=true&consumer key=$cunsumerKey&consumer secret=$cumsumerSecret",
+          );
+      // var data = response.data;
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+
+
+
+
+
+}
 else
 
    { if (await ConnectivityUtils.isNetworkConnected()) {

@@ -1,7 +1,9 @@
+import '../../models/product/draftOrderModel.dart';
+import '../../utils/defaultValues.dart';
+
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-
-class BigCommerceDraftOrderModel implements DraftOrderModel {
+class WooCommerceDraftOrderModel implements DraftOrderModel {
   @override
   final dynamic id;
   @override
@@ -27,7 +29,7 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
   @override
   final String status;
   @override
-  final List<BigCommerceLineItem> lineItems;
+  final List<WooCommerceLineItem> lineItems;
   @override
   final String shippingAddress;
   @override
@@ -41,11 +43,11 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
   @override
   final String shippingLine;
   @override
-  final List<BigCommerceTaxLine> taxLines;
+  final List<WooCommerceTaxLine> taxLines;
   @override
   final String tags;
   @override
-  final List<BigCommerceNoteAttribute> noteAttributes;
+  final List<WooCommerceNoteAttribute> noteAttributes;
   @override
   late double totalPrice;
   @override
@@ -57,9 +59,9 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
   @override
   final String adminGraphqlApiId;
   @override
-  final BigCommerceCustomerModel customer;
+  final WooCustomerModel customer;
 
-  BigCommerceDraftOrderModel({
+  WooCommerceDraftOrderModel({
     required this.id,
     required this.note,
     required this.email,
@@ -90,42 +92,42 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
     required this.customer,
   });
 
-  factory BigCommerceDraftOrderModel.fromJson(Map<String, dynamic> json) {
-    return BigCommerceDraftOrderModel(
-      id: json['id'] ?? DefaultValues.defaultInt,
-      note: json['note'] ?? DefaultValues.defaultString,
-      email: json['email'] ?? DefaultValues.defaultString,
+  factory WooCommerceDraftOrderModel.fromJson(Map<String, dynamic> json) {
+    return WooCommerceDraftOrderModel(
+      id: json['cart_hash'] ?? DefaultValues.defaultInt,
+      note: json['cart_key'] ?? DefaultValues.defaultString,
+      email: json['cart_key'] ?? DefaultValues.defaultString,
       taxesIncluded: json['taxes_included'] ?? false,
-      currency: json['currency']['code'] ?? DefaultValues.defaultString,
+      currency:
+          json['currency']['currency_symbol'] ?? DefaultValues.defaultString,
       invoiceSentAt: json['invoice_sent_at'] ?? DefaultValues.defaultString,
-      createdAt: json['created_time'] ?? DefaultValues.defaultString,
-      updatedAt: json['updated_time'] ?? DefaultValues.defaultString,
+      createdAt: json['created_at'] ?? DefaultValues.defaultString,
+      updatedAt: json['updated_at'] ?? DefaultValues.defaultString,
       taxExempt: json['tax_exempt'] ?? false,
-      completedAt: json['updated_time'] ?? DefaultValues.defaultString,
+      completedAt: json['completed_at'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       status: json['status'] ?? DefaultValues.defaultString,
-      lineItems: List<BigCommerceLineItem>.from(json['line_items']
-              ['physical_items']
-          .map((item) => BigCommerceLineItem.fromJson(item))),
+      lineItems: List<WooCommerceLineItem>.from(
+          json['items'].map((item) => WooCommerceLineItem.fromJson(item))),
       shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
       billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
       invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
-      appliedDiscount:
-          json['discount_amount'].toString() ?? DefaultValues.defaultString,
+      appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
       shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
-      taxLines: [BigCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
+      taxLines: [WooCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
       tags: json['tags'] ?? DefaultValues.defaultString,
       noteAttributes: [],
-      totalPrice: double.parse(json['cart_amount'].toString()) ??
+      totalPrice: double.parse(json['totals']['total'].toString()) / 100 ??
           DefaultValues.defaultDouble,
-      subtotalPrice:
-          json['cart_amount'].toString() ?? DefaultValues.defaultString,
-      totalTax: json['total_tax'] ?? DefaultValues.defaultString,
+      subtotalPrice: (double.parse(json['totals']['subtotal'].toString()) / 100)
+              .toString() ??
+          DefaultValues.defaultString,
+      totalTax: json['totals']['total_tax'] ?? DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
           json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
-      customer: BigCommerceCustomerModel(
+      customer: WooCustomerModel(
           id: 7,
           email: 'cyberpunk7099@gmail.com',
           acceptsMarketing: true,
@@ -148,7 +150,7 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
   }
 }
 
-class BigCommerceLineItem implements LineItem {
+class WooCommerceLineItem implements LineItem {
   @override
   final dynamic id;
   @override
@@ -176,7 +178,7 @@ class BigCommerceLineItem implements LineItem {
   @override
   final int grams;
   @override
-  final List<BigCommerceTaxLine> taxLines;
+  final List<WooCommerceTaxLine> taxLines;
   @override
   final dynamic appliedDiscount;
   @override
@@ -190,7 +192,7 @@ class BigCommerceLineItem implements LineItem {
   @override
   final String adminGraphqlApiId;
 
-  BigCommerceLineItem({
+  WooCommerceLineItem({
     required this.id,
     required this.variantId,
     required this.productId,
@@ -213,34 +215,35 @@ class BigCommerceLineItem implements LineItem {
     required this.adminGraphqlApiId,
   });
 
-  factory BigCommerceLineItem.fromJson(Map<String, dynamic> json) {
-    return BigCommerceLineItem(
-      id: json['id'] ?? DefaultValues.defaultInt,
-      variantId: json['variant_id'] ?? DefaultValues.defaultInt,
-      productId: json['product_id'] ?? DefaultValues.defaultInt,
-      title: json['name'] ?? DefaultValues.defaultString,
-      variantTitle: json['variant_title'] ?? DefaultValues.defaultString,
+  factory WooCommerceLineItem.fromJson(Map<String, dynamic> json) {
+    return WooCommerceLineItem(
+      id: json['item_key'] ?? DefaultValues.defaultInt,
+      variantId: json['id'] ?? DefaultValues.defaultInt,
+      productId: json['id'] ?? DefaultValues.defaultInt,
+      title: json['title'] ?? DefaultValues.defaultString,
+      variantTitle: json['name'] ?? DefaultValues.defaultString,
       sku: json['sku'] ?? DefaultValues.defaultString,
       vendor: json['vendor'] ?? DefaultValues.defaultString,
-      quantity: json['quantity'] ?? DefaultValues.defaultInt,
-      requiresShipping: json['is_require_shipping'] ?? false,
+      quantity: json['quantity']['value'] ?? DefaultValues.defaultInt,
+      requiresShipping: json['requires_shipping'] ?? false,
       taxable: json['taxable'] ?? false,
       giftCard: json['gift_card'] ?? false,
       fulfillmentService:
           json['fulfillment_service'] ?? DefaultValues.defaultString,
-      grams: json['grams'] ?? DefaultValues.defaultInt,
-      taxLines: [BigCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
-      appliedDiscount: json['discount_amount'] ?? DefaultValues.defaultString,
-      name: json['name'] ?? DefaultValues.defaultString,
+      grams: json['meta']['weight'].round() ?? DefaultValues.defaultInt,
+      taxLines: [WooCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
+      appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
+      name: json['title'] ?? DefaultValues.defaultString,
       properties: [],
       custom: json['custom'] ?? false,
-      price: json['sale_price'].toString() ?? DefaultValues.defaultString,
-      adminGraphqlApiId: json['image_url'] ?? DefaultValues.defaultString,
+      price: (double.parse(json['price'].toString()) / 100).toString() ??
+          DefaultValues.defaultString,
+      adminGraphqlApiId: json['featured_image'] ?? DefaultValues.defaultString,
     );
   }
 }
 
-class BigCommerceTaxLine implements TaxLine {
+class WooCommerceTaxLine implements TaxLine {
   @override
   final double rate;
   @override
@@ -248,14 +251,14 @@ class BigCommerceTaxLine implements TaxLine {
   @override
   final String price;
 
-  BigCommerceTaxLine({
+  WooCommerceTaxLine({
     required this.rate,
     required this.title,
     required this.price,
   });
 
-  factory BigCommerceTaxLine.fromJson(Map<String, dynamic> json) {
-    return BigCommerceTaxLine(
+  factory WooCommerceTaxLine.fromJson(Map<String, dynamic> json) {
+    return WooCommerceTaxLine(
       rate: json['rate'] ?? DefaultValues.defaultDouble,
       title: json['title'] ?? DefaultValues.defaultString,
       price: json['price'] ?? DefaultValues.defaultString,
@@ -263,28 +266,28 @@ class BigCommerceTaxLine implements TaxLine {
   }
 }
 
-class BigCommerceNoteAttribute implements NoteAttribute {
+class WooCommerceNoteAttribute implements NoteAttribute {
   @override
   final dynamic key;
   @override
   final dynamic value;
 
-  BigCommerceNoteAttribute({
+  WooCommerceNoteAttribute({
     required this.key,
     required this.value,
   });
 
-  factory BigCommerceNoteAttribute.fromJson(Map<String, dynamic> json) {
-    return BigCommerceNoteAttribute(
+  factory WooCommerceNoteAttribute.fromJson(Map<String, dynamic> json) {
+    return WooCommerceNoteAttribute(
       key: json['key'] ?? DefaultValues.defaultString,
       value: json['value'] ?? DefaultValues.defaultString,
     );
   }
 }
 
-class BigCommerceCustomerModel implements CustomerModel {
+class WooCustomerModel implements CustomerModel {
   @override
-  final int id;
+  final dynamic id;
   @override
   final String email;
   @override
@@ -320,7 +323,7 @@ class BigCommerceCustomerModel implements CustomerModel {
   @override
   final String adminGraphqlApiId;
 
-  BigCommerceCustomerModel({
+  WooCustomerModel({
     required this.id,
     required this.email,
     required this.acceptsMarketing,
@@ -341,8 +344,8 @@ class BigCommerceCustomerModel implements CustomerModel {
     required this.adminGraphqlApiId,
   });
 
-  factory BigCommerceCustomerModel.fromJson(Map<String, dynamic> json) {
-    return BigCommerceCustomerModel(
+  factory WooCustomerModel.fromJson(Map<String, dynamic> json) {
+    return WooCustomerModel(
       id: json['id'] ?? DefaultValues.defaultInt,
       email: json['email'] ?? DefaultValues.defaultString,
       acceptsMarketing: json['accepts_marketing'] ?? false,
@@ -359,14 +362,14 @@ class BigCommerceCustomerModel implements CustomerModel {
       tags: json['tags'] ?? DefaultValues.defaultString,
       lastOrderName: json['last_order_name'] ?? DefaultValues.defaultString,
       currency: json['currency'] ?? DefaultValues.defaultString,
-      phone: json['phone'] ?? DefaultValues.defaultString,
+      phone: json['billing']['phone'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
           json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
     );
   }
 }
 
-class BigCommerceEmailMarketingConsent implements EmailMarketingConsent {
+class WooCommerceEmailMarketingConsent implements EmailMarketingConsent {
   @override
   final String state;
   @override
@@ -374,14 +377,14 @@ class BigCommerceEmailMarketingConsent implements EmailMarketingConsent {
   @override
   final dynamic consentUpdatedAt;
 
-  BigCommerceEmailMarketingConsent({
+  WooCommerceEmailMarketingConsent({
     required this.state,
     required this.optInLevel,
     required this.consentUpdatedAt,
   });
 
-  factory BigCommerceEmailMarketingConsent.fromJson(Map<String, dynamic> json) {
-    return BigCommerceEmailMarketingConsent(
+  factory WooCommerceEmailMarketingConsent.fromJson(Map<String, dynamic> json) {
+    return WooCommerceEmailMarketingConsent(
       state: json['state'] ?? DefaultValues.defaultString,
       optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
       consentUpdatedAt:
@@ -390,7 +393,7 @@ class BigCommerceEmailMarketingConsent implements EmailMarketingConsent {
   }
 }
 
-class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
+class WooCommerceSmsMarketingConsent implements SmsMarketingConsent {
   @override
   final String state;
   @override
@@ -400,15 +403,15 @@ class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
   @override
   final String consentCollectedFrom;
 
-  BigCommerceSmsMarketingConsent({
+  WooCommerceSmsMarketingConsent({
     required this.state,
     required this.optInLevel,
     required this.consentUpdatedAt,
     required this.consentCollectedFrom,
   });
 
-  factory BigCommerceSmsMarketingConsent.fromJson(Map<String, dynamic> json) {
-    return BigCommerceSmsMarketingConsent(
+  factory WooCommerceSmsMarketingConsent.fromJson(Map<String, dynamic> json) {
+    return WooCommerceSmsMarketingConsent(
       state: json['state'] ?? DefaultValues.defaultString,
       optInLevel: json['opt_in_level'] ?? DefaultValues.defaultString,
       consentUpdatedAt:
@@ -419,7 +422,7 @@ class BigCommerceSmsMarketingConsent implements SmsMarketingConsent {
   }
 }
 
-class BigCommerceDefaultAddressModel implements DefaultAddressModel {
+class WooCommerceDefaultAddressModel implements DefaultAddressModel {
   @override
   final int id;
   @override
@@ -451,7 +454,7 @@ class BigCommerceDefaultAddressModel implements DefaultAddressModel {
   @override
   late bool defaultAddress;
 
-  BigCommerceDefaultAddressModel({
+  WooCommerceDefaultAddressModel({
     required this.id,
     required this.customerId,
     required this.firstName,
@@ -469,25 +472,22 @@ class BigCommerceDefaultAddressModel implements DefaultAddressModel {
     required this.defaultAddress,
   });
 
-  factory BigCommerceDefaultAddressModel.fromJson(Map<String, dynamic> json) {
-    return BigCommerceDefaultAddressModel(
+  factory WooCommerceDefaultAddressModel.fromJson(Map<String, dynamic> json) {
+    return WooCommerceDefaultAddressModel(
       id: json['id'] ?? DefaultValues.defaultInt,
       customerId: json['customer_id'] ?? DefaultValues.defaultInt,
       firstName: json['first_name'] ?? DefaultValues.defaultString,
       lastName: json['last_name'] ?? DefaultValues.defaultString,
       address1: json['address1'] ?? DefaultValues.defaultString,
       city: json['city'] ?? DefaultValues.defaultString,
-      province: json['state_or_province'] ?? DefaultValues.defaultString,
+      province: json['province'] ?? DefaultValues.defaultString,
       country: json['country'] ?? DefaultValues.defaultString,
-      zip: json['postal_code'] ??DefaultValues.defaultString ??
-          DefaultValues.defaultString,
+      zip: json['zip'] ?? DefaultValues.defaultString,
       phone: json['phone'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,
       provinceCode: json['province_code'] ?? DefaultValues.defaultString,
       countryCode: json['country_code'] ?? DefaultValues.defaultString,
-      countryName: json['country'] ??
-          DefaultValues.defaultString ??
-          DefaultValues.defaultString,
+      countryName: json['country_name'] ?? DefaultValues.defaultString,
       defaultAddress: json['default'] ?? false,
     );
   }

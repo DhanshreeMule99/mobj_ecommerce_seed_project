@@ -18,6 +18,7 @@ import 'utils/appColors.dart';
 
 final providerContainer = ProviderContainer();
 List<Map<String, dynamic>> bigcommerceOrderedItems = [];
+ Map<String, dynamic>? woocommerceaddressbody;
 Future<void> backgroundHandler(RemoteMessage message) async {}
 
 void main() async {

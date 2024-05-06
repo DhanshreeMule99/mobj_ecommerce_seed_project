@@ -111,11 +111,50 @@ class _CollectionWiseProductScreenState
   final collectionWiseProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log("Product from woocommerce");
+      API api = API();
+      try {
+        final response = await api.sendRequest.get(
+            'https://ttf.setoo.org/wp-json/wc/v3/products/?category=$pid&consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
+
+        if (response.statusCode == APIConstants.successCode) {
+          // Parse the response body
+          log("123");
+          // log(response.body);
+          List<dynamic> responseBody = response.data;
+          //log("From json ${responseBody.length} ${responseBody.map((e) => ProductCollectionModel.fromJson(e)).toList()}");
+
+          List<ProductCollectionModel> products = responseBody
+              .map((e) => ProductCollectionModel(
+                  title: e['name'],
+                  description: '',
+                  handle: '',
+                  featuredImage: e['images'][0]['src'],
+                  minPrice: 100,
+                  maxPrice: 100,
+                  currencyCode: '',
+                  imageUrls: [e['images'][0]['src']],
+                  id: ''))
+              .toList();
+          return products;
+        } else {
+          // Handle API error response
+          List<ProductCollectionModel> products = [];
+          return products;
+        }
+      } catch (error, stackTrac) {
+        // Handle error
+        print('Error: $error $stackTrac');
+        List<ProductCollectionModel> products = [];
+        return products;
+      }
+      // return products;
+    } else if (AppConfigure.bigCommerce) {
       API api = API();
       try {
         final response = await ApiManager.get(
-            '${AppConfigure.bigcommerceUrl}/catalog/categories/$pid/products/sort-order');
+            'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/categories/$pid/products/sort-order');
 
         if (response.statusCode == APIConstants.successCode) {
           // Parse the response body
@@ -541,6 +580,7 @@ fragment PriceFields on Money {
                                   itemCount: products.length,
                                   itemBuilder: (context, index) {
                                     final product = products[index];
+                                    log("image url is this ${product.featuredImage}");
                                     return Padding(
                                         padding: const EdgeInsets.only(
                                             top: 5, left: 15, right: 15),
@@ -685,6 +725,7 @@ fragment PriceFields on Money {
                                       itemCount: products.length,
                                       itemBuilder: (context, index) {
                                         final product = products[index];
+                                            log("image url is this ${product.featuredImage}");
                                         return Padding(
                                             padding: const EdgeInsets.only(
                                                 top: 5, left: 15, right: 15),

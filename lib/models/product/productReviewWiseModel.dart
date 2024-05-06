@@ -1,10 +1,10 @@
-
 import '../../mappers/bigcommerce_models/bigcommerce_proudct_review_model.dart';
 import '../../mappers/shopify_models/shopify_product_review_model.dart';
+import '../../mappers/woocommerce/woocommerce_review_model.dart';
 import '../../utils/appConfiguer.dart';
 
 class ReviewProductModels {
-  final currentPage;
+  final int currentPage;
   final int perPage;
   final List<Review> reviews;
 
@@ -15,12 +15,37 @@ class ReviewProductModels {
   });
 
   factory ReviewProductModels.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      return WooCommerceReviewProductModels.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceReviewProductModels.fromJson(json);
     } else {
       return ShopifyReviewProductModels.fromJson(json);
     }
   }
+//   factory ReviewProductModels.fromJson(dynamic json) {
+//   if (json is List) {
+//     // If the response is a list, handle it accordingly
+//     return ReviewProductModels(
+//       currentPage: 0, // Set appropriate values
+//       perPage: 0, // Set appropriate values
+//       reviews: json,
+//     );
+//   } else if (json is Map<String, dynamic>) {
+//     // If the response is a map, handle it accordingly
+//     if (AppConfigure.wooCommerce) {
+//       return WooCommerceReviewProductModels.fromJson(json);
+//     } else if (AppConfigure.bigCommerce) {
+//       return BigCommerceReviewProductModels.fromJson(json);
+//     } else {
+//       return ShopifyReviewProductModels.fromJson(json);
+//     }
+//   } else {
+//     // Handle other cases or throw an error
+//     throw Exception('Invalid JSON format');
+//   }
+// }
+
 }
 
 class Review {
@@ -69,7 +94,9 @@ class Review {
   });
 
   factory Review.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      return WooCommerceReview.fromJson(json);
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceReview.fromJson(json);
     } else {
       return ShopifyReview.fromJson(json);
@@ -99,6 +126,9 @@ class Reviewer {
   });
 
   factory Reviewer.fromJson(Map<String, dynamic> json) {
+    if (AppConfigure.wooCommerce) {
+      return WooCommerceReviewer.fromJson(json);
+    }
     if (AppConfigure.bigCommerce) {
       return BigCommerceReviewer.fromJson(json);
     } else {

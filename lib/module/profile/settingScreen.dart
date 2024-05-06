@@ -83,7 +83,19 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
       // }
 
       
-    } else {
+    } else if (AppConfigure.wooCommerce){
+
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
+  Navigator.of(context).pop();
+  navigatorKey.currentState!.pushNamedAndRemoveUntil(
+    RouteConstants.login,
+    (route) => false,
+  );
+
+    } 
+    
+    else {
       // Logout with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       final token = await SharedPreferenceManager().getToken();

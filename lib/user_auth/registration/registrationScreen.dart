@@ -313,18 +313,34 @@ final body = [
     // Signing with WooCommerce
    
 final body = 
-        {
+//         {
+//   "email": email.text,
+//   "first_name": firstName.text,
+//   "last_name": lastName.text,
+//   "password": password.text,
+//   "phone": mobNo.text,
+// };
+{
   "email": email.text,
-  "first_name": firstName.text,
+  "first_name":firstName.text,
   "last_name": lastName.text,
   "password": password.text,
-  "phone": mobNo.text,
+   "billing": {
+
+        "phone":  mobNo.text
+    }
 };
       try {
+          String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
         final response = await api.sendRequest.post(
-          'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3/customers',
+          '/wp-json/wc/v3/customers?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
           data: body,
-         
+          options: Options(headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "basic $cunsumerKey:$cumsumerSecret"
+          }),
         );
         debugPrint('status code is ${response.statusCode}');
         var data = response.data;
@@ -351,7 +367,7 @@ final body =
             ),
           );
           // Optionally, you can navigate to another screen or perform any additional action here
-        } else if (response.statusCode == APIConstants.alreadyExistCode) {
+        } else if (response.statusCode == 400) {
           setState(() {
             loadingSignup = false;
           });
@@ -380,6 +396,14 @@ final body =
               textColor: AppColors.whiteColor,
               fontSize: 16.0);
         }
+          Fluttertoast.showToast(
+              msg: "User Already Exist",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
         debugPrint("error: $error");
         setState(() {
           loadingSignup = false;

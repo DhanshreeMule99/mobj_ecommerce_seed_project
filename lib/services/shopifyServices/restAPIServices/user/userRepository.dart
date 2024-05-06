@@ -52,7 +52,38 @@ class UserRepository {
         debugPrint('profile data error is this $error');
         rethrow;
       }
-    } else {
+    }
+    else 
+    if (AppConfigure.wooCommerce){
+ debugPrint('calling bigcommerce profile api');
+      try {
+       String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+        final uid = await SharedPreferenceManager().getUserId();
+        log(" woo commerce UID : $uid");
+        final response = await api.sendRequest.get("/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret",
+        
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // ref.refresh(profileDataProvider);
+          final result = response.data;
+          await SharedPreferenceManager()
+              .setname(result['first_name'].toString());
+          await SharedPreferenceManager().setemail(result['email'].toString());
+          debugPrint('result is this $result');
+          return CustomerModel.fromJson(result);
+        } else {
+          throw Exception(response.data);
+        }
+      } catch (error) {
+        debugPrint('profile data error is this $error');
+        rethrow;
+      }
+
+
+    }
+    
+     else {
       try {
         String baseUrl = AppConfigure.baseUrl +
             APIConstants.apiForAdminURL +
@@ -126,6 +157,9 @@ query {
     debugPrint('getting 2');
     API api = API();
     if (AppConfigure.bigCommerce) {
+
+// edit customer details for bigCommerce 
+
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
@@ -160,7 +194,47 @@ query {
         exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } else {
+    } else if (AppConfigure.wooCommerce ){
+  
+        // edit customer for WooCommerce
+    debugPrint('Calling edit woo commerce api');
+      var body1 = jsonEncode({"customer": body});
+      try {
+         final uid = await SharedPreferenceManager().getUserId();
+               String cunsumerKey = AppConfigure.consumerkey;
+       String cumsumerSecret = AppConfigure.consumersecret;
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response = await api.sendRequest.put(
+            '/wp-json/wc/v3/customers/$uid?consumer key=$cunsumerKey&consumer secret=$cumsumerSecret',
+            data: body,
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+            }),
+          );
+
+          if (response.statusCode == APIConstants.successCode) {
+            return response;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      } catch (error) {
+        exceptionString = AppString.serverError;
+        return exceptionString;
+      }
+
+
+    }
+    
+    else {
+      // edit customer details  by shpify 
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +

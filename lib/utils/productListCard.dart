@@ -168,6 +168,7 @@ class _ProductListCardstate extends State<ProductListCard> {
     try {
       final response = await api.sendRequest.post(
         "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items",
+        "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items",
         data: newProduct,
         options: Options(headers: {
           'Content-Type': 'application/json',
