@@ -46,16 +46,11 @@ class AppConfigure {
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
   static const storeFront = 'zwpg4jmenh';
   static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
-      'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
-  static const storeFront = 'zwpg4jmenh';
-  static const bigCommerceAccessToken = '78m433mgo5za5sdsgnvcjpbrsboac63';
+     
+
 
 // woo commerce url
 // woo commerce url
-
-  static const wooCommerce = false;
-  static const woocommerceUrl =
-      'https://woo-almost-pioneering-heart.wpcomstaging.com/wp-json/wc/v3';
 
   static const wooCommerce = true;
   static const woocommerceUrl = 'https://ttf.setoo.org/';
