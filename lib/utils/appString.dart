@@ -223,7 +223,7 @@ class AppString {
   static const zipLabel = 'ZIP Code';
   static const customer = 'Customer';
   static const relatedProduct = 'Related Product';
-  static const outOfStock = 'Out of Stock';
+  static const outOfStock = 'Out\nof\nStock';
   static const selectPrice = 'Selected price range';
   static const clear = 'CLEAR FILTER';
   static const applyFilter = 'APPLY FILTER';

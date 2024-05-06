@@ -4,8 +4,11 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobj_project/utils/api.dart';
 import '../../utils/appColors.dart';
@@ -311,233 +314,260 @@ class _ProductListCardstate extends State<ProductListCard> {
         )
         .id;
     log("wishlist item id is this $wishlistItemID");
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-              child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Wrap(
-                    runAlignment: WrapAlignment.end,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.end,
-                    children: <Widget>[
-                      // Share Button
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: widget.shareProduct,
-                        icon: const Icon(
-                          Icons.share,
-                          size: 25,
-                        ),
-                      ),
-                      LikeButton(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        isLiked: isLiked,
-                        onTap: (isLiked) async {
-                          await toggleLikeStatus();
-                          return !isLiked;
-                        },
-                        likeBuilder: (bool isLiked) {
-                          return Icon(
-                            Icons.favorite,
-                            color: isLiked ? Colors.red : Colors.black,
-                            size: 25,
-                          );
-                        },
-                      ),
-                    ],
-                  ))),
-          CachedNetworkImage(
-            imageUrl: widget.productImage,
-            imageBuilder: (context, imageProvider) => Container(
-              height: MediaQuery.of(context).size.height / 4,
-              // width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  //image size fill
-                  image: imageProvider,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            placeholder: (context, url) => Container(
-              height: MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width,
-              color: AppColors.greyShade,
-            ),
-            errorWidget: (context, url, error) => Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width,
-                color: AppColors.greyShade),
-          ),
-          Container(
-            width: double.infinity,
-            alignment: Alignment.topLeft,
-            decoration: BoxDecoration(
-                // color: app_colors.white_color,
-                borderRadius: BorderRadius.circular(15.0),
-                // Adjust the radius as needed
-                border: Border.all(
-                  color: Colors.transparent,
-                  // Set the border color
-                  width: 2.0, // Set the border width
-                )),
-            child: Row(
+    return Container(
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).colorScheme.secondary,
+          boxShadow: const [
+            BoxShadow(
+                color: ConstColors.shadowColor,
+                blurRadius: 4,
+                spreadRadius: 0,
+                offset: Offset(0, 1))
+          ]),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Padding(
+            //     padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+            //     child: Align(
+            //         alignment: Alignment.bottomRight,
+            //         child: Wrap(
+            //           runAlignment: WrapAlignment.end,
+            //           crossAxisAlignment: WrapCrossAlignment.center,
+            //           alignment: WrapAlignment.end,
+            //           children: <Widget>[
+            //             // Share Button
+            //             IconButton(
+            //               padding: EdgeInsets.zero,
+            //               onPressed: widget.shareProduct,
+            //               icon: const Icon(
+            //                 Icons.share,
+            //                 size: 25,
+            //               ),
+            //             ),
+            //             LikeButton(
+            //               mainAxisAlignment: MainAxisAlignment.end,
+            //               isLiked: isLiked,
+            //               onTap: (isLiked) async {
+            //                 await toggleLikeStatus();
+            //                 return !isLiked;
+            //               },
+            //               likeBuilder: (bool isLiked) {
+            //                 return Icon(
+            //                   Icons.favorite,
+            //                   color: isLiked ? Colors.red : Colors.black,
+            //                   size: 25,
+            //                 );
+            //               },
+            //             ),
+            //           ],
+            //         ))),
+            Stack(
               children: [
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                        child: Text(
-                          widget.productName,
-                          style: TextStyle(
-                            fontSize: 0.04 * MediaQuery.of(context).size.width,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.productImage,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: MediaQuery.of(context).size.height / 4.5,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        image: DecorationImage(
+                          //image size fill
+                          image: imageProvider,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      widget.productPrice != null
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              child: Text(
-                                "\u{20B9}${widget.productPrice}",
-                                style: TextStyle(
-                                  fontSize:
-                                      0.05 * MediaQuery.of(context).size.width,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            )
-                          : Container(),
-                    ])),
+                    ),
+                    placeholder: (context, url) => Container(
+                      height: MediaQuery.of(context).size.height / 4.5,
+                      color: AppColors.greyShade,
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                        height: MediaQuery.of(context).size.height / 4.5,
+                        color: AppColors.greyShade),
+                  ),
+                ),
                 Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: widget.stock > 0
-                        ? ElevatedButton(
-                            onPressed: () async {
-                              debugPrint(
-                                  "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
-                              isLogin().then((value) {
-                                if (value == true) {
-                                  CommonAlert.show_loading_alert(context);
-                                  debugPrint(
-                                      "varient id is this ${widget.variantId}");
-                                  if (AppConfigure.bigCommerce) {
-                                    ProductRepository()
-                                        .addToCartBigcommerce(
-                                            widget.variantId,
-                                            '1',
-                                            widget.productName,
-                                            widget.productPrice.toString(),
-                                            widget.productId)
-                                        .then((value) async {
-                                      if (value == AppString.success) {
-                                        Navigator.of(context).pop();
-                                        widget.ref.refresh(productDataProvider);
-                                        widget.ref
-                                            .refresh(cartDetailsDataProvider);
-                                        widget.ref.refresh(
-                                            productDetailsProvider(
-                                                widget.productId));
-                                        Fluttertoast.showToast(
-                                            msg: AppString.addToCartSuccess,
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 0,
-                                            backgroundColor: AppColors.green,
-                                            textColor: AppColors.whiteColor,
-                                            fontSize: 16.0);
-                                      } else {
-                                        Navigator.of(context).pop();
-                                        Fluttertoast.showToast(
-                                            msg: AppString.oops,
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 0,
-                                            backgroundColor: AppColors.green,
-                                            textColor: AppColors.whiteColor,
-                                            fontSize: 16.0);
-                                      }
-                                    });
-                                  } else {
-                                    ProductRepository()
-                                        .addToCart(widget.variantId, "1")
-                                        .then((value) async {
-                                      if (value == AppString.success) {
-                                        Navigator.of(context).pop();
-                                        widget.ref.refresh(productDataProvider);
-                                        widget.ref
-                                            .refresh(cartDetailsDataProvider);
-                                        widget.ref.refresh(
-                                            productDetailsProvider(
-                                                widget.productId));
-                                        Fluttertoast.showToast(
-                                            msg: AppString.addToCartSuccess,
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 0,
-                                            backgroundColor: AppColors.green,
-                                            textColor: AppColors.whiteColor,
-                                            fontSize: 16.0);
-                                      } else {
-                                        Navigator.of(context).pop();
-                                        Fluttertoast.showToast(
-                                            msg: AppString.oops,
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 0,
-                                            backgroundColor: AppColors.green,
-                                            textColor: AppColors.whiteColor,
-                                            fontSize: 16.0);
-                                      }
-                                    });
-                                  }
-                                } else {
-                                  CommonAlert.showAlertAndNavigateToLogin(
-                                      context);
-                                }
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: widget.tileColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              textStyle: const TextStyle(
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            child: Text(
-                              AppLocalizations.of(context)!
-                                  .addToCart
-                                  .toUpperCase(),
-                              style: const TextStyle(
-                                  color: AppColors.whiteColor,
-                                  // fontSize:
-                                  //     MediaQuery.of(context).size.width * 0.05,
-                                  fontWeight: FontWeight.bold),
-                            ))
-                        : outOfStockCard()),
+                  padding: EdgeInsets.only(top: 5.sp, right: 8.sp),
+                  child: LikeButton(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    isLiked: isLiked,
+                    onTap: (isLiked) async {
+                      await toggleLikeStatus();
+                      return !isLiked;
+                    },
+                    likeBuilder: (bool isLiked) {
+                      return Icon(
+                        Ionicons.heart,
+                        color: isLiked ? Colors.red : Colors.black54,
+                        size: 25.sp,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(
-              top: 5,
-              left: 5,
+            Container(
+              //  width: double.infinity,
+
+              alignment: Alignment.topLeft,
+              decoration: BoxDecoration(
+                  // color: app_colors.white_color,
+                  borderRadius: BorderRadius.circular(15.0),
+                  // Adjust the radius as needed
+                  border: Border.all(
+                    color: Colors.transparent,
+                    // Set the border color
+                    width: 2.0, // Set the border width
+                  )),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.sp),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 3.4,
+                            child: Text(
+                              widget.productName,
+                              style: Theme.of(context).textTheme.headlineLarge,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        widget.productPrice != null
+                            ? Padding(
+                                padding: EdgeInsets.all(5.sp),
+                                child: Text(
+                                  "\u{20B9}${widget.productPrice}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                ),
+                              )
+                            : Container(),
+                      ]),
+                  Padding(
+                      padding: const EdgeInsets.only(right: 0),
+                      child: widget.stock > 0
+                          ? IconButton(
+                              onPressed: () async {
+                                debugPrint(
+                                    "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
+                                isLogin().then((value) {
+                                  if (value == true) {
+                                    CommonAlert.show_loading_alert(context);
+                                    debugPrint(
+                                        "varient id is this ${widget.variantId}");
+                                    if (AppConfigure.bigCommerce) {
+                                      ProductRepository()
+                                          .addToCartBigcommerce(
+                                              widget.variantId,
+                                              '1',
+                                              widget.productName,
+                                              widget.productPrice.toString(),
+                                              widget.productId)
+                                          .then((value) async {
+                                        if (value == AppString.success) {
+                                          Navigator.of(context).pop();
+                                          widget.ref
+                                              .refresh(productDataProvider);
+                                          widget.ref
+                                              .refresh(cartDetailsDataProvider);
+                                          widget.ref.refresh(
+                                              productDetailsProvider(
+                                                  widget.productId));
+                                          Fluttertoast.showToast(
+                                              msg: AppString.addToCartSuccess,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 0,
+                                              backgroundColor: AppColors.green,
+                                              textColor: AppColors.whiteColor,
+                                              fontSize: 16.0);
+                                        } else {
+                                          Navigator.of(context).pop();
+                                          Fluttertoast.showToast(
+                                              msg: AppString.oops,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 0,
+                                              backgroundColor: AppColors.green,
+                                              textColor: AppColors.whiteColor,
+                                              fontSize: 16.0);
+                                        }
+                                      });
+                                    } else {
+                                      ProductRepository()
+                                          .addToCart(widget.variantId, "1")
+                                          .then((value) async {
+                                        if (value == AppString.success) {
+                                          Navigator.of(context).pop();
+                                          widget.ref
+                                              .refresh(productDataProvider);
+                                          widget.ref
+                                              .refresh(cartDetailsDataProvider);
+                                          widget.ref.refresh(
+                                              productDetailsProvider(
+                                                  widget.productId));
+                                          Fluttertoast.showToast(
+                                              msg: AppString.addToCartSuccess,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 0,
+                                              backgroundColor: AppColors.green,
+                                              textColor: AppColors.whiteColor,
+                                              fontSize: 16.0);
+                                        } else {
+                                          Navigator.of(context).pop();
+                                          Fluttertoast.showToast(
+                                              msg: AppString.oops,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 0,
+                                              backgroundColor: AppColors.green,
+                                              textColor: AppColors.whiteColor,
+                                              fontSize: 16.0);
+                                        }
+                                      });
+                                    }
+                                  } else {
+                                    CommonAlert.showAlertAndNavigateToLogin(
+                                        context);
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                Icons.add_circle,
+                                size: 30.sp,
+                                color: Theme.of(context).colorScheme.primary,
+                              ))
+                          : Padding(
+                              padding: EdgeInsets.only(right: 5.sp),
+                              child: Text(
+                                AppString.outOfStock,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.none,
+                                    fontSize: 10),
+                              ),
+                            )),
+                ],
+              ),
             ),
-            // child: Divider(
-            //   thickness: 1.5,
-            // )
-          )
-        ]);
+          ]),
+    );
   }
 
   Widget outOfStockCard() {

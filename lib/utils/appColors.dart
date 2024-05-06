@@ -1,4 +1,3 @@
-
 import 'cmsConfigue.dart';
 
 class AppColors {
@@ -34,8 +33,6 @@ class AppColors {
   static const Color transparent = Colors.transparent;
 }
 
-
-
 class ConstColors {
   //primary color
   static const Color purple = Color(0xFF6F47EB);
@@ -66,7 +63,7 @@ const lightColorScheme = ColorScheme(
   onPrimary: Color(0xFFEEE9FD), //light  purple
   primaryContainer: Color.fromARGB(255, 224, 224, 224),
   onPrimaryContainer: Color.fromARGB(255, 245, 245, 245),
-  secondary: Color(0xFFEDEDED), // grey
+  secondary: Colors.white, // Dark gray // grey
   onSecondary: Color(0xFFF9F9F9), //lightgrey
   secondaryContainer: Color(0xFF595D61), //darkgrey
   onSecondaryContainer: Color(0xFFC5C5C5), //textColor
