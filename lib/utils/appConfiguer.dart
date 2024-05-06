@@ -4,8 +4,8 @@ class AppConfigure {
   static const primaryColor = "#0000FF";
   static const secondaryColor = "#ADD8E6";
   static const logoImagePath =
-      // "https://www.creativefabrica.com/wp-content/uploads/2019/03/Monogram-PY-Logo-Design-by-Greenlines-Studios-580x386.jpg";
-      "https://img.freepik.com/free-vector/customer-woman-shopping-with-barrow-concept_40876-2484.jpg?w=740&t=st=1714978157~exp=1714978757~hmac=8ef49c7be20bb5e43a0dcd39c037e1b89ff344d1f719357d78fd33ae1b4dc73c";
+      "https://www.creativefabrica.com/wp-content/uploads/2019/03/Monogram-PY-Logo-Design-by-Greenlines-Studios-580x386.jpg";
+      static const loginbackimage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgiQwmsQRG7ghIW01bAZaTUGP5NLYyOL0EYIaOZCNYA&s";
   // static const baseUrl =
   //     bigCommerce == true ? bigcommerceUrl : "https://b8507f-9a.myshopify.com/";
 
