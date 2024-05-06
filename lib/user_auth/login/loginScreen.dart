@@ -771,6 +771,7 @@
 
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -780,6 +781,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import '../../provider/addressProvider.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
+import '../../utils/api.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

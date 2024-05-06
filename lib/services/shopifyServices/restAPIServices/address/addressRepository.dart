@@ -88,7 +88,7 @@ class AddressRepository {
           if (result.isEmpty) {
             throw (AppString.noDataError);
           } else {
-            return add.map((e) => DefaultAddressModel.fromJson(e)).toList();
+            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
           }
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
