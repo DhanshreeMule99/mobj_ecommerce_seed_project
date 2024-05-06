@@ -86,7 +86,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         headlineLarge: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: ConstColors.black,
-                          fontSize: 18.sp,
+                          fontSize: 14.sp,
                         ),
                         headlineMedium: GoogleFonts.inter(
                           fontWeight: FontWeight.w400,
@@ -108,8 +108,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             color: ConstColors.black,
                             fontSize: 14.sp,
                             decoration: TextDecoration.underline,
-                            decorationColor: ConstColors.black
-                            ),
+                            decorationColor: ConstColors.black),
                         bodySmall: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: ConstColors.darkGrey,
@@ -140,8 +139,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             color: ConstColors.purple,
                             fontSize: 12.sp,
                             decoration: TextDecoration.underline,
-                            decorationColor: ConstColors.purple
-                            ),
+                            decorationColor: ConstColors.purple),
                         displaySmall: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           fontSize: 13.sp,
