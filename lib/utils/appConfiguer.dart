@@ -5,6 +5,7 @@ class AppConfigure {
   static const secondaryColor = "#ADD8E6";
   static const logoImagePath =
       "https://www.creativefabrica.com/wp-content/uploads/2019/03/Monogram-PY-Logo-Design-by-Greenlines-Studios-580x386.jpg";
+      static const loginbackimage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZgiQwmsQRG7ghIW01bAZaTUGP5NLYyOL0EYIaOZCNYA&s";
   // static const baseUrl =
   //     bigCommerce == true ? bigcommerceUrl : "https://b8507f-9a.myshopify.com/";
 
@@ -38,7 +39,7 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = false;
+  static const bigCommerce = true;
 
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
