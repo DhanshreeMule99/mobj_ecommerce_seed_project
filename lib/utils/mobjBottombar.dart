@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:mobj_project/module/checkout/CheckoutScreen.dart';
@@ -81,7 +82,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                   : theme.toString() == "true"
                       ? AppColors.whiteColor
                       : AppColors.blackColor,
-              size: 25,
+              size: 20.sp,
             ),
             label: ""),
         BottomNavigationBarItem(
@@ -93,7 +94,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                 : theme.toString() == "true"
                     ? AppColors.whiteColor
                     : AppColors.blackColor,
-            size: 25,
+            size: 20.sp,
           ),
         ),
         BottomNavigationBarItem(
@@ -104,7 +105,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                   : theme.toString() == "true"
                       ? AppColors.whiteColor
                       : AppColors.blackColor,
-              size: 29,
+              size: 24.sp,
             ),
             label: ""),
         BottomNavigationBarItem(
@@ -115,7 +116,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                   : theme.toString() == "true"
                       ? AppColors.whiteColor
                       : AppColors.blackColor,
-              size: 25,
+              size: 20.sp,
             ),
             label: ""),
       ],
