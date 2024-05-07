@@ -1106,7 +1106,7 @@ Widget build(BuildContext context) {
                                   Expanded(
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 15, left: 15, right: 5),
+                                            top: 15, left: 10, right: 5),
                                         child: TextFormField(
                   
                                           controller: firstName,
@@ -1179,7 +1179,7 @@ Widget build(BuildContext context) {
                                   Expanded(
                                     child: Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 15, left: 5, right: 15),
+                                            top: 15, left: 5, right: 10),
                                         child: TextFormField(
                                           controller: lastName,
                                           validator: (value) {
@@ -1253,7 +1253,7 @@ Widget build(BuildContext context) {
                   
                               Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 15, left: 15, right: 15),
+                                      top: 15, left: 10, right: 10),
                                   child: TextFormField(
                                     controller: email,
                                     validator: (value) {
@@ -1309,7 +1309,7 @@ Widget build(BuildContext context) {
                                   )),
                               Padding(
                                   padding: const EdgeInsets.only(
-                                      top: 15, left: 15, right: 15),
+                                      top: 15, left: 10, right: 10),
                                   child: TextFormField(
                                     controller: mobNo,
                                     validator: (value) {
@@ -1368,7 +1368,8 @@ Widget build(BuildContext context) {
                                     // maxLength: 10,
                                   )),
                               Padding(
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10),
                                   child: TextFormField(
                                       keyboardType: TextInputType.visiblePassword,
                                       obscureText: _obscured,
@@ -1432,8 +1433,9 @@ Widget build(BuildContext context) {
                                             .validatePassword(value!);
                                       })),
                               Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 15, right: 15),
+                               
+                                      padding: const EdgeInsets.only(
+                                      top: 15, left: 10, right: 10),
                                   child: TextFormField(
                                     
                                       keyboardType: TextInputType.visiblePassword,
@@ -1510,7 +1512,8 @@ Widget build(BuildContext context) {
                                   : Container(),
                               //fo,)),
                               Padding(
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.only(
+                                      top: 10, left: 10, right: 10),
                                   child: Consumer(
                                     builder: (context, watch, _) {
                                       return ElevatedButton(
