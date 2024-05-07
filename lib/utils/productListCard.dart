@@ -630,18 +630,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                                 ),
                               ),
                             )
-                          : Padding(
-                              padding: EdgeInsets.only(right: 5.sp),
-                              child: Text(
-                                AppString.outOfStock,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none,
-                                    fontSize: 10),
-                              ),
-                            )),
+                          : outOfStockCard()),
                 ],
               ),
             ),
@@ -650,17 +639,20 @@ class _ProductListCardstate extends State<ProductListCard> {
   }
 
   Widget outOfStockCard() {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        color: AppColors.red,
-        borderRadius: BorderRadius.circular(15), // Set the radius to 35
-      ),
-      child: const Text(
-        AppString.outOfStock,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.0.w),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 2.0.w),
+        width: MediaQuery.of(context).size.width / .24,
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: AppColors.red,
+          borderRadius: BorderRadius.circular(10), // Set the radius to 35
+        ),
+        child: Text(
+          AppString.outOfStock,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
     );

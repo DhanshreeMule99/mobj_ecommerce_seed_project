@@ -210,7 +210,9 @@ fragment PriceFields on Money {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     products.length == 0
-                        ? Center(child: CircularProgressIndicator())
+                        ? AppConfigure.wooCommerce
+                            ? Center(child: Text("Not Availble"))
+                            : Center(child: CircularProgressIndicator())
                         : Expanded(
                             child: GridView.builder(
                                 gridDelegate:

@@ -18,7 +18,20 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   List<dynamic> data = [];
   final uid = SharedPreferenceManager().getUserId();
   Future<void> fetchCategories() async {
-    if (AppConfigure.bigCommerce) {
+    if (AppConfigure.wooCommerce) {
+      log('Woo Commerce caetgorires');
+      final response = await ApiManager.get(
+          "https://ttf.setoo.org/wp-json/wc/v3/products/categories?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf");
+      if (response.statusCode == APIConstants.successCode) {
+        final apiData = json.decode(response.body);
+        log(response.body);
+        setState(() {
+          data = apiData;
+        });
+      } else {
+        throw Exception('Failed to fetch categories');
+      }
+    } else if (AppConfigure.bigCommerce) {
       debugPrint('In bigCommerAPI');
       final response = await ApiManager.get(
           "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/catalog/trees/categories");
@@ -73,10 +86,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                   : GridView.builder(
                       itemCount: data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        String imageUrl = data[index]['image_url'] ??
-                            DefaultValues.defaultImage;
-                        String categoryName = data[index][
-                            'name']; // Assuming category name is in 'name' field
                         return GestureDetector(
                           onTap: () async {
                             // Fetch uid asynchronously
@@ -102,10 +111,17 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                     offset: Offset(0, 2))
                               ],
                               image: DecorationImage(
-                                  image: imageUrl == ""
-                                      ? NetworkImage(
-                                          "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
-                                      : NetworkImage(imageUrl),
+                                  image: AppConfigure.wooCommerce
+                                      ? (data[index]["image"] == null
+                                          ? NetworkImage(
+                                              "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                          : NetworkImage(
+                                              data[index]["image"]["src"]))
+                                      : (data[index]["image_url"] == ""
+                                          ? NetworkImage(
+                                              "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                          : NetworkImage(
+                                              data[index]["image_url"])),
                                   fit: BoxFit.cover),
                               borderRadius: BorderRadius.circular(
                                   10), // Adjust border radius as needed
@@ -133,7 +149,13 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                   left: 0,
                                   right: 0,
                                   child: Center(
-                                    child: Text(categoryName,
+                                    child: Text(
+                                        AppConfigure.bigCommerce
+                                            ? data[index]['name'].toString()
+                                            : (AppConfigure.wooCommerce
+                                                ? data[index]['name'].toString()
+                                                : data[index]['title']
+                                                    .toString()),
                                         style: Theme.of(context)
                                             .textTheme
                                             .displayLarge),

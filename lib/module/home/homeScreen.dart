@@ -362,12 +362,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               width: 1),
                                           image: DecorationImage(
                                             //image size fill
-                                            image: data[index]["image_url"] ==
-                                                    null
-                                                ? NetworkImage(
-                                                    "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
-                                                : NetworkImage(
-                                                    data[index]["image_url"]),
+                                            image: AppConfigure.wooCommerce
+                                                ? (data[index]["image"] == null
+                                                    ? NetworkImage(
+                                                        "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                                    : NetworkImage(data[index]
+                                                        ["image"]["src"]))
+                                                : (data[index]["image_url"] ==
+                                                        ""
+                                                    ? NetworkImage(
+                                                        "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                                    : NetworkImage(data[index]
+                                                        ["image_url"])),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
