@@ -1041,11 +1041,47 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                     ]),
               );
             },
-            error: (error, s) => Column(
+            // error: (error, s) => Column(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(error.toString()),
+            //     Center(
+            //       child: ErrorHandling(
+            //         error_type: error != AppString.noDataError
+            //             ? AppString.error
+            //             : AppString.noDataError,
+            //       ),
+            //     ),
+            //     error == AppString.noDataError
+            //         ? Text(AppString.emptyAddress,
+            //             style: TextStyle(
+            //                 fontSize: MediaQuery.of(context).size.width * 0.05,
+            //                 fontWeight: FontWeight.bold))
+            //         : Container(),
+            //     error != AppString.noDataError
+            //         ? ElevatedButton(
+            //             style: ElevatedButton.styleFrom(
+            //               backgroundColor: AppColors.buttonColor,
+            //             ),
+            //             onPressed: () {
+            //               ref.refresh(addressDataProvider);
+            //             },
+            //             child: const Text(
+            //               AppString.refresh,
+            //               style: TextStyle(
+            //                 fontSize: 16,
+            //                 color: AppColors.whiteColor,
+            //               ),
+            //             ),
+            //           )
+            //         : Container()
+            //   ],
+            // ),
+                        error: (error, s) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(error.toString()),
                 Center(
                   child: ErrorHandling(
                     error_type: error != AppString.noDataError
@@ -1054,6 +1090,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                   ),
                 ),
                 error == AppString.noDataError
+                    //  ? Text(AppLocalizations.of(context)!.emptyorders,
                     ? Text(AppString.emptyAddress,
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
@@ -1065,11 +1102,11 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                           backgroundColor: AppColors.buttonColor,
                         ),
                         onPressed: () {
-                          ref.refresh(addressDataProvider);
+                          ref.refresh(cartDetailsDataProvider);
                         },
-                        child: const Text(
-                          AppString.refresh,
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.refresh,
+                          style: const TextStyle(
                             fontSize: 16,
                             color: AppColors.whiteColor,
                           ),
