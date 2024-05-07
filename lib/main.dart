@@ -18,7 +18,7 @@ import 'utils/appColors.dart';
 
 final providerContainer = ProviderContainer();
 List<Map<String, dynamic>> bigcommerceOrderedItems = [];
- Map<String, dynamic>? woocommerceaddressbody;
+Map<String, dynamic>? woocommerceaddressbody;
 Future<void> backgroundHandler(RemoteMessage message) async {}
 
 void main() async {
@@ -133,7 +133,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         displayLarge: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: ConstColors.backgroundColor,
-                          fontSize: 13.sp,
+                          fontSize: 14.sp,
                         ),
                         displayMedium: GoogleFonts.inter(
                             fontWeight: FontWeight.w500,

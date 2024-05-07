@@ -111,7 +111,7 @@ fragment ProductFields on Product {
   id
   entityId
   name
-  prices(currencyCode: INR) {
+  prices(currencyCode: USD) {
     price {
       ...PriceFields
     }
@@ -209,296 +209,304 @@ fragment PriceFields on Money {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                        child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 1 / 1.4),
-                            itemCount: products.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final isBookmarked = bookmarkedProduct.indexWhere(
-                                  (p) => p.id == products[index].id);
-                              final int staticStock =
-                                  10; // Example static value for stock
-                              final String staticVariantId =
-                                  "static_variant_id";
-                              return InkWell(
-                                  onTap: () {
-                                    ref.refresh(productDetailsProvider(
-                                        products[index].id.toString()));
-                                    Navigator.of(context).push(
-                                      PageRouteBuilder(
-                                        pageBuilder:
-                                            (context, animation1, animation2) =>
+                    products.length == 0
+                        ? Center(child: CircularProgressIndicator())
+                        : Expanded(
+                            child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 1 / 1.6),
+                                itemCount: products.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final isBookmarked =
+                                      bookmarkedProduct.indexWhere(
+                                          (p) => p.id == products[index].id);
+                                  final int staticStock =
+                                      10; // Example static value for stock
+                                  final String staticVariantId =
+                                      "static_variant_id";
+                                  return InkWell(
+                                      onTap: () {
+                                        ref.refresh(productDetailsProvider(
+                                            products[index].id.toString()));
+                                        Navigator.of(context).push(
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, animation1,
+                                                    animation2) =>
                                                 ProductDetailsScreen(
-                                          uid: products[index].id.toString(),
-                                          // product: products[index],
-                                        ),
-                                        transitionDuration: Duration.zero,
-                                        reverseTransitionDuration:
-                                            Duration.zero,
-                                      ),
-                                    );
-                                  },
-                                  child: ProductListCard(
-                                    shareProduct: () async {
-                                      ShareItem().buildDynamicLinks(
-                                          products[index].id.toString(),
-                                          products[index]
-                                              .defaultImage
-                                              .toString(),
-                                          products[index].name.toString());
-                                    },
+                                              uid:
+                                                  products[index].id.toString(),
+                                              // product: products[index],
+                                            ),
+                                            transitionDuration: Duration.zero,
+                                            reverseTransitionDuration:
+                                                Duration.zero,
+                                          ),
+                                        );
+                                      },
+                                      child: ProductListCard(
+                                        shareProduct: () async {
+                                          ShareItem().buildDynamicLinks(
+                                              products[index].id.toString(),
+                                              products[index]
+                                                  .defaultImage
+                                                  .toString(),
+                                              products[index].name.toString());
+                                        },
 
-                                    isLikedToggle: "true",
-                                    onLiked: () async {
-                                      // ref
-                                      //     .read(
-                                      //         bookmarkedProductProvider
-                                      //             .notifier)
-                                      //     .toggleBookmark(
-                                      //         products[index]);
-                                      //TODO list API integration of like
-                                      // debouncer.run(() {
-                                      // if ((productlist[index]
-                                      //     .saveStatus ==
-                                      // "true" &&
-                                      // isBookmarked
-                                      //     .toString() ==
-                                      // "0") ||
-                                      // (productlist[index]
-                                      //     .saveStatus !=
-                                      // "true" &&
-                                      // isBookmarked
-                                      //     .toString() ==
-                                      // "-1")) {
-                                      // Onsaved_repository()
-                                      //     .onsaved(productlist[
-                                      // index]
-                                      //     .opportunityID
-                                      //     .toString())
-                                      //     .then(
-                                      // (subjectFromServer) {
-                                      // if (subjectFromServer ==
-                                      // "Opportunity is already saved") {
-                                    },
-                                    tileColor: appInfo.primaryColorValue,
-                                    logoPath:
-                                        products[index].defaultImage.toString(),
-                                    productName:
-                                        products[index].name.toString(),
-                                    address: products[index].name.toString(),
-                                    datetime: products[index].name.toString(),
-                                    // "${AppString.deliverAt} ${products[index].createdAt.toString()}/${products[index].createdAt}/${products[index].createdAt!}",
-                                    productImage: products[index]
-                                        .defaultImage
-                                        .urlOriginal
-                                        .toString(),
-                                    ratings: () {
-                                      //TODO list product rating
-                                      // showDialog(
-                                      //     context: context,
-                                      //     builder: (context) =>
-                                      //         // RatingAlert(
-                                      //         //     onRatingSelected:
-                                      //         //         (val) {},
-                                      //         //     org_name:
-                                      //         //         "abc",
-                                      //         //     onsubmit:
-                                      //         //         () {},
-                                      //         //     user_rating:
-                                      //         //         4));
-                                      // // showDialog(
-                                      // // context: context,
-                                      // // builder: (context) =>
-                                      // // user_ratings.when(
-                                      // // data: (id) =>
-                                      // // RatingAlert(
-                                      // // onRatingSelected:
-                                      // // (rating) {
-                                      // // ratings = rating;
-                                      // // },
-                                      // // org_name: productlist[
-                                      // // index]
-                                      // //     .organizationName,
-                                      // // onsubmit: () {
-                                      // // setState(() {
-                                      // // var avgRating =
-                                      // // 0.0;
-                                      // // var sum = 0.0;
-                                      // // var len = 0.0;
-                                      // //
-                                      // // if (productlist[
-                                      // // index]
-                                      // //     .ratingsLength ==
-                                      // // "0") {
-                                      // // sum = double.parse(productlist[
-                                      // // index]
-                                      // //     .sumRatings!
-                                      // //     .toString()) +
-                                      // // ratings;
-                                      // // if (double.parse(
-                                      // // id.toString()) ==
-                                      // // "0") {
-                                      // // len = double.parse(productlist[
-                                      // // index]
-                                      // //     .ratingsLength!
-                                      // //     .toString()) +
-                                      // // 1;
-                                      // // } else {
-                                      // // len = double.parse(productlist[
-                                      // // index]
-                                      // //     .ratingsLength!
-                                      // //     .toString());
-                                      // // }
-                                      // // avgRating =
-                                      // // sum / len;
-                                      // // }
-                                      // // productlist[index]
-                                      // //     .rating =
-                                      // // ratings
-                                      // //     .toString();
-                                      // // });
-                                      // //
-                                      // // Rating_repository()
-                                      // //     .ratings(
-                                      // // productlist[
-                                      // // index]
-                                      // //     .opportunityID
-                                      // //     .toString(),
-                                      // // ratings
-                                      // //     .toString())
-                                      // //     .then((val) {
-                                      // // ref.refresh(
-                                      // // bookmarkedPostsProvider);
-                                      // //
-                                      // // ref.refresh(
-                                      // // opportunityDataProvider);
-                                      // // ref.refresh(userratingsProvider(
-                                      // // productlist[
-                                      // // index]
-                                      // //     .opportunityID
-                                      // //     .toString()));
-                                      // // Fluttertoast.showToast(
-                                      // // msg:
-                                      // // "Thank you for your feedback",
-                                      // // toastLength: Toast
-                                      // //     .LENGTH_SHORT,
-                                      // // gravity:
-                                      // // ToastGravity
-                                      // //     .BOTTOM,
-                                      // // timeInSecForIosWeb:
-                                      // // 1,
-                                      // // backgroundColor:
-                                      // // Colors
-                                      // //     .green,
-                                      // // textColor:
-                                      // // Colors
-                                      // //     .white,
-                                      // // fontSize:
-                                      // // 16.0);
-                                      // // });
-                                      // // Navigator.pop(
-                                      // // context);
-                                      // // },
-                                      // // user_rating:
-                                      // // double.parse(id
-                                      // //     .toString()),
-                                      // // ),
-                                      // // error: (error, s) => Text(
-                                      // // "OOPS Something went wrong"),
-                                      // // loading: () =>
-                                      // // Container(),
-                                      // // ),
-                                      // // );
-                                    },
-                                    productDetails: staticVariantId,
-                                    // "\u{20B9}${products[index].variants![0].price}",
-                                    status: staticVariantId,
+                                        isLikedToggle: "true",
+                                        onLiked: () async {
+                                          // ref
+                                          //     .read(
+                                          //         bookmarkedProductProvider
+                                          //             .notifier)
+                                          //     .toggleBookmark(
+                                          //         products[index]);
+                                          //TODO list API integration of like
+                                          // debouncer.run(() {
+                                          // if ((productlist[index]
+                                          //     .saveStatus ==
+                                          // "true" &&
+                                          // isBookmarked
+                                          //     .toString() ==
+                                          // "0") ||
+                                          // (productlist[index]
+                                          //     .saveStatus !=
+                                          // "true" &&
+                                          // isBookmarked
+                                          //     .toString() ==
+                                          // "-1")) {
+                                          // Onsaved_repository()
+                                          //     .onsaved(productlist[
+                                          // index]
+                                          //     .opportunityID
+                                          //     .toString())
+                                          //     .then(
+                                          // (subjectFromServer) {
+                                          // if (subjectFromServer ==
+                                          // "Opportunity is already saved") {
+                                        },
+                                        tileColor: appInfo.primaryColorValue,
+                                        logoPath: products[index]
+                                            .defaultImage
+                                            .toString(),
+                                        productName:
+                                            products[index].name.toString(),
+                                        address:
+                                            products[index].name.toString(),
+                                        datetime:
+                                            products[index].name.toString(),
+                                        // "${AppString.deliverAt} ${products[index].createdAt.toString()}/${products[index].createdAt}/${products[index].createdAt!}",
+                                        productImage: products[index]
+                                            .defaultImage
+                                            .urlOriginal
+                                            .toString(),
+                                        ratings: () {
+                                          //TODO list product rating
+                                          // showDialog(
+                                          //     context: context,
+                                          //     builder: (context) =>
+                                          //         // RatingAlert(
+                                          //         //     onRatingSelected:
+                                          //         //         (val) {},
+                                          //         //     org_name:
+                                          //         //         "abc",
+                                          //         //     onsubmit:
+                                          //         //         () {},
+                                          //         //     user_rating:
+                                          //         //         4));
+                                          // // showDialog(
+                                          // // context: context,
+                                          // // builder: (context) =>
+                                          // // user_ratings.when(
+                                          // // data: (id) =>
+                                          // // RatingAlert(
+                                          // // onRatingSelected:
+                                          // // (rating) {
+                                          // // ratings = rating;
+                                          // // },
+                                          // // org_name: productlist[
+                                          // // index]
+                                          // //     .organizationName,
+                                          // // onsubmit: () {
+                                          // // setState(() {
+                                          // // var avgRating =
+                                          // // 0.0;
+                                          // // var sum = 0.0;
+                                          // // var len = 0.0;
+                                          // //
+                                          // // if (productlist[
+                                          // // index]
+                                          // //     .ratingsLength ==
+                                          // // "0") {
+                                          // // sum = double.parse(productlist[
+                                          // // index]
+                                          // //     .sumRatings!
+                                          // //     .toString()) +
+                                          // // ratings;
+                                          // // if (double.parse(
+                                          // // id.toString()) ==
+                                          // // "0") {
+                                          // // len = double.parse(productlist[
+                                          // // index]
+                                          // //     .ratingsLength!
+                                          // //     .toString()) +
+                                          // // 1;
+                                          // // } else {
+                                          // // len = double.parse(productlist[
+                                          // // index]
+                                          // //     .ratingsLength!
+                                          // //     .toString());
+                                          // // }
+                                          // // avgRating =
+                                          // // sum / len;
+                                          // // }
+                                          // // productlist[index]
+                                          // //     .rating =
+                                          // // ratings
+                                          // //     .toString();
+                                          // // });
+                                          // //
+                                          // // Rating_repository()
+                                          // //     .ratings(
+                                          // // productlist[
+                                          // // index]
+                                          // //     .opportunityID
+                                          // //     .toString(),
+                                          // // ratings
+                                          // //     .toString())
+                                          // //     .then((val) {
+                                          // // ref.refresh(
+                                          // // bookmarkedPostsProvider);
+                                          // //
+                                          // // ref.refresh(
+                                          // // opportunityDataProvider);
+                                          // // ref.refresh(userratingsProvider(
+                                          // // productlist[
+                                          // // index]
+                                          // //     .opportunityID
+                                          // //     .toString()));
+                                          // // Fluttertoast.showToast(
+                                          // // msg:
+                                          // // "Thank you for your feedback",
+                                          // // toastLength: Toast
+                                          // //     .LENGTH_SHORT,
+                                          // // gravity:
+                                          // // ToastGravity
+                                          // //     .BOTTOM,
+                                          // // timeInSecForIosWeb:
+                                          // // 1,
+                                          // // backgroundColor:
+                                          // // Colors
+                                          // //     .green,
+                                          // // textColor:
+                                          // // Colors
+                                          // //     .white,
+                                          // // fontSize:
+                                          // // 16.0);
+                                          // // });
+                                          // // Navigator.pop(
+                                          // // context);
+                                          // // },
+                                          // // user_rating:
+                                          // // double.parse(id
+                                          // //     .toString()),
+                                          // // ),
+                                          // // error: (error, s) => Text(
+                                          // // "OOPS Something went wrong"),
+                                          // // loading: () =>
+                                          // // Container(),
+                                          // // ),
+                                          // // );
+                                        },
+                                        productDetails: staticVariantId,
+                                        // "\u{20B9}${products[index].variants![0].price}",
+                                        status: staticVariantId,
 
-                                    // products[index]
-                                    //     .variants
-                                    //     .toString(),
-                                    isLiked: isBookmarked.toString(),
-                                    ratingCount: num.parse("5.5"),
-                                    productId: products[index].id.toString(),
-                                    productPrice: products[index]
-                                        .prices
-                                        .basePrice
-                                        .value
-                                        .toString(),
-                                    // products[index]
-                                    //         .prices
-                                    //     //     .isEmpty
-                                    //     // ? products[index]
-                                    //     //     .variants![0]
-                                    //     //     .price
-                                    //     // : DefaultValues.defaultPrice
-                                    //         .toString(),
-                                    addToCart: () {
-                                      // CommonAlert
-                                      //     .show_loading_alert(
-                                      //         context);
-                                      // ProductRepository()
-                                      //     .addToCart(
-                                      //         productlist[index]
-                                      //             .variants[0]
-                                      //             .id
-                                      //             .toString(),
-                                      //         "1")
-                                      //     .then((value) async {
-                                      //   if (value ==
-                                      //       AppString.success) {
-                                      //
-                                      //     ref.refresh(
-                                      //         cartDetailsDataProvider);
-                                      //     ref.refresh(
-                                      //         productDetailsProvider(
-                                      //             productlist[index].id.toString()));
-                                      //     Fluttertoast.showToast(
-                                      //         msg: AppString
-                                      //             .addToCartSuccess,
-                                      //         toastLength: Toast
-                                      //             .LENGTH_SHORT,
-                                      //         gravity: ToastGravity
-                                      //             .BOTTOM,
-                                      //         timeInSecForIosWeb: 0,
-                                      //         backgroundColor:
-                                      //             AppColors.green,
-                                      //         textColor: AppColors
-                                      //             .whiteColor,
-                                      //         fontSize: 16.0);
-                                      //   } else {
-                                      //     Fluttertoast.showToast(
-                                      //         msg: AppString
-                                      //             .oops,
-                                      //         toastLength: Toast
-                                      //             .LENGTH_SHORT,
-                                      //         gravity: ToastGravity
-                                      //             .BOTTOM,
-                                      //         timeInSecForIosWeb: 0,
-                                      //         backgroundColor:
-                                      //         AppColors.green,
-                                      //         textColor: AppColors
-                                      //             .whiteColor,
-                                      //         fontSize: 16.0);
-                                      //   }
-                                      // });
-                                    },
-                                    variantId:
-                                        staticVariantId, // Assign static value to variantId
-                                    stock: staticStock,
-                                    // variantId: products[index]
-                                    //     .variants[0]
-                                    //     .id
-                                    //     .toString(),
-                                    // stock: products[index]
-                                    //     .variants[0]
-                                    //     .inventoryQuantity,
-                                    ref: ref,
-                                  ));
-                            })),
+                                        // products[index]
+                                        //     .variants
+                                        //     .toString(),
+                                        isLiked: isBookmarked.toString(),
+                                        ratingCount: num.parse("5.5"),
+                                        productId:
+                                            products[index].id.toString(),
+                                        productPrice: products[index]
+                                            .prices
+                                            .basePrice
+                                            .value
+                                            .toString(),
+                                        // products[index]
+                                        //         .prices
+                                        //     //     .isEmpty
+                                        //     // ? products[index]
+                                        //     //     .variants![0]
+                                        //     //     .price
+                                        //     // : DefaultValues.defaultPrice
+                                        //         .toString(),
+                                        addToCart: () {
+                                          // CommonAlert
+                                          //     .show_loading_alert(
+                                          //         context);
+                                          // ProductRepository()
+                                          //     .addToCart(
+                                          //         productlist[index]
+                                          //             .variants[0]
+                                          //             .id
+                                          //             .toString(),
+                                          //         "1")
+                                          //     .then((value) async {
+                                          //   if (value ==
+                                          //       AppString.success) {
+                                          //
+                                          //     ref.refresh(
+                                          //         cartDetailsDataProvider);
+                                          //     ref.refresh(
+                                          //         productDetailsProvider(
+                                          //             productlist[index].id.toString()));
+                                          //     Fluttertoast.showToast(
+                                          //         msg: AppString
+                                          //             .addToCartSuccess,
+                                          //         toastLength: Toast
+                                          //             .LENGTH_SHORT,
+                                          //         gravity: ToastGravity
+                                          //             .BOTTOM,
+                                          //         timeInSecForIosWeb: 0,
+                                          //         backgroundColor:
+                                          //             AppColors.green,
+                                          //         textColor: AppColors
+                                          //             .whiteColor,
+                                          //         fontSize: 16.0);
+                                          //   } else {
+                                          //     Fluttertoast.showToast(
+                                          //         msg: AppString
+                                          //             .oops,
+                                          //         toastLength: Toast
+                                          //             .LENGTH_SHORT,
+                                          //         gravity: ToastGravity
+                                          //             .BOTTOM,
+                                          //         timeInSecForIosWeb: 0,
+                                          //         backgroundColor:
+                                          //         AppColors.green,
+                                          //         textColor: AppColors
+                                          //             .whiteColor,
+                                          //         fontSize: 16.0);
+                                          //   }
+                                          // });
+                                        },
+                                        variantId:
+                                            staticVariantId, // Assign static value to variantId
+                                        stock: staticStock,
+                                        // variantId: products[index]
+                                        //     .variants[0]
+                                        //     .id
+                                        //     .toString(),
+                                        // stock: products[index]
+                                        //     .variants[0]
+                                        //     .inventoryQuantity,
+                                        ref: ref,
+                                      ));
+                                })),
                   ]),
             ))
           ])),

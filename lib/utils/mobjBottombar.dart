@@ -11,6 +11,7 @@ import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/provider/User_provider.dart';
 import 'package:mobj_project/utils/themeProvider.dart';
 import '../models/shared_preferences/SharedPreference.dart';
+import '../module/categorie_screen/categorie_screen.dart';
 import 'appColors.dart';
 import 'commonAlert.dart';
 
@@ -158,7 +159,7 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) =>
-                            const CheckoutScreen(),
+                            const CategoriesScreen(),
                         transitionDuration: Duration.zero,
                         reverseTransitionDuration: Duration.zero,
                       ),

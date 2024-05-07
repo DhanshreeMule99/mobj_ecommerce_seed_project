@@ -1,5 +1,6 @@
 // profileScreen
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,7 +66,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
             appBar: AppBar(
-              elevation: 2,
+              automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
               actions: [
                 IconButton(
                     onPressed: () async {
@@ -88,6 +91,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ],
               title: Text(
                 AppLocalizations.of(context)!.profile,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
             bottomNavigationBar: MobjBottombar(
@@ -120,81 +124,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                       top: 10, left: 15, right: 15, bottom: 15),
                                   child: Column(
                                     children: [
-                                      // const Padding(
-                                      //     padding: EdgeInsets.only(
-                                      //         top: 0,
-                                      //         left: 10,
-                                      //         right: 10,
-                                      //         bottom: 0),
-                                      //     child: Row(
-                                      //       mainAxisAlignment:
-                                      //           MainAxisAlignment.center,
-                                      //       crossAxisAlignment:
-                                      //           CrossAxisAlignment.center,
-                                      //       children: [
-                                      //         //TODO list display profile pic from cache
-                                      //         // CircleAvatar(
-                                      //         //     radius: 75,
-                                      //         //     backgroundColor:
-                                      //         //         app_colors
-                                      //         //             .button_color,
-                                      //         //     child: CachedNetworkImage(
-                                      //         //       imageUrl:
-                                      //         //           user.profilePhoto,
-                                      //         //       imageBuilder: (context,
-                                      //         //               imageProvider) =>
-                                      //         //           Container(
-                                      //         //         width: 100,
-                                      //         //         height: 100,
-                                      //         //         decoration:
-                                      //         //             BoxDecoration(
-                                      //         //           image:
-                                      //         //               DecorationImage(
-                                      //         //             //image size fill
-                                      //         //             image:
-                                      //         //                 imageProvider,
-                                      //         //             fit: BoxFit.fill,
-                                      //         //           ),
-                                      //         //         ),
-                                      //         //       ),
-                                      //         //       placeholder:
-                                      //         //           (context, url) =>
-                                      //         //               Container(
-                                      //         //         width: 100,
-                                      //         //         height: 100,
-                                      //         //         // color: Appcolors.grey_shade,
-                                      //         //         child: const Icon(
-                                      //         //           Icons.person,
-                                      //         //           size: 35,
-                                      //         //         ),
-                                      //         //       ),
-                                      //         //       errorWidget: (context,
-                                      //         //               url, error) =>
-                                      //         //           Container(
-                                      //         //         width: 45,
-                                      //         //         height: 45,
-                                      //         //         // color: Appcolors.grey_shade,
-                                      //         //         child: const Icon(
-                                      //         //             Icons.person,
-                                      //         //             size: 35),
-                                      //         //       ),
-                                      //         //     )
-                                      //         //     // Mobj_text(
-                                      //         //     //   string: user.firstName[0].toUpperCase() +
-                                      //         //     //       user.lastName[0].toUpperCase(),
-                                      //         //     //   color: app_colors.white_color,
-                                      //         //     //   fontweight: FontWeight.bold,
-                                      //         //     //   fontsize:
-                                      //         //     //   MediaQuery.of(context).size.width * 0.06,
-                                      //         //     // ),
-                                      //         //     ),
-                                      //         CircleAvatar(
-                                      //           radius: 50,
-                                      //           backgroundImage: NetworkImage(
-                                      //               'https://cdn.shopify.com/s/files/1/0625/7685/3156/products/2015-03-20_Ashley_Look_20_23515_15567.jpg?v=1697805909'), // Replace with the user's actual avatar URL
-                                      //         ),
-                                      //       ],
-                                      //     )),
                                       Padding(
                                           padding: const EdgeInsets.only(
                                               top: 0,
@@ -203,17 +132,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               bottom: 0),
                                           child: Row(
                                             children: [
+                                              Icon(
+                                                Icons.person,
+                                                size: 16.sp,
+                                                color: AppColors.grey,
+                                              ),
+                                              const SizedBox(width: 5),
                                               Text(
                                                 "${user.firstName} ${user.lastName}",
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.05,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineLarge,
                                               ),
+                                              const SizedBox(width: 5),
                                               IconButton(
                                                   onPressed: () {
                                                     Navigator.of(context).push(
@@ -233,13 +164,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             top: 0, left: 0, right: 10),
                                         child: Row(
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.email,
-                                              size: 16,
+                                              size: 16.sp,
                                               color: AppColors.grey,
                                             ),
                                             const SizedBox(width: 5),
-                                            Text(user.email),
+                                            Text(
+                                              user.email,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -248,13 +184,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             top: 8, left: 0, right: 10),
                                         child: Row(
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.phone,
-                                              size: 16,
+                                              size: 16.sp,
                                               color: AppColors.grey,
                                             ),
                                             const SizedBox(width: 5),
-                                            Text(user.phone),
+                                            Text(
+                                              user.phone,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium,
+                                            ),
                                           ],
                                         ),
                                       ),

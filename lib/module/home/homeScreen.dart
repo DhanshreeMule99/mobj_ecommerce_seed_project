@@ -455,7 +455,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, childAspectRatio: 1 / 1.4),
+                            crossAxisCount: 2, childAspectRatio: 1 / 1.6),
                         itemCount: productlist.length,
                         itemBuilder: (BuildContext context, int index) {
                           final isBookmarked = bookmarkedProduct
