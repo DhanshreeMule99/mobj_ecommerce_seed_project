@@ -125,7 +125,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               selectedPage: 1,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-               screen3:  WishlistScreen(),
+              screen3: WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),
@@ -1450,8 +1450,12 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             padding: const EdgeInsets.only(
                                                 top: 5, left: 3, bottom: 5),
                                             child: Text(
-                                                product.reviews[index].body
-                                                    .toString(),
+                                                AppConfigure.wooCommerce
+                                                    ? extractTextContent(product
+                                                        .reviews[index].body)
+                                                    : product
+                                                        .reviews[index].body
+                                                        .toString(),
                                                 style: TextStyle(
                                                   fontSize: 0.04 *
                                                       MediaQuery.of(context)
@@ -1808,8 +1812,14 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 padding: const EdgeInsets.only(
                                                     top: 5, left: 3, bottom: 5),
                                                 child: Text(
-                                                    product.reviews[index].body
-                                                        .toString(),
+                                                    AppConfigure.wooCommerce
+                                                        ? extractTextContent(
+                                                            product
+                                                                .reviews[index]
+                                                                .body)
+                                                        : product
+                                                            .reviews[index].body
+                                                            .toString(),
                                                     style: TextStyle(
                                                       fontSize: 0.04 *
                                                           MediaQuery.of(context)
