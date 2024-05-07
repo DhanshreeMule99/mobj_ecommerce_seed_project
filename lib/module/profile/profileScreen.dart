@@ -58,8 +58,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     //TODO list API integration
-    final 
-    user = ref.watch(profileDataProvider);
+    final user = ref.watch(profileDataProvider);
 
     final appInfoAsyncValue = ref.watch(appInfoProvider);
 
@@ -95,10 +94,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               bgcolor: AppColors.whiteColor,
               selcted_icon_color: AppColors.buttonColor,
               unselcted_icon_color: AppColors.blackColor,
-              selectedPage: 3,
+              selectedPage: 4,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-              screen3:  WishlistScreen(),
+              screen3: WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),
@@ -340,7 +339,8 @@ class ProfileOptionButton extends StatelessWidget {
   final String title;
   final Function onTap;
 
-  const ProfileOptionButton({super.key, required this.title, required this.onTap});
+  const ProfileOptionButton(
+      {super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
