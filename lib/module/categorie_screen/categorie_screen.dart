@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
 
 import '../../utils/cmsConfigue.dart';
+import '../home/collectionWiseProductScreen.dart';
 import '../wishlist/wishlishScreen.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
@@ -88,16 +89,23 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () async {
-                            // Fetch uid asynchronously
-                            String uid =
-                                await SharedPreferenceManager().getUserId();
-                            log(uid);
-                            // Navigate to the product detail screen when category is clicked
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductDetailsScreen(uid: uid)),
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        CollectionWiseProductScreen(
+                                  category: AppConfigure.bigCommerce
+                                      ? data[index]['category_id'].toString()
+                                      : data[index]['id'].toString(),
+                                  categoryName: AppConfigure.bigCommerce
+                                      ? data[index]['name'].toString()
+                                      : (AppConfigure.wooCommerce
+                                          ? data[index]['name'].toString()
+                                          : data[index]['title'].toString()),
+                                ),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ),
                             );
                           },
                           child: Container(
