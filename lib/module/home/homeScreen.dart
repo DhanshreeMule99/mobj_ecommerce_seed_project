@@ -327,10 +327,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                       .toString()
                                                   : data[index]['id']
                                                       .toString(),
-                                              categoryName:
-                                                  AppConfigure.bigCommerce
-                                                      ? data[index]["name"]
-                                                      : data[index]['title'],
+                                              categoryName: AppConfigure
+                                                      .bigCommerce
+                                                  ? data[index]['name']
+                                                      .toString()
+                                                  : (AppConfigure.wooCommerce
+                                                      ? data[index]['name']
+                                                          .toString()
+                                                      : data[index]['title']
+                                                          .toString()),
                                             ),
                                             transitionDuration: Duration.zero,
                                             reverseTransitionDuration:
@@ -358,7 +363,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           image: DecorationImage(
                                             //image size fill
                                             image: data[index]["image_url"] ==
-                                                    ""
+                                                    null
                                                 ? NetworkImage(
                                                     "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
                                                 : NetworkImage(
@@ -392,8 +397,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                   Text(
                                     AppConfigure.bigCommerce
-                                        ? data[index]["name"]
-                                        : data[index]['title'],
+                                        ? data[index]['name'].toString()
+                                        : (AppConfigure.wooCommerce
+                                            ? data[index]['name'].toString()
+                                            : data[index]['title'].toString()),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium,
