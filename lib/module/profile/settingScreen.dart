@@ -26,21 +26,16 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
   }
 
   logout() async {
-
-     if (AppConfigure.bigCommerce) {
+    if (AppConfigure.bigCommerce) {
       // Logout with BigCommerce
 
-
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.clear();
-  Navigator.of(context).pop();
-  navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    RouteConstants.login,
-    (route) => false,
-  );
-
-
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.of(context).pop();
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+        RouteConstants.login,
+        (route) => false,
+      );
 
       // try {
       //   final response = await http.post(
@@ -81,21 +76,15 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
       //     fontSize: 16.0,
       //   );
       // }
-
-      
-    } else if (AppConfigure.wooCommerce){
-
-       SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.clear();
-  Navigator.of(context).pop();
-  navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    RouteConstants.login,
-    (route) => false,
-  );
-
-    } 
-    
-    else {
+    } else if (AppConfigure.wooCommerce) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.of(context).pop();
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+        RouteConstants.login,
+        (route) => false,
+      );
+    } else {
       // Logout with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       final token = await SharedPreferenceManager().getToken();
@@ -131,8 +120,8 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
             'Failed to delete access token. Exception: ${result.exception.toString()}',
           );
         } else {
-          final deletedAccessToken = result.data?['customerAccessTokenDelete']
-              ['deletedAccessToken'];
+          final deletedAccessToken =
+              result.data?['customerAccessTokenDelete']['deletedAccessToken'];
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.clear();
           Navigator.of(context).pop();
@@ -154,14 +143,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
         Navigator.of(context).pop();
       }
     }
-
-
-
-
-
-
-
-
 
     // GraphQLClient client = graphQLConfig.clientToQuery();
     // final token = await SharedPreferenceManager().getToken();
@@ -220,13 +201,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
     // final login = LoginRepository();
   }
 
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final appInfoAsyncValue = ref.watch(appInfoProvider);
@@ -245,10 +219,10 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 bgcolor: AppColors.whiteColor,
                 selcted_icon_color: AppColors.buttonColor,
                 unselcted_icon_color: AppColors.blackColor,
-                selectedPage: 3,
+                selectedPage: 4,
                 screen1: const HomeScreen(),
                 screen2: const SearchWidget(),
-                screen3:  WishlistScreen(),
+                screen3: WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),

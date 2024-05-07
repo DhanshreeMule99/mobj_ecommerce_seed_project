@@ -475,6 +475,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               .indexWhere((p) => p.id == post[index].id);
                           return InkWell(
                               onTap: () {
+                                print("(${productlist[index].id.toString()})");
                                 ref.refresh(productDetailsProvider(
                                     productlist[index].id.toString()));
                                 Navigator.of(context).push(
