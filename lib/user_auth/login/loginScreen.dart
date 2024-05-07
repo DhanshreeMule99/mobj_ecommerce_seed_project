@@ -772,6 +772,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -1106,7 +1107,6 @@ API api = API();
 
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1114,34 +1114,35 @@ API api = API();
         top: true,
         child: Stack(
           children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.23),
+           
 
           
-                child:
+              //   child:
                  Container(
-                    //  height: MediaQuery.of(context).size.height * 0.6,
-                  //  width: MediaQuery.of(context).size.width  ,
+                  
+                 height: MediaQuery.of(context).size.height * .6 ,
+                    width: MediaQuery.of(context).size.width  ,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/login.jpg"),
-                  fit: BoxFit.cover, 
-                    
-                    ),
+                    color: Theme.of(context).colorScheme.onSecondary ,
+               
+                  ),
+                  child: Padding(
+                    padding:  EdgeInsets.only(bottom:  MediaQuery.of(context).size.height * .05 ),
+                    child: Image.asset("assets/loginBack-removebg-preview.png", fit: BoxFit.cover,),
                   ), 
                 ),
-               ),
+              //  ),
                  
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
+            Align(
+              alignment: Alignment.bottomCenter,
               child: Container(
+              
                     //  height: MediaQuery.of(context).size.height * 0.5,
                     // width: MediaQuery.of(context).size.width  ,
                 padding: EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                   color: Theme.of(context).colorScheme.secondary,
+                
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
@@ -1155,23 +1156,25 @@ API api = API();
                 Form(
                   key: formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                   mainAxisSize: MainAxisSize.min,
+            
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
                        padding: const EdgeInsets.only( left: 10),
                         child: Text(
-                            AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.headlineLarge,
+                            AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.titleLarge,
                           
                           ),
                       ),
                        Padding(
                         padding:
-                            const EdgeInsets.only(right: 10, left: 10, top: 25),
+                            const EdgeInsets.only(right: 10, left: 10, top: 25,bottom: 10),
                         child: TextFormField(
-
+              
                           onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                           
                           controller: email,
                           validator: (value) {
@@ -1227,8 +1230,8 @@ API api = API();
                         padding: const EdgeInsets.all(10),
                         child: TextFormField(
                           onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: _obscured,
                             controller: pass,
@@ -1313,7 +1316,7 @@ API api = API();
                                 if (isLoading == false) {
                                   if (formKey.currentState!.validate()) {
                                     _signInWithEmailAndPassword(context);
-
+              
                                     _focusNode.unfocus();
                                   } else {}
                                 }
@@ -1370,7 +1373,7 @@ API api = API();
                         TextButton(
                       child: Text(
                         AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.displayMedium
-
+              
                         
                       ),
                       onPressed: () {
@@ -1387,8 +1390,8 @@ API api = API();
                  loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stackTrace) => const Text(AppString.oops),
               );
-            }
-            )
+                          }
+                          )
               ),
             ),
           ],

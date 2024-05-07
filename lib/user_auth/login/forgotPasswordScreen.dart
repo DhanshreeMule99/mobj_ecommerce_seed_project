@@ -1,4 +1,5 @@
 // forgotPasswordScreen
+import 'package:flutter/widgets.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -248,28 +249,31 @@ Widget build(BuildContext context) {
             : AppLocalizations.of(context)!.forgetPass,
       ),
     ),
-    body: SafeArea(
-      top: true,
-      child: Stack(
-        children: [
-          
-           Container(
-           margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.4),
-           decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/login.jpg"), // Replace with your image path
-                fit: BoxFit.cover,
-              
-              ),
-            ),
-           
-          ),
+    body: Stack(
+      children: [
+        
+    
           Container(
+                
+               height: MediaQuery.of(context).size.height * .6 ,
+                  width: MediaQuery.of(context).size.width  ,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary ,
+             
+                ),
+                child: Padding(
+                  padding:  EdgeInsets.only(bottom:  MediaQuery.of(context).size.height * .05 ),
+                  child: Image.asset("assets/loginBack-removebg-preview.png", fit: BoxFit.cover,),
+                ), 
+              ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
             // Second container overlaying the first one
-           margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.4),
+          
             padding: EdgeInsets.all(20.0),
             decoration: BoxDecoration(
-              color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -283,69 +287,76 @@ Widget build(BuildContext context) {
              Form(
               key: formKey,
               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                               Padding(
                                 padding: const EdgeInsets.only(
                                     top: 15, left: 15, bottom: 10),
                                 child: Text(
-                                   AppLocalizations.of(context)!.enterEmail, style: Theme.of(context).textTheme.headlineLarge,
+                                   AppLocalizations.of(context)!.enterEmail, style: Theme.of(context).textTheme.titleLarge,
                                  
                                 )),
-
-                Padding(
-                            padding: const EdgeInsets.only(
-                                right: 10, left: 10, top: 20),
-                            child: TextFormField(
-                              controller: email,
-                              validator: (value) {
-                                return Validation().emailValidation(value);
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(
-                                 contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
-                                  label:  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(AppLocalizations.of(context)!.email),
-                                      const Text(
-                                        '*',
-                                        style: TextStyle(
-                                            color: AppColors.red, fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                  border: OutlineInputBorder(
-                                      //Outline border type for TextFeild
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(
-                                              AppDimension.buttonRadius)),
-                                      borderSide: BorderSide(
-                                         color: Theme.of(context).colorScheme.primary,
-                                        width: 1.5,
-                                      )),
-                                  //normal border
-                                  enabledBorder: OutlineInputBorder(
-                                      //Outline border type for TextFeild
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(
-                                              AppDimension.buttonRadius)),
-                                      borderSide: BorderSide(
-                                       color: Theme.of(context).colorScheme.primary,
-                                        width: 1.5,
-                                      )),
-                                  focusedBorder: OutlineInputBorder(
-                                      //Outline border type for TextFeild
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(
-                                              AppDimension.buttonRadius)),
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context).colorScheme.primary,
-                                          width: 1.5))),
-                              keyboardType: TextInputType.emailAddress,
-                            )),
+          
+               Padding(
+                      padding:
+                          const EdgeInsets.only(right: 10, left: 10, top: 25,bottom: 10),
+                      child: TextFormField(
+            
+                        onTapOutside: (event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                        
+                        controller: email,
+                        validator: (value) {
+                          return Validation().emailValidation(value);
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: InputDecoration(
+                          errorStyle: TextStyle(fontSize: 12),
+                           contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(AppLocalizations.of(context)!.email),
+                                const Text(
+                                  '*',
+                                  style: TextStyle(
+                                      color: AppColors.red, fontSize: 20),
+                                )
+                              ],
+                            ),
+                            border: OutlineInputBorder(
+                                //Outline border type for TextFeild
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 1.5,
+                                )),
+                            // //normal border
+                            enabledBorder: OutlineInputBorder(
+                                //Outline border type for TextFeild
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                 color: Theme.of(context).colorScheme.primary,
+                                  width: 1.5,
+                                )
+                                ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(
+                                        AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                    width: 1.5)
+                                    )
+                                    ),
+                        keyboardType: TextInputType.emailAddress,
+                      )),
                         error != ""
                             ? Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
@@ -364,7 +375,7 @@ Widget build(BuildContext context) {
                                     if (isLoading == false) {
                                       if (formKey.currentState!.validate()) {
                                         signUp();
-
+          
                                         _focusNode.unfocus();
                                       }
                                     } else {}
@@ -405,8 +416,8 @@ Widget build(BuildContext context) {
                 );
               })
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
