@@ -168,7 +168,6 @@ class _ProductListCardstate extends State<ProductListCard> {
     try {
       final response = await api.sendRequest.post(
         "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items",
-     
         data: newProduct,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -480,6 +479,48 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                   widget.productPrice
                                                       .toString(),
                                                   widget.productId)
+                                              .then((value) async {
+                                            if (value == AppString.success) {
+                                              Navigator.of(context).pop();
+                                              widget.ref
+                                                  .refresh(productDataProvider);
+                                              widget.ref.refresh(
+                                                  cartDetailsDataProvider);
+                                              widget.ref.refresh(
+                                                  productDetailsProvider(
+                                                      widget.productId));
+                                              Fluttertoast.showToast(
+                                                  msg: AppString
+                                                      .addToCartSuccess,
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 0,
+                                                  backgroundColor:
+                                                      AppColors.green,
+                                                  textColor:
+                                                      AppColors.whiteColor,
+                                                  fontSize: 16.0);
+                                            } else {
+                                              Navigator.of(context).pop();
+                                              Fluttertoast.showToast(
+                                                  msg: AppString.oops,
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 0,
+                                                  backgroundColor:
+                                                      AppColors.green,
+                                                  textColor:
+                                                      AppColors.whiteColor,
+                                                  fontSize: 16.0);
+                                            }
+                                          });
+                                        } else if (AppConfigure.wooCommerce) {
+                                          log('product to ${widget.productId} ${widget.variantId}');
+                                          ProductRepository()
+                                              .addToCartWooCommerce(
+                                                  "1", widget.variantId)
                                               .then((value) async {
                                             if (value == AppString.success) {
                                               Navigator.of(context).pop();
