@@ -49,7 +49,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               selectedPage: 2,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
-              screen3:  WishlistScreen(),
+              screen3: WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
             ),
@@ -337,10 +337,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               debugPrint('add maps');
 
                                                                               debugPrint('calling put api ');
-                                                                              String email = await SharedPreferenceManager().getemail();
+                                                                              String cartToken = await SharedPreferenceManager().getCartToken();
 
                                                                               var response = await api.sendRequest.post(
-                                                                                'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email',
+                                                                                'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
                                                                                 data: {
                                                                                   "quantity": orderList.quantity.toString()
                                                                                 },
@@ -469,12 +469,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                             debugPrint('calling put api ');
                                                                             String
-                                                                                email =
-                                                                                await SharedPreferenceManager().getemail();
+                                                                                cartToken =
+                                                                                await SharedPreferenceManager().getCartToken();
 
                                                                             var response =
                                                                                 await api.sendRequest.post(
-                                                                              'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email',
+                                                                              'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
                                                                               data: {
                                                                                 "quantity": orderList.quantity.toString()
                                                                               },
