@@ -424,193 +424,211 @@ class _ProductListCardstate extends State<ProductListCard> {
                     // Set the border color
                     width: 2.0, // Set the border width
                   )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 5.sp),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3.4,
-                            child: Text(
-                              widget.productName,
-                              style: Theme.of(context).textTheme.headlineLarge,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5.sp),
+                    child: Text(
+                      widget.productName,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  widget.productPrice != null
+                      ? Padding(
+                          padding: EdgeInsets.all(5.sp),
+                          child: Text(
+                            "\u{20B9}${widget.productPrice}",
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
-                        ),
-                        widget.productPrice != null
-                            ? Padding(
-                                padding: EdgeInsets.all(5.sp),
-                                child: Text(
-                                  "\u{20B9}${widget.productPrice}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                              )
-                            : Container(),
-                      ]),
+                        )
+                      : Container(),
                   Padding(
                       padding: const EdgeInsets.only(right: 0),
                       child: widget.stock > 0
                           ? Tooltip(
                               message: "Add to Cart",
-                              child: IconButton(
-                                  onPressed: () async {
-                                    debugPrint(
-                                        "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
-                                    isLogin().then((value) {
-                                      if (value == true) {
-                                        CommonAlert.show_loading_alert(context);
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 5.0.w),
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width / .24,
+                                  child: ElevatedButton(
+                                      onPressed: () async {
                                         debugPrint(
-                                            "varient id is this ${widget.variantId}");
-                                        if (AppConfigure.bigCommerce) {
-                                          ProductRepository()
-                                              .addToCartBigcommerce(
-                                                  widget.variantId,
-                                                  '1',
-                                                  widget.productName,
-                                                  widget.productPrice
-                                                      .toString(),
-                                                  widget.productId)
-                                              .then((value) async {
-                                            if (value == AppString.success) {
-                                              Navigator.of(context).pop();
-                                              widget.ref
-                                                  .refresh(productDataProvider);
-                                              widget.ref.refresh(
-                                                  cartDetailsDataProvider);
-                                              widget.ref.refresh(
-                                                  productDetailsProvider(
-                                                      widget.productId));
-                                              Fluttertoast.showToast(
-                                                  msg: AppString
-                                                      .addToCartSuccess,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
+                                            "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
+                                        isLogin().then((value) {
+                                          if (value == true) {
+                                            CommonAlert.show_loading_alert(
+                                                context);
+                                            debugPrint(
+                                                "varient id is this ${widget.variantId}");
+                                            if (AppConfigure.bigCommerce) {
+                                              ProductRepository()
+                                                  .addToCartBigcommerce(
+                                                      widget.variantId,
+                                                      '1',
+                                                      widget.productName,
+                                                      widget.productPrice
+                                                          .toString(),
+                                                      widget.productId)
+                                                  .then((value) async {
+                                                if (value ==
+                                                    AppString.success) {
+                                                  Navigator.of(context).pop();
+                                                  widget.ref.refresh(
+                                                      productDataProvider);
+                                                  widget.ref.refresh(
+                                                      cartDetailsDataProvider);
+                                                  widget.ref.refresh(
+                                                      productDetailsProvider(
+                                                          widget.productId));
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString
+                                                          .addToCartSuccess,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                } else {
+                                                  Navigator.of(context).pop();
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString.oops,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
+                                            } else if (AppConfigure
+                                                .wooCommerce) {
+                                              log('product to ${widget.productId} ${widget.variantId}');
+                                              ProductRepository()
+                                                  .addToCartWooCommerce(
+                                                      "1", widget.variantId)
+                                                  .then((value) async {
+                                                if (value ==
+                                                    AppString.success) {
+                                                  Navigator.of(context).pop();
+                                                  widget.ref.refresh(
+                                                      productDataProvider);
+                                                  widget.ref.refresh(
+                                                      cartDetailsDataProvider);
+                                                  widget.ref.refresh(
+                                                      productDetailsProvider(
+                                                          widget.productId));
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString
+                                                          .addToCartSuccess,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                } else {
+                                                  Navigator.of(context).pop();
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString.oops,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
                                             } else {
-                                              Navigator.of(context).pop();
-                                              Fluttertoast.showToast(
-                                                  msg: AppString.oops,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
+                                              ProductRepository()
+                                                  .addToCart(
+                                                      widget.variantId, "1")
+                                                  .then((value) async {
+                                                if (value ==
+                                                    AppString.success) {
+                                                  Navigator.of(context).pop();
+                                                  widget.ref.refresh(
+                                                      productDataProvider);
+                                                  widget.ref.refresh(
+                                                      cartDetailsDataProvider);
+                                                  widget.ref.refresh(
+                                                      productDetailsProvider(
+                                                          widget.productId));
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString
+                                                          .addToCartSuccess,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                } else {
+                                                  Navigator.of(context).pop();
+                                                  Fluttertoast.showToast(
+                                                      msg: AppString.oops,
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.BOTTOM,
+                                                      timeInSecForIosWeb: 0,
+                                                      backgroundColor:
+                                                          AppColors.green,
+                                                      textColor:
+                                                          AppColors.whiteColor,
+                                                      fontSize: 16.0);
+                                                }
+                                              });
                                             }
-                                          });
-                                        } else if (AppConfigure.wooCommerce) {
-                                          log('product to ${widget.productId} ${widget.variantId}');
-                                          ProductRepository()
-                                              .addToCartWooCommerce(
-                                                  "1", widget.variantId)
-                                              .then((value) async {
-                                            if (value == AppString.success) {
-                                              Navigator.of(context).pop();
-                                              widget.ref
-                                                  .refresh(productDataProvider);
-                                              widget.ref.refresh(
-                                                  cartDetailsDataProvider);
-                                              widget.ref.refresh(
-                                                  productDetailsProvider(
-                                                      widget.productId));
-                                              Fluttertoast.showToast(
-                                                  msg: AppString
-                                                      .addToCartSuccess,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
-                                            } else {
-                                              Navigator.of(context).pop();
-                                              Fluttertoast.showToast(
-                                                  msg: AppString.oops,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
-                                            }
-                                          });
-                                        } else {
-                                          ProductRepository()
-                                              .addToCart(widget.variantId, "1")
-                                              .then((value) async {
-                                            if (value == AppString.success) {
-                                              Navigator.of(context).pop();
-                                              widget.ref
-                                                  .refresh(productDataProvider);
-                                              widget.ref.refresh(
-                                                  cartDetailsDataProvider);
-                                              widget.ref.refresh(
-                                                  productDetailsProvider(
-                                                      widget.productId));
-                                              Fluttertoast.showToast(
-                                                  msg: AppString
-                                                      .addToCartSuccess,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
-                                            } else {
-                                              Navigator.of(context).pop();
-                                              Fluttertoast.showToast(
-                                                  msg: AppString.oops,
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity: ToastGravity.BOTTOM,
-                                                  timeInSecForIosWeb: 0,
-                                                  backgroundColor:
-                                                      AppColors.green,
-                                                  textColor:
-                                                      AppColors.whiteColor,
-                                                  fontSize: 16.0);
-                                            }
-                                          });
-                                        }
-                                      } else {
-                                        CommonAlert.showAlertAndNavigateToLogin(
-                                            context);
-                                      }
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.add_circle,
-                                    size: 30.sp,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )),
+                                          } else {
+                                            CommonAlert
+                                                .showAlertAndNavigateToLogin(
+                                                    context);
+                                          }
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      child: Text(
+                                        "Add to Cart",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displayLarge,
+                                      )),
+                                ),
+                              ),
                             )
                           : Padding(
                               padding: EdgeInsets.only(right: 5.sp),

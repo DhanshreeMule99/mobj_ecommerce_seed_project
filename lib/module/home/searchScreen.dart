@@ -54,11 +54,14 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
               appBar: AppBar(
-                  // elevation: 2,
-                  // title: Text(
-                  //   appInfo.appName,
-                  // ),
-                  ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+
+                automaticallyImplyLeading: true,
+                // elevation: 2,
+                // title: Text(
+                //   appInfo.appName,
+                // ),
+              ),
               bottomNavigationBar: MobjBottombar(
                 bgcolor: AppColors.whiteColor,
                 selcted_icon_color: AppColors.buttonColor,
@@ -109,7 +112,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                       child: GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, childAspectRatio: 1 / 1.4),
+                                  crossAxisCount: 2, childAspectRatio: 1 / 1.6),
                           itemCount: product.length,
                           itemBuilder: (BuildContext context, int index) {
                             return InkWell(
