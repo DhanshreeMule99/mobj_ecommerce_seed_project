@@ -67,13 +67,13 @@ if (AppConfigure.bigCommerce) {
   };
 } else {
   body = {
-    "customerAccessToken": "${AppConfigure.accessToken}",
-    "customer": {
-      "firstName": ref.read(fNameProvider),
-      "lastName": ref.read(lNameProvider),
-      "phone": "+91${ref.read(phoneProvider)}"
-    }
-  };
+              "customerAccessToken": "$accessToken",
+              "customer": {
+                "firstName": ref.read(fNameProvider),
+                "lastName": ref.read(lNameProvider),
+                "phone": "+91${ref.read(phoneProvider)}"
+              }
+            };
 }
 
       final register = UserRepository();

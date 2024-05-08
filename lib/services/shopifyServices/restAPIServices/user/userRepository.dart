@@ -194,7 +194,8 @@ query {
         exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } else if (AppConfigure.wooCommerce ){
+    } 
+    else if (AppConfigure.wooCommerce ){
   
         // edit customer for WooCommerce
     debugPrint('Calling edit woo commerce api');
@@ -239,7 +240,7 @@ query {
           APIConstants.apiForAdminURL +
           APIConstants.apiURL +
           APIConstants.customer;
-
+ debugPrint('calling edit profile........');
       var body1 = jsonEncode({"customer": body});
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
