@@ -1149,103 +1149,46 @@ API api = API();
                   ),
                 ),
                child:
-                Consumer(builder: (context, watch, child) {
-              final appInfoAsyncValue = ref.watch(appInfoProvider);
-              return appInfoAsyncValue.when(
-                data: (appInfo) => 
-                Form(
-                  key: formKey,
-                  child: Column(
-                   mainAxisSize: MainAxisSize.min,
-            
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                       padding: const EdgeInsets.only( left: 10),
-                        child: Text(
-                            AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.titleLarge,
-                          
-                          ),
-                      ),
-                       Padding(
-                        padding:
-                            const EdgeInsets.only(right: 10, left: 10, top: 25,bottom: 10),
-                        child: TextFormField(
-              
-                          onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                          
-                          controller: email,
-                          validator: (value) {
-                            return Validation().emailValidation(value);
-                          },
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: InputDecoration(
-                            errorStyle: TextStyle(fontSize: 12),
-                             contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
-                              label: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(AppLocalizations.of(context)!.email),
-                                  const Text(
-                                    '*',
-                                    style: TextStyle(
-                                        color: AppColors.red, fontSize: 20),
-                                  )
-                                ],
-                              ),
-                              border: OutlineInputBorder(
-                                  //Outline border type for TextFeild
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(
-                                          AppDimension.buttonRadius)),
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    width: 1.5,
-                                  )),
-                              // //normal border
-                              enabledBorder: OutlineInputBorder(
-                                  //Outline border type for TextFeild
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(
-                                          AppDimension.buttonRadius)),
-                                  borderSide: BorderSide(
-                                   color: Theme.of(context).colorScheme.primary,
-                                    width: 1.5,
-                                  )
-                                  ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(
-                                          AppDimension.buttonRadius)),
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
-                                      width: 1.5)
-                                      )
-                                      ),
-                          keyboardType: TextInputType.emailAddress,
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: TextFormField(
-                          onTapOutside: (event) {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: _obscured,
-                            controller: pass,
-                            // focusNode: _focuspass,
-                            autofocus: false,
+                SingleChildScrollView(
+                  child: Consumer(builder: (context, watch, child) {
+                                final appInfoAsyncValue = ref.watch(appInfoProvider);
+                                return appInfoAsyncValue.when(
+                  data: (appInfo) => 
+                  Form(
+                    key: formKey,
+                    child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                              
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                         padding: const EdgeInsets.only( left: 10),
+                          child: Text(
+                              AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.titleLarge,
+                            
+                            ),
+                        ),
+                         Padding(
+                          padding:
+                              const EdgeInsets.only(right: 10, left: 10, top: 25,bottom: 10),
+                          child: TextFormField(
+                                
+                            onTapOutside: (event) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                            
+                            controller: email,
+                            validator: (value) {
+                              return Validation().emailValidation(value);
+                            },
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             decoration: InputDecoration(
-                          errorStyle: TextStyle(fontSize: 12),
-                
+                              errorStyle: TextStyle(fontSize: 12),
                                contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
                                 label: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
-                                        AppLocalizations.of(context)!.password),
+                                    Text(AppLocalizations.of(context)!.email),
                                     const Text(
                                       '*',
                                       style: TextStyle(
@@ -1254,6 +1197,7 @@ API api = API();
                                   ],
                                 ),
                                 border: OutlineInputBorder(
+                                    //Outline border type for TextFeild
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
@@ -1261,137 +1205,195 @@ API api = API();
                                       color: Theme.of(context).colorScheme.primary,
                                       width: 1.5,
                                     )),
+                                // //normal border
                                 enabledBorder: OutlineInputBorder(
                                     //Outline border type for TextFeild
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
                                     borderSide: BorderSide(
-                                      color: Theme.of(context).colorScheme.primary,
+                                     color: Theme.of(context).colorScheme.primary,
                                       width: 1.5,
-                                    )),
+                                    )
+                                    ),
                                 focusedBorder: OutlineInputBorder(
-                                    //Outline border type for TextFeild
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(
                                             AppDimension.buttonRadius)),
                                     borderSide: BorderSide(
                                       color: Theme.of(context).colorScheme.primary,
-                                        width: 1.5)),
-                                suffixIcon: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                                  child: GestureDetector(
-                                    onTap: _toggleObscured,
-                                    child: Icon(
-                                        _obscured
-                                            ? Icons.visibility_off_rounded
-                                            : Icons.visibility_rounded,
-                                        size: 25,
-                                      color: Theme.of(context).colorScheme.primary,
+                                        width: 1.5)
+                                        )
                                         ),
+                            keyboardType: TextInputType.emailAddress,
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: TextFormField(
+                            onTapOutside: (event) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: _obscured,
+                              controller: pass,
+                              // focusNode: _focuspass,
+                              autofocus: false,
+                              decoration: InputDecoration(
+                            errorStyle: TextStyle(fontSize: 12),
+                  
+                                 contentPadding: EdgeInsets.symmetric(vertical: 0.0,horizontal: 10),
+                                  label: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                          AppLocalizations.of(context)!.password),
+                                      const Text(
+                                        '*',
+                                        style: TextStyle(
+                                            color: AppColors.red, fontSize: 20),
+                                      )
+                                    ],
                                   ),
-                                )),
-                            validator: (value) {
-                              return Validation().validatePassword(value!);
-                            })
-                            ),
-                     
-                     
-                         error != ""
-                        ? Center(
-                            child: Text(
-                            error,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.red),
-                          ))
-                        : Container(),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                      child: Consumer(
-                        builder: (context, watch, _) {
-                          return ElevatedButton(
-                              onPressed: () async {
-                                if (isLoading == false) {
-                                  if (formKey.currentState!.validate()) {
-                                    _signInWithEmailAndPassword(context);
-              
-                                    _focusNode.unfocus();
-                                  } else {}
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                minimumSize: const Size.fromHeight(50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        AppDimension.buttonRadius)),
-                                textStyle: const TextStyle(
-                                    color: AppColors.whiteColor,
-                                    fontSize: 10,
-                                    fontStyle: FontStyle.normal),
+                                  border: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(
+                                              AppDimension.buttonRadius)),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        width: 1.5,
+                                      )),
+                                  enabledBorder: OutlineInputBorder(
+                                      //Outline border type for TextFeild
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(
+                                              AppDimension.buttonRadius)),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.primary,
+                                        width: 1.5,
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      //Outline border type for TextFeild
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(
+                                              AppDimension.buttonRadius)),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.primary,
+                                          width: 1.5)),
+                                  suffixIcon: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                    child: GestureDetector(
+                                      onTap: _toggleObscured,
+                                      child: Icon(
+                                          _obscured
+                                              ? Icons.visibility_off_rounded
+                                              : Icons.visibility_rounded,
+                                          size: 25,
+                                        color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                    ),
+                                  )),
+                              validator: (value) {
+                                return Validation().validatePassword(value!);
+                              })
                               ),
-                              child: isLoading == false
-                                  ? Text(
-                                      AppLocalizations.of(context)!
-                                          .login
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05,
-                                          color: AppColors.whiteColor,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  : const CircularProgressIndicator(
+                       
+                       
+                           error != ""
+                          ? Center(
+                              child: Text(
+                              error,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: AppColors.red),
+                            ))
+                          : Container(),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                        child: Consumer(
+                          builder: (context, watch, _) {
+                            return ElevatedButton(
+                                onPressed: () async {
+                                  if (isLoading == false) {
+                                    if (formKey.currentState!.validate()) {
+                                      _signInWithEmailAndPassword(context);
+                                
+                                      _focusNode.unfocus();
+                                    } else {}
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  minimumSize: const Size.fromHeight(50),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          AppDimension.buttonRadius)),
+                                  textStyle: const TextStyle(
                                       color: AppColors.whiteColor,
-                                    ));
+                                      fontSize: 10,
+                                      fontStyle: FontStyle.normal),
+                                ),
+                                child: isLoading == false
+                                    ? Text(
+                                        AppLocalizations.of(context)!
+                                            .login
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
+                                            color: AppColors.whiteColor,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    : const CircularProgressIndicator(
+                                        color: AppColors.whiteColor,
+                                      ));
+                          },
+                        ),
+                      ),
+                         Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(AppLocalizations.of(context)!.notHaveAcc,style: Theme.of(context).textTheme.bodyLarge),
+                          TextButton(
+                            child: Text(
+                              AppLocalizations.of(context)!.signUp,style: Theme.of(context).textTheme.displayMedium
+                           
+                            ),
+                            onPressed: () {
+                              //signup screen
+                              Navigator.of(context).push(PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          const RegistrationScreen()));
+                            },
+                          )
+                        ],
+                      ),
+                          TextButton(
+                        child: Text(
+                          AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.displayMedium
+                                
+                          
+                        ),
+                        onPressed: () {
+                          //signup screen
+                          Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  const ForgotPasswordScreen()));
                         },
                       ),
-                    ),
-                       Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(AppLocalizations.of(context)!.notHaveAcc,style: Theme.of(context).textTheme.bodyLarge),
-                        TextButton(
-                          child: Text(
-                            AppLocalizations.of(context)!.signUp,style: Theme.of(context).textTheme.displayMedium
-                         
-                          ),
-                          onPressed: () {
-                            //signup screen
-                            Navigator.of(context).push(PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        const RegistrationScreen()));
-                          },
-                        )
+                      
                       ],
                     ),
-                        TextButton(
-                      child: Text(
-                        AppLocalizations.of(context)!.forgetPass,style: Theme.of(context).textTheme.displayMedium
-              
-                        
-                      ),
-                      onPressed: () {
-                        //signup screen
-                        Navigator.of(context).push(PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const ForgotPasswordScreen()));
-                      },
-                    ),
-                    
-                    ],
                   ),
-                ),
-                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) => const Text(AppString.oops),
-              );
-                          }
-                          )
+                   loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, stackTrace) => const Text(AppString.oops),
+                                );
+                            }
+                            ),
+                )
               ),
             ),
           ],
