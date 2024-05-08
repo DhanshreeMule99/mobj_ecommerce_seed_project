@@ -152,23 +152,23 @@ class _Mobj_bottombarstate extends State<MobjBottombar> {
             }
             break;
           case 1:
-            isLogin().then((value) {
-              if (value == true) {
-                if (widget.selectedPage != 2) {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            const CategoriesScreen(),
-                        transitionDuration: Duration.zero,
-                        reverseTransitionDuration: Duration.zero,
-                      ),
-                      (route) => route.isFirst);
-                }
-              } else {
-                CommonAlert.showAlertAndNavigateToLogin(context);
-              }
-            });
+            // isLogin().then((value) {
+            //   if (value == true) {
+            //     if (widget.selectedPage != 2) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const CategoriesScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (route) => route.isFirst);
+            //     }
+            //   } else {
+            //     CommonAlert.showAlertAndNavigateToLogin(context);
+            //   }
+            // });
 
             break;
           case 2:
