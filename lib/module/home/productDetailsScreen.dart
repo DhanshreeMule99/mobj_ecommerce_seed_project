@@ -903,202 +903,210 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 )
               : Container(),
 
-          ElevatedButton(
-              onPressed: () async {
-                isLogin().then((value) {
-                  print("$value");
-                  if (value == true) {
-                    CommonAlert.show_loading_alert(context);
-                    if ((selectedVariant != null &&
-                            selectedVariant.inventoryQuantity > 0) ||
-                        productModel.variants[0].inventoryQuantity > 0) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      int? variantId;
-                      List<ProductVariant> filteredVariants =
-                          productModel.variants.where((variant) {
-                        if ((variant.option1 != DefaultValues.defaultOption1) &&
-                            (variant.option2 == DefaultValues.defaultOption2 &&
-                                variant.option3 ==
-                                    DefaultValues.defaultOption3)) {
-                          return ((variant.option1
-                                  .contains(selectedSize.toString())) ||
-                              (variant.option1
-                                  .contains(selectedColor.toString())));
-                        } else if ((variant.option1 !=
-                                DefaultValues.defaultOption1) &&
-                            (variant.option2 != DefaultValues.defaultOption2 &&
-                                variant.option3 ==
-                                    DefaultValues.defaultOption3)) {
-                          return (((variant.option1
+          selectedVariant.inventoryQuantity > 0
+              ? ElevatedButton(
+                  onPressed: () async {
+                    isLogin().then((value) {
+                      print("$value");
+                      if (value == true) {
+                        CommonAlert.show_loading_alert(context);
+                        if ((selectedVariant != null &&
+                                selectedVariant.inventoryQuantity > 0) ||
+                            productModel.variants[0].inventoryQuantity > 0) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          int? variantId;
+                          List<ProductVariant> filteredVariants =
+                              productModel.variants.where((variant) {
+                            if ((variant.option1 !=
+                                    DefaultValues.defaultOption1) &&
+                                (variant.option2 ==
+                                        DefaultValues.defaultOption2 &&
+                                    variant.option3 ==
+                                        DefaultValues.defaultOption3)) {
+                              return ((variant.option1
                                       .contains(selectedSize.toString())) ||
                                   (variant.option1
-                                      .contains(selectedColor.toString()))) &&
-                              ((variant.option2
+                                      .contains(selectedColor.toString())));
+                            } else if ((variant.option1 !=
+                                    DefaultValues.defaultOption1) &&
+                                (variant.option2 !=
+                                        DefaultValues.defaultOption2 &&
+                                    variant.option3 ==
+                                        DefaultValues.defaultOption3)) {
+                              return (((variant.option1
+                                          .contains(selectedSize.toString())) ||
+                                      (variant.option1.contains(
+                                          selectedColor.toString()))) &&
+                                  ((variant.option2
+                                          .contains(selectedSize.toString())) ||
+                                      (variant.option2.contains(
+                                          selectedColor.toString()))));
+                            } else {
+                              return ((variant.option1
                                       .contains(selectedSize.toString())) ||
-                                  (variant.option2
-                                      .contains(selectedColor.toString()))));
-                        } else {
-                          return ((variant.option1
-                                  .contains(selectedSize.toString())) ||
-                              (variant.option1
-                                  .contains(selectedColor.toString())));
+                                  (variant.option1
+                                      .contains(selectedColor.toString())));
+                            }
+                          }).toList();
+
+                          // Display the filtered variants
+                          for (var variant in filteredVariants) {
+                            variantId = variant.id;
+                          }
+
+                          if (AppConfigure.bigCommerce) {
+                            ProductRepository()
+                                .addToCartBigcommerce(
+                                    variantId != null
+                                        ? variantId.toString()
+                                        : productModel.variants[0].id
+                                            .toString(),
+                                    quantity.toString(),
+                                    productModel.title,
+                                    selectedVariant != null
+                                        ? selectedVariant.price
+                                        : productModel.variants[0].price,
+                                    productModel.id.toString())
+                                .then((value) async {
+                              if (value == AppString.success) {
+                                Navigator.of(context).pop();
+                                ref.refresh(cartDetailsDataProvider);
+                                ref.refresh(productDetailsProvider(widget.uid));
+                                Fluttertoast.showToast(
+                                    msg: AppString.addToCartSuccess,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 0,
+                                    backgroundColor: AppColors.green,
+                                    textColor: AppColors.whiteColor,
+                                    fontSize: 16.0);
+                              } else {
+                                Navigator.of(context).pop();
+                                Fluttertoast.showToast(
+                                    msg: AppString.oops,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 0,
+                                    backgroundColor: AppColors.green,
+                                    textColor: AppColors.whiteColor,
+                                    fontSize: 16.0);
+                              }
+                            });
+                          } else if (AppConfigure.wooCommerce) {
+                            //  log('product to ${widget.productId} ${widget.variantId}');
+                            ProductRepository()
+                                .addToCartWooCommerce(
+                              quantity.toString(),
+                              variantId != null
+                                  ? variantId.toString()
+                                  : productModel.variants[0].id.toString(),
+                            )
+                                .then((value) async {
+                              if (value == AppString.success) {
+                                Navigator.of(context).pop();
+                                ref.refresh(productDataProvider);
+                                ref.refresh(cartDetailsDataProvider);
+                                ref.refresh(productDetailsProvider(widget.uid));
+                                Fluttertoast.showToast(
+                                    msg: AppString.addToCartSuccess,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 0,
+                                    backgroundColor: AppColors.green,
+                                    textColor: AppColors.whiteColor,
+                                    fontSize: 16.0);
+                              } else {
+                                Navigator.of(context).pop();
+                                Fluttertoast.showToast(
+                                    msg: AppString.oops,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 0,
+                                    backgroundColor: AppColors.green,
+                                    textColor: AppColors.whiteColor,
+                                    fontSize: 16.0);
+                              }
+                            });
+                          } else {
+                            ProductRepository()
+                                .addToCart(
+                                    variantId != null
+                                        ? variantId.toString()
+                                        : productModel.variants[0].id
+                                            .toString(),
+                                    quantity.toString())
+                                .then((value) async {
+                              Navigator.of(context).pop();
+                              if (value == AppString.success) {
+                                setState(() {
+                                  error = "";
+                                  isLoading = false;
+                                });
+                                ref.refresh(cartDetailsDataProvider);
+                                ref.refresh(productDetailsProvider(widget.uid));
+                                Fluttertoast.showToast(
+                                    msg: AppLocalizations.of(context)!
+                                        .addToCartSuccess,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 0,
+                                    backgroundColor: AppColors.green,
+                                    textColor: AppColors.whiteColor,
+                                    fontSize: 16.0);
+                              } else {
+                                setState(() {
+                                  error = AppLocalizations.of(context)!.oops;
+                                  isLoading = false;
+                                });
+                              }
+                            });
+                          }
                         }
-                      }).toList();
-
-                      // Display the filtered variants
-                      for (var variant in filteredVariants) {
-                        variantId = variant.id;
-                      }
-
-                      if (AppConfigure.bigCommerce) {
-                        ProductRepository()
-                            .addToCartBigcommerce(
-                                variantId != null
-                                    ? variantId.toString()
-                                    : productModel.variants[0].id.toString(),
-                                quantity.toString(),
-                                productModel.title,
-                                selectedVariant != null
-                                    ? selectedVariant.price
-                                    : productModel.variants[0].price,
-                                productModel.id.toString())
-                            .then((value) async {
-                          if (value == AppString.success) {
-                            Navigator.of(context).pop();
-                            ref.refresh(cartDetailsDataProvider);
-                            ref.refresh(productDetailsProvider(widget.uid));
-                            Fluttertoast.showToast(
-                                msg: AppString.addToCartSuccess,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 0,
-                                backgroundColor: AppColors.green,
-                                textColor: AppColors.whiteColor,
-                                fontSize: 16.0);
-                          } else {
-                            Navigator.of(context).pop();
-                            Fluttertoast.showToast(
-                                msg: AppString.oops,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 0,
-                                backgroundColor: AppColors.green,
-                                textColor: AppColors.whiteColor,
-                                fontSize: 16.0);
-                          }
-                        });
-                      } else if (AppConfigure.wooCommerce) {
-                        //  log('product to ${widget.productId} ${widget.variantId}');
-                        ProductRepository()
-                            .addToCartWooCommerce(
-                          quantity.toString(),
-                          variantId != null
-                              ? variantId.toString()
-                              : productModel.variants[0].id.toString(),
-                        )
-                            .then((value) async {
-                          if (value == AppString.success) {
-                            Navigator.of(context).pop();
-                            ref.refresh(productDataProvider);
-                            ref.refresh(cartDetailsDataProvider);
-                            ref.refresh(productDetailsProvider(widget.uid));
-                            Fluttertoast.showToast(
-                                msg: AppString.addToCartSuccess,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 0,
-                                backgroundColor: AppColors.green,
-                                textColor: AppColors.whiteColor,
-                                fontSize: 16.0);
-                          } else {
-                            Navigator.of(context).pop();
-                            Fluttertoast.showToast(
-                                msg: AppString.oops,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 0,
-                                backgroundColor: AppColors.green,
-                                textColor: AppColors.whiteColor,
-                                fontSize: 16.0);
-                          }
-                        });
                       } else {
-                        ProductRepository()
-                            .addToCart(
-                                variantId != null
-                                    ? variantId.toString()
-                                    : productModel.variants[0].id.toString(),
-                                quantity.toString())
-                            .then((value) async {
-                          Navigator.of(context).pop();
-                          if (value == AppString.success) {
-                            setState(() {
-                              error = "";
-                              isLoading = false;
-                            });
-                            ref.refresh(cartDetailsDataProvider);
-                            ref.refresh(productDetailsProvider(widget.uid));
-                            Fluttertoast.showToast(
-                                msg: AppLocalizations.of(context)!
-                                    .addToCartSuccess,
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 0,
-                                backgroundColor: AppColors.green,
-                                textColor: AppColors.whiteColor,
-                                fontSize: 16.0);
-                          } else {
-                            setState(() {
-                              error = AppLocalizations.of(context)!.oops;
-                              isLoading = false;
-                            });
-                          }
-                        });
+                        CommonAlert.showAlertAndNavigateToLogin(context);
                       }
-                    }
-                  } else {
-                    CommonAlert.showAlertAndNavigateToLogin(context);
-                  }
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: selectedVariant != null
-                    ? selectedVariant.inventoryQuantity > 0
-                        ? appInfo.primaryColorValue
-                        : AppColors.greyShade200
-                    : productModel.variants[0].inventoryQuantity > 0
-                        ? appInfo.primaryColorValue
-                        : AppColors.greyShade200,
-                minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppDimension.buttonRadius)),
-                textStyle: TextStyle(
-                    color: selectedVariant != null
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedVariant != null
                         ? selectedVariant.inventoryQuantity > 0
-                            ? AppColors.whiteColor
-                            : AppColors.blackColor
+                            ? appInfo.primaryColorValue
+                            : AppColors.greyShade200
                         : productModel.variants[0].inventoryQuantity > 0
-                            ? AppColors.whiteColor
-                            : AppColors.blackColor,
-                    fontSize: 10,
-                    fontStyle: FontStyle.normal),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.addToCart.toUpperCase(),
-                style: TextStyle(
-                    color: selectedVariant != null
-                        ? selectedVariant.inventoryQuantity > 0
-                            ? AppColors.whiteColor
-                            : AppColors.blackColor
-                        : productModel.variants[0].inventoryQuantity > 0
-                            ? AppColors.whiteColor
-                            : AppColors.blackColor,
-                    fontSize: MediaQuery.of(context).size.width * 0.05,
-                    fontWeight: FontWeight.bold),
-              )),
+                            ? appInfo.primaryColorValue
+                            : AppColors.greyShade200,
+                    minimumSize: const Size.fromHeight(50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppDimension.buttonRadius)),
+                    textStyle: TextStyle(
+                        color: selectedVariant != null
+                            ? selectedVariant.inventoryQuantity > 0
+                                ? AppColors.whiteColor
+                                : AppColors.blackColor
+                            : productModel.variants[0].inventoryQuantity > 0
+                                ? AppColors.whiteColor
+                                : AppColors.blackColor,
+                        fontSize: 10,
+                        fontStyle: FontStyle.normal),
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.addToCart.toUpperCase(),
+                    style: TextStyle(
+                        color: selectedVariant != null
+                            ? selectedVariant.inventoryQuantity > 0
+                                ? AppColors.whiteColor
+                                : AppColors.blackColor
+                            : productModel.variants[0].inventoryQuantity > 0
+                                ? AppColors.whiteColor
+                                : AppColors.blackColor,
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.bold),
+                  ))
+              : const SizedBox(),
+
           const SizedBox(height: 25),
 
           product.when(

@@ -13,6 +13,7 @@ import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_getwishlistModel.dart';
+import '../categorie_screen/categorie_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -317,9 +318,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         "Categories",
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
-                      Text(
-                        "View All",
-                        style: Theme.of(context).textTheme.headlineSmall,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const CategoriesScreen(),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ),
+                              (route) => route.isFirst);
+                        },
+                        child: Text("View All",
+                            style: Theme.of(context).textTheme.displayMedium),
                       )
                     ],
                   ),

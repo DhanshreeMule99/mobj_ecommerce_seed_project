@@ -46,7 +46,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               bgcolor: AppColors.whiteColor,
               selcted_icon_color: AppColors.buttonColor,
               unselcted_icon_color: AppColors.blackColor,
-              selectedPage: 2,
+              selectedPage: 1,
               screen1: const HomeScreen(),
               screen2: const SearchWidget(),
               screen3: WishlistScreen(),

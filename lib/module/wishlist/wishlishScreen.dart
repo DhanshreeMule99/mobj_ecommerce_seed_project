@@ -127,7 +127,14 @@ fragment PriceFields on Money {
     } catch (error, stackTrace) {
       log("error is this: $stackTrace");
       log("error is this: $error");
+      setState(() {
+        loader = false;
+      });
       rethrow;
+    } finally {
+      setState(() {
+        loader = false;
+      });
     }
   }
 
@@ -179,9 +186,12 @@ fragment PriceFields on Money {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     products.isEmpty
-                        ? AppConfigure.wooCommerce
-                            ? Center(child: Text("Not Availble"))
-                            : Center(child: CircularProgressIndicator())
+                        ? AppConfigure.bigCommerce
+                            ? loader
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : const Center(child: Text("No Products"))
+                            : const Center(child: Text("Paid Feature"))
                         : Expanded(
                             child: GridView.builder(
                                 gridDelegate:

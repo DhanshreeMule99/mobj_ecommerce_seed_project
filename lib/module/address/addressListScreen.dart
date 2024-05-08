@@ -297,7 +297,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           bgcolor: AppColors.whiteColor,
           selcted_icon_color: AppColors.buttonColor,
           unselcted_icon_color: AppColors.blackColor,
-          selectedPage: 3,
+          selectedPage: 4,
           screen1: AddressListScreen(
             bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
@@ -1078,7 +1078,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
             //         : Container()
             //   ],
             // ),
-                        error: (error, s) => Column(
+            error: (error, s) => Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

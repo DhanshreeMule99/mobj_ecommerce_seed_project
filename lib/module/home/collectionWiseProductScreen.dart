@@ -320,209 +320,209 @@ fragment PriceFields on Money {
           appBar: AppBar(
             elevation: 2,
             actions: [
-              IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(25.0),
-                        )),
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder:
-                                (BuildContext context, StateSetter setState) {
-                              return Container(
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20.0),
-                                      topRight: Radius.circular(20.0),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5,
-                                                    left: 15,
-                                                    right: 15),
-                                                child: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .selectPrice,
-                                                  style: TextStyle(
-                                                    fontSize: 0.04 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                  ),
-                                                )),
-                                            const SizedBox(
-                                              height: 15,
-                                            ),
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 0,
-                                                    left: 15,
-                                                    right: 15),
-                                                child: Text(
-                                                  "\u{20B9}${start.toStringAsFixed(0)} - \u{20B9}${end.toStringAsFixed(0)}${end >= 900 ? plus : ""}",
-                                                  style: TextStyle(
-                                                    fontSize: 0.04 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                )),
-                                            StatefulBuilder(
-                                                builder: (context, state) {
-                                              return RangeSlider(
-                                                values: RangeValues(start, end),
-                                                labels: RangeLabels(
-                                                  start.toString(),
-                                                  end.toString(),
-                                                ),
-                                                activeColor:
-                                                    appInfo.primaryColorValue,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    state(() {
-                                                      start = value.start;
-                                                      end = value.end;
-                                                    });
-                                                  });
-                                                },
-                                                min: 0.0,
-                                                max: 900.0,
-                                              );
-                                            }),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isFilter = false;
-                                                      isFilters = false;
-                                                    });
-                                                    ref.refresh(
-                                                        productsProvider(widget
-                                                            .categoryName));
-                                                    Navigator.pop(
-                                                        context); // Close the bottom sheet
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppColors.whiteColor,
-                                                    // Button color
-                                                    side: BorderSide(
-                                                        color: appInfo
-                                                            .primaryColorValue),
-                                                    // Border color
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius
-                                                          .circular(AppDimension
-                                                              .buttonRadius),
-                                                    ),
-                                                    textStyle: const TextStyle(
-                                                      color:
-                                                          AppColors.blackColor,
-                                                      fontSize: 10,
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .clear,
-                                                      style: TextStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.04,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                                const SizedBox(
-                                                  width: 15,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      isFilter = true;
-                                                      isFilters = true;
-                                                    });
-                                                    ref.refresh(
-                                                        productsProvider(widget
-                                                            .categoryName));
-                                                    Navigator.pop(
-                                                        context); // Close the bottom sheet
-                                                  },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        AppColors.whiteColor,
-                                                    // Button color
-                                                    side: BorderSide(
-                                                        color: appInfo
-                                                            .primaryColorValue),
-                                                    // Border color
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius
-                                                          .circular(AppDimension
-                                                              .buttonRadius),
-                                                    ),
-                                                    textStyle: const TextStyle(
-                                                      color:
-                                                          AppColors.blackColor,
-                                                      fontSize: 10,
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .applyFilter,
-                                                      style: TextStyle(
-                                                          color: AppColors
-                                                              .blackColor,
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.04,
-                                                          fontWeight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )));
-                            },
-                          );
-                        });
-                  },
-                  icon: const Icon(Icons.filter_alt)),
               // IconButton(
               //     onPressed: () {
-              //       _showSortingOptions(context);
+              //       showModalBottomSheet(
+              //           shape: const RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.vertical(
+              //             top: Radius.circular(25.0),
+              //           )),
+              //           context: context,
+              //           builder: (BuildContext context) {
+              //             return StatefulBuilder(
+              //               builder:
+              //                   (BuildContext context, StateSetter setState) {
+              //                 return Container(
+              //                     decoration: const BoxDecoration(
+              //                       borderRadius: BorderRadius.only(
+              //                         topLeft: Radius.circular(20.0),
+              //                         topRight: Radius.circular(20.0),
+              //                       ),
+              //                     ),
+              //                     child: Padding(
+              //                         padding: const EdgeInsets.all(15.0),
+              //                         child: SingleChildScrollView(
+              //                           child: Column(
+              //                             crossAxisAlignment:
+              //                                 CrossAxisAlignment.start,
+              //                             children: [
+              //                               Padding(
+              //                                   padding: const EdgeInsets.only(
+              //                                       top: 5,
+              //                                       left: 15,
+              //                                       right: 15),
+              //                                   child: Text(
+              //                                     AppLocalizations.of(context)!
+              //                                         .selectPrice,
+              //                                     style: TextStyle(
+              //                                       fontSize: 0.04 *
+              //                                           MediaQuery.of(context)
+              //                                               .size
+              //                                               .width,
+              //                                     ),
+              //                                   )),
+              //                               const SizedBox(
+              //                                 height: 15,
+              //                               ),
+              //                               Padding(
+              //                                   padding: const EdgeInsets.only(
+              //                                       top: 0,
+              //                                       left: 15,
+              //                                       right: 15),
+              //                                   child: Text(
+              //                                     "\u{20B9}${start.toStringAsFixed(0)} - \u{20B9}${end.toStringAsFixed(0)}${end >= 900 ? plus : ""}",
+              //                                     style: TextStyle(
+              //                                       fontSize: 0.04 *
+              //                                           MediaQuery.of(context)
+              //                                               .size
+              //                                               .width,
+              //                                       fontWeight: FontWeight.w700,
+              //                                     ),
+              //                                   )),
+              //                               StatefulBuilder(
+              //                                   builder: (context, state) {
+              //                                 return RangeSlider(
+              //                                   values: RangeValues(start, end),
+              //                                   labels: RangeLabels(
+              //                                     start.toString(),
+              //                                     end.toString(),
+              //                                   ),
+              //                                   activeColor:
+              //                                       appInfo.primaryColorValue,
+              //                                   onChanged: (value) {
+              //                                     setState(() {
+              //                                       state(() {
+              //                                         start = value.start;
+              //                                         end = value.end;
+              //                                       });
+              //                                     });
+              //                                   },
+              //                                   min: 0.0,
+              //                                   max: 900.0,
+              //                                 );
+              //                               }),
+              //                               Row(
+              //                                 mainAxisAlignment:
+              //                                     MainAxisAlignment.center,
+              //                                 children: [
+              //                                   ElevatedButton(
+              //                                     onPressed: () {
+              //                                       setState(() {
+              //                                         isFilter = false;
+              //                                         isFilters = false;
+              //                                       });
+              //                                       ref.refresh(
+              //                                           productsProvider(widget
+              //                                               .categoryName));
+              //                                       Navigator.pop(
+              //                                           context); // Close the bottom sheet
+              //                                     },
+              //                                     style:
+              //                                         ElevatedButton.styleFrom(
+              //                                       backgroundColor:
+              //                                           AppColors.whiteColor,
+              //                                       // Button color
+              //                                       side: BorderSide(
+              //                                           color: appInfo
+              //                                               .primaryColorValue),
+              //                                       // Border color
+              //                                       shape:
+              //                                           RoundedRectangleBorder(
+              //                                         borderRadius: BorderRadius
+              //                                             .circular(AppDimension
+              //                                                 .buttonRadius),
+              //                                       ),
+              //                                       textStyle: const TextStyle(
+              //                                         color:
+              //                                             AppColors.blackColor,
+              //                                         fontSize: 10,
+              //                                         fontStyle:
+              //                                             FontStyle.normal,
+              //                                       ),
+              //                                     ),
+              //                                     child: Text(
+              //                                         AppLocalizations.of(
+              //                                                 context)!
+              //                                             .clear,
+              //                                         style: TextStyle(
+              //                                             color: AppColors
+              //                                                 .blackColor,
+              //                                             fontSize: MediaQuery.of(
+              //                                                         context)
+              //                                                     .size
+              //                                                     .width *
+              //                                                 0.04,
+              //                                             fontWeight:
+              //                                                 FontWeight.bold)),
+              //                                   ),
+              //                                   const SizedBox(
+              //                                     width: 15,
+              //                                   ),
+              //                                   ElevatedButton(
+              //                                     onPressed: () {
+              //                                       setState(() {
+              //                                         isFilter = true;
+              //                                         isFilters = true;
+              //                                       });
+              //                                       ref.refresh(
+              //                                           productsProvider(widget
+              //                                               .categoryName));
+              //                                       Navigator.pop(
+              //                                           context); // Close the bottom sheet
+              //                                     },
+              //                                     style:
+              //                                         ElevatedButton.styleFrom(
+              //                                       backgroundColor:
+              //                                           AppColors.whiteColor,
+              //                                       // Button color
+              //                                       side: BorderSide(
+              //                                           color: appInfo
+              //                                               .primaryColorValue),
+              //                                       // Border color
+              //                                       shape:
+              //                                           RoundedRectangleBorder(
+              //                                         borderRadius: BorderRadius
+              //                                             .circular(AppDimension
+              //                                                 .buttonRadius),
+              //                                       ),
+              //                                       textStyle: const TextStyle(
+              //                                         color:
+              //                                             AppColors.blackColor,
+              //                                         fontSize: 10,
+              //                                         fontStyle:
+              //                                             FontStyle.normal,
+              //                                       ),
+              //                                     ),
+              //                                     child: Text(
+              //                                         AppLocalizations.of(
+              //                                                 context)!
+              //                                             .applyFilter,
+              //                                         style: TextStyle(
+              //                                             color: AppColors
+              //                                                 .blackColor,
+              //                                             fontSize: MediaQuery.of(
+              //                                                         context)
+              //                                                     .size
+              //                                                     .width *
+              //                                                 0.04,
+              //                                             fontWeight:
+              //                                                 FontWeight.bold)),
+              //                                   ),
+              //                                 ],
+              //                               ),
+              //                             ],
+              //                           ),
+              //                         )));
+              //               },
+              //             );
+              //           });
               //     },
-              //     icon: const Icon(Icons.sort))
+              //     icon: const Icon(Icons.filter_alt)),
+              // // IconButton(
+              // //     onPressed: () {
+              // //       _showSortingOptions(context);
+              // //     },
+              // //     icon: const Icon(Icons.sort))
             ],
             title: Text(
               widget.categoryName,
@@ -532,7 +532,7 @@ fragment PriceFields on Money {
             bgcolor: AppColors.whiteColor,
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
-            selectedPage: 1,
+            selectedPage: 2,
             screen1: const SearchWidget(),
             screen2: const SearchWidget(),
             screen3: const SearchWidget(),
