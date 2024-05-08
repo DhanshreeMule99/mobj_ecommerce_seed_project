@@ -46,6 +46,7 @@ class ProductListCard extends StatefulWidget {
   final bool isWhislisted;
   final List<BigcommerceGetWishlistModel> getwishlistIDHere;
   final WidgetRef ref;
+  final Widget likeButtonWidget;
 
   const ProductListCard({
     Key? key,
@@ -73,6 +74,7 @@ class ProductListCard extends StatefulWidget {
     required this.stock,
     required this.ref,
     this.isWhislisted = false,
+    this.likeButtonWidget = const SizedBox(),
   }) : super(key: key);
 
   @override
@@ -99,185 +101,7 @@ class _ProductListCardstate extends State<ProductListCard> {
 //     });
 //   }
 
-  // Function to toggle the like status
-  Future<void> toggleLikeStatus() async {
-    try {
-      if (isLiked) {
-        // Remove from wishlist
-        await deleteWishlistItem();
-        Fluttertoast.showToast(
-          msg: "Removed this product from wishlist",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-        );
-      } else {
-        // Check if wishlist ID is available
-
-        String wislistId = await SharedPreferenceManager().getwishlistID();
-
-        if (wislistId != "") {
-          try {
-            log("this is wislis ID : $wislistId");
-            // If wishlist ID is available, add product to wishlist
-            log("adding product to wislist");
-
-            await addproductTowishlist();
-            Fluttertoast.showToast(
-              msg: "Added this product to wishlist",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-            );
-          } catch (error, stackTrace) {
-            log("error is this: $stackTrace");
-            log("error is this: $error");
-            rethrow;
-          }
-        } else {
-          // If wishlist ID is not available, create a new wishlist and add product to it
-          log("creating wislist.........");
-          await createwishlist();
-          Fluttertoast.showToast(
-            msg: "Added this product to wishlist",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-          );
-        }
-      }
-      setState(() {
-        isLiked = !isLiked;
-      });
-    } catch (error, stackTrace) {
-      log("error is this: $stackTrace");
-      log("error is this: $error");
-      rethrow;
-    }
-  }
-
-  Future<void> addproductTowishlist() async {
-    API api = API();
-    String WishlistID = await SharedPreferenceManager().getwishlistID();
-    log(" product Id... $widget.productId");
-    Map<String, dynamic> newProduct = {
-      "items": [
-        {
-          "product_id": int.parse(widget.productId),
-          "variant_id": int.parse(widget.variantId),
-        }
-      ]
-    };
-    try {
-      final response = await api.sendRequest.post(
-        "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items",
-        data: newProduct,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          "Accept": "application/json",
-          "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-        }),
-      );
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        log("Added to wishlist : $response");
-        final result = response.data['data'];
-        await SharedPreferenceManager().setWishlistId(result['id'].toString());
-        String WishlistID = await SharedPreferenceManager().getwishlistID();
-        log("wishlist id : $WishlistID");
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        throw (AppString.noDataError);
-      } else {
-        throw (AppString.noDataError);
-      }
-    } catch (error, stackTrace) {
-      log("error is this: $stackTrace");
-      log("error is this: $error");
-      rethrow;
-    }
-  }
-
-  deleteWishlistItem() async {
-    String exceptionString = "";
-    final uid = await SharedPreferenceManager().getUserId();
-    final WishlistID = await SharedPreferenceManager().getwishlistID();
-    API api = API();
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        final response = await api.sendRequest.delete(
-          "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items/$wishlistItemID",
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-          }),
-        );
-        // var data = jsonDecode(response.body);
-        if (response.statusCode == 204) {
-          return AppString.success;
-        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-          exceptionString = AppString.unAuthorized;
-          return exceptionString;
-        } else {
-          exceptionString = AppString.serverError;
-          return exceptionString;
-        }
-      } else {
-        var exceptionString = AppString.checkInternet;
-        return exceptionString;
-      }
-    } catch (error) {
-      exceptionString = AppString.serverError;
-      return exceptionString;
-    }
-  }
-
-  Future<void> createwishlist() async {
-    API api = API();
-    final uid = await SharedPreferenceManager().getUserId();
-    log("product Id : $widget.productId");
-    Map<String, dynamic> wishlistData = {
-      "customer_id": int.parse(uid),
-      "is_public": false,
-      "name": "new list",
-      "items": [
-        {
-          "product_id": int.parse(widget.productId),
-          "variant_id": int.parse(widget.variantId),
-        }
-      ]
-    };
-    try {
-      final response = await api.sendRequest.post(
-        "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists",
-        data: wishlistData,
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          "Accept": "application/json",
-          "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
-        }),
-      );
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        log("create wishlist : $response");
-        final result = response.data['data'];
-        await SharedPreferenceManager().setWishlistId(result['id'].toString());
-        String WishlistID = await SharedPreferenceManager().getwishlistID();
-        log("wishlist id : $WishlistID");
-
-        setState(() {
-          isLiked = true;
-        });
-      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
-        throw (AppString.noDataError);
-      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-        throw (AppString.noDataError);
-      } else {
-        throw (AppString.noDataError);
-      }
-    } catch (error, stackTrace) {
-      log("error is this: $stackTrace");
-      log("error is this: $error");
-      rethrow;
-    }
-  }
+ 
 
   @override
   void initState() {
@@ -392,23 +216,8 @@ class _ProductListCardstate extends State<ProductListCard> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 5.sp, right: 8.sp),
-                  child: LikeButton(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    isLiked: isLiked,
-                    onTap: (isLiked) async {
-                      await toggleLikeStatus();
-                      return !isLiked;
-                    },
-                    likeBuilder: (bool isLiked) {
-                      return Icon(
-                        Ionicons.heart,
-                        color: isLiked ? Colors.red : Colors.black54,
-                        size: 25.sp,
-                      );
-                    },
-                  ),
-                ),
+                    padding: EdgeInsets.only(top: 5.sp, right: 8.sp),
+                    child: widget.likeButtonWidget),
               ],
             ),
             Container(
@@ -458,7 +267,14 @@ class _ProductListCardstate extends State<ProductListCard> {
                                   width:
                                       MediaQuery.of(context).size.width / .24,
                                   child: ElevatedButton(
-                                      onPressed: () async {
+                                      onPressed:
+                                          //  AppConfigure.bigCommerce
+                                          //     ? () {
+                                          //         print(
+                                          //             "varient id ${widget.variantId} ${widget.productName} ${widget.productPrice} ${widget.productId}");
+                                          //       }
+                                          //     :
+                                          () async {
                                         debugPrint(
                                             "varient id is this ${widget.variantId} 1 ${widget.productName} ${widget.productPrice} ${widget.productId}");
                                         isLogin().then((value) {
@@ -477,6 +293,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                           .toString(),
                                                       widget.productId)
                                                   .then((value) async {
+                                                print("value is this $value");
                                                 if (value ==
                                                     AppString.success) {
                                                   Navigator.of(context).pop();

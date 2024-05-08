@@ -66,20 +66,27 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         showNextButton: false,
         // autoScrollDuration: 3000,
         // infiniteAutoScroll: false,
-        globalFooter: SizedBox(
-          width: double.infinity,
-          height: 60,
-          child: ElevatedButton(
-            child: Text(_currentPage == 2 ? 'Done' : 'Next',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-            onPressed: () {
-              if (_currentPage < 2) {
-                introKey.currentState?.animateScroll(_currentPage + 1);
-                // _currentPage++;
-              } else {
-                _onIntroEnd(context);
-              }
-            },
+        globalFooter: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: SizedBox(
+            width: double.infinity,
+            height: 60,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  backgroundColor: Theme.of(context).colorScheme.primary),
+              child: Text(_currentPage == 2 ? 'Done' : 'Next',
+                  style: Theme.of(context).textTheme.displayLarge),
+              onPressed: () {
+                if (_currentPage < 2) {
+                  introKey.currentState?.animateScroll(_currentPage + 1);
+                  // _currentPage++;
+                } else {
+                  _onIntroEnd(context);
+                }
+              },
+            ),
           ),
         ),
         pages: [

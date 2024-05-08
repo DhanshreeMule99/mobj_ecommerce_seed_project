@@ -410,7 +410,7 @@ class ProductRepository {
           "variant_id": int.parse(variantId)
         }
       ],
-      "currency": {"code": "INR"},
+      "currency": {"code": "USD"},
       "locale": "en-US"
     });
     var decodedBody = jsonDecode(body);
@@ -444,7 +444,8 @@ class ProductRepository {
           return exceptionString;
         }
       }
-    } catch (error) {
+    } catch (error, stackTrace) {
+      print("add to cart $error $stackTrace");
       exceptionString = AppString.oops;
       return exceptionString;
     }
@@ -1074,6 +1075,180 @@ class ProductRepository {
       } catch (error) {
         rethrow;
       }
+    }
+  }
+
+  // Function to toggle the like status
+  Future<void> toggleLikeStatus(bool isLikedd, String wishlistId,
+      String productId, String varientId) async {
+    try {
+      if (isLikedd) {
+        // Remove from wishlist
+        await deleteWishlistItem(wishlistId);
+        Fluttertoast.showToast(
+          msg: "Removed this product from wishlist",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+      } else {
+        // Check if wishlist ID is available
+
+        String wislistId = await SharedPreferenceManager().getwishlistID();
+
+        if (wislistId != "") {
+          try {
+            log("this is wislis ID : $wislistId");
+            // If wishlist ID is available, add product to wishlist
+            log("adding product to wislist");
+
+            await addproductTowishlist(productId, varientId);
+            Fluttertoast.showToast(
+              msg: "Added this product to wishlist",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+            );
+          } catch (error, stackTrace) {
+            log("error is this: $stackTrace");
+            log("error is this: $error");
+            rethrow;
+          }
+        } else {
+          // If wishlist ID is not available, create a new wishlist and add product to it
+          log("creating wislist.........");
+          await createwishlist(productId, varientId);
+          Fluttertoast.showToast(
+            msg: "Added this product to wishlist",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+          );
+        }
+      }
+    } catch (error, stackTrace) {
+      log("error is this: $stackTrace");
+      log("error is this: $error");
+      rethrow;
+    }
+  }
+
+  Future<void> addproductTowishlist(String productId, String variantId) async {
+    API api = API();
+    String WishlistID = await SharedPreferenceManager().getwishlistID();
+    log(" product Id... $productId");
+    Map<String, dynamic> newProduct = {
+      "items": [
+        {
+          "product_id": int.parse(productId),
+          "variant_id": int.parse(variantId),
+        }
+      ]
+    };
+    try {
+      final response = await api.sendRequest.post(
+        "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items",
+        data: newProduct,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          "Accept": "application/json",
+          "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+        }),
+      );
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        log("Added to wishlist : $response");
+        final result = response.data['data'];
+        await SharedPreferenceManager().setWishlistId(result['id'].toString());
+        String WishlistID = await SharedPreferenceManager().getwishlistID();
+        log("wishlist id : $WishlistID");
+      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+        throw (AppString.noDataError);
+      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+        throw (AppString.noDataError);
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      log("error is this: $stackTrace");
+      log("error is this: $error");
+      rethrow;
+    }
+  }
+
+  deleteWishlistItem(String wishlistItemID) async {
+    String exceptionString = "";
+    final uid = await SharedPreferenceManager().getUserId();
+    final WishlistID = await SharedPreferenceManager().getwishlistID();
+    API api = API();
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        final response = await api.sendRequest.delete(
+          "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists/$WishlistID/items/$wishlistItemID",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+          }),
+        );
+        // var data = jsonDecode(response.body);
+        if (response.statusCode == 204) {
+          return AppString.success;
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          exceptionString = AppString.unAuthorized;
+          return exceptionString;
+        } else {
+          exceptionString = AppString.serverError;
+          return exceptionString;
+        }
+      } else {
+        var exceptionString = AppString.checkInternet;
+        return exceptionString;
+      }
+    } catch (error) {
+      exceptionString = AppString.serverError;
+      return exceptionString;
+    }
+  }
+
+  Future<void> createwishlist(String productId, String variantId) async {
+    API api = API();
+    final uid = await SharedPreferenceManager().getUserId();
+    log("product Id : $productId");
+    Map<String, dynamic> wishlistData = {
+      "customer_id": int.parse(uid),
+      "is_public": false,
+      "name": "new list",
+      "items": [
+        {
+          "product_id": int.parse(productId),
+          "variant_id": int.parse(variantId),
+        }
+      ]
+    };
+    try {
+      final response = await api.sendRequest.post(
+        "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/wishlists",
+        data: wishlistData,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          "Accept": "application/json",
+          "X-auth-Token": "${AppConfigure.bigCommerceAccessToken}"
+        }),
+      );
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        log("create wishlist : $response");
+        final result = response.data['data'];
+        await SharedPreferenceManager().setWishlistId(result['id'].toString());
+        String WishlistID = await SharedPreferenceManager().getwishlistID();
+        log("wishlist id : $WishlistID");
+      } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+        throw (AppString.noDataError);
+      } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+        throw (AppString.noDataError);
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      log("error is this: $stackTrace");
+      log("error is this: $error");
+      rethrow;
     }
   }
 

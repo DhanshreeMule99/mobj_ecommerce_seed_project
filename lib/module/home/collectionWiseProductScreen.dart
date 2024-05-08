@@ -810,7 +810,7 @@ fragment PriceFields on Money {
                                                         ),
                                                       ),
                                                       trailing: Text(
-                                                          '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
+                                                          '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} '),
                                                     ),
                                                   ),
                                                 )));

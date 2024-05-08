@@ -40,7 +40,7 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = false;
+  static const bigCommerce = true;
 
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
@@ -50,7 +50,7 @@ class AppConfigure {
 // woo commerce url
 // woo commerce url
 
-  static const wooCommerce = true;
+  static const wooCommerce = false;
   static const woocommerceUrl = 'https://ttf.setoo.org/';
 
   static const consumerkey = 'ck_db1d729eb2978c28ae46451d36c1ca02da112cb3';

@@ -81,6 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               id: responseBody["data"]["items"][i]["id"],
               productId: responseBody["data"]["items"][i]["product_id"]));
         }
+        setState(() {});
         log("list wishlist $wishlistProductIds");
       }
     } catch (e) {
@@ -473,6 +474,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           final isBookmarked = bookmarkedProduct
                               .indexWhere((p) => p.id == post[index].id);
+                          int wishlistItemIdis = wishlistProductIds
+                              .map((element) =>
+                                  element.productId == productlist[index].id
+                                      ? element.id
+                                      : 0)
+                              .firstWhere((id) => id != 0, orElse: () => 0);
                           return InkWell(
                               onTap: () {
                                 print("(${productlist[index].id.toString()})");
@@ -492,6 +499,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 );
                               },
                               child: ProductListCard(
+                                likeButtonWidget: LikeButton(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  isLiked: wishlistProductIds.any((element) =>
+                                      element.productId ==
+                                      productlist[index].id),
+                                  onTap: (isLiked) async {
+                                    await ProductRepository().toggleLikeStatus(
+                                        isLiked,
+                                        wishlistItemIdis.toString(),
+                                        productlist[index].id.toString(),
+                                        productlist[index]
+                                            .variants[0]
+                                            .id
+                                            .toString());
+                                    return !isLiked;
+                                  },
+                                  likeBuilder: (bool isLiked) {
+                                    return Icon(
+                                      Ionicons.heart,
+                                      color:
+                                          isLiked ? Colors.red : Colors.black54,
+                                      size: 25.sp,
+                                    );
+                                  },
+                                ),
                                 getwishlistIDHere: wishlistProductIds,
                                 isWhislisted: wishlistProductIds.any(
                                     (element) =>

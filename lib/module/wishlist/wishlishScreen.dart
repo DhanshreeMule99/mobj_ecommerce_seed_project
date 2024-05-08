@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
@@ -31,44 +33,11 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
   final LocationMobj _locationService = LocationMobj();
   String address = "";
   bool loader = false;
-  void initDynamicLinks() async {
-    // Check if you received the link via `getInitialLink` first
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-
-    if (initialLink != null) {
-      final Uri deepLink = initialLink.link;
-    } else {}
-
-    FirebaseDynamicLinks.instance.onLink.listen(
-      (pendingDynamicLinkData) {
-        // Set up the `onLink` event listener next as it may be received here
-        if (pendingDynamicLinkData != null) {
-          final Uri deepLink = pendingDynamicLinkData.link;
-          handleMyLink(deepLink);
-          // Example of using the dynamic link to push the user to a different screen
-          // Navigator.pushNamed(context, deepLink.path);
-        }
-      },
-    );
-  }
-
-  void handleMyLink(Uri url) {
-    String opportunityId = url.queryParameters["itemIds"] ?? "";
-//TODO list firebase integration
-    // ref.read(str.notifier).state++;
-    // Get.to(()=>ProductDetailScreen(sepeatedLink[1]));
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => ProductDetailsScreen(uid: opportunityId),
-      ),
-    );
-  }
 
   List<dynamic> data = [];
   List<ProductModel> wishlistProducts = [];
   final List<WishlistProductModel> products = [];
-
+  List productList = [];
   Future<void> getallWishlist() async {
     API api = API();
     setState(() {
@@ -84,7 +53,7 @@ class _WishlistScreenState extends ConsumerState<WishlistScreen> {
         final Map<String, dynamic> responseBody = json.decode(response.body);
         // final List result = jsonDecode(response.body)['data'];
 
-        List productList = responseBody["data"]["items"];
+        productList = responseBody["data"]["items"];
         log("body is this one ${responseBody["data"]["items"][0]["product_id"]}");
 
         String graphQLQuery = '';
@@ -165,7 +134,7 @@ fragment PriceFields on Money {
   @override
   void initState() {
     // TODO: implement initState
-    initDynamicLinks();
+
     getallWishlist();
     super.initState();
   }
@@ -209,7 +178,7 @@ fragment PriceFields on Money {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    products.length == 0
+                    products.isEmpty
                         ? AppConfigure.wooCommerce
                             ? Center(child: Text("Not Availble"))
                             : Center(child: CircularProgressIndicator())
@@ -228,17 +197,21 @@ fragment PriceFields on Money {
                                       10; // Example static value for stock
                                   final String staticVariantId =
                                       "static_variant_id";
+                                  log("product id this ${productList[index]["product_id"]}");
                                   return InkWell(
                                       onTap: () {
                                         ref.refresh(productDetailsProvider(
-                                            products[index].id.toString()));
+                                            products[index]
+                                                .entityId
+                                                .toString()));
                                         Navigator.of(context).push(
                                           PageRouteBuilder(
                                             pageBuilder: (context, animation1,
                                                     animation2) =>
                                                 ProductDetailsScreen(
-                                              uid:
-                                                  products[index].id.toString(),
+                                              uid: products[index]
+                                                  .entityId
+                                                  .toString(),
                                               // product: products[index],
                                             ),
                                             transitionDuration: Duration.zero,
@@ -248,6 +221,42 @@ fragment PriceFields on Money {
                                         );
                                       },
                                       child: ProductListCard(
+                                        likeButtonWidget: LikeButton(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          isLiked: productList[index]
+                                                  ["product_id"] ==
+                                              products[index].entityId,
+                                          onTap: (isLiked) async {
+                                            String wishlistidis =
+                                                productList[index]["id"]
+                                                    .toString();
+
+                                            await ProductRepository()
+                                                .toggleLikeStatus(
+                                                    isLiked,
+                                                    wishlistidis,
+                                                    productList[index]
+                                                            ["product_id"]
+                                                        .toString(),
+                                                    productList[index]
+                                                            ["variant_id"]
+                                                        .toString());
+                                            setState(() {
+                                              products.removeAt(index);
+                                            });
+                                            return !isLiked;
+                                          },
+                                          likeBuilder: (bool isLiked) {
+                                            return Icon(
+                                              Ionicons.heart,
+                                              color: isLiked
+                                                  ? Colors.red
+                                                  : Colors.black54,
+                                              size: 25.sp,
+                                            );
+                                          },
+                                        ),
                                         shareProduct: () async {
                                           ShareItem().buildDynamicLinks(
                                               products[index].id.toString(),
@@ -304,124 +313,7 @@ fragment PriceFields on Money {
                                             .defaultImage
                                             .urlOriginal
                                             .toString(),
-                                        ratings: () {
-                                          //TODO list product rating
-                                          // showDialog(
-                                          //     context: context,
-                                          //     builder: (context) =>
-                                          //         // RatingAlert(
-                                          //         //     onRatingSelected:
-                                          //         //         (val) {},
-                                          //         //     org_name:
-                                          //         //         "abc",
-                                          //         //     onsubmit:
-                                          //         //         () {},
-                                          //         //     user_rating:
-                                          //         //         4));
-                                          // // showDialog(
-                                          // // context: context,
-                                          // // builder: (context) =>
-                                          // // user_ratings.when(
-                                          // // data: (id) =>
-                                          // // RatingAlert(
-                                          // // onRatingSelected:
-                                          // // (rating) {
-                                          // // ratings = rating;
-                                          // // },
-                                          // // org_name: productlist[
-                                          // // index]
-                                          // //     .organizationName,
-                                          // // onsubmit: () {
-                                          // // setState(() {
-                                          // // var avgRating =
-                                          // // 0.0;
-                                          // // var sum = 0.0;
-                                          // // var len = 0.0;
-                                          // //
-                                          // // if (productlist[
-                                          // // index]
-                                          // //     .ratingsLength ==
-                                          // // "0") {
-                                          // // sum = double.parse(productlist[
-                                          // // index]
-                                          // //     .sumRatings!
-                                          // //     .toString()) +
-                                          // // ratings;
-                                          // // if (double.parse(
-                                          // // id.toString()) ==
-                                          // // "0") {
-                                          // // len = double.parse(productlist[
-                                          // // index]
-                                          // //     .ratingsLength!
-                                          // //     .toString()) +
-                                          // // 1;
-                                          // // } else {
-                                          // // len = double.parse(productlist[
-                                          // // index]
-                                          // //     .ratingsLength!
-                                          // //     .toString());
-                                          // // }
-                                          // // avgRating =
-                                          // // sum / len;
-                                          // // }
-                                          // // productlist[index]
-                                          // //     .rating =
-                                          // // ratings
-                                          // //     .toString();
-                                          // // });
-                                          // //
-                                          // // Rating_repository()
-                                          // //     .ratings(
-                                          // // productlist[
-                                          // // index]
-                                          // //     .opportunityID
-                                          // //     .toString(),
-                                          // // ratings
-                                          // //     .toString())
-                                          // //     .then((val) {
-                                          // // ref.refresh(
-                                          // // bookmarkedPostsProvider);
-                                          // //
-                                          // // ref.refresh(
-                                          // // opportunityDataProvider);
-                                          // // ref.refresh(userratingsProvider(
-                                          // // productlist[
-                                          // // index]
-                                          // //     .opportunityID
-                                          // //     .toString()));
-                                          // // Fluttertoast.showToast(
-                                          // // msg:
-                                          // // "Thank you for your feedback",
-                                          // // toastLength: Toast
-                                          // //     .LENGTH_SHORT,
-                                          // // gravity:
-                                          // // ToastGravity
-                                          // //     .BOTTOM,
-                                          // // timeInSecForIosWeb:
-                                          // // 1,
-                                          // // backgroundColor:
-                                          // // Colors
-                                          // //     .green,
-                                          // // textColor:
-                                          // // Colors
-                                          // //     .white,
-                                          // // fontSize:
-                                          // // 16.0);
-                                          // // });
-                                          // // Navigator.pop(
-                                          // // context);
-                                          // // },
-                                          // // user_rating:
-                                          // // double.parse(id
-                                          // //     .toString()),
-                                          // // ),
-                                          // // error: (error, s) => Text(
-                                          // // "OOPS Something went wrong"),
-                                          // // loading: () =>
-                                          // // Container(),
-                                          // // ),
-                                          // // );
-                                        },
+                                        ratings: () {},
                                         productDetails: staticVariantId,
                                         // "\u{20B9}${products[index].variants![0].price}",
                                         status: staticVariantId,
@@ -432,11 +324,12 @@ fragment PriceFields on Money {
                                         isLiked: isBookmarked.toString(),
                                         ratingCount: num.parse("5.5"),
                                         productId:
-                                            products[index].id.toString(),
+                                            products[index].entityId.toString(),
                                         productPrice: products[index]
                                             .prices
                                             .basePrice
                                             .value
+                                            .round()
                                             .toString(),
                                         // products[index]
                                         //         .prices
@@ -496,8 +389,9 @@ fragment PriceFields on Money {
                                           //   }
                                           // });
                                         },
-                                        variantId:
-                                            staticVariantId, // Assign static value to variantId
+                                        variantId: productList[index]
+                                                ["variant_id"]
+                                            .toString(), // Assign static value to variantId
                                         stock: staticStock,
                                         // variantId: products[index]
                                         //     .variants[0]
