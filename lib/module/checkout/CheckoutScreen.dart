@@ -90,26 +90,29 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                               10, 5, 10, 5),
                                           child: GestureDetector(
                                               onTap: () {
-                                                ref.refresh(
-                                                    productDetailsProvider(
-                                                  orderList.productId
-                                                      .toString(),
-                                                ));
-                                                Navigator.of(context).push(
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context,
-                                                            animation1,
-                                                            animation2) =>
-                                                        ProductDetailsScreen(
-                                                      uid: orderList.productId
-                                                          .toString(),
+                                                if (AppConfigure.wooCommerce) {
+                                                } else {
+                                                  ref.refresh(
+                                                      productDetailsProvider(
+                                                    orderList.productId
+                                                        .toString(),
+                                                  ));
+                                                  Navigator.of(context).push(
+                                                    PageRouteBuilder(
+                                                      pageBuilder: (context,
+                                                              animation1,
+                                                              animation2) =>
+                                                          ProductDetailsScreen(
+                                                        uid: orderList.productId
+                                                            .toString(),
+                                                      ),
+                                                      transitionDuration:
+                                                          Duration.zero,
+                                                      reverseTransitionDuration:
+                                                          Duration.zero,
                                                     ),
-                                                    transitionDuration:
-                                                        Duration.zero,
-                                                    reverseTransitionDuration:
-                                                        Duration.zero,
-                                                  ),
-                                                );
+                                                  );
+                                                }
                                               },
                                               child: Card(
                                                 margin: const EdgeInsets.only(
