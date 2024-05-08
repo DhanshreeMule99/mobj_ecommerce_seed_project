@@ -79,16 +79,68 @@ class AddressRepository {
     }
     
     else {
-      try {
-        final response =
-            await ApiManager.get("$BASE_URL$uid/${APIConstants.address}.json");
-        if (response.statusCode == APIConstants.successCode) {
-          debugPrint("body is this ${response.body} $uid");
-          final List result = jsonDecode(response.body)['addresses'];
-          if (result.isEmpty) {
+           try {
+  String exceptionString = "";
+ API api = API();
+  final accessToken = await SharedPreferenceManager().getToken();
+      final response = await api.sendRequest.post(
+        "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
+        data: {
+          'query': '''
+          query {
+            customer(customerAccessToken: "$accessToken") {
+              id
+              addresses(first: 5) {
+                edges {
+                  node {
+                    id
+                    firstName
+                    lastName
+                    address1
+                    city
+                    province
+                    country
+                    zip
+                  }
+                }
+              }
+            }
+          }
+          ''',
+        },
+      );
+
+      if (response.statusCode == APIConstants.successCode) {
+         var data = response.data;
+        // final Map<String, dynamic> data = jsonDecode(response.data);
+final List<Map<String, dynamic>> add = data['data']['customer']['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node'] as Map<String, dynamic>).toList();
+
+
+
+//       API api = API();
+//       try {
+// var response;
+//   debugPrint("calling for get address api");
+//             String query = '''
+
+
+// ''';
+//             response = await api.sendRequest.post(
+//               "https://pyvaidyass.myshopify.com/api/2023-10/graphql.json",
+//               data: {
+//                 'query': query,
+//               },
+//             );
+//         if (response.statusCode == APIConstants.successCode) {
+//           debugPrint("body is this ${response.data} $uid");
+
+
+          // final List result = json.decode(response.data)['addresses']['edges'].map<Map<String, dynamic>>((edge) => edge['node']).toList();
+
+          if (add.isEmpty) {
             throw (AppString.noDataError);
           } else {
-            return result.map((e) => DefaultAddressModel.fromJson(e)).toList();
+            return add.map((e) => DefaultAddressModel.fromJson(e)).toList();
           }
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
@@ -231,9 +283,6 @@ class AddressRepository {
         print("error for address is this $error $stackTrace");
         rethrow;
       }
-
-
-      
     }
     
     

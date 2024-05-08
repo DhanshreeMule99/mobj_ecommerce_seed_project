@@ -40,7 +40,7 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = true;
+  static const bigCommerce = false;
 
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
