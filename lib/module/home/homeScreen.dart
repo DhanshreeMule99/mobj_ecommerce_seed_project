@@ -129,6 +129,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  String jwt_token = "";
+  String userid = "";
+  Future<bool> isLogin() async {
+    final jwt = await SharedPreferenceManager().getToken();
+    jwt_token = jwt;
+    final uid = await SharedPreferenceManager().getUserId();
+    final did = await SharedPreferenceManager().getDeviceId();
+    userid = uid;
+
+    if (jwt_token != '' || userid != '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -181,14 +197,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 //     )),
                 IconButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                const CheckoutScreen(),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ));
+                      isLogin().then((value) {
+                        if (value == true) {
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const CheckoutScreen(),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ));
+                        } else {
+                          CommonAlert.showAlertAndNavigateToLogin(context);
+                        }
+                      });
+
                       // (route) => route.isFirst);
                     },
                     icon: Icon(
