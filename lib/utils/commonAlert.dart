@@ -28,8 +28,14 @@ class CommonAlert {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.pleaseLogin),
-          content: Text(AppLocalizations.of(context)!.needLogin),
+          title: Text(
+            AppLocalizations.of(context)!.pleaseLogin,
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          content: Text(
+            AppLocalizations.of(context)!.needLogin,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           actions: <Widget>[
             TextButton(
               child: Text(AppLocalizations.of(context)!.cancel),

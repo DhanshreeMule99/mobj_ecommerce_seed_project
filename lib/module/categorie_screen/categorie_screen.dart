@@ -193,7 +193,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         unselcted_icon_color: AppColors.blackColor,
         selectedPage: 2,
         screen1: const HomeScreen(),
-        screen2: const SearchWidget(),
+        screen2:  SearchWidget(),
         screen3: WishlistScreen(),
         screen4: const ProfileScreen(),
         ref: ref,

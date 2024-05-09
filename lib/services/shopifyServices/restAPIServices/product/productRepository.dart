@@ -23,7 +23,7 @@ class ProductRepository {
             APIConstants.apiURL +
             APIConstants.product;
         final response = await ApiManager.get(
-            'https://ttf.setoo.org/wp-json/wc/v3/products?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
+            'https://ttf.setoo.org/wp-json/wc/v3/products?consumer key=${AppConfigure.consumerkey}&consumer secret=${AppConfigure.consumersecret}&page=$currentPage&per_page=10');
 
         // final response = await ApiManager.get(
         //     'https://api.bigcommerce.com/stores/05vrtqkend/v3/catalog/products?include=images,variants,options');

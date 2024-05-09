@@ -17,8 +17,11 @@ class SearchQueryNotifier extends StateNotifier<String> {
 }
 
 class SearchWidget extends ConsumerStatefulWidget {
-  const SearchWidget({super.key});
-
+  SearchWidget({
+    super.key,
+    this.productlistsearch = const [],
+  });
+  final List<ProductModel> productlistsearch;
   @override
   ConsumerState<SearchWidget> createState() => SearchWidgetState();
 }
@@ -33,7 +36,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
       data: (product) {
         // Filter product based on search query
         if (searchQuery.isNotEmpty) {
-          return product
+          return widget.productlistsearch
               .where((user) =>
                   user.title
                       .toLowerCase()
@@ -43,17 +46,19 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                       .contains(searchQuery.toLowerCase()))
               .toList();
         } else {
-          return product;
+          return widget.productlistsearch;
         }
       },
       loading: () => [], // Return an empty list when data is still loading
       error: (error, stackTrace) =>
           [], // Return an empty list when an error occurs
     );
+
     final appInfoAsyncValue = ref.watch(appInfoProvider);
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
               appBar: AppBar(
+                toolbarHeight: 0,
                 backgroundColor: Theme.of(context).colorScheme.secondary,
 
                 automaticallyImplyLeading: true,
@@ -68,7 +73,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 1,
                 screen1: const HomeScreen(),
-                screen2: const SearchWidget(),
+                screen2: SearchWidget(),
                 screen3: WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
@@ -94,14 +99,20 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                         },
                         autofocus: true,
                         decoration: InputDecoration(
-                            hintText: "Search Here",
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide.none),
-                            contentPadding: EdgeInsets.all(10.sp),
-                            suffixIcon: Icon(
-                              Ionicons.search,
-                              size: 20.sp,
-                            )),
+                          prefixIcon: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(Icons.arrow_back)),
+                          hintText: "Search Here",
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                          contentPadding: EdgeInsets.all(10.sp),
+                          // suffixIcon: Icon(
+                          //   Ionicons.search,
+                          //   size: 20.sp,
+                          // )
+                        ),
                         onChanged: (value) async {
                           ref
                               .read(searchQueryProvider.notifier)

@@ -61,7 +61,7 @@
   "locationPermissionSett": "Please grant location permission in app settings to use this feature.",
   "locationPermissionReq": "Location Permission Required",
   "cancel": "Cancel",
-  "pleaseLogin": "Please Login In",
+  "pleaseLogin": "Login In",
   "needLogin": "You need to Login in to access this feature.",
   "skip": "Skip",
   "done": "Done",

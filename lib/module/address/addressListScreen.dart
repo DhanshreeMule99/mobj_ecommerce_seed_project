@@ -301,7 +301,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           screen1: AddressListScreen(
             bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
-          screen2: const SearchWidget(),
+          screen2:  SearchWidget(),
           screen3: AddressListScreen(
             bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
