@@ -221,7 +221,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 4,
                 screen1: const HomeScreen(),
-                screen2: const SearchWidget(),
+                screen2:  SearchWidget(),
                 screen3: WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,

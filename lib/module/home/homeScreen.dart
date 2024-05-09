@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -179,53 +180,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               surfaceTintColor: Theme.of(context).colorScheme.secondary,
               // elevation: 2,
               actions: [
-                // IconButton(
-                //     onPressed: () {
-                //       Navigator.of(context).push(
-                //         PageRouteBuilder(
-                //           pageBuilder: (context, animation1, animation2) =>
-                //               WishlistScreen(),
-                //           transitionDuration: Duration.zero,
-                //           reverseTransitionDuration: Duration.zero,
-                //         ),
-                //       );
-                //     },
-                //     icon: const Icon(
-                //       Icons.favorite,
-                //     )),
-                // IconButton(
-                //     onPressed: () {
-                //       Navigator.of(context).push(PageRouteBuilder(
-                //           pageBuilder: (context, animation1, animation2) =>
-                //               const SearchWidget()));
-                //     },
-                //     icon: const Icon(
-                //       Icons.search,
-                //     )),
-                IconButton(
-                    onPressed: () {
-                      isLogin().then((value) {
-                        if (value == true) {
-                          Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        const CheckoutScreen(),
-                                transitionDuration: Duration.zero,
-                                reverseTransitionDuration: Duration.zero,
-                              ));
-                        } else {
-                          CommonAlert.showAlertAndNavigateToLogin(context);
-                        }
-                      });
+                Badge(
+                  backgroundColor: Colors.transparent,
+                  // offset: Offset(-2, 2),
+                  // label: Text("5"),
+                  child: IconButton(
+                      onPressed: () {
+                        isLogin().then((value) {
+                          if (value == true) {
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (context, animation1, animation2) =>
+                                          const CheckoutScreen(),
+                                  transitionDuration: Duration.zero,
+                                  reverseTransitionDuration: Duration.zero,
+                                ));
+                          } else {
+                            CommonAlert.showAlertAndNavigateToLogin(context);
+                          }
+                        });
 
-                      // (route) => route.isFirst);
-                    },
-                    icon: Icon(
-                      Ionicons.cart,
-                      size: 25.sp,
-                    )),
+                        // (route) => route.isFirst);
+                      },
+                      icon: Icon(
+                        Ionicons.cart,
+                        size: 25.sp,
+                      )),
+                ),
               ],
               title: Row(
                 children: [
@@ -269,7 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 1,
             screen1: const HomeScreen(),
-            screen2: const SearchWidget(),
+            screen2: SearchWidget(),
             screen3: WishlistScreen(),
             screen4: const ProfileScreen(),
             ref: ref,
@@ -280,6 +263,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ref.refresh(productDataProvider("1"));
             },
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               controller: scrollController,
               child: Column(children: [
                 Padding(
@@ -301,7 +285,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       onTap: () {
                         Navigator.of(context).push(PageRouteBuilder(
                             pageBuilder: (context, animation1, animation2) =>
-                                const SearchWidget()));
+                                SearchWidget(
+                                  productlistsearch: productlist,
+                                )));
                       },
                       decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.searchHere,

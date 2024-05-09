@@ -67,7 +67,7 @@ class AppString {
       "Please grant location permission in app settings to use this feature.";
   static const locationPermissionReq = "Location Permission Required";
   static const cancel = "Cancel";
-  static const pleaseLogin = "Please debugPrint In";
+  static const pleaseLogin = "Log In";
   static const needLogin = "You need to debugPrint in to access this feature.";
   static const skip = "Skip";
   static const done = "Done";
