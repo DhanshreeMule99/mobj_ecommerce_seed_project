@@ -243,8 +243,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
             // ),
             AppBar(
           elevation: 2,
-          title: const Text(
-            AppString.addressList,
+          title: Text(
+            AppLocalizations.of(context)!.addressAppBar,
           ),
           // actions: [
           //   // Conditionally show the add icon button based on the length of the address list

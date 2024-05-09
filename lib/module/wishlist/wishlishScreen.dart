@@ -163,7 +163,7 @@ fragment PriceFields on Money {
             backgroundColor: Theme.of(context).colorScheme.secondary,
             automaticallyImplyLeading: false,
             title: Text(
-              "Wishlist",
+              AppLocalizations.of(context)!.wishlist,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
           ),
@@ -190,7 +190,7 @@ fragment PriceFields on Money {
                             ? loader
                                 ? const Center(
                                     child: CircularProgressIndicator())
-                                : const Center(child: Text("No Products"))
+                                :  Center(child: Text(AppLocalizations.of(context)!.noProduct,))
                             : const Center(child: Text("Paid Feature"))
                         : Expanded(
                             child: GridView.builder(

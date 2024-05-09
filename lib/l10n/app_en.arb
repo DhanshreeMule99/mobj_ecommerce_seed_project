@@ -225,5 +225,12 @@
   "selectLanguage": "Select Language",
   "apply": "Apply",
   "repeatOrder": "Repeat Order",
-  "grantPermission": "Please grant location permission in app settings to use this feature."
+  "grantPermission": "Please grant location permission in app settings to use this feature.",
+  "categories": "Categories",
+  "searchHere": "Search Here",
+  "viewAll": "View All",
+  "wishlist": "Wishlist",
+  "noProduct": "No Product",
+  "noOrder": "No Order",
+  "addressAppBar": "Address"
 }

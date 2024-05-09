@@ -97,7 +97,6 @@ class AppString {
   static const oldPass = "Old Password";
   static const validOTP = "Please enter valid OTP";
   static const resendOTP = "Resend OTP";
-
   static const resetPass = "Reset password";
   static const help = "Help";
   static const themeChange = "Theme change";
@@ -237,4 +236,7 @@ class AppString {
   static const locationReq = 'Location Permission Required';
   static const grantPermission =
       "Please grant location permission in app settings to use this feature.";
+  static const searchHere = "Search Here";
+  static const categories = "Categories";
+  static const viewAll = "View All";
 }

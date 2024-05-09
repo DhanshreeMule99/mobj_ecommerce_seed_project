@@ -178,7 +178,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                 ),
                 error == AppString.noDataError
                     //  ? Text(AppLocalizations.of(context)!.emptyorders,
-                    ? Text("No Orders",
+                    ? Text(AppLocalizations.of(context)!.noOrder,
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontWeight: FontWeight.bold))

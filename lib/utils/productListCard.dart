@@ -450,7 +450,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                 borderRadius:
                                                     BorderRadius.circular(10))),
                                         child: Text(
-                                          "Add to Cart",
+                                          AppLocalizations.of(context)!.addToCart,
                                           style: Theme.of(context)
                                               .textTheme
                                               .displayLarge,

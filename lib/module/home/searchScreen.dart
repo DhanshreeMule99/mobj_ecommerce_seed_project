@@ -94,7 +94,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                         },
                         autofocus: true,
                         decoration: InputDecoration(
-                            hintText: "Search Here",
+                            hintText: AppLocalizations.of(context)!.searchHere,
                             border: const OutlineInputBorder(
                                 borderSide: BorderSide.none),
                             contentPadding: EdgeInsets.all(10.sp),

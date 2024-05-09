@@ -304,7 +304,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 const SearchWidget()));
                       },
                       decoration: InputDecoration(
-                          hintText: "Search Here",
+                          labelText: AppLocalizations.of(context)!.searchHere,
                           border: const OutlineInputBorder(
                               borderSide: BorderSide.none),
                           contentPadding: EdgeInsets.all(10.sp),
@@ -321,8 +321,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Categories",
+                      Text(AppLocalizations.of(context)!.categories,
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       InkWell(
@@ -338,7 +337,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                               (route) => route.isFirst);
                         },
-                        child: Text("View All",
+                        child: Text(AppLocalizations.of(context)!.viewAll,
                             style: Theme.of(context).textTheme.displayMedium),
                       )
                     ],

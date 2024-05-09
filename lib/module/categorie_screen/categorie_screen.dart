@@ -72,7 +72,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
           automaticallyImplyLeading: false,
           backgroundColor: Theme.of(context).colorScheme.secondary,
           title: Text(
-            "Categories",
+            AppLocalizations.of(context)!.categories,
             style: Theme.of(context).textTheme.headlineLarge,
           )),
       body: SingleChildScrollView(
