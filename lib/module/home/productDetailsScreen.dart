@@ -1006,7 +1006,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 .then((value) async {
                               if (value == AppString.success) {
                                 Navigator.of(context).pop();
-                                ref.refresh(productDataProvider);
+                                ref.refresh(productDataProvider("1"));
                                 ref.refresh(cartDetailsDataProvider);
                                 ref.refresh(productDetailsProvider(widget.uid));
                                 Fluttertoast.showToast(
@@ -1116,7 +1116,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               return RefreshIndicator(
                 // Wrap the list in a RefreshIndicator widget
                 onRefresh: () async {
-                  ref.refresh(productDataProvider);
+                  ref.refresh(productDataProvider("1"));
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -1277,7 +1277,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               return RefreshIndicator(
                 // Wrap the list in a RefreshIndicator widget
                 onRefresh: () async {
-                  ref.refresh(productDataProvider);
+                  ref.refresh(productDataProvider("1"));
                 },
                 child: product.reviews.isNotEmpty
                     ? Column(
@@ -1686,7 +1686,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
               return RefreshIndicator(
                 // Wrap the list in a RefreshIndicator widget
                 onRefresh: () async {
-                  ref.refresh(productDataProvider);
+                  ref.refresh(productDataProvider("1"));
                 },
                 child: product.reviews.isNotEmpty
                     ? Column(

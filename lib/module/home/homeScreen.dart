@@ -32,7 +32,11 @@ final bookmarkedProductProvider =
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final LocationMobj _locationService = LocationMobj();
   String address = "";
-
+  final scrollController = ScrollController();
+  bool isLoading = false;
+  bool isAllFetched = false;
+  List<ProductModel> productlist = [];
+  int currentPage = 1;
   void initDynamicLinks() async {
     // Check if you received the link via `getInitialLink` first
     final PendingDynamicLinkData? initialLink =
@@ -149,6 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
+
     initDynamicLinks();
     getWishlistproduct();
     fetchCategories();
@@ -158,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     //TODO use read insted of read and dispose the provider
-    final product = ref.watch(productDataProvider);
+    final product = ref.watch(productDataProvider('1'));
 
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final selectedChipIndex = ref.watch(selectedChipIndexProvider);
@@ -166,6 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.watch(productDataByCollectionProvider(selectedCategory.toString()));
     final appInfoAsyncValue = ref.watch(appInfoProvider);
     final bookmarkedProduct = ref.watch(bookmarkedProductProvider);
+
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
           appBar: AppBar(
@@ -271,9 +277,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           body: RefreshIndicator(
             // Wrap the list in a RefreshIndicator widget
             onRefresh: () async {
-              ref.refresh(productDataProvider);
+              ref.refresh(productDataProvider("1"));
             },
             child: SingleChildScrollView(
+              controller: scrollController,
               child: Column(children: [
                 Padding(
                   padding:
@@ -498,10 +505,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         )),
                 product.when(
                   data: (product) {
-                    List<ProductModel> productlist =
-                        product.map((e) => e).toList();
-                    final post = product;
+                    scrollController.addListener(() async {
+                      double maxScroll =
+                          scrollController.position.maxScrollExtent;
+                      double currentScroll = scrollController.position.pixels;
+                      double delta = MediaQuery.of(context).size.width * 0.50;
+                      if (!isLoading &&
+                          maxScroll - currentScroll <= delta &&
+                          !isAllFetched) {
+                        // Set isLoading to true to prevent duplicate calls
+                        isLoading = true;
+                        currentPage++;
+                        List<ProductModel> local = await ProductRepository()
+                            .getProducts(currentPage.toString());
+                        if (local.isNotEmpty) {
+                          setState(() {
+                            productlist = [...productlist, ...local];
+                          });
 
+                          log("this is the end ${productlist.length} ${currentPage} ${local.last.title}");
+                          Future.delayed(Duration(seconds: 1), () {
+                            isLoading = false;
+                          });
+                        } else {
+                          isAllFetched = true;
+                          Fluttertoast.showToast(msg: "All products fetched");
+                        }
+                      }
+                    });
+                    if (currentPage == 1) {
+                      productlist = product.map((e) => e).toList();
+                    }
+
+                    final post = product;
                     return GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -816,7 +852,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           backgroundColor: AppColors.buttonColor,
                         ),
                         onPressed: () {
-                          ref.refresh(productDataProvider);
+                          ref.refresh(productDataProvider("1"));
                           // Navigator.of(context).push(
                           //   PageRouteBuilder(
                           //     pageBuilder:
@@ -841,7 +877,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                   loading: () => const SkeletonLoaderWidget(),
-                )
+                ),
+                // isAllFetched
+                //     ? SizedBox()
+                //     : Padding(
+                //         padding: const EdgeInsets.all(8.0),
+                //         child: Center(
+                //           child: CircularProgressIndicator(),
+                //         ),
+                //       ),
               ]),
             ),
           )),
@@ -862,7 +906,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     backgroundColor: AppColors.buttonColor,
                   ),
                   onPressed: () {
-                    ref.refresh(productDataProvider);
+                    ref.refresh(productDataProvider("1"));
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,

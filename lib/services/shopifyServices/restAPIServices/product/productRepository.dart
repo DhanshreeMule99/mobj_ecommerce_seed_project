@@ -14,7 +14,7 @@ class ProductRepository {
   List<ProductModel> empty = [];
   API api = API();
 
-  Future<List<ProductModel>> getProducts() async {
+  Future<List<ProductModel>> getProducts(String currentPage) async {
     if (AppConfigure.wooCommerce) {
       try {
         log('calling api by wooCommerce');
@@ -55,6 +55,12 @@ class ProductRepository {
             APIConstants.apiForAdminURL +
             APIConstants.apiURL +
             APIConstants.product;
+
+        if (AppConfigure.bigCommerce) {
+          productUrl = productUrl + "&page=$currentPage&limit=10";
+        }
+        log(productUrl);
+
         final response = await ApiManager.get(productUrl);
 
         // final response = await ApiManager.get(

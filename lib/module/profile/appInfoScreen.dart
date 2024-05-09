@@ -38,7 +38,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
         ),
         body: SingleChildScrollView(
             child: Center(
-          child: ref.watch(productDataProvider).when(
+          child: ref.watch(productDataProvider('1')).when(
                 data: (profile) {
                   return Padding(
                     padding: const EdgeInsets.all(10),

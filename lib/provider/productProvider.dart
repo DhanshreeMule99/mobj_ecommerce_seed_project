@@ -1,8 +1,8 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-
-final productDataProvider = FutureProvider<List<ProductModel>>((ref) async {
-  return ref.watch(productsProvider).getProducts();
+final productDataProvider =
+    FutureProvider.family<List<ProductModel>, String>((ref, currentPage) async {
+  return ref.watch(productsProvider).getProducts(currentPage);
 });
 
 final orderDataProvider = FutureProvider<List<OrderModel>>((ref) async {

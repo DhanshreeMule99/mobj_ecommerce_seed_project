@@ -17,7 +17,7 @@ class PrivacyScreen extends ConsumerStatefulWidget {
 class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(productDataProvider);
+    final user = ref.watch(productDataProvider('1'));
     final appInfoAsyncValue = ref.watch(appInfoProvider);
     List<AppliedFilterModel> applied = [];
 
@@ -44,7 +44,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                   data: (user) {
                     return SingleChildScrollView(
                         child: Center(
-                      child: ref.watch(productDataProvider).when(
+                      child: ref.watch(productDataProvider('1')).when(
                             data: (profile) {
                               return Padding(
                                 padding: const EdgeInsets.all(10),

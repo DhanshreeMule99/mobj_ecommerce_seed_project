@@ -30,7 +30,7 @@ class HelpCenterScreen extends ConsumerWidget {
                 // Disable the back button
                 return false;
               },
-              child: ref.watch(productDataProvider).when(
+              child: ref.watch(productDataProvider('1')).when(
                 data: (profile) {
                   return appInfoAsyncValue.when(
                       data: (appInfo) => Tawk(

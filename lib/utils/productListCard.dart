@@ -306,7 +306,8 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                       AppString.success) {
                                                     Navigator.of(context).pop();
                                                     widget.ref.refresh(
-                                                        productDataProvider);
+                                                        productDataProvider(
+                                                            '1'));
                                                     widget.ref.refresh(
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
@@ -352,7 +353,8 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                       AppString.success) {
                                                     Navigator.of(context).pop();
                                                     widget.ref.refresh(
-                                                        productDataProvider);
+                                                        productDataProvider(
+                                                            '1'));
                                                     widget.ref.refresh(
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
@@ -396,7 +398,8 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                       AppString.success) {
                                                     Navigator.of(context).pop();
                                                     widget.ref.refresh(
-                                                        productDataProvider);
+                                                        productDataProvider(
+                                                            '1'));
                                                     widget.ref.refresh(
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(

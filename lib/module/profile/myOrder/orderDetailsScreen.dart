@@ -379,7 +379,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                 .then((value) async {
                               if (value != AppString.oops) {
                                 Navigator.of(context).pop();
-                                ref.refresh(productDataProvider);
+                                ref.refresh(productDataProvider("1"));
                                 ref.refresh(cartDetailsDataProvider);
                                 Navigator.push(
                                     context,

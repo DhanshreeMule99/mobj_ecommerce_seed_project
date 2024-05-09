@@ -150,7 +150,7 @@ fragment PriceFields on Money {
   Widget build(BuildContext context) {
     //TODO use read insted of read and dispose the provider
 
-    final wishlist = ref.watch(productDataProvider);
+    final wishlist = ref.watch(productDataProvider('1'));
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final selectedChipIndex = ref.watch(selectedChipIndexProvider);
     final productByCollection =
@@ -433,7 +433,7 @@ fragment PriceFields on Money {
                     backgroundColor: AppColors.buttonColor,
                   ),
                   onPressed: () {
-                    ref.refresh(productDataProvider);
+                    ref.refresh(productDataProvider("1"));
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,

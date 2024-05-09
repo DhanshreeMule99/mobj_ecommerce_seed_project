@@ -27,7 +27,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final searchQuery = ref.watch(searchQueryProvider);
-    final userModel = ref.watch(productDataProvider);
+    final userModel = ref.watch(productDataProvider('1'));
 
     List<ProductModel> product = userModel.when(
       data: (product) {

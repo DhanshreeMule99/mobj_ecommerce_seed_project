@@ -98,7 +98,7 @@
 //                   return RefreshIndicator(
 //                     // Wrap the list in a RefreshIndicator widget
 //                     onRefresh: () async {
-//                       ref.refresh(productDataProvider);
+//                       ref.refresh(productDataProvider("1"));
 //                     },
 //                     child: const Column(
 //                         mainAxisAlignment: MainAxisAlignment.center,
@@ -404,7 +404,7 @@
 //                             primary: AppColors.buttonColor,
 //                           ),
 //                           onPressed: () {
-//                             ref.refresh(productDataProvider);
+//                             ref.refresh(productDataProvider("1"));
 //                           },
 //                           child: const Text(
 //                             AppString.refresh,

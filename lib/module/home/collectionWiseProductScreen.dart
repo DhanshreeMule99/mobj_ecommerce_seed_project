@@ -698,7 +698,7 @@ fragment PriceFields on Money {
                                 backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
-                                ref.refresh(productDataProvider);
+                                ref.refresh(productDataProvider("1"));
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
@@ -718,7 +718,7 @@ fragment PriceFields on Money {
                           return RefreshIndicator(
                               // Wrap the list in a RefreshIndicator widget
                               onRefresh: () async {
-                                ref.refresh(productDataProvider);
+                                ref.refresh(productDataProvider("1"));
                               },
                               child: products.isNotEmpty
                                   ? ListView.builder(
@@ -853,7 +853,7 @@ fragment PriceFields on Money {
                                 backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
-                                ref.refresh(productDataProvider);
+                                ref.refresh(productDataProvider("1"));
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
@@ -891,7 +891,7 @@ fragment PriceFields on Money {
                     backgroundColor: AppColors.buttonColor,
                   ),
                   onPressed: () {
-                    ref.refresh(productDataProvider);
+                    ref.refresh(productDataProvider("1"));
                   },
                   child: Text(
                     AppLocalizations.of(context)!.refresh,
