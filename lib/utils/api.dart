@@ -15,6 +15,7 @@ class API {
       _dio.options.headers["X-auth-Token"] =
           AppConfigure.bigCommerceAccessToken;
       _dio.options.headers["Content-Type"] = "application/json";
+      _dio.options.headers["Accept"] = "application/json";
       _dio.options.headers["Authorization"] =
           "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjaWQiOjEsImNvcnMiOltdLCJlYXQiOjE4ODU2MzUxNzYsImlhdCI6MTcxNTA2MjY5NywiaXNzIjoiQkMiLCJzaWQiOjEwMDMxNzY2NzAsInN1YiI6ImVlNnhnaGJ4cGhsOXo2YWJ0ZnBianV5cHZleXc4dmEiLCJzdWJfdHlwZSI6MiwidG9rZW5fdHlwZSI6MX0.ZBAbkfHsOe4AXSBTIaCkLZX5wDzqdWlog7qn7VlRB38lcRl0nJfX0DfNV0j1G82Lk1urzG64FAgZsdmhQYBOxw";
     } else if (AppConfigure.wooCommerce) {
