@@ -105,14 +105,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           fontSize: 14.sp,
                         ),
                         bodyMedium: GoogleFonts.inter(
-                            fontWeight: FontWeight.w500,
-                            color: ConstColors.black,
-                            fontSize: 14.sp,
-                            ),
+                          fontWeight: FontWeight.w500,
+                          color: ConstColors.purple,
+                          fontSize: 12.sp,
+                        ),
                         bodySmall: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           color: ConstColors.darkGrey,
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                         ),
                         titleLarge: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
@@ -125,9 +125,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           fontSize: 12.sp,
                         ),
                         titleSmall: GoogleFonts.inter(
-                          fontWeight: FontWeight.normal,
-                          color: ConstColors.darkGrey,
-                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w700,
+                          color: ConstColors.black,
+                          fontSize: 14.sp,
                         ),
                         displayLarge: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
@@ -142,8 +142,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             decorationColor: ConstColors.purple),
                         displaySmall: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
-                          fontSize: 13.sp,
-                          color: ConstColors.purple,
+                          fontSize: 12.sp,
+                          color: ConstColors.backgroundColor,
                         ),
                       )
                       // brightness: Brightness.light,

@@ -6,7 +6,7 @@ class AppColors {
   static const Color tileColor = Color(0xFFCFEBFF);
   static const Color textColor = Color(0xFFD9D9D9);
   static const Color likeColor = Color(0xFFD22F27);
-  static const buttonColor = Color(0xFF1694EF);
+  static const buttonColor = Color(0xFF6F47EB);
   static const greyShade = Color(0xFFEEEDED);
   static const startColor = Color(0xFFFFD233);
   static const Color red = Colors.red;

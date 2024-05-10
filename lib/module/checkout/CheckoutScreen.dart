@@ -2,6 +2,9 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -38,9 +41,21 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         data: (appInfo) {
           return Scaffold(
             appBar: AppBar(
-                elevation: 1,
+                centerTitle: true,
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.chevron_left_rounded,
+                      size: 25.sp,
+                    )),
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                surfaceTintColor: Theme.of(context).colorScheme.secondary,
                 title: Text(
                   AppLocalizations.of(context)!.myBag,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 )),
             bottomNavigationBar: MobjBottombar(
               bgcolor: AppColors.whiteColor,
@@ -48,7 +63,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               unselcted_icon_color: AppColors.blackColor,
               selectedPage: 1,
               screen1: const HomeScreen(),
-              screen2:  SearchWidget(),
+              screen2: SearchWidget(),
               screen3: WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
@@ -115,239 +130,515 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                 }
                                               },
                                               child: Card(
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 0),
-                                                elevation: 2,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  leading: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 5),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: AppConfigure
-                                                                  .bigCommerce ||
-                                                              AppConfigure
-                                                                  .wooCommerce
-                                                          ? orderList
-                                                              .adminGraphqlApiId
-                                                          : (ref.watch(productImageDataProvider(
-                                                                      orderList
-                                                                          .productId
-                                                                          .toString())))
-                                                                  .when(
-                                                                data: (images) {
-                                                                  if (images
-                                                                      .isNotEmpty) {
-                                                                    // Find the image with the specified variant ID
-                                                                    final selectedImage =
-                                                                        images
-                                                                            .firstWhere(
-                                                                      (image) => image
-                                                                          .variantIds
-                                                                          .contains(
-                                                                              orderList.variantId),
-                                                                      orElse: () =>
-                                                                          ProductImage(
-                                                                        id: 0,
-                                                                        // Provide a default ID
-                                                                        alt:
-                                                                            "Default",
-                                                                        position:
-                                                                            0,
-                                                                        productId:
-                                                                            0,
-                                                                        createdAt:
-                                                                            DateTime.now().toString(),
-                                                                        // Provide a default creation time
-                                                                        updatedAt:
-                                                                            DateTime.now().toString(),
-                                                                        // Provide a default update time
-                                                                        adminGraphqlApiId:
-                                                                            "gid://shopify/ProductImage/0",
-                                                                        width:
-                                                                            0,
-                                                                        height:
-                                                                            0,
-                                                                        src: images[0]
-                                                                            .src,
-                                                                        // Provide a default image URL
-                                                                        variantIds: [],
-                                                                      ),
-                                                                    );
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary,
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 0),
+                                                  elevation: 2,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  child:
+                                                      //  index == 0
+                                                      //     ?
+                                                      Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          child: SizedBox(
+                                                            width: 90.sp,
+                                                            height: 90.sp,
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: AppConfigure
+                                                                          .bigCommerce ||
+                                                                      AppConfigure
+                                                                          .wooCommerce
+                                                                  ? orderList
+                                                                      .adminGraphqlApiId
+                                                                  : (ref.watch(productImageDataProvider(orderList
+                                                                              .productId
+                                                                              .toString())))
+                                                                          .when(
+                                                                        data:
+                                                                            (images) {
+                                                                          if (images
+                                                                              .isNotEmpty) {
+                                                                            // Find the image with the specified variant ID
+                                                                            final selectedImage =
+                                                                                images.firstWhere(
+                                                                              (image) => image.variantIds.contains(orderList.variantId),
+                                                                              orElse: () => ProductImage(
+                                                                                id: 0,
+                                                                                // Provide a default ID
+                                                                                alt: "Default",
+                                                                                position: 0,
+                                                                                productId: 0,
+                                                                                createdAt: DateTime.now().toString(),
+                                                                                // Provide a default creation time
+                                                                                updatedAt: DateTime.now().toString(),
+                                                                                // Provide a default update time
+                                                                                adminGraphqlApiId: "gid://shopify/ProductImage/0",
+                                                                                width: 0,
+                                                                                height: 0,
+                                                                                src: images[0].src,
+                                                                                // Provide a default image URL
+                                                                                variantIds: [],
+                                                                              ),
+                                                                            );
 
-                                                                    return selectedImage
-                                                                        .src;
-                                                                  }
-                                                                  return DefaultValues
-                                                                      .defaultImagesSrc;
-                                                                },
-                                                                loading: () =>
-                                                                    DefaultValues
-                                                                        .defaultImagesSrc,
-                                                                error: (_,
-                                                                        __) =>
-                                                                    DefaultValues
-                                                                        .defaultImagesSrc,
-                                                              ) ??
-                                                              DefaultValues
-                                                                  .defaultImagesSrc,
-                                                      placeholder:
-                                                          (context, url) =>
-                                                              Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        color:
-                                                            AppColors.greyShade,
+                                                                            return selectedImage.src;
+                                                                          }
+                                                                          return DefaultValues
+                                                                              .defaultImagesSrc;
+                                                                        },
+                                                                        loading:
+                                                                            () =>
+                                                                                DefaultValues.defaultImagesSrc,
+                                                                        error: (_,
+                                                                                __) =>
+                                                                            DefaultValues.defaultImagesSrc,
+                                                                      ) ??
+                                                                      DefaultValues
+                                                                          .defaultImagesSrc,
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      Container(
+                                                                width: 90.sp,
+                                                                height: 90.sp,
+                                                                color: AppColors
+                                                                    .greyShade,
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                              width: 90.sp,
+                                                              height: 90.sp,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.error),
-                                                      width: 50,
-                                                      height: 50,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
-                                                  title: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 10, left: 0),
-                                                    child: Text(orderList.name),
-                                                  ),
-                                                  subtitle: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 5, left: 0),
-                                                      child: Column(
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Text(
-                                                            '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(orderList.price.toString()) * orderList.quantity).toStringAsFixed(2)}',
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  trailing: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                              color: AppColors
-                                                                  .blackColor,
-                                                              width: 1.5),
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  AppDimension
-                                                                      .buttonRadius),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            IconButton(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              // Remove padding
-                                                              icon: const Icon(
-                                                                Icons.remove,
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              SizedBox(
+                                                                width: 180.w,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8),
+                                                                  child: Text(
+                                                                    orderList
+                                                                        .name,
+                                                                    maxLines: 2,
+                                                                    style: Theme.of(
+                                                                            context)
+                                                                        .textTheme
+                                                                        .headlineLarge,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ),
                                                               ),
-                                                              // Adjust icon size
-                                                              onPressed: AppConfigure
-                                                                      .bigCommerce
-                                                                  ? () async {
-                                                                      if (orderList
-                                                                              .quantity >
-                                                                          1) {
-                                                                        API api =
-                                                                            API();
-                                                                        try {
-                                                                          String
-                                                                              draftId =
-                                                                              await SharedPreferenceManager().getDraftId();
-                                                                          CommonAlert.show_loading_alert(
-                                                                              context);
+                                                              SizedBox(
+                                                                width: 20.w,
+                                                              ),
+                                                              IconButton(
+                                                                icon: Icon(
+                                                                  Icons.delete,
+                                                                  size: 20.sp,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSecondaryContainer,
+                                                                ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  debugPrint(
+                                                                      'id is this ${orderList.id}');
+                                                                  String
+                                                                      draftId =
+                                                                      await SharedPreferenceManager()
+                                                                          .getDraftId();
+                                                                  CommonAlert
+                                                                      .show_loading_alert(
+                                                                          context);
+                                                                  if (productlist
+                                                                          .lineItems
+                                                                          .length ==
+                                                                      1) {
+                                                                    if (AppConfigure
+                                                                        .wooCommerce) {
+                                                                      await SharedPreferenceManager()
+                                                                          .setCartToken(
+                                                                              "");
+                                                                    } else {
+                                                                      await SharedPreferenceManager()
+                                                                          .setDraftId(
+                                                                              "");
+                                                                    }
 
-                                                                          orderList
-                                                                              .quantity--;
-                                                                          setState(
-                                                                              () {});
-                                                                          debugPrint(
-                                                                              'add maps');
+                                                                    ref.refresh(
+                                                                        cartDetailsDataProvider);
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  } else {
+                                                                    productlist
+                                                                        .lineItems
+                                                                        .removeAt(
+                                                                            index);
+                                                                    setState(
+                                                                        () {});
+                                                                    final lineItemsList =
+                                                                        productlist
+                                                                            .lineItems;
+                                                                    var reqBody =
+                                                                        [];
+                                                                    for (int i =
+                                                                            0;
+                                                                        i <=
+                                                                            productlist.lineItems.length -
+                                                                                1;
+                                                                        i++) {
+                                                                      reqBody
+                                                                          .add({
+                                                                        "variant_id":
+                                                                            lineItemsList[i].variantId,
+                                                                        "quantity":
+                                                                            lineItemsList[i].quantity
+                                                                      });
+                                                                    }
 
-                                                                          debugPrint(
-                                                                              'calling put api ');
-                                                                          var response = await api.sendRequest.put(
-                                                                              '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                              data: {
-                                                                                "line_item": {
-                                                                                  "id": orderList.id,
-                                                                                  "variant_id": orderList.variantId,
-                                                                                  "product_id": orderList.productId,
-                                                                                  "quantity": orderList.quantity,
-                                                                                }
-                                                                              },
-                                                                              options: Options(headers: {
-                                                                                "X-auth-Token": AppConfigure.bigCommerceAccessToken,
-                                                                                'Content-Type': 'application/json',
-                                                                              }));
+                                                                    if (AppConfigure
+                                                                        .bigCommerce) {
+                                                                      var response =
+                                                                          await ApiManager.delete(
+                                                                              '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
 
-                                                                          // Response
-                                                                          //     response =
-                                                                          //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                          //         body);
+                                                                      ref.refresh(
+                                                                          cartDetailsDataProvider);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      debugPrint(
+                                                                          "cart item deleted successfully ${response.statusCode}");
+                                                                    } else if (AppConfigure
+                                                                        .wooCommerce) {
+                                                                      String
+                                                                          email =
+                                                                          await SharedPreferenceManager()
+                                                                              .getCartToken();
+                                                                      var response =
+                                                                          await ApiManager.delete(
+                                                                              '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
 
+                                                                      ref.refresh(
+                                                                          cartDetailsDataProvider);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      debugPrint(
+                                                                          "cart item deleted successfully ${response.statusCode}");
+                                                                    } else {
+                                                                      ProductRepository()
+                                                                          .updateCart(
+                                                                              reqBody)
+                                                                          .then(
+                                                                              (subjectFromServer) {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+
+                                                                        if (subjectFromServer ==
+                                                                            AppString.success) {
                                                                           ref.refresh(
                                                                               cartDetailsDataProvider);
-
-                                                                          debugPrint(
-                                                                              'cart updated successfully ${response.statusCode}');
-                                                                        } on Exception catch (e) {
-                                                                          debugPrint(
-                                                                              e.toString());
-                                                                        } finally {
-                                                                          Navigator.of(context)
-                                                                              .pop();
                                                                         }
-                                                                      }
+                                                                      });
                                                                     }
-                                                                  : AppConfigure
-                                                                          .wooCommerce
-                                                                      ? () async {
-                                                                          if (orderList.quantity >
-                                                                              1) {
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              horizontal: 8.0,
+                                                            ),
+                                                            child: Text(
+                                                              '\u{20B9}${(double.parse(orderList.price.toString()) * orderList.quantity).toStringAsFixed(2)}',
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .headlineMedium,
+                                                            ),
+                                                          ),
+                                                          // SizedBox(
+                                                          //   height: orderList
+                                                          //               .name
+                                                          //               .length >
+                                                          //           22
+                                                          //       ? 5.h
+                                                          //       : 12.h,
+                                                          // ),
+                                                          SizedBox(
+                                                            width: 232.w,
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                Container(
+                                                                  width: 32.sp,
+                                                                  height: 32.sp,
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                          vertical:
+                                                                              5,
+                                                                          horizontal:
+                                                                              15),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      border: Border.all(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .onSecondaryContainer,
+                                                                          width:
+                                                                              2)),
+                                                                  child:
+                                                                      IconButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    // Remove padding
+                                                                    icon:
+                                                                        const Icon(
+                                                                      FontAwesomeIcons
+                                                                          .minus,
+                                                                    ),
+                                                                    // Adjust icon size
+                                                                    onPressed: AppConfigure
+                                                                            .bigCommerce
+                                                                        ? () async {
+                                                                            if (orderList.quantity >
+                                                                                1) {
+                                                                              API api = API();
+                                                                              try {
+                                                                                String draftId = await SharedPreferenceManager().getDraftId();
+                                                                                CommonAlert.show_loading_alert(context);
+
+                                                                                orderList.quantity--;
+                                                                                setState(() {});
+                                                                                debugPrint('add maps');
+
+                                                                                debugPrint('calling put api ');
+                                                                                var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                                    data: {
+                                                                                      "line_item": {
+                                                                                        "id": orderList.id,
+                                                                                        "variant_id": orderList.variantId,
+                                                                                        "product_id": orderList.productId,
+                                                                                        "quantity": orderList.quantity,
+                                                                                      }
+                                                                                    },
+                                                                                    options: Options(headers: {
+                                                                                      "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                                                      'Content-Type': 'application/json',
+                                                                                    }));
+
+                                                                                // Response
+                                                                                //     response =
+                                                                                //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                                //         body);
+
+                                                                                ref.refresh(cartDetailsDataProvider);
+
+                                                                                debugPrint('cart updated successfully ${response.statusCode}');
+                                                                              } on Exception catch (e) {
+                                                                                debugPrint(e.toString());
+                                                                              } finally {
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        : AppConfigure.wooCommerce
+                                                                            ? () async {
+                                                                                if (orderList.quantity > 1) {
+                                                                                  API api = API();
+                                                                                  try {
+                                                                                    String draftId = await SharedPreferenceManager().getDraftId();
+                                                                                    CommonAlert.show_loading_alert(context);
+
+                                                                                    orderList.quantity--;
+                                                                                    setState(() {});
+                                                                                    debugPrint('add maps');
+
+                                                                                    debugPrint('calling put api ');
+                                                                                    String cartToken = await SharedPreferenceManager().getCartToken();
+
+                                                                                    var response = await api.sendRequest.post(
+                                                                                      'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                                                      data: {
+                                                                                        "quantity": orderList.quantity.toString()
+                                                                                      },
+                                                                                    );
+
+                                                                                    ref.refresh(cartDetailsDataProvider);
+
+                                                                                    debugPrint('cart updated successfully ${response.statusCode}');
+                                                                                  } on Exception catch (e) {
+                                                                                    debugPrint(e.toString());
+                                                                                  } finally {
+                                                                                    Navigator.of(context).pop();
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            : () {
+                                                                                if (orderList.quantity > 1) {
+                                                                                  setState(
+                                                                                    () {
+                                                                                      orderList.quantity--;
+                                                                                      final lineItemsList = productlist.lineItems;
+                                                                                      var reqBody = [];
+                                                                                      for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                        reqBody.add({
+                                                                                          "variant_id": lineItemsList[i].variantId,
+                                                                                          "quantity": lineItemsList[i].quantity
+                                                                                        });
+                                                                                      }
+
+                                                                                      CommonAlert.show_loading_alert(context);
+                                                                                      // getProductsByVariantId
+
+                                                                                      ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                                        Navigator.of(context).pop();
+
+                                                                                        if (subjectFromServer == AppString.success) {
+                                                                                          ref.refresh(cartDetailsDataProvider);
+                                                                                        }
+                                                                                      });
+                                                                                    },
+                                                                                  );
+                                                                                }
+                                                                              },
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  '${orderList.quantity}',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .headlineLarge,
+                                                                ),
+                                                                Container(
+                                                                  width: 32.sp,
+                                                                  height: 32.sp,
+                                                                  margin: EdgeInsets
+                                                                      .symmetric(
+                                                                          vertical:
+                                                                              5,
+                                                                          horizontal:
+                                                                              15),
+                                                                  decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      border: Border.all(
+                                                                          color: Theme.of(context)
+                                                                              .colorScheme
+                                                                              .primary,
+                                                                          width:
+                                                                              2)),
+                                                                  child:
+                                                                      IconButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    // Remove padding
+
+                                                                    icon: Icon(
+                                                                      FontAwesomeIcons
+                                                                          .plus,
+                                                                      color: Theme.of(
+                                                                              context)
+                                                                          .colorScheme
+                                                                          .primary,
+                                                                    ),
+                                                                    onPressed: AppConfigure
+                                                                            .bigCommerce
+                                                                        ? () async {
                                                                             API api =
                                                                                 API();
                                                                             try {
                                                                               String draftId = await SharedPreferenceManager().getDraftId();
                                                                               CommonAlert.show_loading_alert(context);
 
-                                                                              orderList.quantity--;
+                                                                              orderList.quantity++;
                                                                               setState(() {});
                                                                               debugPrint('add maps');
 
                                                                               debugPrint('calling put api ');
-                                                                              String cartToken = await SharedPreferenceManager().getCartToken();
+                                                                              var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                                  data: {
+                                                                                    "line_item": {
+                                                                                      "id": orderList.id,
+                                                                                      "variant_id": orderList.variantId,
+                                                                                      "product_id": orderList.productId,
+                                                                                      "quantity": orderList.quantity,
+                                                                                    }
+                                                                                  },
+                                                                                  options: Options(headers: {
+                                                                                    "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                                                    'Content-Type': 'application/json',
+                                                                                  }));
 
-                                                                              var response = await api.sendRequest.post(
-                                                                                'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
-                                                                                data: {
-                                                                                  "quantity": orderList.quantity.toString()
-                                                                                },
-                                                                              );
+                                                                              // Response
+                                                                              //     response =
+                                                                              //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                              //         body);
 
                                                                               ref.refresh(cartDetailsDataProvider);
 
@@ -358,300 +649,575 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               Navigator.of(context).pop();
                                                                             }
                                                                           }
-                                                                        }
-                                                                      : () {
-                                                                          if (orderList.quantity >
-                                                                              1) {
-                                                                            setState(
-                                                                              () {
-                                                                                orderList.quantity--;
-                                                                                final lineItemsList = productlist.lineItems;
-                                                                                var reqBody = [];
-                                                                                for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
-                                                                                  reqBody.add({
-                                                                                    "variant_id": lineItemsList[i].variantId,
-                                                                                    "quantity": lineItemsList[i].quantity
-                                                                                  });
-                                                                                }
+                                                                        : AppConfigure.wooCommerce
+                                                                            ? () async {
+                                                                                API api = API();
+                                                                                try {
+                                                                                  String draftId = await SharedPreferenceManager().getDraftId();
+                                                                                  CommonAlert.show_loading_alert(context);
 
-                                                                                CommonAlert.show_loading_alert(context);
-                                                                                // getProductsByVariantId
+                                                                                  orderList.quantity++;
+                                                                                  setState(() {});
+                                                                                  debugPrint('add maps');
 
-                                                                                ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                                  debugPrint('calling put api ');
+                                                                                  String cartToken = await SharedPreferenceManager().getCartToken();
+
+                                                                                  var response = await api.sendRequest.post(
+                                                                                    'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                                                    data: {
+                                                                                      "quantity": orderList.quantity.toString()
+                                                                                    },
+                                                                                  );
+
+                                                                                  ref.refresh(cartDetailsDataProvider);
+
+                                                                                  debugPrint('cart updated successfully ${response.statusCode}');
+                                                                                } on Exception catch (e) {
+                                                                                  debugPrint(e.toString());
+                                                                                } finally {
                                                                                   Navigator.of(context).pop();
+                                                                                }
+                                                                              }
+                                                                            : () {
+                                                                                final price = double.parse(orderList.price.toString());
+                                                                                CommonAlert.show_loading_alert(context);
+                                                                                ProductRepository().getProductsByVariantId(orderList.variantId.toString(), orderList.productId.toString()).then((subjectFromServer) {
+                                                                                  if (orderList.quantity < subjectFromServer.inventoryQuantity) {
+                                                                                    setState(
+                                                                                      () {
+                                                                                        orderList.quantity++;
+                                                                                        final lineItemsList = productlist.lineItems;
+                                                                                        var reqBody = [];
+                                                                                        for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                          reqBody.add({
+                                                                                            "variant_id": lineItemsList[i].variantId,
+                                                                                            "quantity": lineItemsList[i].quantity
+                                                                                          });
+                                                                                        }
 
-                                                                                  if (subjectFromServer == AppString.success) {
-                                                                                    ref.refresh(cartDetailsDataProvider);
+                                                                                        ProductRepository().updateCart(reqBody).then((subjectFromServers) {
+                                                                                          Navigator.of(context).pop();
+
+                                                                                          if (subjectFromServers == AppString.success) {
+                                                                                            ref.refresh(cartDetailsDataProvider);
+                                                                                          }
+                                                                                        });
+                                                                                      },
+                                                                                    );
+                                                                                  } else {
+                                                                                    Navigator.of(context).pop();
+                                                                                    Fluttertoast.showToast(msg: "Only ${subjectFromServer.inventoryQuantity} left in stock", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 0, backgroundColor: AppColors.blackColor, textColor: AppColors.whiteColor, fontSize: 16.0);
                                                                                   }
+                                                                                  // });
                                                                                 });
                                                                               },
-                                                                            );
-                                                                          }
-                                                                        },
+                                                                  ),
+                                                                )
+                                                              ],
                                                             ),
-                                                            Text(
-                                                                '${orderList.quantity}'),
-                                                            IconButton(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              // Remove padding
-
-                                                              icon: const Icon(
-                                                                Icons.add,
-                                                              ),
-                                                              onPressed: AppConfigure
-                                                                      .bigCommerce
-                                                                  ? () async {
-                                                                      API api =
-                                                                          API();
-                                                                      try {
-                                                                        String
-                                                                            draftId =
-                                                                            await SharedPreferenceManager().getDraftId();
-                                                                        CommonAlert.show_loading_alert(
-                                                                            context);
-
-                                                                        orderList
-                                                                            .quantity++;
-                                                                        setState(
-                                                                            () {});
-                                                                        debugPrint(
-                                                                            'add maps');
-
-                                                                        debugPrint(
-                                                                            'calling put api ');
-                                                                        var response = await api.sendRequest.put(
-                                                                            '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                            data: {
-                                                                              "line_item": {
-                                                                                "id": orderList.id,
-                                                                                "variant_id": orderList.variantId,
-                                                                                "product_id": orderList.productId,
-                                                                                "quantity": orderList.quantity,
-                                                                              }
-                                                                            },
-                                                                            options:
-                                                                                Options(headers: {
-                                                                              "X-auth-Token": AppConfigure.bigCommerceAccessToken,
-                                                                              'Content-Type': 'application/json',
-                                                                            }));
-
-                                                                        // Response
-                                                                        //     response =
-                                                                        //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                        //         body);
-
-                                                                        ref.refresh(
-                                                                            cartDetailsDataProvider);
-
-                                                                        debugPrint(
-                                                                            'cart updated successfully ${response.statusCode}');
-                                                                      } on Exception catch (e) {
-                                                                        debugPrint(
-                                                                            e.toString());
-                                                                      } finally {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      }
-                                                                    }
-                                                                  : AppConfigure
-                                                                          .wooCommerce
-                                                                      ? () async {
-                                                                          API api =
-                                                                              API();
-                                                                          try {
-                                                                            String
-                                                                                draftId =
-                                                                                await SharedPreferenceManager().getDraftId();
-                                                                            CommonAlert.show_loading_alert(context);
-
-                                                                            orderList.quantity++;
-                                                                            setState(() {});
-                                                                            debugPrint('add maps');
-
-                                                                            debugPrint('calling put api ');
-                                                                            String
-                                                                                cartToken =
-                                                                                await SharedPreferenceManager().getCartToken();
-
-                                                                            var response =
-                                                                                await api.sendRequest.post(
-                                                                              'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
-                                                                              data: {
-                                                                                "quantity": orderList.quantity.toString()
-                                                                              },
-                                                                            );
-
-                                                                            ref.refresh(cartDetailsDataProvider);
-
-                                                                            debugPrint('cart updated successfully ${response.statusCode}');
-                                                                          } on Exception catch (e) {
-                                                                            debugPrint(e.toString());
-                                                                          } finally {
-                                                                            Navigator.of(context).pop();
-                                                                          }
-                                                                        }
-                                                                      : () {
-                                                                          final price = double.parse(orderList
-                                                                              .price
-                                                                              .toString());
-                                                                          CommonAlert.show_loading_alert(
-                                                                              context);
-                                                                          ProductRepository()
-                                                                              .getProductsByVariantId(orderList.variantId.toString(), orderList.productId.toString())
-                                                                              .then((subjectFromServer) {
-                                                                            if (orderList.quantity <
-                                                                                subjectFromServer.inventoryQuantity) {
-                                                                              setState(
-                                                                                () {
-                                                                                  orderList.quantity++;
-                                                                                  final lineItemsList = productlist.lineItems;
-                                                                                  var reqBody = [];
-                                                                                  for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
-                                                                                    reqBody.add({
-                                                                                      "variant_id": lineItemsList[i].variantId,
-                                                                                      "quantity": lineItemsList[i].quantity
-                                                                                    });
-                                                                                  }
-
-                                                                                  ProductRepository().updateCart(reqBody).then((subjectFromServers) {
-                                                                                    Navigator.of(context).pop();
-
-                                                                                    if (subjectFromServers == AppString.success) {
-                                                                                      ref.refresh(cartDetailsDataProvider);
-                                                                                    }
-                                                                                  });
-                                                                                },
-                                                                              );
-                                                                            } else {
-                                                                              Navigator.of(context).pop();
-                                                                              Fluttertoast.showToast(msg: "Only ${subjectFromServer.inventoryQuantity} left in stock", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 0, backgroundColor: AppColors.blackColor, textColor: AppColors.whiteColor, fontSize: 16.0);
-                                                                            }
-                                                                            // });
-                                                                          });
-                                                                        },
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      IconButton(
-                                                        icon: const Icon(
-                                                            Icons.delete),
-                                                        onPressed: () async {
-                                                          debugPrint(
-                                                              'id is this ${orderList.id}');
-                                                          String draftId =
-                                                              await SharedPreferenceManager()
-                                                                  .getDraftId();
-                                                          CommonAlert
-                                                              .show_loading_alert(
-                                                                  context);
-                                                          if (productlist
-                                                                  .lineItems
-                                                                  .length ==
-                                                              1) {
-                                                            if (AppConfigure
-                                                                .wooCommerce) {
-                                                              await SharedPreferenceManager()
-                                                                  .setCartToken(
-                                                                      "");
-                                                            } else {
-                                                              await SharedPreferenceManager()
-                                                                  .setDraftId(
-                                                                      "");
-                                                            }
-
-                                                            ref.refresh(
-                                                                cartDetailsDataProvider);
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          } else {
-                                                            productlist
-                                                                .lineItems
-                                                                .removeAt(
-                                                                    index);
-                                                            setState(() {});
-                                                            final lineItemsList =
-                                                                productlist
-                                                                    .lineItems;
-                                                            var reqBody = [];
-                                                            for (int i = 0;
-                                                                i <=
-                                                                    productlist
-                                                                            .lineItems
-                                                                            .length -
-                                                                        1;
-                                                                i++) {
-                                                              reqBody.add({
-                                                                "variant_id":
-                                                                    lineItemsList[
-                                                                            i]
-                                                                        .variantId,
-                                                                "quantity":
-                                                                    lineItemsList[
-                                                                            i]
-                                                                        .quantity
-                                                              });
-                                                            }
-
-                                                            if (AppConfigure
-                                                                .bigCommerce) {
-                                                              var response =
-                                                                  await ApiManager
-                                                                      .delete(
-                                                                          '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
-
-                                                              ref.refresh(
-                                                                  cartDetailsDataProvider);
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              debugPrint(
-                                                                  "cart item deleted successfully ${response.statusCode}");
-                                                            } else if (AppConfigure
-                                                                .wooCommerce) {
-                                                              String email =
-                                                                  await SharedPreferenceManager()
-                                                                      .getCartToken();
-                                                              var response =
-                                                                  await ApiManager
-                                                                      .delete(
-                                                                          '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
-
-                                                              ref.refresh(
-                                                                  cartDetailsDataProvider);
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              debugPrint(
-                                                                  "cart item deleted successfully ${response.statusCode}");
-                                                            } else {
-                                                              ProductRepository()
-                                                                  .updateCart(
-                                                                      reqBody)
-                                                                  .then(
-                                                                      (subjectFromServer) {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-
-                                                                if (subjectFromServer ==
-                                                                    AppString
-                                                                        .success) {
-                                                                  ref.refresh(
-                                                                      cartDetailsDataProvider);
-                                                                }
-                                                              });
-                                                            }
-                                                          }
-                                                        },
-                                                      ),
+                                                          ),
+                                                        ],
+                                                      )
                                                     ],
-                                                  ),
-                                                ),
-                                              )))
+                                                  )
+
+                                                  // : ListTile(
+                                                  //     contentPadding:
+                                                  //         EdgeInsets.zero,
+                                                  //     minVerticalPadding: 0,
+                                                  //     dense: false,
+                                                  //     visualDensity:
+                                                  //         const VisualDensity(
+                                                  //             horizontal: 4,
+                                                  //             vertical: 4),
+                                                  //     leading: Padding(
+                                                  //       padding:
+                                                  //           const EdgeInsets
+                                                  //               .only(
+                                                  //               left: 5),
+                                                  //       child: Container(
+                                                  //         width: 100.sp,
+                                                  //         height: 100,
+                                                  //         color: Colors.red,
+                                                  //         child:
+                                                  //             CachedNetworkImage(
+                                                  //           imageUrl: AppConfigure
+                                                  //                       .bigCommerce ||
+                                                  //                   AppConfigure
+                                                  //                       .wooCommerce
+                                                  //               ? orderList
+                                                  //                   .adminGraphqlApiId
+                                                  //               : (ref.watch(productImageDataProvider(orderList
+                                                  //                           .productId
+                                                  //                           .toString())))
+                                                  //                       .when(
+                                                  //                     data:
+                                                  //                         (images) {
+                                                  //                       if (images
+                                                  //                           .isNotEmpty) {
+                                                  //                         // Find the image with the specified variant ID
+                                                  //                         final selectedImage =
+                                                  //                             images.firstWhere(
+                                                  //                           (image) => image.variantIds.contains(orderList.variantId),
+                                                  //                           orElse: () => ProductImage(
+                                                  //                             id: 0,
+                                                  //                             // Provide a default ID
+                                                  //                             alt: "Default",
+                                                  //                             position: 0,
+                                                  //                             productId: 0,
+                                                  //                             createdAt: DateTime.now().toString(),
+                                                  //                             // Provide a default creation time
+                                                  //                             updatedAt: DateTime.now().toString(),
+                                                  //                             // Provide a default update time
+                                                  //                             adminGraphqlApiId: "gid://shopify/ProductImage/0",
+                                                  //                             width: 0,
+                                                  //                             height: 0,
+                                                  //                             src: images[0].src,
+                                                  //                             // Provide a default image URL
+                                                  //                             variantIds: [],
+                                                  //                           ),
+                                                  //                         );
+
+                                                  //                         return selectedImage.src;
+                                                  //                       }
+                                                  //                       return DefaultValues
+                                                  //                           .defaultImagesSrc;
+                                                  //                     },
+                                                  //                     loading:
+                                                  //                         () =>
+                                                  //                             DefaultValues.defaultImagesSrc,
+                                                  //                     error: (_,
+                                                  //                             __) =>
+                                                  //                         DefaultValues.defaultImagesSrc,
+                                                  //                   ) ??
+                                                  //                   DefaultValues
+                                                  //                       .defaultImagesSrc,
+                                                  //           placeholder:
+                                                  //               (context,
+                                                  //                       url) =>
+                                                  //                   Container(
+                                                  //             width: 100.sp,
+                                                  //             height: 100.sp,
+                                                  //             color: AppColors
+                                                  //                 .greyShade,
+                                                  //           ),
+                                                  //           errorWidget: (context,
+                                                  //                   url,
+                                                  //                   error) =>
+                                                  //               const Icon(Icons
+                                                  //                   .error),
+                                                  //           width: 100.sp,
+                                                  //           height: 100.sp,
+                                                  //           fit: BoxFit
+                                                  //               .contain,
+                                                  //         ),
+                                                  //       ),
+                                                  //     ),
+                                                  //     title: Padding(
+                                                  //       padding:
+                                                  //           const EdgeInsets
+                                                  //               .only(
+                                                  //               top: 10,
+                                                  //               left: 0),
+                                                  //       child: Text(
+                                                  //           orderList.name),
+                                                  //     ),
+                                                  //     subtitle: Padding(
+                                                  //         padding:
+                                                  //             const EdgeInsets
+                                                  //                 .only(
+                                                  //                 top: 5,
+                                                  //                 left: 0),
+                                                  //         child: Column(
+                                                  //           crossAxisAlignment:
+                                                  //               CrossAxisAlignment
+                                                  //                   .start,
+                                                  //           children: [
+                                                  //             Text(
+                                                  //               '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(orderList.price.toString()) * orderList.quantity).toStringAsFixed(2)}',
+                                                  //             ),
+                                                  //             const SizedBox(
+                                                  //               height: 5,
+                                                  //             ),
+                                                  //           ],
+                                                  //         )),
+                                                  //     trailing: Row(
+                                                  //       mainAxisSize:
+                                                  //           MainAxisSize.min,
+                                                  //       children: [
+                                                  //         Container(
+                                                  //           decoration:
+                                                  //               BoxDecoration(
+                                                  //             border: Border.all(
+                                                  //                 color: AppColors
+                                                  //                     .blackColor,
+                                                  //                 width: 1.5),
+                                                  //             borderRadius:
+                                                  //                 BorderRadius.circular(
+                                                  //                     AppDimension
+                                                  //                         .buttonRadius),
+                                                  //           ),
+                                                  //           child: Row(
+                                                  //             mainAxisSize:
+                                                  //                 MainAxisSize
+                                                  //                     .min,
+                                                  //             children: [
+                                                  //               IconButton(
+                                                  //                 padding:
+                                                  //                     EdgeInsets
+                                                  //                         .zero,
+                                                  //                 // Remove padding
+                                                  //                 icon:
+                                                  //                     const Icon(
+                                                  //                   Icons
+                                                  //                       .remove,
+                                                  //                 ),
+                                                  //                 // Adjust icon size
+                                                  //                 onPressed: AppConfigure
+                                                  //                         .bigCommerce
+                                                  //                     ? () async {
+                                                  //                         if (orderList.quantity >
+                                                  //                             1) {
+                                                  //                           API api = API();
+                                                  //                           try {
+                                                  //                             String draftId = await SharedPreferenceManager().getDraftId();
+                                                  //                             CommonAlert.show_loading_alert(context);
+
+                                                  //                             orderList.quantity--;
+                                                  //                             setState(() {});
+                                                  //                             debugPrint('add maps');
+
+                                                  //                             debugPrint('calling put api ');
+                                                  //                             var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                  //                                 data: {
+                                                  //                                   "line_item": {
+                                                  //                                     "id": orderList.id,
+                                                  //                                     "variant_id": orderList.variantId,
+                                                  //                                     "product_id": orderList.productId,
+                                                  //                                     "quantity": orderList.quantity,
+                                                  //                                   }
+                                                  //                                 },
+                                                  //                                 options: Options(headers: {
+                                                  //                                   "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                  //                                   'Content-Type': 'application/json',
+                                                  //                                 }));
+
+                                                  //                             // Response
+                                                  //                             //     response =
+                                                  //                             //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                  //                             //         body);
+
+                                                  //                             ref.refresh(cartDetailsDataProvider);
+
+                                                  //                             debugPrint('cart updated successfully ${response.statusCode}');
+                                                  //                           } on Exception catch (e) {
+                                                  //                             debugPrint(e.toString());
+                                                  //                           } finally {
+                                                  //                             Navigator.of(context).pop();
+                                                  //                           }
+                                                  //                         }
+                                                  //                       }
+                                                  //                     : AppConfigure.wooCommerce
+                                                  //                         ? () async {
+                                                  //                             if (orderList.quantity > 1) {
+                                                  //                               API api = API();
+                                                  //                               try {
+                                                  //                                 String draftId = await SharedPreferenceManager().getDraftId();
+                                                  //                                 CommonAlert.show_loading_alert(context);
+
+                                                  //                                 orderList.quantity--;
+                                                  //                                 setState(() {});
+                                                  //                                 debugPrint('add maps');
+
+                                                  //                                 debugPrint('calling put api ');
+                                                  //                                 String cartToken = await SharedPreferenceManager().getCartToken();
+
+                                                  //                                 var response = await api.sendRequest.post(
+                                                  //                                   'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                  //                                   data: {
+                                                  //                                     "quantity": orderList.quantity.toString()
+                                                  //                                   },
+                                                  //                                 );
+
+                                                  //                                 ref.refresh(cartDetailsDataProvider);
+
+                                                  //                                 debugPrint('cart updated successfully ${response.statusCode}');
+                                                  //                               } on Exception catch (e) {
+                                                  //                                 debugPrint(e.toString());
+                                                  //                               } finally {
+                                                  //                                 Navigator.of(context).pop();
+                                                  //                               }
+                                                  //                             }
+                                                  //                           }
+                                                  //                         : () {
+                                                  //                             if (orderList.quantity > 1) {
+                                                  //                               setState(
+                                                  //                                 () {
+                                                  //                                   orderList.quantity--;
+                                                  //                                   final lineItemsList = productlist.lineItems;
+                                                  //                                   var reqBody = [];
+                                                  //                                   for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                  //                                     reqBody.add({
+                                                  //                                       "variant_id": lineItemsList[i].variantId,
+                                                  //                                       "quantity": lineItemsList[i].quantity
+                                                  //                                     });
+                                                  //                                   }
+
+                                                  //                                   CommonAlert.show_loading_alert(context);
+                                                  //                                   // getProductsByVariantId
+
+                                                  //                                   ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                  //                                     Navigator.of(context).pop();
+
+                                                  //                                     if (subjectFromServer == AppString.success) {
+                                                  //                                       ref.refresh(cartDetailsDataProvider);
+                                                  //                                     }
+                                                  //                                   });
+                                                  //                                 },
+                                                  //                               );
+                                                  //                             }
+                                                  //                           },
+                                                  //               ),
+                                                  //               Text(
+                                                  //                   '${orderList.quantity}'),
+                                                  //               IconButton(
+                                                  //                 padding:
+                                                  //                     EdgeInsets
+                                                  //                         .zero,
+                                                  //                 // Remove padding
+
+                                                  //                 icon:
+                                                  //                     const Icon(
+                                                  //                   Icons.add,
+                                                  //                 ),
+                                                  //                 onPressed: AppConfigure
+                                                  //                         .bigCommerce
+                                                  //                     ? () async {
+                                                  //                         API api =
+                                                  //                             API();
+                                                  //                         try {
+                                                  //                           String draftId = await SharedPreferenceManager().getDraftId();
+                                                  //                           CommonAlert.show_loading_alert(context);
+
+                                                  //                           orderList.quantity++;
+                                                  //                           setState(() {});
+                                                  //                           debugPrint('add maps');
+
+                                                  //                           debugPrint('calling put api ');
+                                                  //                           var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                  //                               data: {
+                                                  //                                 "line_item": {
+                                                  //                                   "id": orderList.id,
+                                                  //                                   "variant_id": orderList.variantId,
+                                                  //                                   "product_id": orderList.productId,
+                                                  //                                   "quantity": orderList.quantity,
+                                                  //                                 }
+                                                  //                               },
+                                                  //                               options: Options(headers: {
+                                                  //                                 "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                  //                                 'Content-Type': 'application/json',
+                                                  //                               }));
+
+                                                  //                           // Response
+                                                  //                           //     response =
+                                                  //                           //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                  //                           //         body);
+
+                                                  //                           ref.refresh(cartDetailsDataProvider);
+
+                                                  //                           debugPrint('cart updated successfully ${response.statusCode}');
+                                                  //                         } on Exception catch (e) {
+                                                  //                           debugPrint(e.toString());
+                                                  //                         } finally {
+                                                  //                           Navigator.of(context).pop();
+                                                  //                         }
+                                                  //                       }
+                                                  //                     : AppConfigure.wooCommerce
+                                                  //                         ? () async {
+                                                  //                             API api = API();
+                                                  //                             try {
+                                                  //                               String draftId = await SharedPreferenceManager().getDraftId();
+                                                  //                               CommonAlert.show_loading_alert(context);
+
+                                                  //                               orderList.quantity++;
+                                                  //                               setState(() {});
+                                                  //                               debugPrint('add maps');
+
+                                                  //                               debugPrint('calling put api ');
+                                                  //                               String cartToken = await SharedPreferenceManager().getCartToken();
+
+                                                  //                               var response = await api.sendRequest.post(
+                                                  //                                 'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                  //                                 data: {
+                                                  //                                   "quantity": orderList.quantity.toString()
+                                                  //                                 },
+                                                  //                               );
+
+                                                  //                               ref.refresh(cartDetailsDataProvider);
+
+                                                  //                               debugPrint('cart updated successfully ${response.statusCode}');
+                                                  //                             } on Exception catch (e) {
+                                                  //                               debugPrint(e.toString());
+                                                  //                             } finally {
+                                                  //                               Navigator.of(context).pop();
+                                                  //                             }
+                                                  //                           }
+                                                  //                         : () {
+                                                  //                             final price = double.parse(orderList.price.toString());
+                                                  //                             CommonAlert.show_loading_alert(context);
+                                                  //                             ProductRepository().getProductsByVariantId(orderList.variantId.toString(), orderList.productId.toString()).then((subjectFromServer) {
+                                                  //                               if (orderList.quantity < subjectFromServer.inventoryQuantity) {
+                                                  //                                 setState(
+                                                  //                                   () {
+                                                  //                                     orderList.quantity++;
+                                                  //                                     final lineItemsList = productlist.lineItems;
+                                                  //                                     var reqBody = [];
+                                                  //                                     for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                  //                                       reqBody.add({
+                                                  //                                         "variant_id": lineItemsList[i].variantId,
+                                                  //                                         "quantity": lineItemsList[i].quantity
+                                                  //                                       });
+                                                  //                                     }
+
+                                                  //                                     ProductRepository().updateCart(reqBody).then((subjectFromServers) {
+                                                  //                                       Navigator.of(context).pop();
+
+                                                  //                                       if (subjectFromServers == AppString.success) {
+                                                  //                                         ref.refresh(cartDetailsDataProvider);
+                                                  //                                       }
+                                                  //                                     });
+                                                  //                                   },
+                                                  //                                 );
+                                                  //                               } else {
+                                                  //                                 Navigator.of(context).pop();
+                                                  //                                 Fluttertoast.showToast(msg: "Only ${subjectFromServer.inventoryQuantity} left in stock", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 0, backgroundColor: AppColors.blackColor, textColor: AppColors.whiteColor, fontSize: 16.0);
+                                                  //                               }
+                                                  //                               // });
+                                                  //                             });
+                                                  //                           },
+                                                  //               )
+                                                  //             ],
+                                                  //           ),
+                                                  //         ),
+                                                  //         IconButton(
+                                                  //           icon: const Icon(
+                                                  //               Icons.delete),
+                                                  //           onPressed:
+                                                  //               () async {
+                                                  //             debugPrint(
+                                                  //                 'id is this ${orderList.id}');
+                                                  //             String draftId =
+                                                  //                 await SharedPreferenceManager()
+                                                  //                     .getDraftId();
+                                                  //             CommonAlert
+                                                  //                 .show_loading_alert(
+                                                  //                     context);
+                                                  //             if (productlist
+                                                  //                     .lineItems
+                                                  //                     .length ==
+                                                  //                 1) {
+                                                  //               if (AppConfigure
+                                                  //                   .wooCommerce) {
+                                                  //                 await SharedPreferenceManager()
+                                                  //                     .setCartToken(
+                                                  //                         "");
+                                                  //               } else {
+                                                  //                 await SharedPreferenceManager()
+                                                  //                     .setDraftId(
+                                                  //                         "");
+                                                  //               }
+
+                                                  //               ref.refresh(
+                                                  //                   cartDetailsDataProvider);
+                                                  //               Navigator.of(
+                                                  //                       context)
+                                                  //                   .pop();
+                                                  //             } else {
+                                                  //               productlist
+                                                  //                   .lineItems
+                                                  //                   .removeAt(
+                                                  //                       index);
+                                                  //               setState(
+                                                  //                   () {});
+                                                  //               final lineItemsList =
+                                                  //                   productlist
+                                                  //                       .lineItems;
+                                                  //               var reqBody =
+                                                  //                   [];
+                                                  //               for (int i =
+                                                  //                       0;
+                                                  //                   i <=
+                                                  //                       productlist.lineItems.length -
+                                                  //                           1;
+                                                  //                   i++) {
+                                                  //                 reqBody
+                                                  //                     .add({
+                                                  //                   "variant_id":
+                                                  //                       lineItemsList[i]
+                                                  //                           .variantId,
+                                                  //                   "quantity":
+                                                  //                       lineItemsList[i]
+                                                  //                           .quantity
+                                                  //                 });
+                                                  //               }
+
+                                                  //               if (AppConfigure
+                                                  //                   .bigCommerce) {
+                                                  //                 var response =
+                                                  //                     await ApiManager.delete(
+                                                  //                         '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
+
+                                                  //                 ref.refresh(
+                                                  //                     cartDetailsDataProvider);
+                                                  //                 Navigator.of(
+                                                  //                         context)
+                                                  //                     .pop();
+                                                  //                 debugPrint(
+                                                  //                     "cart item deleted successfully ${response.statusCode}");
+                                                  //               } else if (AppConfigure
+                                                  //                   .wooCommerce) {
+                                                  //                 String
+                                                  //                     email =
+                                                  //                     await SharedPreferenceManager()
+                                                  //                         .getCartToken();
+                                                  //                 var response =
+                                                  //                     await ApiManager.delete(
+                                                  //                         '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
+
+                                                  //                 ref.refresh(
+                                                  //                     cartDetailsDataProvider);
+                                                  //                 Navigator.of(
+                                                  //                         context)
+                                                  //                     .pop();
+                                                  //                 debugPrint(
+                                                  //                     "cart item deleted successfully ${response.statusCode}");
+                                                  //               } else {
+                                                  //                 ProductRepository()
+                                                  //                     .updateCart(
+                                                  //                         reqBody)
+                                                  //                     .then(
+                                                  //                         (subjectFromServer) {
+                                                  //                   Navigator.of(
+                                                  //                           context)
+                                                  //                       .pop();
+
+                                                  //                   if (subjectFromServer ==
+                                                  //                       AppString
+                                                  //                           .success) {
+                                                  //                     ref.refresh(
+                                                  //                         cartDetailsDataProvider);
+                                                  //                   }
+                                                  //                 });
+                                                  //               }
+                                                  //             }
+                                                  //           },
+                                                  //         ),
+                                                  //       ],
+                                                  //     ),
+                                                  //   ),
+
+                                                  )))
                                       : const Center(
                                           child: ErrorHandling(
                                             error_type: AppString.noDataError,
@@ -665,27 +1231,41 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             children: [
                               const Divider(
                                 thickness: 1.5,
+                                color: AppColors.greyShade,
                               ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${AppLocalizations.of(context)!.actualPrice}:',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                                      '${AppLocalizations.of(context)!.actualPrice}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                  Text('\u{20B9}${product.subtotalPrice}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('${AppLocalizations.of(context)!.tax}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
                                   Text(
-                                    '\u{20B9}${product.subtotalPrice}',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                      product.totalTax == ""
+                                          ? '\u{20B9}${0}'
+                                          : '\u{20B9}${product.totalTax}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge),
                                 ],
                               ),
                               const SizedBox(
@@ -696,51 +1276,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '${AppLocalizations.of(context)!.tax}:',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    '\u{20B9}${product.totalTax}',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '${AppLocalizations.of(context)!.total}:',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    '\u{20B9}${product.totalPrice}',
-                                    style: TextStyle(
-                                      fontSize: 0.05 *
-                                          MediaQuery.of(context).size.width,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                      '${AppLocalizations.of(context)!.total}:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                  Text('\u{20B9}${product.totalPrice}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge),
                                 ],
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    top: 25, left: 10, right: 10),
+                                    top: 25, left: 0, right: 0),
                                 child: ElevatedButton(
                                     onPressed: () {
                                       Navigator.of(context).push(
@@ -764,27 +1312,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
-                                          appInfo.primaryColorValue,
+                                          Theme.of(context).colorScheme.primary,
                                       minimumSize: const Size.fromHeight(50),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
                                               AppDimension.buttonRadius)),
-                                      textStyle: const TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: 10,
-                                          fontStyle: FontStyle.normal),
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
                                     ),
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .next
                                           .toUpperCase(),
-                                      style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.05,
-                                          fontWeight: FontWeight.bold),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayLarge,
                                     )),
                               ),
                               const SizedBox(height: 16),

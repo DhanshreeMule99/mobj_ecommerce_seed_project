@@ -169,7 +169,7 @@ fragment PriceFields on Money {
           ),
           bottomNavigationBar: MobjBottombar(
             bgcolor: AppColors.whiteColor,
-            selcted_icon_color: AppColors.buttonColor,
+            selcted_icon_color: ConstColors.red,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 3,
             screen1: HomeScreen(),
@@ -190,7 +190,10 @@ fragment PriceFields on Money {
                             ? loader
                                 ? const Center(
                                     child: CircularProgressIndicator())
-                                :  Center(child: Text(AppLocalizations.of(context)!.noProduct,))
+                                : Center(
+                                    child: Text(
+                                    AppLocalizations.of(context)!.noProduct,
+                                  ))
                             : const Center(child: Text("Paid Feature"))
                         : Expanded(
                             child: GridView.builder(

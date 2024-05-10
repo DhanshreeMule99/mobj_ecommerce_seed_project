@@ -1,8 +1,14 @@
 // addressListScreen
 import 'dart:math';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_native_splash/cli_commands.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -242,9 +248,20 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
             //   ],
             // ),
             AppBar(
-          elevation: 2,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          surfaceTintColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             AppLocalizations.of(context)!.addressAppBar,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           // actions: [
           //   // Conditionally show the add icon button based on the length of the address list
@@ -273,23 +290,29 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                   AppConfigure.wooCommerce
               ? null
               : [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              AddressScreen(
-                            addressId: "",
-                            isCheckout: widget.isCheckout ?? false,
-                            amount: widget.amount,
-                            mobile: widget.mobile,
+                  Tooltip(
+                    message: "Add Address",
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                AddressScreen(
+                              addressId: "",
+                              isCheckout: widget.isCheckout ?? false,
+                              amount: widget.amount,
+                              mobile: widget.mobile,
+                            ),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
                           ),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
+                        );
+                      },
+                      icon: Icon(
+                        FontAwesomeIcons.plus,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   )
                 ],
         ),
@@ -301,7 +324,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           screen1: AddressListScreen(
             bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
-          screen2:  SearchWidget(),
+          screen2: SearchWidget(),
           screen3: AddressListScreen(
             bigcommerceOrderedItems: bigcommerceOrderedItems,
           ),
@@ -333,167 +356,671 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(
                                 top: 5, left: 10, right: 10),
-                            child: Card(
-                                child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    AppConfigure.bigCommerce
-                                        ? Radio(
-                                            value: index,
-                                            groupValue: bigCommerceAddressIndex,
-                                            onChanged: (value) async {
-                                              String draftId =
-                                                  await SharedPreferenceManager()
-                                                      .getDraftId();
-                                              print(draftId);
-                                              String email =
-                                                  await SharedPreferenceManager()
-                                                      .getEmail();
-                                              print(
-                                                  "$value ${addressList[index]}");
-                                              addressbody = {
-                                                "first_name":
-                                                    addresses.firstName,
-                                                "last_name": addresses.lastName,
-                                                "email": email,
-                                                "company": "setoo",
-                                                "address1": addresses.address1,
-                                                "address2": "string",
-                                                "city": addresses.city,
-                                                "state_or_province":
-                                                    addresses.province,
-                                                "state_or_province_code":
-                                                    addresses.provinceCode,
-                                                "country_code":
-                                                    addresses.countryCode,
-                                                "postal_code": addresses.zip,
-                                                "phone": addresses.phone,
-                                              };
-                                              print(addressbody);
-                                              setState(() {
-                                                bigCommerceAddressIndex = index;
-                                              });
+                            child: index >= 0
+                                ? Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    width: double.maxFinite,
+                                    decoration: BoxDecoration(
+                                        boxShadow: const [
+                                          BoxShadow(
+                                              color: ConstColors.shadowColor,
+                                              blurRadius: 4,
+                                              spreadRadius: 0,
+                                              offset: Offset(0, 1))
+                                        ],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        // border: Border.all(
+                                        //     color: Theme.of(context)
+                                        //         .colorScheme
+                                        //         .onSecondaryContainer,
+                                        //     width: 1.5),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FilterChip(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 15),
+                                                labelPadding:
+                                                    const EdgeInsets.all(0),
+                                                selected: true,
+                                                showCheckmark: false,
+                                                selectedColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                label: Text(
+                                                  addresses.lastName
+                                                      .capitalize(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .displaySmall,
+                                                ),
+                                                onSelected: (value) {}),
+                                            AppConfigure.bigCommerce
+                                                ? Radio(
+                                                    value: index,
+                                                    groupValue:
+                                                        bigCommerceAddressIndex,
+                                                    onChanged: (value) async {
+                                                      String draftId =
+                                                          await SharedPreferenceManager()
+                                                              .getDraftId();
+                                                      print(draftId);
+                                                      String email =
+                                                          await SharedPreferenceManager()
+                                                              .getEmail();
+                                                      print(
+                                                          "$value ${addressList[index]}");
+                                                      addressbody = {
+                                                        "first_name":
+                                                            addresses.firstName,
+                                                        "last_name":
+                                                            addresses.lastName,
+                                                        "email": email,
+                                                        "company": "setoo",
+                                                        "address1":
+                                                            addresses.address1,
+                                                        "address2": "string",
+                                                        "city": addresses.city,
+                                                        "state_or_province":
+                                                            addresses.province,
+                                                        "state_or_province_code":
+                                                            addresses
+                                                                .provinceCode,
+                                                        "country_code":
+                                                            addresses
+                                                                .countryCode,
+                                                        "postal_code":
+                                                            addresses.zip,
+                                                        "phone":
+                                                            addresses.phone,
+                                                      };
+                                                      print(addressbody);
+                                                      setState(() {
+                                                        bigCommerceAddressIndex =
+                                                            index;
+                                                      });
 
-                                              CommonAlert.show_loading_alert(
-                                                  context);
-                                              AddressRepository()
-                                                  .bigCommerceShippingAddress(
-                                                      addressbody!)
-                                                  .then((subjectFromServer) {
-                                                Navigator.of(context).pop();
-                                                if (subjectFromServer ==
-                                                    AppString.success) {
-                                                  ref.refresh(
-                                                      addressDataProvider);
-                                                  Fluttertoast.showToast(
-                                                      msg: AppString
-                                                          .defaultAddressSuccess,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 0,
-                                                      backgroundColor:
-                                                          AppColors.green,
-                                                      textColor:
-                                                          AppColors.whiteColor,
-                                                      fontSize: 16.0);
-                                                } else {
-                                                  Fluttertoast.showToast(
-                                                      msg: AppString.oops,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.BOTTOM,
-                                                      timeInSecForIosWeb: 0,
-                                                      backgroundColor:
-                                                          AppColors.green,
-                                                      textColor:
-                                                          AppColors.whiteColor,
-                                                      fontSize: 16.0);
+                                                      CommonAlert
+                                                          .show_loading_alert(
+                                                              context);
+                                                      AddressRepository()
+                                                          .bigCommerceShippingAddress(
+                                                              addressbody!)
+                                                          .then(
+                                                              (subjectFromServer) {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        if (subjectFromServer ==
+                                                            AppString.success) {
+                                                          ref.refresh(
+                                                              addressDataProvider);
+                                                          Fluttertoast.showToast(
+                                                              msg: AppString
+                                                                  .defaultAddressSuccess,
+                                                              toastLength: Toast
+                                                                  .LENGTH_SHORT,
+                                                              gravity:
+                                                                  ToastGravity
+                                                                      .BOTTOM,
+                                                              timeInSecForIosWeb:
+                                                                  0,
+                                                              backgroundColor:
+                                                                  AppColors
+                                                                      .green,
+                                                              textColor: AppColors
+                                                                  .whiteColor,
+                                                              fontSize: 16.0);
+                                                        } else {
+                                                          Fluttertoast.showToast(
+                                                              msg: AppString
+                                                                  .oops,
+                                                              toastLength: Toast
+                                                                  .LENGTH_SHORT,
+                                                              gravity:
+                                                                  ToastGravity
+                                                                      .BOTTOM,
+                                                              timeInSecForIosWeb:
+                                                                  0,
+                                                              backgroundColor:
+                                                                  AppColors
+                                                                      .green,
+                                                              textColor: AppColors
+                                                                  .whiteColor,
+                                                              fontSize: 16.0);
+                                                        }
+                                                      });
+                                                    },
+                                                  )
+                                                : AppConfigure.wooCommerce
+                                                    ? Radio(
+                                                        value: index,
+                                                        groupValue:
+                                                            bigCommerceAddressIndex,
+                                                        onChanged:
+                                                            (value) async {
+                                                          String draftId =
+                                                              await SharedPreferenceManager()
+                                                                  .getDraftId();
+                                                          print(draftId);
+                                                          String email =
+                                                              await SharedPreferenceManager()
+                                                                  .getEmail();
+                                                          print(
+                                                              "$value ${addressList[index]}");
+                                                          addressbody = {
+                                                            "first_name":
+                                                                addresses
+                                                                    .firstName,
+                                                            "last_name":
+                                                                addresses
+                                                                    .lastName,
+                                                            "phone":
+                                                                addresses.phone,
+                                                            "email": email,
+                                                            "company": "setoo",
+                                                            "address_1":
+                                                                addresses
+                                                                    .address1,
+                                                            "address_2":
+                                                                "string",
+                                                            "city":
+                                                                addresses.city,
+                                                            "state": addresses
+                                                                .province,
+                                                            // "state_or_province_code":
+                                                            //     addresses.provinceCode,
+                                                            "country": addresses
+                                                                .countryCode,
+                                                            "postcode":
+                                                                addresses.zip,
+                                                          };
+                                                          print(addressbody);
+                                                          setState(() {
+                                                            woocommerceaddressbody =
+                                                                addressbody;
+                                                            bigCommerceAddressIndex =
+                                                                index;
+                                                          });
+                                                        },
+                                                      )
+                                                    : Radio(
+                                                        value: index,
+                                                        groupValue: selectedDefaultIndex ==
+                                                                0
+                                                            ? addressList
+                                                                .indexWhere(
+                                                                    (address) =>
+                                                                        address
+                                                                            .defaultAddress)
+                                                            : selectedDefaultIndex,
+                                                        onChanged:
+                                                            (value) async {
+                                                          setState(() {
+                                                            selectedDefaultIndex =
+                                                                value as int;
+                                                            getLocationFromAddress(
+                                                                "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
+                                                          });
+                                                          CommonAlert
+                                                              .show_loading_alert(
+                                                                  context);
+                                                          AddressRepository()
+                                                              .setDefaultAddress(
+                                                                  addresses.id
+                                                                      .toString())
+                                                              .then(
+                                                                  (subjectFromServer) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            if (subjectFromServer ==
+                                                                AppString
+                                                                    .success) {
+                                                              ref.refresh(
+                                                                  addressDataProvider);
+                                                              Fluttertoast.showToast(
+                                                                  msg: AppString
+                                                                      .defaultAddressSuccess,
+                                                                  toastLength: Toast
+                                                                      .LENGTH_SHORT,
+                                                                  gravity:
+                                                                      ToastGravity
+                                                                          .BOTTOM,
+                                                                  timeInSecForIosWeb:
+                                                                      0,
+                                                                  backgroundColor:
+                                                                      AppColors
+                                                                          .green,
+                                                                  textColor:
+                                                                      AppColors
+                                                                          .whiteColor,
+                                                                  fontSize:
+                                                                      16.0);
+                                                            } else {
+                                                              Fluttertoast.showToast(
+                                                                  msg: AppString
+                                                                      .oops,
+                                                                  toastLength: Toast
+                                                                      .LENGTH_SHORT,
+                                                                  gravity:
+                                                                      ToastGravity
+                                                                          .BOTTOM,
+                                                                  timeInSecForIosWeb:
+                                                                      0,
+                                                                  backgroundColor:
+                                                                      AppColors
+                                                                          .green,
+                                                                  textColor:
+                                                                      AppColors
+                                                                          .whiteColor,
+                                                                  fontSize:
+                                                                      16.0);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                          ],
+                                        ),
+                                        Text(
+                                          addresses.firstName.capitalize(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          '${addresses.address1}, ${addresses.city}, ${addresses.country}'
+                                              .capitalize(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                          '${addresses.phone}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        Row(
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pushReplacement(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AddressScreen(
+                                                            addressId: addresses
+                                                                .id
+                                                                .toString(),
+                                                            address: addresses,
+                                                            isCheckout: widget
+                                                                    .isCheckout ??
+                                                                false),
+                                                  ),
+                                                );
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.edit),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    'Edit',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              child: VerticalDivider(
+                                                color: AppColors.grey,
+                                              ),
+                                            ),
+                                            TextButton(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.delete,
+                                                    color: ConstColors.red,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    "Delete",
+                                                    style: GoogleFonts.inter(
+                                                        color: ConstColors.red,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 12.sp),
+                                                  )
+                                                ],
+                                              ),
+                                              onPressed: () async {
+                                                bool? logoutConfirmed =
+                                                    await showDeleteAddressDialog(
+                                                        context);
+                                                if (logoutConfirmed
+                                                        .toString() ==
+                                                    "true") {
+                                                  if (addresses
+                                                          .defaultAddress ==
+                                                      true) {
+                                                    Fluttertoast.showToast(
+                                                        msg: AppString
+                                                            .canNotDeleteDefault,
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.BOTTOM,
+                                                        timeInSecForIosWeb: 0,
+                                                        backgroundColor:
+                                                            AppColors.green,
+                                                        textColor: AppColors
+                                                            .whiteColor,
+                                                        fontSize: 16.0);
+                                                  } else {
+                                                    CommonAlert
+                                                        .show_loading_alert(
+                                                            context);
+                                                    AddressRepository()
+                                                        .deleteAddress(
+                                                      addresses.id.toString(),
+                                                    )
+                                                        .then(
+                                                            (subjectFromServer) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      if (subjectFromServer ==
+                                                          AppString.success) {
+                                                        ref.refresh(
+                                                            addressDataProvider);
+                                                      }
+                                                    });
+                                                  }
                                                 }
-                                              });
-                                            },
-                                          )
-                                        : AppConfigure.wooCommerce
-                                            ? Radio(
-                                                value: index,
-                                                groupValue:
-                                                    bigCommerceAddressIndex,
-                                                onChanged: (value) async {
-                                                  String draftId =
-                                                      await SharedPreferenceManager()
-                                                          .getDraftId();
-                                                  print(draftId);
-                                                  String email =
-                                                      await SharedPreferenceManager()
-                                                          .getEmail();
-                                                  print(
-                                                      "$value ${addressList[index]}");
-                                                  addressbody = {
-                                                    "first_name":
-                                                        addresses.firstName,
-                                                    "last_name":
-                                                        addresses.lastName,
-                                                    "phone": addresses.phone,
-                                                    "email": email,
-                                                    "company": "setoo",
-                                                    "address_1":
-                                                        addresses.address1,
-                                                    "address_2": "string",
-                                                    "city": addresses.city,
-                                                    "state": addresses.province,
-                                                    // "state_or_province_code":
-                                                    //     addresses.provinceCode,
-                                                    "country":
-                                                        addresses.countryCode,
-                                                    "postcode": addresses.zip,
-                                                  };
-                                                  print(addressbody);
-                                                  setState(() {
-                                                    woocommerceaddressbody =
-                                                        addressbody;
-                                                    bigCommerceAddressIndex =
-                                                        index;
-                                                  });
-                                                },
-                                              )
-                                            : Radio(
-                                                value: index,
-                                                groupValue:
-                                                    selectedDefaultIndex == 0
-                                                        ? addressList.indexWhere(
-                                                            (address) => address
-                                                                .defaultAddress)
-                                                        : selectedDefaultIndex,
-                                                onChanged: (value) async {
-                                                  setState(() {
-                                                    selectedDefaultIndex =
-                                                        value as int;
-                                                    getLocationFromAddress(
-                                                        "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
-                                                  });
-                                                  CommonAlert
-                                                      .show_loading_alert(
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    ))
+                                : Card(
+                                    child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        children: [
+                                          AppConfigure.bigCommerce
+                                              ? Radio(
+                                                  value: index,
+                                                  groupValue:
+                                                      bigCommerceAddressIndex,
+                                                  onChanged: (value) async {
+                                                    String draftId =
+                                                        await SharedPreferenceManager()
+                                                            .getDraftId();
+                                                    print(draftId);
+                                                    String email =
+                                                        await SharedPreferenceManager()
+                                                            .getEmail();
+                                                    print(
+                                                        "$value ${addressList[index]}");
+                                                    addressbody = {
+                                                      "first_name":
+                                                          addresses.firstName,
+                                                      "last_name":
+                                                          addresses.lastName,
+                                                      "email": email,
+                                                      "company": "setoo",
+                                                      "address1":
+                                                          addresses.address1,
+                                                      "address2": "string",
+                                                      "city": addresses.city,
+                                                      "state_or_province":
+                                                          addresses.province,
+                                                      "state_or_province_code":
+                                                          addresses
+                                                              .provinceCode,
+                                                      "country_code":
+                                                          addresses.countryCode,
+                                                      "postal_code":
+                                                          addresses.zip,
+                                                      "phone": addresses.phone,
+                                                    };
+                                                    print(addressbody);
+                                                    setState(() {
+                                                      bigCommerceAddressIndex =
+                                                          index;
+                                                    });
+
+                                                    CommonAlert
+                                                        .show_loading_alert(
+                                                            context);
+                                                    AddressRepository()
+                                                        .bigCommerceShippingAddress(
+                                                            addressbody!)
+                                                        .then(
+                                                            (subjectFromServer) {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      if (subjectFromServer ==
+                                                          AppString.success) {
+                                                        ref.refresh(
+                                                            addressDataProvider);
+                                                        Fluttertoast.showToast(
+                                                            msg: AppString
+                                                                .defaultAddressSuccess,
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                0,
+                                                            backgroundColor:
+                                                                AppColors.green,
+                                                            textColor: AppColors
+                                                                .whiteColor,
+                                                            fontSize: 16.0);
+                                                      } else {
+                                                        Fluttertoast.showToast(
+                                                            msg: AppString.oops,
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                0,
+                                                            backgroundColor:
+                                                                AppColors.green,
+                                                            textColor: AppColors
+                                                                .whiteColor,
+                                                            fontSize: 16.0);
+                                                      }
+                                                    });
+                                                  },
+                                                )
+                                              : AppConfigure.wooCommerce
+                                                  ? Radio(
+                                                      value: index,
+                                                      groupValue:
+                                                          bigCommerceAddressIndex,
+                                                      onChanged: (value) async {
+                                                        String draftId =
+                                                            await SharedPreferenceManager()
+                                                                .getDraftId();
+                                                        print(draftId);
+                                                        String email =
+                                                            await SharedPreferenceManager()
+                                                                .getEmail();
+                                                        print(
+                                                            "$value ${addressList[index]}");
+                                                        addressbody = {
+                                                          "first_name":
+                                                              addresses
+                                                                  .firstName,
+                                                          "last_name": addresses
+                                                              .lastName,
+                                                          "phone":
+                                                              addresses.phone,
+                                                          "email": email,
+                                                          "company": "setoo",
+                                                          "address_1": addresses
+                                                              .address1,
+                                                          "address_2": "string",
+                                                          "city":
+                                                              addresses.city,
+                                                          "state": addresses
+                                                              .province,
+                                                          // "state_or_province_code":
+                                                          //     addresses.provinceCode,
+                                                          "country": addresses
+                                                              .countryCode,
+                                                          "postcode":
+                                                              addresses.zip,
+                                                        };
+                                                        print(addressbody);
+                                                        setState(() {
+                                                          woocommerceaddressbody =
+                                                              addressbody;
+                                                          bigCommerceAddressIndex =
+                                                              index;
+                                                        });
+                                                      },
+                                                    )
+                                                  : Radio(
+                                                      value: index,
+                                                      groupValue: selectedDefaultIndex ==
+                                                              0
+                                                          ? addressList.indexWhere(
+                                                              (address) => address
+                                                                  .defaultAddress)
+                                                          : selectedDefaultIndex,
+                                                      onChanged: (value) async {
+                                                        setState(() {
+                                                          selectedDefaultIndex =
+                                                              value as int;
+                                                          getLocationFromAddress(
+                                                              "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
+                                                        });
+                                                        CommonAlert
+                                                            .show_loading_alert(
+                                                                context);
+                                                        AddressRepository()
+                                                            .setDefaultAddress(
+                                                                addresses.id
+                                                                    .toString())
+                                                            .then(
+                                                                (subjectFromServer) {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          if (subjectFromServer ==
+                                                              AppString
+                                                                  .success) {
+                                                            ref.refresh(
+                                                                addressDataProvider);
+                                                            Fluttertoast.showToast(
+                                                                msg: AppString
+                                                                    .defaultAddressSuccess,
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                timeInSecForIosWeb:
+                                                                    0,
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .green,
+                                                                textColor: AppColors
+                                                                    .whiteColor,
+                                                                fontSize: 16.0);
+                                                          } else {
+                                                            Fluttertoast.showToast(
+                                                                msg: AppString
+                                                                    .oops,
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                timeInSecForIosWeb:
+                                                                    0,
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .green,
+                                                                textColor: AppColors
+                                                                    .whiteColor,
+                                                                fontSize: 16.0);
+                                                          }
+                                                        });
+                                                      },
+                                                    ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(capitalizeWords(
+                                                    addresses.lastName)),
+                                                Text(addresses.firstName),
+                                                Text(
+                                                  '${addresses.address1}, ${addresses.city}, ${addresses.country}',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.delete),
+                                                onPressed: () async {
+                                                  bool? logoutConfirmed =
+                                                      await showDeleteAddressDialog(
                                                           context);
-                                                  AddressRepository()
-                                                      .setDefaultAddress(
-                                                          addresses.id
-                                                              .toString())
-                                                      .then(
-                                                          (subjectFromServer) {
-                                                    Navigator.of(context).pop();
-                                                    if (subjectFromServer ==
-                                                        AppString.success) {
-                                                      ref.refresh(
-                                                          addressDataProvider);
+                                                  if (logoutConfirmed
+                                                          .toString() ==
+                                                      "true") {
+                                                    if (addresses
+                                                            .defaultAddress ==
+                                                        true) {
                                                       Fluttertoast.showToast(
                                                           msg: AppString
-                                                              .defaultAddressSuccess,
+                                                              .canNotDeleteDefault,
                                                           toastLength: Toast
                                                               .LENGTH_SHORT,
                                                           gravity: ToastGravity
@@ -505,108 +1032,56 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                               .whiteColor,
                                                           fontSize: 16.0);
                                                     } else {
-                                                      Fluttertoast.showToast(
-                                                          msg: AppString.oops,
-                                                          toastLength: Toast
-                                                              .LENGTH_SHORT,
-                                                          gravity: ToastGravity
-                                                              .BOTTOM,
-                                                          timeInSecForIosWeb: 0,
-                                                          backgroundColor:
-                                                              AppColors.green,
-                                                          textColor: AppColors
-                                                              .whiteColor,
-                                                          fontSize: 16.0);
+                                                      CommonAlert
+                                                          .show_loading_alert(
+                                                              context);
+                                                      AddressRepository()
+                                                          .deleteAddress(
+                                                        addresses.id.toString(),
+                                                      )
+                                                          .then(
+                                                              (subjectFromServer) {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        if (subjectFromServer ==
+                                                            AppString.success) {
+                                                          ref.refresh(
+                                                              addressDataProvider);
+                                                        }
+                                                      });
                                                     }
-                                                  });
+                                                  }
                                                 },
                                               ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(capitalizeWords(
-                                              addresses.lastName)),
-                                          Text(addresses.firstName),
-                                          Text(
-                                            '${addresses.address1}, ${addresses.city}, ${addresses.country}',
+                                              IconButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AddressScreen(
+                                                              addressId: addresses
+                                                                  .id
+                                                                  .toString(),
+                                                              address:
+                                                                  addresses,
+                                                              isCheckout: widget
+                                                                      .isCheckout ??
+                                                                  false),
+                                                    ),
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.edit),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () async {
-                                            bool? logoutConfirmed =
-                                                await showDeleteAddressDialog(
-                                                    context);
-                                            if (logoutConfirmed.toString() ==
-                                                "true") {
-                                              if (addresses.defaultAddress ==
-                                                  true) {
-                                                Fluttertoast.showToast(
-                                                    msg: AppString
-                                                        .canNotDeleteDefault,
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.BOTTOM,
-                                                    timeInSecForIosWeb: 0,
-                                                    backgroundColor:
-                                                        AppColors.green,
-                                                    textColor:
-                                                        AppColors.whiteColor,
-                                                    fontSize: 16.0);
-                                              } else {
-                                                CommonAlert.show_loading_alert(
-                                                    context);
-                                                AddressRepository()
-                                                    .deleteAddress(
-                                                  addresses.id.toString(),
-                                                )
-                                                    .then((subjectFromServer) {
-                                                  Navigator.of(context).pop();
-                                                  if (subjectFromServer ==
-                                                      AppString.success) {
-                                                    ref.refresh(
-                                                        addressDataProvider);
-                                                  }
-                                                });
-                                              }
-                                            }
-                                          },
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AddressScreen(
-                                                        addressId: addresses
-                                                            .id
-                                                            .toString(),
-                                                        address: addresses,
-                                                        isCheckout:
-                                                            widget.isCheckout ??
-                                                                false),
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(Icons.edit),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  )),
                           );
                         },
                       )),
