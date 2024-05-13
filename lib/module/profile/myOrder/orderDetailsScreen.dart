@@ -1,5 +1,6 @@
 // OrderdetailsScreen
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mobj_project/module/profile/myOrder/repeatOrder.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -40,9 +41,23 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
           appBar: AppBar(
-            elevation: 2,
+              automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
+
+               leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
+        
             title: Text(
               AppLocalizations.of(context)!.orderDetailsTitle,
+              style: Theme.of(context).textTheme.headlineLarge,
+
             ),
             actions: const [],
           ),
@@ -63,6 +78,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                 top: 5, left: 10, right: 10),
                             child: Card(
                               elevation: 3,
+                              color: Theme.of(context).colorScheme.onPrimary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -116,7 +132,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                         ),
                                         trailing: const OrderStatus(
                                             orderStatus:
-                                                AppString.orderStatus2),
+                                                AppString.orderStatus2,),
                                       )),
                                   const SizedBox(
                                     height: 5,
@@ -145,6 +161,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                       );
                                     },
                                     child: Card(
+                                       color: Theme.of(context).colorScheme.onPrimary,
                                       margin: const EdgeInsets.only(bottom: 0),
                                       elevation: 3,
                                       shape: RoundedRectangleBorder(
@@ -291,6 +308,12 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
             )
           ])),
           bottomNavigationBar: BottomAppBar(
+//  automaticallyImplyLeading: false,
+//               backgroundColor: Theme.of(context).colorScheme.secondary,
+
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.secondary,
+
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -298,7 +321,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: appInfo.primaryColorValue,
+                          backgroundColor: AppColors.buttonColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   AppDimension.buttonRadius)),
@@ -312,8 +335,8 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                           style: TextStyle(
                               color: AppColors.whiteColor,
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              fontWeight: FontWeight.bold),
+                                  MediaQuery.of(context).size.width * 0.04,
+                              fontWeight: FontWeight.w400),
                         ),
                         onPressed: () {
                           Navigator.push(
@@ -328,7 +351,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: appInfo.primaryColorValue,
+                          backgroundColor: AppColors.buttonColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   AppDimension.buttonRadius)),
@@ -342,8 +365,8 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                           style: TextStyle(
                               color: AppColors.whiteColor,
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
-                              fontWeight: FontWeight.bold),
+                                  MediaQuery.of(context).size.width * 0.04,
+                              fontWeight: FontWeight.w400),
                         ),
                         onPressed: () async {
                           orderProviders.whenData((product) async {

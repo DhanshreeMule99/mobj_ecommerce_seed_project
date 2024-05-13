@@ -211,6 +211,9 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
               appBar: AppBar(
+                 automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
                   leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -219,9 +222,10 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 Icons.chevron_left_rounded,
                 size: 25.sp,
               )),
-                elevation: 2,
+           
                 title: Text(
                   AppLocalizations.of(context)!.setting,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ),
               bottomNavigationBar: MobjBottombar(

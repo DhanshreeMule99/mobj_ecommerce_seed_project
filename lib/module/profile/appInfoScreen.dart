@@ -1,5 +1,6 @@
 // appInfoScreen
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../wishlist/wishlishScreen.dart';
@@ -20,10 +21,20 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
         appBar: AppBar(
-          elevation: 0,
+           automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
           title: const Text(
             "",
           ),
+           leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
         ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
@@ -82,9 +93,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                         const SizedBox(height: 20),
                         Text(
                           appInfo.aboutApp,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
+                          style: Theme.of(context).textTheme.headlineLarge,
                         ),
                       ],
                     ),

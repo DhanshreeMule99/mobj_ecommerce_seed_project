@@ -1,6 +1,7 @@
 // OrderListScreen
 import 'package:intl/intl.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderListScreen extends ConsumerStatefulWidget {
   final bool? isCheckout;
@@ -26,17 +27,27 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
         appBar: AppBar(
-          elevation: 2,
+         automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
           title: Text(
             AppLocalizations.of(context)!.myOrders,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
-          actions: const [],
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
         ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
           selcted_icon_color: AppColors.buttonColor,
           unselcted_icon_color: AppColors.blackColor,
-          selectedPage: 3,
+          selectedPage: 4,
           screen1: const OrderListScreen(),
           screen2:  SearchWidget(),
           screen3: const OrderListScreen(),
@@ -77,7 +88,9 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                             padding: const EdgeInsets.only(
                                 top: 5, left: 10, right: 10),
                             child: Card(
+                              color: Theme.of(context).colorScheme.onPrimary,
                                 elevation: 3,
+                                
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
