@@ -4,12 +4,16 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:like_button/like_button.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
 import '../../utils/api.dart';
+
 
 class CollectionWiseProductScreen extends ConsumerStatefulWidget {
   final String category;
@@ -49,6 +53,7 @@ class _CollectionWiseProductScreenState
   bool isFilter = false;
   bool isFilters = false;
   bool toggleIcon = false;
+ 
   GraphQlRepository graphQLConfig = GraphQlRepository();
   String plus = "+";
   final productsProvider =
@@ -314,218 +319,26 @@ fragment PriceFields on Money {
     final productsFuture = ref.watch(productsProvider(widget.categoryName));
     final productByCollection =
         ref.watch(collectionWiseProvider(widget.category));
+       
 
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
           appBar: AppBar(
-            elevation: 2,
-            actions: [
-              // IconButton(
-              //     onPressed: () {
-              //       showModalBottomSheet(
-              //           shape: const RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.vertical(
-              //             top: Radius.circular(25.0),
-              //           )),
-              //           context: context,
-              //           builder: (BuildContext context) {
-              //             return StatefulBuilder(
-              //               builder:
-              //                   (BuildContext context, StateSetter setState) {
-              //                 return Container(
-              //                     decoration: const BoxDecoration(
-              //                       borderRadius: BorderRadius.only(
-              //                         topLeft: Radius.circular(20.0),
-              //                         topRight: Radius.circular(20.0),
-              //                       ),
-              //                     ),
-              //                     child: Padding(
-              //                         padding: const EdgeInsets.all(15.0),
-              //                         child: SingleChildScrollView(
-              //                           child: Column(
-              //                             crossAxisAlignment:
-              //                                 CrossAxisAlignment.start,
-              //                             children: [
-              //                               Padding(
-              //                                   padding: const EdgeInsets.only(
-              //                                       top: 5,
-              //                                       left: 15,
-              //                                       right: 15),
-              //                                   child: Text(
-              //                                     AppLocalizations.of(context)!
-              //                                         .selectPrice,
-              //                                     style: TextStyle(
-              //                                       fontSize: 0.04 *
-              //                                           MediaQuery.of(context)
-              //                                               .size
-              //                                               .width,
-              //                                     ),
-              //                                   )),
-              //                               const SizedBox(
-              //                                 height: 15,
-              //                               ),
-              //                               Padding(
-              //                                   padding: const EdgeInsets.only(
-              //                                       top: 0,
-              //                                       left: 15,
-              //                                       right: 15),
-              //                                   child: Text(
-              //                                     "\u{20B9}${start.toStringAsFixed(0)} - \u{20B9}${end.toStringAsFixed(0)}${end >= 900 ? plus : ""}",
-              //                                     style: TextStyle(
-              //                                       fontSize: 0.04 *
-              //                                           MediaQuery.of(context)
-              //                                               .size
-              //                                               .width,
-              //                                       fontWeight: FontWeight.w700,
-              //                                     ),
-              //                                   )),
-              //                               StatefulBuilder(
-              //                                   builder: (context, state) {
-              //                                 return RangeSlider(
-              //                                   values: RangeValues(start, end),
-              //                                   labels: RangeLabels(
-              //                                     start.toString(),
-              //                                     end.toString(),
-              //                                   ),
-              //                                   activeColor:
-              //                                       appInfo.primaryColorValue,
-              //                                   onChanged: (value) {
-              //                                     setState(() {
-              //                                       state(() {
-              //                                         start = value.start;
-              //                                         end = value.end;
-              //                                       });
-              //                                     });
-              //                                   },
-              //                                   min: 0.0,
-              //                                   max: 900.0,
-              //                                 );
-              //                               }),
-              //                               Row(
-              //                                 mainAxisAlignment:
-              //                                     MainAxisAlignment.center,
-              //                                 children: [
-              //                                   ElevatedButton(
-              //                                     onPressed: () {
-              //                                       setState(() {
-              //                                         isFilter = false;
-              //                                         isFilters = false;
-              //                                       });
-              //                                       ref.refresh(
-              //                                           productsProvider(widget
-              //                                               .categoryName));
-              //                                       Navigator.pop(
-              //                                           context); // Close the bottom sheet
-              //                                     },
-              //                                     style:
-              //                                         ElevatedButton.styleFrom(
-              //                                       backgroundColor:
-              //                                           AppColors.whiteColor,
-              //                                       // Button color
-              //                                       side: BorderSide(
-              //                                           color: appInfo
-              //                                               .primaryColorValue),
-              //                                       // Border color
-              //                                       shape:
-              //                                           RoundedRectangleBorder(
-              //                                         borderRadius: BorderRadius
-              //                                             .circular(AppDimension
-              //                                                 .buttonRadius),
-              //                                       ),
-              //                                       textStyle: const TextStyle(
-              //                                         color:
-              //                                             AppColors.blackColor,
-              //                                         fontSize: 10,
-              //                                         fontStyle:
-              //                                             FontStyle.normal,
-              //                                       ),
-              //                                     ),
-              //                                     child: Text(
-              //                                         AppLocalizations.of(
-              //                                                 context)!
-              //                                             .clear,
-              //                                         style: TextStyle(
-              //                                             color: AppColors
-              //                                                 .blackColor,
-              //                                             fontSize: MediaQuery.of(
-              //                                                         context)
-              //                                                     .size
-              //                                                     .width *
-              //                                                 0.04,
-              //                                             fontWeight:
-              //                                                 FontWeight.bold)),
-              //                                   ),
-              //                                   const SizedBox(
-              //                                     width: 15,
-              //                                   ),
-              //                                   ElevatedButton(
-              //                                     onPressed: () {
-              //                                       setState(() {
-              //                                         isFilter = true;
-              //                                         isFilters = true;
-              //                                       });
-              //                                       ref.refresh(
-              //                                           productsProvider(widget
-              //                                               .categoryName));
-              //                                       Navigator.pop(
-              //                                           context); // Close the bottom sheet
-              //                                     },
-              //                                     style:
-              //                                         ElevatedButton.styleFrom(
-              //                                       backgroundColor:
-              //                                           AppColors.whiteColor,
-              //                                       // Button color
-              //                                       side: BorderSide(
-              //                                           color: appInfo
-              //                                               .primaryColorValue),
-              //                                       // Border color
-              //                                       shape:
-              //                                           RoundedRectangleBorder(
-              //                                         borderRadius: BorderRadius
-              //                                             .circular(AppDimension
-              //                                                 .buttonRadius),
-              //                                       ),
-              //                                       textStyle: const TextStyle(
-              //                                         color:
-              //                                             AppColors.blackColor,
-              //                                         fontSize: 10,
-              //                                         fontStyle:
-              //                                             FontStyle.normal,
-              //                                       ),
-              //                                     ),
-              //                                     child: Text(
-              //                                         AppLocalizations.of(
-              //                                                 context)!
-              //                                             .applyFilter,
-              //                                         style: TextStyle(
-              //                                             color: AppColors
-              //                                                 .blackColor,
-              //                                             fontSize: MediaQuery.of(
-              //                                                         context)
-              //                                                     .size
-              //                                                     .width *
-              //                                                 0.04,
-              //                                             fontWeight:
-              //                                                 FontWeight.bold)),
-              //                                   ),
-              //                                 ],
-              //                               ),
-              //                             ],
-              //                           ),
-              //                         )));
-              //               },
-              //             );
-              //           });
-              //     },
-              //     icon: const Icon(Icons.filter_alt)),
-              // // IconButton(
-              // //     onPressed: () {
-              // //       _showSortingOptions(context);
-              // //     },
-              // //     icon: const Icon(Icons.sort))
-            ],
+            automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              surfaceTintColor: Theme.of(context).colorScheme.secondary,
+           leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
+            actions: [],
             title: Text(
               widget.categoryName,
+               style: Theme.of(context).textTheme.headlineLarge,
             ),
           ),
           bottomNavigationBar: MobjBottombar(
@@ -576,11 +389,20 @@ fragment PriceFields on Money {
                         child: productsFuture.when(
                         data: (products) {
                           return products.isNotEmpty
-                              ? ListView.builder(
-                                  itemCount: products.length,
-                                  itemBuilder: (context, index) {
+                              ?  GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 1 / 1.6),
+                                itemCount: products.length,
+                                itemBuilder: (BuildContext context, int index) {
                                     final product = products[index];
                                     log("image url is this ${product.featuredImage}");
+                                   
+                                    final int staticStock =
+                                      10; // Example static value for stock
+                                  final String staticVariantId =
+                                      "static_variant_id";
                                     return Padding(
                                         padding: const EdgeInsets.only(
                                             top: 5, left: 15, right: 15),
@@ -609,59 +431,95 @@ fragment PriceFields on Money {
                                                 ),
                                               );
                                             },
-                                            child: Card(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 10),
-                                              elevation: 2,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                // Add padding to the Card
-                                                child: ListTile(
-                                                  contentPadding:
-                                                      const EdgeInsets.all(0),
-                                                  // Remove default ListTile padding
-                                                  title: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 8),
-                                                    // Add padding to the title
-                                                    child: Text(product.title),
-                                                  ),
-                                                  leading: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8),
-                                                    // Add padding to the leading widget
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          product.featuredImage,
-                                                      placeholder:
-                                                          (context, url) =>
-                                                              Container(
-                                                        height: 50,
-                                                        width: 50,
-                                                        color:
-                                                            AppColors.greyShade,
-                                                      ),
-                                                      errorWidget: (context,
-                                                              url, error) =>
-                                                          const Icon(
-                                                              Icons.error),
-                                                      width: 50,
-                                                      height: 50,
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
-                                                  trailing: Text(
-                                                      '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
-                                                ),
-                                              ),
-                                            )));
+                                            child:
+// CollectionProductCard(
+//         tileColor: AppColors.blue, // Set your desired tile color
+//         productName: product.title,
+//         productImage: product.featuredImage,
+//         productPrice: "\u{20B9}${product.minPrice}",
+//         // isInStock: staticStock,
+//         addToCart: () {
+//           // Define your addToCart function logic here
+//         },
+//       )
+
+                                             ProductListCard(
+                                              logoPath: product.title,
+                                              address: product.title,
+                                              datetime: product.title,
+                                              ratingCount:  num.parse("5.5"),
+                                              productId:product.id ,
+                                              variantId: product.title, 
+                                              stock: staticStock, 
+                                              ref: ref,
+
+                                     
+                                      tileColor:appInfo.primaryColorValue,
+                                      productName: product.title,
+                                      productImage: product.featuredImage,
+                                      productPrice: product.minPrice.toString(),
+                                      addToCart: () {
+                                        
+                                      },
+                                     
+                                    ),
+                                            
+                                            
+                                    //          Card(
+                                    //           margin: const EdgeInsets.only(
+                                    //               bottom: 10),
+                                    //           elevation: 2,
+                                    //           shape: RoundedRectangleBorder(
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(15),
+                                    //           ),
+                                    //           child: Padding(
+                                    //             padding:
+                                    //                 const EdgeInsets.all(10),
+                                    //             // Add padding to the Card
+                                    //             child: ListTile(
+                                    //               contentPadding:
+                                    //                   const EdgeInsets.all(0),
+                                    //               // Remove default ListTile padding
+                                    //               title: Padding(
+                                    //                 padding:
+                                    //                     const EdgeInsets.only(
+                                    //                         bottom: 8),
+                                    //                 // Add padding to the title
+                                    //                 child: Text(product.title),
+                                    //               ),
+                                    //               leading: Padding(
+                                    //                 padding:
+                                    //                     const EdgeInsets.only(
+                                    //                         right: 8),
+                                    //                 // Add padding to the leading widget
+                                    //                 child: CachedNetworkImage(
+                                    //                   imageUrl:
+                                    //                       product.featuredImage,
+                                    //                   placeholder:
+                                    //                       (context, url) =>
+                                    //                           Container(
+                                    //                     height: 50,
+                                    //                     width: 50,
+                                    //                     color:
+                                    //                         AppColors.greyShade,
+                                    //                   ),
+                                    //                   errorWidget: (context,
+                                    //                           url, error) =>
+                                    //                       const Icon(
+                                    //                           Icons.error),
+                                    //                   width: 50,
+                                    //                   height: 50,
+                                    //                   fit: BoxFit.contain,
+                                    //                 ),
+                                    //               ),
+                                    //               trailing: Text(
+                                    //                   '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
+                                    //             ),
+                                    //           ),
+                                    //         )
+                                            
+                                      ));
                                   },
                                 )
                               : Column(
@@ -721,99 +579,148 @@ fragment PriceFields on Money {
                                 ref.refresh(productDataProvider("1"));
                               },
                               child: products.isNotEmpty
-                                  ? ListView.builder(
-                                      itemCount: products.length,
-                                      itemBuilder: (context, index) {
+                                  ?  GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 1 / 1.6),
+                                itemCount: products.length,
+                                itemBuilder: (BuildContext context, int index) {
                                         final product = products[index];
                                         log("image url is this ${product.featuredImage}");
-                                        return Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 5, left: 15, right: 15),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  Navigator.of(context).push(
-                                                    PageRouteBuilder(
-                                                      pageBuilder: (context,
-                                                              animation1,
-                                                              animation2) =>
-                                                          ProductDetailsScreen(
-                                                        uid: product.id
-                                                            .replaceAll(
-                                                                "gid://shopify/Product/",
-                                                                "")
-                                                            .toString(),
-                                                      ),
-                                                      transitionDuration:
-                                                          Duration.zero,
-                                                      reverseTransitionDuration:
-                                                          Duration.zero,
-                                                    ),
-                                                  );
-                                                },
-                                                child: Card(
-                                                  margin: const EdgeInsets.only(
-                                                      bottom: 10),
-                                                  elevation: 2,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
+                                          
+                                    final int staticStock =
+                                      10; // Example static value for stock
+                                  final String staticVariantId =
+                                      "static_variant_id";
+                                        return InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                PageRouteBuilder(
+                                                  pageBuilder: (context,
+                                                          animation1,
+                                                          animation2) =>
+                                                      ProductDetailsScreen(
+                                                    uid: product.id
+                                                        .replaceAll(
+                                                            "gid://shopify/Product/",
+                                                            "")
+                                                        .toString(),
                                                   ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    // Add padding to the Card
-                                                    child: ListTile(
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                      // Remove default ListTile padding
-                                                      title: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                bottom: 8),
-                                                        // Add padding to the title
-                                                        child:
-                                                            Text(product.title),
-                                                      ),
-                                                      leading: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 8),
-                                                        // Add padding to the leading widget
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl: product
-                                                                  .imageUrls
-                                                                  .isNotEmpty
-                                                              ? product
-                                                                  .imageUrls[0]
-                                                                  .toString()
-                                                              : "" ?? "",
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  Container(
-                                                            height: 50,
-                                                            width: 50,
-                                                            color: AppColors
-                                                                .greyShade,
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                          width: 50,
-                                                          height: 50,
-                                                          fit: BoxFit.contain,
-                                                        ),
-                                                      ),
-                                                      trailing: Text(
-                                                          '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} '),
-                                                    ),
-                                                  ),
-                                                )));
+                                                  transitionDuration:
+                                                      Duration.zero,
+                                                  reverseTransitionDuration:
+                                                      Duration.zero,
+                                                ),
+                                              );
+                                            },
+                                            child:
+                                        
+                                        
+                                            // CollectionProductCard(
+                                            //     tileColor: AppColors.blue, // Set your desired tile color
+                                            //     productName: product.title,
+                                            //     productImage: product.featuredImage,
+                                            //     productPrice: "\u{20B9}${product.minPrice}",
+                                            //     // isInStock: staticStock,
+                                            //     addToCart: () {
+                                            //       // Define your addToCart function logic here
+                                            //     },
+                                            //   )
+                                        
+                                                                                        ProductListCard(
+                                                                                      logoPath: product.title,
+                                                                                      address: product.title,
+                                                                                      datetime: product.title,
+                                                                                      ratingCount:  num.parse("5.5"),
+                                                                                      productId:product.title ,
+                                                                                      variantId: product.title, 
+                                                                                      stock: staticStock, 
+                                                                                      ref: ref,
+                                        
+                                                                              
+                                                                              tileColor: Colors.white, 
+                                                                              productName: product.title,
+                                                                              productImage: product.featuredImage,
+                                                                              productPrice: product.minPrice.toString(),
+                                                                              addToCart: () {
+                                                                                
+                                                                              },
+                                                                              
+                                                                            ),
+                                        
+                                        
+                                        
+                                        
+                                            
+                                                                            //              Card(
+                                                                            //               margin: const EdgeInsets.only(
+                                                                            //                   bottom: 10),
+                                                                            //               elevation: 2,
+                                                                            //               shape: RoundedRectangleBorder(
+                                                                            //                 borderRadius:
+                                                                            //                     BorderRadius.circular(
+                                                                            //                         15),
+                                                                            //               ),
+                                                                            //               child: Padding(
+                                                                            //                 padding:
+                                                                            //                     const EdgeInsets.all(
+                                                                            //                         10),
+                                                                            //                 // Add padding to the Card
+                                                                            //                 child: ListTile(
+                                                                            //                   contentPadding:
+                                                                            //                       const EdgeInsets.all(
+                                                                            //                           0),
+                                                                            //                   // Remove default ListTile padding
+                                                                            //                   title: Padding(
+                                                                            //                     padding:
+                                                                            //                         const EdgeInsets
+                                                                            //                             .only(
+                                                                            //                             bottom: 8),
+                                                                            //                     // Add padding to the title
+                                                                            //                     child:
+                                                                            //                         Text(product.title),
+                                                                            //                   ),
+                                                                            //                   leading: Padding(
+                                                                            //                     padding:
+                                                                            //                         const EdgeInsets
+                                                                            //                             .only(right: 8),
+                                                                            //                     // Add padding to the leading widget
+                                                                            //                     child:
+                                                                            //                         CachedNetworkImage(
+                                                                            //                       imageUrl: product
+                                                                            //                               .imageUrls
+                                                                            //                               .isNotEmpty
+                                                                            //                           ? product
+                                                                            //                               .imageUrls[0]
+                                                                            //                               .toString()
+                                                                            //                           : "" ?? "",
+                                                                            //                       placeholder:
+                                                                            //                           (context, url) =>
+                                                                            //                               Container(
+                                                                            //                         height: 50,
+                                                                            //                         width: 50,
+                                                                            //                         color: AppColors
+                                                                            //                             .greyShade,
+                                                                            //                       ),
+                                                                            //                       errorWidget: (context,
+                                                                            //                               url, error) =>
+                                                                            //                           const Icon(
+                                                                            //                               Icons.error),
+                                                                            //                       width: 50,
+                                                                            //                       height: 50,
+                                                                            //                       fit: BoxFit.contain,
+                                                                            //                     ),
+                                                                            //                   ),
+                                                                            //                   trailing: Text(
+                                                                            //                       '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} '),
+                                                                            //                 ),
+                                                                            //               ),
+                                                                            //             )
+                                            
+                                          
+                                            
+                                            );
                                       },
                                     )
                                   : Column(
