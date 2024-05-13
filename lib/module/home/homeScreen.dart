@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
+import 'package:mobj_project/module/home/homeCarousel.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -304,10 +305,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
+                  child: ImageCarousel(),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(AppLocalizations.of(context)!.categories,
+                      Text(
+                        AppLocalizations.of(context)!.categories,
                         style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       InkWell(

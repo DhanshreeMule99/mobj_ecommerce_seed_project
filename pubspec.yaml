@@ -112,6 +112,7 @@ dependencies:
   google_fonts: ^4.0.4
   flutter_screenutil: ^5.9.0
   uuid: ^3.0.7
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
