@@ -128,7 +128,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                 data: (user) {
                   return Container(
                     width: double.maxFinite,
-                    height: 65.h,
+                    height: 76.h,
                     margin:
                         EdgeInsets.only(left: 10.w, right: 10.w, bottom: 10.h),
                     padding: const EdgeInsets.all(10),
@@ -738,7 +738,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                   backgroundColor: Theme.of(context).colorScheme.secondary,
                   child: IconButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                       },
                       icon: Icon(
                         Icons.favorite,
@@ -1739,8 +1739,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                             decoration:
                                                                 const BoxDecoration(
                                                               color: Color
-                                                                  .fromARGB(
-                                                                      255,
+                                                                  .fromARGB(255,
                                                                       8,
                                                                       119,
                                                                       12),
@@ -2018,7 +2017,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       ),
                       loading: () => Container(),
                     ),
-                  ],
+                  
+                  SizedBox(
+                    height: 100.h,
+                  )],
                 ),
               ),
             ),

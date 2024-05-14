@@ -1,5 +1,6 @@
 // editProfileScreen
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../wishlist/wishlishScreen.dart';
@@ -129,10 +130,21 @@ if (AppConfigure.bigCommerce) {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
             appBar: AppBar(
-              elevation: 2,
+             leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.chevron_left_rounded,
+                size: 25.sp,
+              )),
+          automaticallyImplyLeading: false,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          surfaceTintColor: Theme.of(context).colorScheme.secondary,
               // backgroundColor: app_colors.white_color,
               title: Text(
                 AppLocalizations.of(context)!.profile,
+ style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
             bottomNavigationBar: MobjBottombar(

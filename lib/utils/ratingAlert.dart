@@ -1,64 +1,252 @@
+// import 'dart:developer';
+
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+// import 'cmsConfigue.dart';
+
+// class RatingAlert extends StatelessWidget {
+//   final Function(double rating) onRatingSelected;
+//   final Function() onsubmit;
+//   final String pid;
+//   final double user_rating;
+//   final review = TextEditingController();
+//   final header = TextEditingController();
+//   final WidgetRef ref;
+//   int rating = 1;
+//   RatingAlert(
+//       {Key? key,
+//       required this.onRatingSelected,
+//       required this.pid,
+//       required this.onsubmit,
+//       required this.user_rating,
+//       required this.ref})
+//       : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: Text(AppLocalizations.of(context)!.rateUs),
+//       content: SingleChildScrollView(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             // Text(user_rating.toString()),
+//             TextField(
+//               controller: header,
+//               decoration: InputDecoration(
+//                   labelText: AppLocalizations.of(context)!.titleReview),
+//             ),
+//             TextField(
+//               controller: review,
+//               decoration: InputDecoration(
+//                   labelText: AppLocalizations.of(context)!.giveReview),
+//             ),
+//             // Text(AppString.rateUs),
+//             const SizedBox(height: 16),
+//             RatingBar.builder(
+//               initialRating: user_rating,
+//               minRating: 1,
+//               maxRating: 5,
+//               direction: Axis.horizontal,
+//               allowHalfRating: false,
+//               itemCount: 5,
+//               itemBuilder: (context, _) => const Icon(
+//                 Icons.star,
+//                 color: Colors.amber,
+//               ),
+//               onRatingUpdate: (rate) {
+//                 rating = rate.toInt();
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//       actions: [
+//         TextButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//           child: Text(AppLocalizations.of(context)!.cancel),
+//         ),
+//         TextButton(
+//           onPressed: () async {
+//             String userid = await SharedPreferenceManager().getUserId();
+//             log(userid);
+//             String customername = await SharedPreferenceManager().getname();
+//             String customeremail = await SharedPreferenceManager().getemail();
+//             String uid = await SharedPreferenceManager().getUserId();
+//             CommonAlert.show_loading_alert(context);
+//             Map<String, dynamic> body;
+//             if (AppConfigure.wooCommerce) {
+//               body = {
+//                 "product_id": pid,
+//                 "title": review.text,
+//                 "review": header.text,
+//                 "status": "approved",
+//                 "rating": rating,
+//                 "reviewer_email": customeremail,
+//                 "reviewer": customername,
+//                 "date_reviewed": "2019-03-24T14:15:22Z"
+//               };
+//             } else if (AppConfigure.bigCommerce) {
+//               body = {
+//                 "title": review.text,
+//                 "text": header.text,
+//                 "status": "pending",
+//                 "rating": rating,
+//                 "email": customeremail,
+//                 "name": customername,
+//                 "date_reviewed": "2019-03-24T14:15:22Z"
+//               };
+//             } else {
+//               body = {
+//                 "data": {
+//                   "body": review.text,
+//                   "heading": header.text,
+//                   "state": "approved",
+//                   "is_verified": true,
+//                   "customer_id": uid.toString(),
+//                   "external_product_id": pid,
+//                   "rating": rating
+//                 }
+//               };
+//             }
+//             // AppConfigure.bigCommerce
+//             //     ? {
+//             //         "title": review.text,
+//             //         "text": header.text,
+//             //         "status": "pending",
+//             //         "rating": rating,
+//             //         "email": customeremail,
+//             //         "name": customername,
+//             //         "date_reviewed": "2019-03-24T14:15:22Z"
+//             //       }
+//             //     : {
+//             //         "data": {
+//             //           "body": review.text,
+//             //           "heading": header.text,
+//             //           "state": "approved",
+//             //           "is_verified": true,
+//             //           "customer_id": uid.toString(),
+//             //           "external_product_id": pid,
+//             //           "rating": rating
+//             //         }
+//             // };
+//             ProductRepository().addProductReview(body, pid).then((value) async {
+//               Navigator.of(context).pop();
+//               if (value == AppString.success) {
+//                 ref.refresh(cartDetailsDataProvider);
+//                 ref.refresh(productDetailsProvider(pid));
+//                 ref.refresh(productReviewsProvider(pid));
+//                 ref.refresh(productRatingProvider(pid));
+//                 Navigator.of(context).pop();
+
+//                 Fluttertoast.showToast(
+//                     msg: AppLocalizations.of(context)!.addReviewSuccess,
+//                     toastLength: Toast.LENGTH_SHORT,
+//                     gravity: ToastGravity.BOTTOM,
+//                     timeInSecForIosWeb: 0,
+//                     backgroundColor: AppColors.green,
+//                     textColor: AppColors.whiteColor,
+//                     fontSize: 16.0);
+//                 ref.refresh(productReviewsProvider(pid));
+//               } else {
+//                 Navigator.of(context).pop();
+
+//                 Fluttertoast.showToast(
+//                     msg: value.toString(),
+//                     toastLength: Toast.LENGTH_SHORT,
+//                     gravity: ToastGravity.BOTTOM,
+//                     timeInSecForIosWeb: 0,
+//                     fontSize: 16.0);
+//               }
+//             });
+//           },
+//           child: Text(AppLocalizations.of(context)!.submit),
+//         ),
+//       ],
+//     );
+//   }
+  
+
+// }
+
+
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'cmsConfigue.dart';
 
-class RatingAlert extends StatelessWidget {
+class RatingAlert extends StatefulWidget {
   final Function(double rating) onRatingSelected;
   final Function() onsubmit;
   final String pid;
   final double user_rating;
+  final WidgetRef ref;
+
+  RatingAlert({
+    Key? key,
+    required this.onRatingSelected,
+    required this.pid,
+    required this.onsubmit,
+    required this.user_rating,
+    required this.ref,
+  }) : super(key: key);
+
+  @override
+  _RatingAlertState createState() => _RatingAlertState();
+}
+
+class _RatingAlertState extends State<RatingAlert> {
   final review = TextEditingController();
   final header = TextEditingController();
-  final WidgetRef ref;
   int rating = 1;
-  RatingAlert(
-      {Key? key,
-      required this.onRatingSelected,
-      required this.pid,
-      required this.onsubmit,
-      required this.user_rating,
-      required this.ref})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.rateUs),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Text(user_rating.toString()),
-          TextField(
-            controller: header,
-            decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.titleReview),
-          ),
-          TextField(
-            controller: review,
-            decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.giveReview),
-          ),
-          // Text(AppString.rateUs),
-          const SizedBox(height: 16),
-          RatingBar.builder(
-            initialRating: user_rating,
-            minRating: 1,
-            maxRating: 5,
-            direction: Axis.horizontal,
-            allowHalfRating: false,
-            itemCount: 5,
-            itemBuilder: (context, _) => const Icon(
-              Icons.star,
-              color: Colors.amber,
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              controller: header,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.titleReview,
+              ),
             ),
-            onRatingUpdate: (rate) {
-              rating = rate.toInt();
-            },
-          ),
-        ],
+            TextField(
+              controller: review,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.giveReview,
+              ),
+            ),
+            const SizedBox(height: 16),
+            RatingBar.builder(
+              initialRating: widget.user_rating,
+              minRating: 1,
+              maxRating: 5,
+              direction: Axis.horizontal,
+              allowHalfRating: false,
+              itemCount: 5,
+              itemBuilder: (context, _) => const Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rate) {
+                setState(() {
+                  rating = rate.toInt();
+                });
+              },
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -72,13 +260,14 @@ class RatingAlert extends StatelessWidget {
             String userid = await SharedPreferenceManager().getUserId();
             log(userid);
             String customername = await SharedPreferenceManager().getname();
-            String customeremail = await SharedPreferenceManager().getemail();
+            String customeremail =
+                await SharedPreferenceManager().getemail();
             String uid = await SharedPreferenceManager().getUserId();
             CommonAlert.show_loading_alert(context);
             Map<String, dynamic> body;
             if (AppConfigure.wooCommerce) {
               body = {
-                "product_id": pid,
+                "product_id": widget.pid,
                 "title": review.text,
                 "review": header.text,
                 "status": "approved",
@@ -105,59 +294,42 @@ class RatingAlert extends StatelessWidget {
                   "state": "approved",
                   "is_verified": true,
                   "customer_id": uid.toString(),
-                  "external_product_id": pid,
+                  "external_product_id": widget.pid,
                   "rating": rating
                 }
               };
             }
-            // AppConfigure.bigCommerce
-            //     ? {
-            //         "title": review.text,
-            //         "text": header.text,
-            //         "status": "pending",
-            //         "rating": rating,
-            //         "email": customeremail,
-            //         "name": customername,
-            //         "date_reviewed": "2019-03-24T14:15:22Z"
-            //       }
-            //     : {
-            //         "data": {
-            //           "body": review.text,
-            //           "heading": header.text,
-            //           "state": "approved",
-            //           "is_verified": true,
-            //           "customer_id": uid.toString(),
-            //           "external_product_id": pid,
-            //           "rating": rating
-            //         }
-            // };
-            ProductRepository().addProductReview(body, pid).then((value) async {
+            ProductRepository()
+                .addProductReview(body, widget.pid)
+                .then((value) async {
               Navigator.of(context).pop();
               if (value == AppString.success) {
-                ref.refresh(cartDetailsDataProvider);
-                ref.refresh(productDetailsProvider(pid));
-                ref.refresh(productReviewsProvider(pid));
-                ref.refresh(productRatingProvider(pid));
+                widget.ref.refresh(cartDetailsDataProvider);
+                widget.ref.refresh(productDetailsProvider(widget.pid));
+                widget.ref.refresh(productReviewsProvider(widget.pid));
+                widget.ref.refresh(productRatingProvider(widget.pid));
                 Navigator.of(context).pop();
 
                 Fluttertoast.showToast(
-                    msg: AppLocalizations.of(context)!.addReviewSuccess,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 0,
-                    backgroundColor: AppColors.green,
-                    textColor: AppColors.whiteColor,
-                    fontSize: 16.0);
-                ref.refresh(productReviewsProvider(pid));
+                  msg: AppLocalizations.of(context)!.addReviewSuccess,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 0,
+                  backgroundColor: AppColors.green,
+                  textColor: AppColors.whiteColor,
+                  fontSize: 16.0,
+                );
+                widget.ref.refresh(productReviewsProvider(widget.pid));
               } else {
                 Navigator.of(context).pop();
 
                 Fluttertoast.showToast(
-                    msg: value.toString(),
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 0,
-                    fontSize: 16.0);
+                  msg: value.toString(),
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 0,
+                  fontSize: 16.0,
+                );
               }
             });
           },
