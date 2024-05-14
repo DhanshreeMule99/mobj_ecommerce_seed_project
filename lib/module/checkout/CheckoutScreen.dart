@@ -566,6 +566,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               },
                                                                   ),
                                                                 ),
+                                                            
                                                                 Text(
                                                                   '${orderList.quantity}',
                                                                   style: Theme.of(
@@ -714,6 +715,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               },
                                                                   ),
                                                                 )
+                                                           
                                                               ],
                                                             ),
                                                           ),
