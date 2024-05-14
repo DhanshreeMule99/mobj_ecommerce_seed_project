@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:like_button/like_button.dart';
+import 'package:mobj_project/main.dart';
 import 'package:mobj_project/module/home/collectionWiseProductScreen.dart';
 import 'package:mobj_project/module/home/homeCarousel.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
@@ -35,6 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final LocationMobj _locationService = LocationMobj();
   String address = "";
   final scrollController = ScrollController();
+  
   bool isLoading = false;
   bool isAllFetched = false;
   List<ProductModel> productlist = [];
@@ -164,6 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     //TODO use read insted of read and dispose the provider
     final product = ref.watch(productDataProvider('1'));
 
@@ -182,9 +185,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // elevation: 2,
               actions: [
                 Badge(
-                  backgroundColor: Colors.transparent,
-                  // offset: Offset(-2, 2),
-                  // label: Text("5"),
+                 
+                  backgroundColor: Colors.red,
+                  offset: Offset(-2, 2),
+                  label: Text(cartcount.toString()),
                   child: IconButton(
                       onPressed: () {
                         isLogin().then((value) {

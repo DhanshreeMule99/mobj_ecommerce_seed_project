@@ -444,6 +444,7 @@ class ProductRepository {
             debugPrint(
                 'cart id is this bigcommerce ${data["data"]["id"].toString()}');
           }
+          cartcount++;
           return AppString.success;
         } else {
           exceptionString = AppString.oops;

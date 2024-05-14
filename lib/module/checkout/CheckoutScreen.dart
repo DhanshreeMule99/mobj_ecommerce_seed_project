@@ -41,7 +41,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         data: (appInfo) {
           return Scaffold(
             appBar: AppBar(
-                centerTitle: true,
+                // centerTitle: true,
                 leading: IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -256,7 +256,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                     .start,
                                                             children: [
                                                               SizedBox(
-                                                                width: 180.w,
+                                                                width: 160.w,
                                                                 child: Padding(
                                                                   padding:
                                                                       const EdgeInsets
@@ -283,10 +283,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                 icon: Icon(
                                                                   Icons.delete,
                                                                   size: 20.sp,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .colorScheme
-                                                                      .onSecondaryContainer,
+                                                                  color: ConstColors.red
+                                                                  // Theme.of(
+                                                                  //         context)
+                                                                  //     .colorScheme
+                                                                  //     .onSecondaryContainer,
                                                                 ),
                                                                 onPressed:
                                                                     () async {
@@ -351,7 +352,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       var response =
                                                                           await ApiManager.delete(
                                                                               '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
-
+                                                                                      
                                                                       ref.refresh(
                                                                           cartDetailsDataProvider);
                                                                       Navigator.of(
@@ -359,6 +360,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           .pop();
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
+                                                                           cartcount--;
                                                                     } else if (AppConfigure
                                                                         .wooCommerce) {
                                                                       String
@@ -368,7 +370,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       var response =
                                                                           await ApiManager.delete(
                                                                               '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
-
+                                                                             
                                                                       ref.refresh(
                                                                           cartDetailsDataProvider);
                                                                       Navigator.of(
@@ -376,6 +378,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           .pop();
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
+                                                                           cartcount--;
                                                                     } else {
                                                                       ProductRepository()
                                                                           .updateCart(
@@ -441,7 +444,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   decoration: BoxDecoration(
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                              10),
+                                                                             10),
                                                                       border: Border.all(
                                                                           color: Theme.of(context)
                                                                               .colorScheme

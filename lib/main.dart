@@ -20,7 +20,7 @@ final providerContainer = ProviderContainer();
 List<Map<String, dynamic>> bigcommerceOrderedItems = [];
 Map<String, dynamic>? woocommerceaddressbody;
 Future<void> backgroundHandler(RemoteMessage message) async {}
-
+int cartcount = 0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
