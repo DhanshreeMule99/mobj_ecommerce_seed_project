@@ -966,7 +966,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Exception occurred, show error message
         print('Error occurred: $e');
       }
-    } else if (AppConfigure.wooCommerce) {
+    } else 
+    if (AppConfigure.wooCommerce) {
 // login with Woo Commerce
       API api = API();
 
@@ -1038,7 +1039,86 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         // Exception occurred, show error message
         print('Error occurred: $e');
       }
-    } else {
+    } else 
+    if (AppConfigure.megentoCommerce == true){
+
+
+      // login with Woo Commerce
+      API api = API();
+
+      final body = 
+      {
+        "username": email.text,
+        "password": pass.text,
+    };
+      try {
+        setState(() {
+          isLoading = true;
+        });
+        final response = await api.sendRequest.post(
+          'integration/customer/token',
+          options: Options(headers: {
+            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          }),
+          data: body,
+        );
+        if (response.statusCode == 200) {
+         
+          final String token = response.data;
+          if (token is String) {
+        
+            await SharedPreferenceManager().setToken(token);
+
+            ref.refresh(addressDataProvider);
+            ref.refresh(orderDataProvider);
+            ref.refresh(profileDataProvider);
+            Fluttertoast.showToast(
+                msg: AppLocalizations.of(context)!.loginSuccess,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 0,
+                backgroundColor: AppColors.green,
+                textColor: AppColors.whiteColor,
+                fontSize: 16.0);
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      const HomeScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+                (route) => route.isCurrent);
+          } else {
+            // Failure, show error message
+            setState(() {
+              error = AppLocalizations.of(context)!.invalidCred;
+              isLoading = false;
+            });
+          }
+        } else {
+          // If the server did not return a 200 OK response, show error message
+          setState(() {
+            error = AppLocalizations.of(context)!.oops;
+            isLoading = false;
+          });
+        }
+      } catch (e) {
+        setState(() {
+          error = AppLocalizations.of(context)!.doesNotHaveAcc;
+          isLoading = false;
+        });
+        // Exception occurred, show error message
+        print('Error occurred: $e');
+      }
+
+
+
+
+
+
+    } 
+    
+    else {
       // Login with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       setState(() {

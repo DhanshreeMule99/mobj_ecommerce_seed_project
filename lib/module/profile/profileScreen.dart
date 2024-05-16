@@ -104,7 +104,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         RouteConstants.login,
         (route) => false,
       );
-    } else {
+    }else 
+    if (AppConfigure.megentoCommerce ) {
+      
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.of(context).pop();
+      navigatorKey.currentState!.pushNamedAndRemoveUntil(
+        RouteConstants.login,
+        (route) => false,
+      );
+
+    }
+    
+    else {
       // Logout with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       final token = await SharedPreferenceManager().getToken();

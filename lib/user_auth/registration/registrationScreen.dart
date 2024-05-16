@@ -400,7 +400,130 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           loadingSignup = false;
         });
       }
-    } else {
+    } 
+    else 
+
+    if ( AppConfigure.megentoCommerce == true){
+
+
+
+      final body ={
+        "customer": {
+            "email": email.text,
+            "firstname": firstName.text,
+            "lastname":lastName.text,
+            // "addresses": [{
+            //     "defaultShipping": true,
+            //     "defaultBilling": true,
+            //     "firstname": "Kavin",
+            //     "lastname": "Peter",
+            //     "region": {
+            //         "regionCode": "NY",
+            //         "region": "New York",
+            //         "regionId":43
+            //     },
+            //     "postcode": "10755",
+            //     "street": ["123 Oak Ave"],
+            //     "city": "Purchase",
+            //     "telephone": "1234567890",
+            //     "countryId": "US"
+            // }],
+            "extension_attributes": {
+                "is_subscribed": true
+            },
+            "custom_attributes": [
+                {
+                    "attribute_code": "customer_mobile",
+                    "value": mobNo.text
+                 }
+            ]
+        },
+        "password": password.text,
+    };
+    
+      try {
+        String cunsumerKey = AppConfigure.consumerkey;
+        String cumsumerSecret = AppConfigure.consumersecret;
+        final response = await api.sendRequest.post(
+          'customers',
+          data: body,
+          
+          //  options: Options(headers: {
+          //   "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          // }),
+        );
+        debugPrint('status code is ${response.statusCode}');
+        var data = response.data;
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          setState(() {
+            loadingSignup = false;
+          });
+          // Handle successful registration here
+          Fluttertoast.showToast(
+              msg: "Registration successful",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  const LoginScreen(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+          // Optionally, you can navigate to another screen or perform any additional action here
+        } else if (response.statusCode == 400) {
+          setState(() {
+            loadingSignup = false;
+          });
+          Fluttertoast.showToast(
+              msg: "User Already Exist",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        } else {
+          setState(() {
+            error = "Registration failed";
+            loadingSignup = false;
+          });
+        }
+      } on DioException catch (error) {
+        if (error.response!.statusCode == APIConstants.alreadyExistCode) {
+          Fluttertoast.showToast(
+              msg: "${error.response!.data["errors"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 0,
+              backgroundColor: AppColors.green,
+              textColor: AppColors.whiteColor,
+              fontSize: 16.0);
+        }
+        Fluttertoast.showToast(
+            msg: "User Already Exist",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 0,
+            backgroundColor: AppColors.green,
+            textColor: AppColors.whiteColor,
+            fontSize: 16.0);
+        debugPrint("error: $error");
+        setState(() {
+          loadingSignup = false;
+        });
+      }
+
+
+    }
+    
+    else {
       // Perform login using existing login logic
 
       final body = widget.isOtp == true
