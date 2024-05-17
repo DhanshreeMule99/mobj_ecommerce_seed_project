@@ -81,6 +81,42 @@ class UserRepository {
       }
 
 
+    } else 
+
+    if (AppConfigure.megentoCommerce ) {
+
+debugPrint('calling megento profile api');
+      try {
+          String userToken  = await SharedPreferenceManager().getToken();
+      
+        log("token is here ..........................$userToken");
+        final response = await api.sendRequest.get("customers/me",
+          options: Options(headers: {
+            "Authorization": "Bearer $userToken",
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // ref.refresh(profileDataProvider);
+            // final Map<String, dynamic> result = response.data;
+            // final int userId = result['id'];
+           final result = response.data;
+           final int userId = result['id'];
+            await SharedPreferenceManager().setUserId(userId.toString());
+          await SharedPreferenceManager()
+              .setname(result['firstname'].toString());
+          await SharedPreferenceManager().setemail(result['email'].toString());
+          debugPrint('result is this $result');
+          return CustomerModel.fromJson(result);
+        } else {
+          throw Exception(response.data);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('profile data error is this $error  $stackTrace');
+        rethrow;
+      }
+
+
+
     }
     
      else {
@@ -231,6 +267,43 @@ query {
         return exceptionString;
       }
 
+
+    }
+    else
+      if (AppConfigure.megentoCommerce){
+
+
+    debugPrint('Calling edit magento api');
+      // var body1 = jsonEncode({"customer": body});
+      try {
+         final uid = await SharedPreferenceManager().getUserId();
+            
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response = await api.sendRequest.put(
+            '/customers/$uid',
+            data: body,
+            // options: Options(headers: {
+            //   'Content-Type': 'application/json',
+            // }),
+          );
+
+          if (response.statusCode == APIConstants.successCode) {
+            return response;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      } catch (error) {
+        exceptionString = AppString.serverError;
+        return exceptionString;
+      }
 
     }
     

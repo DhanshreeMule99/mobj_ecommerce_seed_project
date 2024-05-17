@@ -1063,11 +1063,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           data: body,
         );
         if (response.statusCode == 200) {
-         
           final String token = response.data;
+
+          // final Map<String, dynamic> responseData = response.data;
+          //  final String userEmail = responseData['data']['email'];
+          // final int userId = responseData['data']['id'];
+          // ignore: unnecessary_type_check
           if (token is String) {
         
+
+        //  await SharedPreferenceManager().setEmail(userEmail);
+        //     await SharedPreferenceManager().setUserId(userId.toString());
             await SharedPreferenceManager().setToken(token);
+              String userToken  = await SharedPreferenceManager().getToken();
+             log("token is here ..........................$userToken");
 
             ref.refresh(addressDataProvider);
             ref.refresh(orderDataProvider);
@@ -1172,6 +1181,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     }
   }
+
+
+  
 
   @override
   Widget build(BuildContext context) {

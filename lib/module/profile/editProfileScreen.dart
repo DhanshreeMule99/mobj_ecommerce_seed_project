@@ -47,6 +47,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       //ref.read(isLoading.notifier).state = true;
       final uid = await SharedPreferenceManager().getUserId();
       final accessToken = await SharedPreferenceManager().getToken();
+      final useremail = await SharedPreferenceManager().getEmail();
      Map<String, dynamic> body;
 
 if (AppConfigure.bigCommerce) {
@@ -66,7 +67,26 @@ if (AppConfigure.bigCommerce) {
     },
     "id": int.parse(uid)
   };
-} else {
+}
+else 
+
+if (AppConfigure.megentoCommerce){
+
+  body = {
+"customer": {
+"id":int.parse(uid),
+"email": useremail,
+"firstname":ref.read(fNameProvider),
+"lastname":ref.read(lNameProvider),
+"website_id": 1
+}
+};
+
+
+}
+
+
+else {
   body = {
               "customerAccessToken": "$accessToken",
               "customer": {
