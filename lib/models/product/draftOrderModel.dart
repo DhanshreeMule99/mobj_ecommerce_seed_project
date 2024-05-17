@@ -1,3 +1,4 @@
+import 'package:mobj_project/mappers/megento_models/megento_draftmodel.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_draftordermodel.dart';
@@ -219,6 +220,11 @@ class CustomerModel {
       return BigCommerceCustomerModel.fromJson(json);
     } else if (AppConfigure.wooCommerce) {
       return WooCustomerModel.fromJson(json);
+    }
+    else
+    if ( AppConfigure.megentoCommerce){
+
+      return MegentoCustomerModel.fromJson(json);
     } else {
       return ShopifyCustomerModel.fromJson(json);
     }
