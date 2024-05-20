@@ -198,6 +198,52 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
 
               };
             }
+            else 
+            if (AppConfigure.megentoCommerce){
+body = {
+   "customer":{
+      "id":int.parse(uid),
+      "email":"rekha@setoo.co",
+      "firstname":firstNameController.text,
+      "lastname":selectedOption,
+      "website_id":1,
+      "addresses":[
+         {
+            "customer_id":int.parse(uid),
+            "region":{
+               "region_code":"string",
+               "region":"string",
+               "region_id":0,
+               "extension_attributes":{
+                  
+               }
+            },
+            "region_id":0,
+            "country_id":"IN",
+            "street":[
+                selectedAddressIndex == 1
+                                ? addressController.text
+                                : residence,
+            ],
+            "company":"string",
+            "telephone":phoneController.text,
+            "fax":"string",
+            "postcode": selectedAddressIndex == 1 ? zipController.text : postalCode,
+            "city":selectedAddressIndex == 1 ? cityController.text : city,
+            "firstname":firstNameController.text,
+            "lastname":selectedOption,
+            "middlename":"string",
+            "prefix":"string",
+            "suffix":"string",
+            "vat_id":"string",
+            "default_shipping":true,
+            "default_billing":true
+         }
+      ]
+   }
+};
+
+            }
           else 
         {  body = {
               "address": {

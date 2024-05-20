@@ -285,11 +285,23 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           //       icon: const Icon(Icons.add),
           //     )
           // ],
-          actions: addressProviders is AsyncData<List<DefaultAddressModel>> &&
+          actions:
+          //  (AppConfigure.wooCommerce && AppConfigure.megentoCommerce && 
+          //  addressProviders is AsyncData<List<DefaultAddressModel>> && 
+          //  addressProviders.value.length == 1)
+           addressProviders is AsyncData<List<DefaultAddressModel>> &&
                   addressProviders.value.length == 1 &&
-                  AppConfigure.wooCommerce
+                  AppConfigure.wooCommerce 
               ? null
-              : [
+              : 
+                  addressProviders is AsyncData<List<DefaultAddressModel>> &&
+                  addressProviders.value.length == 1 &&
+                  AppConfigure.megentoCommerce 
+
+                   ? null
+              :
+                
+                [
                   Tooltip(
                     message: "Add Address",
                     child: IconButton(
