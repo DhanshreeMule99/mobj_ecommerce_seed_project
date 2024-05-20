@@ -1,4 +1,6 @@
 // logoutRepository
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
@@ -56,9 +58,28 @@ if (await ConnectivityUtils.isNetworkConnected()) {
       return false;
     }
 
+}
+else if( AppConfigure.megentoCommerce){
 
+  
+if (await ConnectivityUtils.isNetworkConnected()) {
 
-
+   
+        final uid = await SharedPreferenceManager().getUserId();
+        
+   
+      final response = await api.sendRequest.delete(
+          "customers/$uid",
+          );
+      // var data = response.data;
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
 
 }
 else
