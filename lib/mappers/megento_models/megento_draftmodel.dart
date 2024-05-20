@@ -85,3 +85,77 @@ class MegentoCustomerModel implements CustomerModel {
     );
   }
 }
+
+
+class MagentoDefaultAddressModel implements DefaultAddressModel {
+  @override
+  final int id;
+  @override
+  final int customerId;
+  @override
+  final String firstName;
+  @override
+  final String lastName;
+  @override
+  final dynamic address1;
+  @override
+  late String city;
+  @override
+  final String province;
+  @override
+  final String country;
+  @override
+  final String zip;
+  @override
+  final String phone;
+  @override
+  final String name;
+  @override
+  final String provinceCode;
+  @override
+  final String countryCode;
+  @override
+  final String countryName;
+  @override
+  late bool defaultAddress;
+
+  MagentoDefaultAddressModel({
+    required this.id,
+    required this.customerId,
+    required this.firstName,
+    required this.lastName,
+    required this.address1,
+    required this.city,
+    required this.province,
+    required this.country,
+    required this.zip,
+    required this.phone,
+    required this.name,
+    required this.provinceCode,
+    required this.countryCode,
+    required this.countryName,
+    required this.defaultAddress,
+  });
+
+  factory MagentoDefaultAddressModel.fromJson(Map<String, dynamic> json) {
+    return MagentoDefaultAddressModel(
+      id: json['id'] ?? DefaultValues.defaultInt,
+      customerId: json['id'] ?? DefaultValues.defaultInt,
+      firstName: json['firstname'] ?? DefaultValues.defaultString,
+      lastName: json['lastname'] ?? DefaultValues.defaultString,
+      address1: json['addresses']["street"][0].toString() ?? DefaultValues.defaultString,
+      city: json['addresses']['city'] ?? DefaultValues.defaultString,
+      province: json['addresses']['vat_id'] ?? DefaultValues.defaultString,
+      country: json['addresses']['country_id'] ?? DefaultValues.defaultString,
+      zip: json['addresses']['postcode'] ?? DefaultValues.defaultString,
+      phone: json['addresses']['telephone'] ?? DefaultValues.defaultString,
+      name: json['firstname'] ?? DefaultValues.defaultString,
+      provinceCode: json['addresses']['vat_id'] ?? DefaultValues.defaultString,
+      countryCode: json['addresses']['country_id']?? DefaultValues.defaultString,
+      countryName: json['addresses']['country_id']?? DefaultValues.defaultString,
+      defaultAddress: json['default'] ?? false,
+    );
+  }
+  
+ 
+}

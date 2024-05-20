@@ -279,10 +279,10 @@ class SmsMarketingConsent {
 
 class DefaultAddressModel {
   final dynamic id;
-  final int customerId;
+  final dynamic customerId;
   final String firstName;
   final String lastName;
-  final String address1;
+  final dynamic address1;
   late String city;
   final String province;
   final String country;
@@ -319,6 +319,10 @@ class DefaultAddressModel {
     else 
     if(AppConfigure.wooCommerce){
        return WooCommerceDefaultAddressModel.fromJson(json);
+    }else 
+    if( AppConfigure.megentoCommerce){
+       return MagentoDefaultAddressModel.fromJson(json);
+
     }
     
     else {
