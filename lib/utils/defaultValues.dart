@@ -1,6 +1,7 @@
 // defaultValues
 import 'package:mobj_project/utils/appConfiguer.dart';
 
+import '../mappers/megento_models/megentoProductModel.dart';
 import '../models/product/productModel.dart';
 
 class DefaultValues {
@@ -21,6 +22,7 @@ class DefaultValues {
   static List<ProductVariant> defaultVariants = [];
   static List<ProductOption> defaultOptions = [];
   static List<ProductImage> defaultImages = [];
+  static List<MegentoProductImage> defaultImagesMegento = [];
   static const defaultImage = {};
   static int defaultProductId = 0;
   static String defaultPrice = "";

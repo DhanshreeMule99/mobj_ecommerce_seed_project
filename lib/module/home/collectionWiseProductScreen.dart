@@ -14,7 +14,6 @@ import '../../models/product/collectionProductModel.dart';
 import '../../services/shopifyServices/graphQLServices/graphQlRespository.dart';
 import '../../utils/api.dart';
 
-
 class CollectionWiseProductScreen extends ConsumerStatefulWidget {
   final String category;
   final String categoryName;
@@ -53,7 +52,7 @@ class _CollectionWiseProductScreenState
   bool isFilter = false;
   bool isFilters = false;
   bool toggleIcon = false;
- 
+
   GraphQlRepository graphQLConfig = GraphQlRepository();
   String plus = "+";
   final productsProvider =
@@ -116,7 +115,79 @@ class _CollectionWiseProductScreenState
   final collectionWiseProvider =
       FutureProvider.family<List<ProductCollectionModel>, String>(
           (ref, pid) async {
-    if (AppConfigure.wooCommerce) {
+    if (AppConfigure.megentoCommerce) {
+      log("Product from Megento API");
+      API api = API();
+      try {
+        final response = await api.sendRequest
+            .get('https://hp.geexu.org/rest/V1/categories/$pid');
+
+        if (response.statusCode == APIConstants.successCode) {
+          // Parse the response body correctly
+          Map<String, dynamic> responseBody = response.data;
+
+          // Create a function to parse a category
+          ProductCollectionModel parseCategory(Map<String, dynamic> category) {
+            return ProductCollectionModel(
+              title: category['name'],
+              description: '',
+              handle: '',
+              featuredImage: category.containsKey('custom_attributes')
+                  ? category['custom_attributes'].firstWhere(
+                      (attr) => attr['attribute_code'] == 'image',
+                      orElse: () => {'value': ''})['value']
+                  : '',
+              minPrice:
+                  0.0, // Default value as price information is not provided
+              maxPrice:
+                  0.0, // Default value as price information is not provided
+              currencyCode: '',
+              imageUrls: category.containsKey('custom_attributes')
+                  ? [
+                      category['custom_attributes'].firstWhere(
+                          (attr) => attr['attribute_code'] == 'image',
+                          orElse: () => {'value': ''})['value']
+                    ]
+                  : [],
+              id: category['id'].toString(),
+            );
+          }
+
+          // Create a list to hold the parsed products
+          List<ProductCollectionModel> products = [];
+
+          // Parse the main category
+          products.add(parseCategory(responseBody));
+
+          // Parse the children data recursively
+          void parseChildren(List<dynamic> children) {
+            for (var child in children) {
+              products.add(parseCategory(child));
+              if (child.containsKey('children_data') &&
+                  child['children_data'].isNotEmpty) {
+                parseChildren(child['children_data']);
+              }
+            }
+          }
+
+          if (responseBody.containsKey('children_data') &&
+              responseBody['children_data'].isNotEmpty) {
+            parseChildren(responseBody['children_data']);
+          }
+
+          return products;
+        } else {
+          // Handle API error response
+          List<ProductCollectionModel> products = [];
+          return products;
+        }
+      } catch (error, stackTrace) {
+        // Handle error
+        log('Error: $error $stackTrace');
+        List<ProductCollectionModel> products = [];
+        return products;
+      }
+    } else if (AppConfigure.wooCommerce) {
       log("Product from woocommerce");
       API api = API();
       try {
@@ -124,11 +195,7 @@ class _CollectionWiseProductScreenState
             'https://ttf.setoo.org/wp-json/wc/v3/products/?category=$pid&consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf');
 
         if (response.statusCode == APIConstants.successCode) {
-          // Parse the response body
-          log("123");
-          // log(response.body);
           List<dynamic> responseBody = response.data;
-          //log("From json ${responseBody.length} ${responseBody.map((e) => ProductCollectionModel.fromJson(e)).toList()}");
 
           List<ProductCollectionModel> products = responseBody
               .map((e) => ProductCollectionModel(
@@ -319,26 +386,25 @@ fragment PriceFields on Money {
     final productsFuture = ref.watch(productsProvider(widget.categoryName));
     final productByCollection =
         ref.watch(collectionWiseProvider(widget.category));
-       
 
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              surfaceTintColor: Theme.of(context).colorScheme.secondary,
-           leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.chevron_left_rounded,
-                size: 25.sp,
-              )),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            surfaceTintColor: Theme.of(context).colorScheme.secondary,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.chevron_left_rounded,
+                  size: 25.sp,
+                )),
             actions: [],
             title: Text(
               widget.categoryName,
-               style: Theme.of(context).textTheme.headlineLarge,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
           ),
           bottomNavigationBar: MobjBottombar(
@@ -346,9 +412,9 @@ fragment PriceFields on Money {
             selcted_icon_color: AppColors.buttonColor,
             unselcted_icon_color: AppColors.blackColor,
             selectedPage: 2,
-            screen1:  SearchWidget(),
-            screen2:  SearchWidget(),
-            screen3:  SearchWidget(),
+            screen1: SearchWidget(),
+            screen2: SearchWidget(),
+            screen3: SearchWidget(),
             screen4: const ProfileScreen(),
             ref: ref,
           ),
@@ -389,49 +455,49 @@ fragment PriceFields on Money {
                         child: productsFuture.when(
                         data: (products) {
                           return products.isNotEmpty
-                              ?  GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 1 / 1.6),
-                                itemCount: products.length,
-                                itemBuilder: (BuildContext context, int index) {
+                              ? GridView.builder(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 1 / 1.6),
+                                  itemCount: products.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     final product = products[index];
                                     log("image url is this ${product.featuredImage}");
-                                   
+
                                     final int staticStock =
-                                      10; // Example static value for stock
-                                  final String staticVariantId =
-                                      "static_variant_id";
+                                        10; // Example static value for stock
+                                    final String staticVariantId =
+                                        "static_variant_id";
                                     return Padding(
                                         padding: const EdgeInsets.only(
                                             top: 5, left: 15, right: 15),
                                         child: InkWell(
-                                            onTap: () {
-                                              ref.refresh(
-                                                  productDetailsProvider(
-                                                product.id.toString(),
-                                              ));
-                                              Navigator.of(context).push(
-                                                PageRouteBuilder(
-                                                  pageBuilder: (context,
-                                                          animation1,
-                                                          animation2) =>
-                                                      ProductDetailsScreen(
-                                                    uid: product.id
-                                                        .replaceAll(
-                                                            "gid://shopify/Product/",
-                                                            "")
-                                                        .toString(),
-                                                  ),
-                                                  transitionDuration:
-                                                      Duration.zero,
-                                                  reverseTransitionDuration:
-                                                      Duration.zero,
+                                          onTap: () {
+                                            ref.refresh(productDetailsProvider(
+                                              product.id.toString(),
+                                            ));
+                                            Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation1,
+                                                        animation2) =>
+                                                    ProductDetailsScreen(
+                                                  uid: product.id
+                                                      .replaceAll(
+                                                          "gid://shopify/Product/",
+                                                          "")
+                                                      .toString(),
                                                 ),
-                                              );
-                                            },
-                                            child:
+                                                transitionDuration:
+                                                    Duration.zero,
+                                                reverseTransitionDuration:
+                                                    Duration.zero,
+                                              ),
+                                            );
+                                          },
+                                          child:
 // CollectionProductCard(
 //         tileColor: AppColors.blue, // Set your desired tile color
 //         productName: product.title,
@@ -443,83 +509,78 @@ fragment PriceFields on Money {
 //         },
 //       )
 
-                                             ProductListCard(
-                                              logoPath: product.title,
-                                              address: product.title,
-                                              datetime: product.title,
-                                              ratingCount:  num.parse("5.5"),
-                                              productId:product.id ,
-                                              variantId: product.title, 
-                                              stock: staticStock, 
-                                              ref: ref,
+                                              ProductListCard(
+                                            logoPath: product.title,
+                                            address: product.title,
+                                            datetime: product.title,
+                                            ratingCount: num.parse("5.5"),
+                                            productId: product.id,
+                                            variantId: product.title,
+                                            stock: staticStock,
+                                            ref: ref,
+                                            tileColor:
+                                                appInfo.primaryColorValue,
+                                            productName: product.title,
+                                            productImage: product.featuredImage,
+                                            productPrice:
+                                                product.minPrice.toString(),
+                                            addToCart: () {},
+                                          ),
 
-                                     
-                                      tileColor:appInfo.primaryColorValue,
-                                      productName: product.title,
-                                      productImage: product.featuredImage,
-                                      productPrice: product.minPrice.toString(),
-                                      addToCart: () {
-                                        
-                                      },
-                                     
-                                    ),
-                                            
-                                            
-                                    //          Card(
-                                    //           margin: const EdgeInsets.only(
-                                    //               bottom: 10),
-                                    //           elevation: 2,
-                                    //           shape: RoundedRectangleBorder(
-                                    //             borderRadius:
-                                    //                 BorderRadius.circular(15),
-                                    //           ),
-                                    //           child: Padding(
-                                    //             padding:
-                                    //                 const EdgeInsets.all(10),
-                                    //             // Add padding to the Card
-                                    //             child: ListTile(
-                                    //               contentPadding:
-                                    //                   const EdgeInsets.all(0),
-                                    //               // Remove default ListTile padding
-                                    //               title: Padding(
-                                    //                 padding:
-                                    //                     const EdgeInsets.only(
-                                    //                         bottom: 8),
-                                    //                 // Add padding to the title
-                                    //                 child: Text(product.title),
-                                    //               ),
-                                    //               leading: Padding(
-                                    //                 padding:
-                                    //                     const EdgeInsets.only(
-                                    //                         right: 8),
-                                    //                 // Add padding to the leading widget
-                                    //                 child: CachedNetworkImage(
-                                    //                   imageUrl:
-                                    //                       product.featuredImage,
-                                    //                   placeholder:
-                                    //                       (context, url) =>
-                                    //                           Container(
-                                    //                     height: 50,
-                                    //                     width: 50,
-                                    //                     color:
-                                    //                         AppColors.greyShade,
-                                    //                   ),
-                                    //                   errorWidget: (context,
-                                    //                           url, error) =>
-                                    //                       const Icon(
-                                    //                           Icons.error),
-                                    //                   width: 50,
-                                    //                   height: 50,
-                                    //                   fit: BoxFit.contain,
-                                    //                 ),
-                                    //               ),
-                                    //               trailing: Text(
-                                    //                   '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
-                                    //             ),
-                                    //           ),
-                                    //         )
-                                            
-                                      ));
+                                          //          Card(
+                                          //           margin: const EdgeInsets.only(
+                                          //               bottom: 10),
+                                          //           elevation: 2,
+                                          //           shape: RoundedRectangleBorder(
+                                          //             borderRadius:
+                                          //                 BorderRadius.circular(15),
+                                          //           ),
+                                          //           child: Padding(
+                                          //             padding:
+                                          //                 const EdgeInsets.all(10),
+                                          //             // Add padding to the Card
+                                          //             child: ListTile(
+                                          //               contentPadding:
+                                          //                   const EdgeInsets.all(0),
+                                          //               // Remove default ListTile padding
+                                          //               title: Padding(
+                                          //                 padding:
+                                          //                     const EdgeInsets.only(
+                                          //                         bottom: 8),
+                                          //                 // Add padding to the title
+                                          //                 child: Text(product.title),
+                                          //               ),
+                                          //               leading: Padding(
+                                          //                 padding:
+                                          //                     const EdgeInsets.only(
+                                          //                         right: 8),
+                                          //                 // Add padding to the leading widget
+                                          //                 child: CachedNetworkImage(
+                                          //                   imageUrl:
+                                          //                       product.featuredImage,
+                                          //                   placeholder:
+                                          //                       (context, url) =>
+                                          //                           Container(
+                                          //                     height: 50,
+                                          //                     width: 50,
+                                          //                     color:
+                                          //                         AppColors.greyShade,
+                                          //                   ),
+                                          //                   errorWidget: (context,
+                                          //                           url, error) =>
+                                          //                       const Icon(
+                                          //                           Icons.error),
+                                          //                   width: 50,
+                                          //                   height: 50,
+                                          //                   fit: BoxFit.contain,
+                                          //                 ),
+                                          //               ),
+                                          //               trailing: Text(
+                                          //                   '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} ${product.currencyCode}'),
+                                          //             ),
+                                          //           ),
+                                          //         )
+                                        ));
                                   },
                                 )
                               : Column(
@@ -579,148 +640,137 @@ fragment PriceFields on Money {
                                 ref.refresh(productDataProvider("1"));
                               },
                               child: products.isNotEmpty
-                                  ?  GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        childAspectRatio: 1 / 1.6),
-                                itemCount: products.length,
-                                itemBuilder: (BuildContext context, int index) {
+                                  ? GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 1 / 1.6),
+                                      itemCount: products.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
                                         final product = products[index];
                                         log("image url is this ${product.featuredImage}");
-                                          
-                                    final int staticStock =
-                                      10; // Example static value for stock
-                                  final String staticVariantId =
-                                      "static_variant_id";
+
+                                        final int staticStock =
+                                            10; // Example static value for stock
+                                        final String staticVariantId =
+                                            "static_variant_id";
                                         return InkWell(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                PageRouteBuilder(
-                                                  pageBuilder: (context,
-                                                          animation1,
-                                                          animation2) =>
-                                                      ProductDetailsScreen(
-                                                    uid: product.id
-                                                        .replaceAll(
-                                                            "gid://shopify/Product/",
-                                                            "")
-                                                        .toString(),
-                                                  ),
-                                                  transitionDuration:
-                                                      Duration.zero,
-                                                  reverseTransitionDuration:
-                                                      Duration.zero,
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation1,
+                                                        animation2) =>
+                                                    ProductDetailsScreen(
+                                                  uid: product.id
+                                                      .replaceAll(
+                                                          "gid://shopify/Product/",
+                                                          "")
+                                                      .toString(),
                                                 ),
-                                              );
-                                            },
-                                            child:
-                                        
-                                        
-                                            // CollectionProductCard(
-                                            //     tileColor: AppColors.blue, // Set your desired tile color
-                                            //     productName: product.title,
-                                            //     productImage: product.featuredImage,
-                                            //     productPrice: "\u{20B9}${product.minPrice}",
-                                            //     // isInStock: staticStock,
-                                            //     addToCart: () {
-                                            //       // Define your addToCart function logic here
-                                            //     },
-                                            //   )
-                                        
-                                                                                        ProductListCard(
-                                                                                      logoPath: product.title,
-                                                                                      address: product.title,
-                                                                                      datetime: product.title,
-                                                                                      ratingCount:  num.parse("5.5"),
-                                                                                      productId:product.title ,
-                                                                                      variantId: product.title, 
-                                                                                      stock: staticStock, 
-                                                                                      ref: ref,
-                                        
-                                                                              
-                                                                              tileColor: Colors.white, 
-                                                                              productName: product.title,
-                                                                              productImage: product.featuredImage,
-                                                                              productPrice: product.minPrice.toString(),
-                                                                              addToCart: () {
-                                                                                
-                                                                              },
-                                                                              
-                                                                            ),
-                                        
-                                        
-                                        
-                                        
-                                            
-                                                                            //              Card(
-                                                                            //               margin: const EdgeInsets.only(
-                                                                            //                   bottom: 10),
-                                                                            //               elevation: 2,
-                                                                            //               shape: RoundedRectangleBorder(
-                                                                            //                 borderRadius:
-                                                                            //                     BorderRadius.circular(
-                                                                            //                         15),
-                                                                            //               ),
-                                                                            //               child: Padding(
-                                                                            //                 padding:
-                                                                            //                     const EdgeInsets.all(
-                                                                            //                         10),
-                                                                            //                 // Add padding to the Card
-                                                                            //                 child: ListTile(
-                                                                            //                   contentPadding:
-                                                                            //                       const EdgeInsets.all(
-                                                                            //                           0),
-                                                                            //                   // Remove default ListTile padding
-                                                                            //                   title: Padding(
-                                                                            //                     padding:
-                                                                            //                         const EdgeInsets
-                                                                            //                             .only(
-                                                                            //                             bottom: 8),
-                                                                            //                     // Add padding to the title
-                                                                            //                     child:
-                                                                            //                         Text(product.title),
-                                                                            //                   ),
-                                                                            //                   leading: Padding(
-                                                                            //                     padding:
-                                                                            //                         const EdgeInsets
-                                                                            //                             .only(right: 8),
-                                                                            //                     // Add padding to the leading widget
-                                                                            //                     child:
-                                                                            //                         CachedNetworkImage(
-                                                                            //                       imageUrl: product
-                                                                            //                               .imageUrls
-                                                                            //                               .isNotEmpty
-                                                                            //                           ? product
-                                                                            //                               .imageUrls[0]
-                                                                            //                               .toString()
-                                                                            //                           : "" ?? "",
-                                                                            //                       placeholder:
-                                                                            //                           (context, url) =>
-                                                                            //                               Container(
-                                                                            //                         height: 50,
-                                                                            //                         width: 50,
-                                                                            //                         color: AppColors
-                                                                            //                             .greyShade,
-                                                                            //                       ),
-                                                                            //                       errorWidget: (context,
-                                                                            //                               url, error) =>
-                                                                            //                           const Icon(
-                                                                            //                               Icons.error),
-                                                                            //                       width: 50,
-                                                                            //                       height: 50,
-                                                                            //                       fit: BoxFit.contain,
-                                                                            //                     ),
-                                                                            //                   ),
-                                                                            //                   trailing: Text(
-                                                                            //                       '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} '),
-                                                                            //                 ),
-                                                                            //               ),
-                                                                            //             )
-                                            
-                                          
-                                            
+                                                transitionDuration:
+                                                    Duration.zero,
+                                                reverseTransitionDuration:
+                                                    Duration.zero,
+                                              ),
                                             );
+                                          },
+                                          child:
+
+                                              // CollectionProductCard(
+                                              //     tileColor: AppColors.blue, // Set your desired tile color
+                                              //     productName: product.title,
+                                              //     productImage: product.featuredImage,
+                                              //     productPrice: "\u{20B9}${product.minPrice}",
+                                              //     // isInStock: staticStock,
+                                              //     addToCart: () {
+                                              //       // Define your addToCart function logic here
+                                              //     },
+                                              //   )
+
+                                              ProductListCard(
+                                            logoPath: product.title,
+                                            address: product.title,
+                                            datetime: product.title,
+                                            ratingCount: num.parse("5.5"),
+                                            productId: product.title,
+                                            variantId: product.title,
+                                            stock: staticStock,
+                                            ref: ref,
+                                            tileColor: Colors.white,
+                                            productName: product.title,
+                                            productImage: product.featuredImage,
+                                            productPrice:
+                                                product.minPrice.toString(),
+                                            addToCart: () {},
+                                          ),
+
+                                          //              Card(
+                                          //               margin: const EdgeInsets.only(
+                                          //                   bottom: 10),
+                                          //               elevation: 2,
+                                          //               shape: RoundedRectangleBorder(
+                                          //                 borderRadius:
+                                          //                     BorderRadius.circular(
+                                          //                         15),
+                                          //               ),
+                                          //               child: Padding(
+                                          //                 padding:
+                                          //                     const EdgeInsets.all(
+                                          //                         10),
+                                          //                 // Add padding to the Card
+                                          //                 child: ListTile(
+                                          //                   contentPadding:
+                                          //                       const EdgeInsets.all(
+                                          //                           0),
+                                          //                   // Remove default ListTile padding
+                                          //                   title: Padding(
+                                          //                     padding:
+                                          //                         const EdgeInsets
+                                          //                             .only(
+                                          //                             bottom: 8),
+                                          //                     // Add padding to the title
+                                          //                     child:
+                                          //                         Text(product.title),
+                                          //                   ),
+                                          //                   leading: Padding(
+                                          //                     padding:
+                                          //                         const EdgeInsets
+                                          //                             .only(right: 8),
+                                          //                     // Add padding to the leading widget
+                                          //                     child:
+                                          //                         CachedNetworkImage(
+                                          //                       imageUrl: product
+                                          //                               .imageUrls
+                                          //                               .isNotEmpty
+                                          //                           ? product
+                                          //                               .imageUrls[0]
+                                          //                               .toString()
+                                          //                           : "" ?? "",
+                                          //                       placeholder:
+                                          //                           (context, url) =>
+                                          //                               Container(
+                                          //                         height: 50,
+                                          //                         width: 50,
+                                          //                         color: AppColors
+                                          //                             .greyShade,
+                                          //                       ),
+                                          //                       errorWidget: (context,
+                                          //                               url, error) =>
+                                          //                           const Icon(
+                                          //                               Icons.error),
+                                          //                       width: 50,
+                                          //                       height: 50,
+                                          //                       fit: BoxFit.contain,
+                                          //                     ),
+                                          //                   ),
+                                          //                   trailing: Text(
+                                          //                       '\u{20B9}${product.minPrice} - \u{20B9} ${product.maxPrice} '),
+                                          //                 ),
+                                          //               ),
+                                          //             )
+                                        );
                                       },
                                     )
                                   : Column(

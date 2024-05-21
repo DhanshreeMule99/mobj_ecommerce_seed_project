@@ -96,6 +96,9 @@ class BigCommerceProductModel implements ProductModel {
             DefaultValues.defaultVariants.cast<BigCommerceProductImage>(),
         image: BigCommerceProductImage.fromJson(json['images'][0] as Map<String, dynamic>? ?? {}));
   }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class BigCommerceProductVariant implements ProductVariant {

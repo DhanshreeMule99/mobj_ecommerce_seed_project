@@ -239,12 +239,12 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
                             style: kIsWeb
                                 ? Theme.of(context)
                                     .textTheme
-                                    .headline5!
+                                    .headlineLarge!
                                     .copyWith(
                                         color: Theme.of(context).highlightColor)
                                 : Theme.of(context)
                                     .textTheme
-                                    .bodyText2!
+                                    .bodyLarge!
                                     .copyWith(
                                         color:
                                             Theme.of(context).highlightColor),

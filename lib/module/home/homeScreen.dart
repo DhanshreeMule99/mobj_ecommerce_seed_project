@@ -16,6 +16,7 @@ import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../../mappers/bigcommerce_models/bigcommerce_getwishlistModel.dart';
+import '../../utils/api.dart';
 import '../categorie_screen/categorie_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -36,7 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final LocationMobj _locationService = LocationMobj();
   String address = "";
   final scrollController = ScrollController();
-  
+
   bool isLoading = false;
   bool isAllFetched = false;
   List<ProductModel> productlist = [];
@@ -99,7 +100,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> fetchCategories() async {
-    if (AppConfigure.wooCommerce) {
+    API api = API();
+    if (AppConfigure.megentoCommerce) {
+      log('Megnto API for categories');
+      try {
+        final response = await api.sendRequest
+            .get("https://hp.geexu.org/rest/V1/categories");
+        if (response.statusCode == APIConstants.successCode) {
+          final apiData = response.data;
+          List<dynamic> categories = _parseCategories(apiData['children_data']);
+          setState(() {
+            data = categories;
+          });
+        } else {
+          throw Exception('Failed to fetch categories');
+        }
+      } catch (e, stackTrace) {
+        debugPrint("error is this $e $stackTrace");
+      }
+    } else if (AppConfigure.wooCommerce) {
       log('Woo Commerce caetgorires');
       final response = await ApiManager.get(
           "https://ttf.setoo.org/wp-json/wc/v3/products/categories?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf");
@@ -138,6 +157,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
+  List<dynamic> _parseCategories(List<dynamic> categories) {
+    List<dynamic> parsedCategories = [];
+    for (var category in categories) {
+      parsedCategories.add(category);
+      if (category['children_data'] != null &&
+          category['children_data'].isNotEmpty) {
+        parsedCategories.addAll(_parseCategories(category['children_data']));
+      }
+    }
+    return parsedCategories;
+  }
+
   String jwt_token = "";
   String userid = "";
   Future<bool> isLogin() async {
@@ -166,7 +197,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     //TODO use read insted of read and dispose the provider
     final product = ref.watch(productDataProvider('1'));
 
@@ -185,7 +215,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               // elevation: 2,
               actions: [
                 Badge(
-                 
                   backgroundColor: Colors.red,
                   offset: Offset(-2, 2),
                   label: Text(cartcount.toString()),
@@ -306,11 +335,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
-                  child: ImageCarousel(),
-                ),
+                if (AppConfigure.bigCommerce)
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
+                    child: ImageCarousel(),
+                  ),
                 Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
@@ -366,17 +396,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               category: AppConfigure.bigCommerce
                                                   ? data[index]['category_id']
                                                       .toString()
-                                                  : data[index]['id']
-                                                      .toString(),
+                                                  : AppConfigure.megentoCommerce
+                                                      ? data[index]['id']
+                                                          .toString()
+                                                      : AppConfigure.wooCommerce
+                                                          ? data[index]['id']
+                                                              .toString()
+                                                          : data[index]['id']
+                                                              .toString(),
                                               categoryName: AppConfigure
                                                       .bigCommerce
                                                   ? data[index]['name']
                                                       .toString()
-                                                  : (AppConfigure.wooCommerce
+                                                  : AppConfigure.wooCommerce
                                                       ? data[index]['name']
                                                           .toString()
-                                                      : data[index]['title']
-                                                          .toString()),
+                                                      : AppConfigure
+                                                              .megentoCommerce
+                                                          ? data[index]['name']
+                                                              .toString()
+                                                          : data[index]['title']
+                                                              .toString(),
                                             ),
                                             transitionDuration: Duration.zero,
                                             reverseTransitionDuration:
@@ -405,16 +445,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             //image size fill
                                             image: AppConfigure.wooCommerce
                                                 ? (data[index]["image"] == null
-                                                    ? NetworkImage(
+                                                    ? const NetworkImage(
                                                         "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
                                                     : NetworkImage(data[index]
                                                         ["image"]["src"]))
-                                                : (data[index]["image_url"] ==
-                                                        ""
-                                                    ? NetworkImage(
-                                                        "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
-                                                    : NetworkImage(data[index]
-                                                        ["image_url"])),
+                                                : AppConfigure.megentoCommerce
+                                                    ? (data[index]["image_url"] ==
+                                                                null ||
+                                                            data[index]["image_url"]
+                                                                .isEmpty
+                                                        ? const NetworkImage(
+                                                            "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                                        : NetworkImage(data[index]
+                                                            ["image_url"]))
+                                                    : (data[index]["image_url"] ==
+                                                                null ||
+                                                            data[index]["image_url"]
+                                                                .isEmpty
+                                                        ? const NetworkImage(
+                                                            "https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg")
+                                                        : NetworkImage(
+                                                            data[index]
+                                                                ["image_url"])),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -442,15 +494,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    AppConfigure.bigCommerce
-                                        ? data[index]['name'].toString()
-                                        : (AppConfigure.wooCommerce
+                                  SizedBox(
+                                    width: 50.w,
+                                    child: Center(
+                                      child: Text(
+                                        AppConfigure.bigCommerce
                                             ? data[index]['name'].toString()
-                                            : data[index]['title'].toString()),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium,
+                                            : (AppConfigure.wooCommerce
+                                                ? data[index]['name'].toString()
+                                                : AppConfigure.megentoCommerce
+                                                    ? data[index]['name']
+                                                        .toString()
+                                                    : (data[index]['title']
+                                                        .toString())),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineMedium,
+                                        overflow: TextOverflow
+                                            .ellipsis, // Adds ellipsis (...) to the text if it overflows
+                                        maxLines:
+                                            1, // Limits the text to one line
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -643,8 +708,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 address: productlist[index].bodyHtml.toString(),
                                 datetime:
                                     "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
-                                productImage:
-                                    productlist[index].image.src.toString(),
+                                productImage: AppConfigure.megentoCommerce
+                                    ? "https://hp.geexu.org/media/catalog/product${productlist[index].images.isNotEmpty == true ? productlist[index].images[0].src : '/default_image_path.jpg'}"
+                                    : productlist[index].image.src.toString(),
                                 ratings: () {
                                   //TODO list product rating
                                   // showDialog(
@@ -763,16 +829,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   // // ),
                                   // // );
                                 },
-                                productDetails:
-                                    "\u{20B9}${productlist[index].variants[0].price}",
+                                productDetails: "",
+                                //                                  "\u{20B9}${productlist[index].variants[0].price}",
                                 status: productlist[index].variants.toString(),
                                 isLiked: isBookmarked.toString(),
                                 ratingCount: num.parse("5.5"),
                                 productId: productlist[index].id.toString(),
-                                productPrice:
-                                    productlist[index].variants.isNotEmpty
-                                        ? productlist[index].variants[0].price
-                                        : DefaultValues.defaultPrice.toString(),
+                                productPrice: AppConfigure.megentoCommerce
+                                    ? productlist[index].price.toString()
+                                    : productlist[index].variants[0].price,
+                                // ? productlist[index].variants[0].price
+                                // : DefaultValues.defaultPrice.toString()
                                 addToCart: () {
                                   // CommonAlert
                                   //     .show_loading_alert(
@@ -823,13 +890,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   //   }
                                   // });
                                 },
-                                variantId: productlist[index]
-                                    .variants[0]
-                                    .id
-                                    .toString(),
-                                stock: productlist[index]
-                                    .variants[0]
-                                    .inventoryQuantity,
+                                variantId: '',
+                                // productlist[index]
+                                //     .variants[0]
+                                //     .id
+                                //     .toString(),
+                                stock: 10,
+                                // productlist[index]
+                                //     .variants[0]
+                                //     .inventoryQuantity,
                                 ref: ref,
                               ));
                         });

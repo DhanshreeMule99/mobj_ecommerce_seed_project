@@ -101,6 +101,10 @@ class ShopifyProductModel implements ProductModel {
           json['image'] as Map<String, dynamic>? ?? {}),
     );
   }
+
+  @override
+  // TODO: implement price
+  int get price => throw UnimplementedError();
 }
 
 class ShopifyProductVariant implements ProductVariant {

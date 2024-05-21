@@ -4,12 +4,12 @@ import 'package:mobj_project/mappers/bigcommerce_models/bigcommerce_proudct_mode
 import 'package:mobj_project/mappers/shopify_models/shopify_proudct_model.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
 
+import '../../mappers/megento_models/megentoProductModel.dart';
 import '../../mappers/woocommerce/woocommerce_productmodel.dart';
-
-
 
 class ProductModel {
   final int id;
+  final int price;
   final String title;
   final String bodyHtml;
   final String vendor;
@@ -30,6 +30,7 @@ class ProductModel {
 
   ProductModel({
     required this.id,
+    required this.price,
     required this.title,
     required this.bodyHtml, // Default value for bodyHtml
     required this.vendor,
@@ -50,9 +51,17 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.wooCommerce) {
+    if (AppConfigure.megentoCommerce) {
       try {
-      log('WooCommerce model');
+        log('megentoCommerce model');
+        return MengentoProductModel.fromJson(json);
+      } catch (e) {
+        log('Error is :$e');
+        rethrow;
+      }
+    } else if (AppConfigure.wooCommerce) {
+      try {
+        log('WooCommerce model');
         return WooCommerceProductModel.fromJson(json);
       } catch (e) {
         log('Error is :$e');
@@ -124,10 +133,15 @@ class ProductVariant {
   });
 
   factory ProductVariant.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.wooCommerce) {
+    if (AppConfigure.megentoCommerce) {
+      log('MegentoVareient model');
+      return MegentoProductVariant.fromJson(json);
+    } 
+    else if (AppConfigure.wooCommerce) {
       log('WooCommerce model');
       return WooCommerceProductVariant.fromJson(json);
-    } else if (AppConfigure.bigCommerce) {
+    } 
+    else if (AppConfigure.bigCommerce) {
       return BigCommerceProductVariant.fromJson(json);
     } else {
       return ShopifyProductVariant.fromJson(json);
@@ -190,7 +204,10 @@ class ProductImage {
   });
 
   factory ProductImage.fromJson(Map<String, dynamic> json) {
-    if (AppConfigure.wooCommerce) {
+    if (AppConfigure.megentoCommerce) {
+      log('MegentoProductImage model');
+      return MegentoProductImage.fromJson(json);
+    } else if (AppConfigure.wooCommerce) {
       log('WooCommerce model');
       return WooCommerceProductImage.fromJson(json);
     } else if (AppConfigure.bigCommerce) {

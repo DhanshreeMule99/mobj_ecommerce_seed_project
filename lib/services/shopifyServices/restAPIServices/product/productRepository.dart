@@ -15,7 +15,35 @@ class ProductRepository {
   API api = API();
 
   Future<List<ProductModel>> getProducts(String currentPage) async {
-    if (AppConfigure.wooCommerce) {
+    if (AppConfigure.megentoCommerce) {
+      try {
+        log('megentoCommerce api');
+        final response = await api.sendRequest.get(
+            'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10');
+
+        if (response.statusCode == APIConstants.successCode) {
+          log("product details: $response");
+          var data = response.data['items'];
+
+          List<dynamic> result = data;
+
+          // log(response.data);
+
+          return result.map((e) => ProductModel.fromJson(e)).toList();
+        } else if (response.statusCode == APIConstants.dataNotFoundCode) {
+          debugPrint("empty data here");
+          throw (AppString.noDataError);
+        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+          debugPrint("empty data here unauthorized");
+          throw AppString.unAuthorized;
+        } else {
+          return empty;
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
+      }
+    } else if (AppConfigure.wooCommerce) {
       try {
         log('calling api by wooCommerce');
         String productUrl = AppConfigure.woocommerceUrl +
@@ -87,6 +115,7 @@ class ProductRepository {
         rethrow;
       }
     }
+    return empty;
   }
 
   Future<ProductVariant> getProductsByVariantId(String vid, String pid) async {
@@ -112,7 +141,26 @@ class ProductRepository {
   }
 
   Future<ProductModel> getProductInfo(String pid) async {
-    if (AppConfigure.wooCommerce) {
+    API api = API();
+    if (AppConfigure.megentoCommerce) {
+      try {
+        log("Logging product 20");
+       String baseUrl =
+            "https://hp.geexu.org/rest/default/V1/products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
+        debugPrint(baseUrl + pid);
+
+        final response = await api.sendRequest.get(baseUrl);
+        log(response.data);
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = response.data;
+          return ProductModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (e) {
+        rethrow;
+      }
+    } else if (AppConfigure.wooCommerce) {
       try {
         String baseUrl =
             "https://ttf.setoo.org/wp-json/wc/v3/products/$pid?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf";

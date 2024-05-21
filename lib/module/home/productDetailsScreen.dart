@@ -41,7 +41,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
     // TODO: implement initState
     super.initState();
     if (widget.product != null) {
-      selectedVariant = widget.product!.variants[0];
+      selectedVariant = (widget.product?.variants != null && widget.product!.variants.isNotEmpty) 
+    ? widget.product!.variants[0] 
+    : DefaultValues.defaultVariants;
+
       setState(() {
         for (int i = 0; i <= widget.product!.options.length - 1; i++) {
           if (widget.product!.options[i].name.toLowerCase() == "color") {
