@@ -40,8 +40,8 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
         unselcted_icon_color: AppColors.blackColor,
         selectedPage: 3,
         screen1: const HomeScreen(),
-        screen2:  SearchWidget(),
-         screen3:  WishlistScreen(),
+        screen2: SearchWidget(),
+        screen3: WishlistScreen(),
         screen4: const ProfileScreen(),
         ref: ref,
       ),
@@ -239,12 +239,12 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
                             style: kIsWeb
                                 ? Theme.of(context)
                                     .textTheme
-                                    .headline5!
+                                    .headlineMedium!
                                     .copyWith(
                                         color: Theme.of(context).highlightColor)
                                 : Theme.of(context)
                                     .textTheme
-                                    .bodyText2!
+                                    .bodyMedium!
                                     .copyWith(
                                         color:
                                             Theme.of(context).highlightColor),
@@ -345,7 +345,8 @@ class _ImageCropState extends ConsumerState<ImageCrop> {
     Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => const ProfileScreen(),
+          pageBuilder: (context, animation1, animation2) =>
+              const ProfileScreen(),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
