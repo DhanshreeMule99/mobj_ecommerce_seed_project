@@ -262,59 +262,71 @@ else {
                                               .read(fNameProvider.notifier)
                                               .state = val;
                                         },
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
+                                      
+                                         autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
 
-                                        decoration: InputDecoration(
-                                            label: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(AppLocalizations.of(
-                                                        context)!
-                                                    .firstName),
-                                                const Text(
-                                                  '*',
-                                                  style: TextStyle(
-                                                      color: AppColors.red,
-                                                      fontSize: 20),
-                                                )
-                                              ],
-                                            ),
-                                            border: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      appInfo.primaryColorValue,
-                                                  width: 1.5,
-                                                )),
-                                            //normal border
-                                            enabledBorder: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      appInfo.primaryColorValue,
-                                                  width: 1.5,
-                                                )),
-                                            focusedBorder: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                    color: appInfo.primaryColorValue,
-                                                    width: 1.5))),
+                                          decoration: InputDecoration(
+                                              errorStyle:
+                                                  TextStyle(fontSize: 12),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 15.0,
+                                                      horizontal: 10),
+                                              label: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .firstName,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium,
+                                                  ),
+                                                  const Text(
+                                                    '*',
+                                                    style: TextStyle(
+                                                        color: AppColors.red,
+                                                        fontSize: 20),
+                                                  )
+                                                ],
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              //normal border
+                                              enabledBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              focusedBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension.buttonRadius)),
+                                                  borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5))),
+                                          // keyboardType: TextInputType.text,
                                         keyboardType: TextInputType.text,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.deny(
@@ -336,62 +348,128 @@ else {
                                               .nameValidation(value);
                                         },
 
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
+                                        // autovalidateMode:
+                                        //     AutovalidateMode.onUserInteraction,
 
-                                        decoration: InputDecoration(
-                                            label: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(AppLocalizations.of(
-                                                        context)!
-                                                    .lastName),
-                                                const Text(
-                                                  '*',
-                                                  style: TextStyle(
-                                                      color: AppColors.red,
-                                                      fontSize: 20),
-                                                )
-                                              ],
-                                            ),
-                                            border: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      appInfo.primaryColorValue,
-                                                  width: 1.5,
-                                                )),
-                                            //normal border
-                                            enabledBorder: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      appInfo.primaryColorValue,
-                                                  width: 1.5,
-                                                )),
-                                            //enabled bordera
+                                        // decoration: InputDecoration(
+                                        //     label: Row(
+                                        //       mainAxisSize: MainAxisSize.min,
+                                        //       children: [
+                                        //         Text(AppLocalizations.of(
+                                        //                 context)!
+                                        //             .lastName),
+                                        //         const Text(
+                                        //           '*',
+                                        //           style: TextStyle(
+                                        //               color: AppColors.red,
+                                        //               fontSize: 20),
+                                        //         )
+                                        //       ],
+                                        //     ),
+                                        //     border: OutlineInputBorder(
+                                        //         //Outline border type for TextFeild
+                                        //         borderRadius:
+                                        //             const BorderRadius.all(
+                                        //                 Radius.circular(
+                                        //                     AppDimension
+                                        //                         .buttonRadius)),
+                                        //         borderSide: BorderSide(
+                                        //           color:
+                                        //               appInfo.primaryColorValue,
+                                        //           width: 1.5,
+                                        //         )),
+                                        //     //normal border
+                                        //     enabledBorder: OutlineInputBorder(
+                                        //         //Outline border type for TextFeild
+                                        //         borderRadius:
+                                        //             const BorderRadius.all(
+                                        //                 Radius.circular(
+                                        //                     AppDimension
+                                        //                         .buttonRadius)),
+                                        //         borderSide: BorderSide(
+                                        //           color:
+                                        //               appInfo.primaryColorValue,
+                                        //           width: 1.5,
+                                        //         )),
+                                        //     //enabled bordera
 
-                                            focusedBorder: OutlineInputBorder(
-                                                //Outline border type for TextFeild
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(
-                                                            AppDimension
-                                                                .buttonRadius)),
-                                                borderSide: BorderSide(
-                                                    color: appInfo.primaryColorValue,
-                                                    width: 1.5))),
-                                        keyboardType: TextInputType.text,
+                                        //     focusedBorder: OutlineInputBorder(
+                                        //         //Outline border type for TextFeild
+                                        //         borderRadius:
+                                        //             const BorderRadius.all(
+                                        //                 Radius.circular(
+                                        //                     AppDimension
+                                        //                         .buttonRadius)),
+                                        //         borderSide: BorderSide(
+                                        //             color: appInfo.primaryColorValue,
+                                        //             width: 1.5))),
+                                        // keyboardType: TextInputType.text,
+
+                                        
+                                         autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+
+                                          decoration: InputDecoration(
+                                              errorStyle:
+                                                  TextStyle(fontSize: 12),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 15.0,
+                                                      horizontal: 10),
+                                              label: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .lastName,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium,
+                                                  ),
+                                                  const Text(
+                                                    '*',
+                                                    style: TextStyle(
+                                                        color: AppColors.red,
+                                                        fontSize: 20),
+                                                  )
+                                                ],
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              //normal border
+                                              enabledBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              focusedBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension.buttonRadius)),
+                                                  borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5))),
+                                          // keyboardType: TextInputType.text,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.deny(
                                               RegExp(r'\s')),
@@ -484,49 +562,114 @@ else {
                                     FilteringTextInputFormatter.digitsOnly,
                                     LengthLimitingTextInputFormatter(10),
                                   ],
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  // autofocus: widget.autofocus,
-                                  decoration: InputDecoration(
-                                      label: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(AppLocalizations.of(context)!
-                                              .mobileNo),
-                                          const Text(
-                                            '*',
-                                            style: TextStyle(
-                                                color: AppColors.red,
-                                                fontSize: 20),
-                                          )
-                                        ],
-                                      ),
-                                      border: OutlineInputBorder(
-                                          //Outline border type for TextFeild
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(
-                                                  AppDimension.buttonRadius)),
-                                          borderSide: BorderSide(
-                                            color: appInfo.primaryColorValue,
-                                            width: 1.5,
-                                          )),
-                                      enabledBorder: OutlineInputBorder(
-                                          //Outline border type for TextFeild
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(
-                                                  AppDimension.buttonRadius)),
-                                          borderSide: BorderSide(
-                                            color: appInfo.primaryColorValue,
-                                            width: 1.5,
-                                          )),
-                                      focusedBorder: OutlineInputBorder(
-                                          //Outline border type for TextFeild
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(
-                                                  AppDimension.buttonRadius)),
-                                          borderSide: BorderSide(
-                                              color: appInfo.primaryColorValue,
-                                              width: 1.5))),
+                                  // autovalidateMode:
+                                  //     AutovalidateMode.onUserInteraction,
+                                  // // autofocus: widget.autofocus,
+                                  // decoration: InputDecoration(
+                                  //     label: Row(
+                                  //       mainAxisSize: MainAxisSize.min,
+                                  //       children: [
+                                  //         Text(AppLocalizations.of(context)!
+                                  //             .mobileNo),
+                                  //         const Text(
+                                  //           '*',
+                                  //           style: TextStyle(
+                                  //               color: AppColors.red,
+                                  //               fontSize: 20),
+                                  //         )
+                                  //       ],
+                                  //     ),
+                                  //     border: OutlineInputBorder(
+                                  //         //Outline border type for TextFeild
+                                  //         borderRadius: const BorderRadius.all(
+                                  //             Radius.circular(
+                                  //                 AppDimension.buttonRadius)),
+                                  //         borderSide: BorderSide(
+                                  //           color: appInfo.primaryColorValue,
+                                  //           width: 1.5,
+                                  //         )),
+                                  //     enabledBorder: OutlineInputBorder(
+                                  //         //Outline border type for TextFeild
+                                  //         borderRadius: const BorderRadius.all(
+                                  //             Radius.circular(
+                                  //                 AppDimension.buttonRadius)),
+                                  //         borderSide: BorderSide(
+                                  //           color: appInfo.primaryColorValue,
+                                  //           width: 1.5,
+                                  //         )),
+                                  //     focusedBorder: OutlineInputBorder(
+                                  //         //Outline border type for TextFeild
+                                  //         borderRadius: const BorderRadius.all(
+                                  //             Radius.circular(
+                                  //                 AppDimension.buttonRadius)),
+                                  //         borderSide: BorderSide(
+                                  //             color: appInfo.primaryColorValue,
+                                  //             width: 1.5))),
+
+                                   autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+
+                                          decoration: InputDecoration(
+                                              errorStyle:
+                                                  TextStyle(fontSize: 12),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      vertical: 15.0,
+                                                      horizontal: 10),
+                                              label: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    AppLocalizations.of(
+                                                            context)!
+                                                        .mobileNo,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium,
+                                                  ),
+                                                  const Text(
+                                                    '*',
+                                                    style: TextStyle(
+                                                        color: AppColors.red,
+                                                        fontSize: 20),
+                                                  )
+                                                ],
+                                              ),
+                                              border: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              //normal border
+                                              enabledBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension
+                                                                  .buttonRadius)),
+                                                  borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    width: 1.5,
+                                                  )),
+                                              focusedBorder: OutlineInputBorder(
+                                                  //Outline border type for TextFeild
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              AppDimension.buttonRadius)),
+                                                  borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5))),
+                                          // keyboardType: TextInputType.text,
                                   keyboardType: TextInputType.phone,
 
                                   // inputFormatters: widget.inputFormatters,
@@ -569,7 +712,7 @@ else {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: appInfo.primaryColorValue,
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
                                   minimumSize: const Size.fromHeight(50),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(

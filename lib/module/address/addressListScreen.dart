@@ -285,11 +285,23 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           //       icon: const Icon(Icons.add),
           //     )
           // ],
-          actions: addressProviders is AsyncData<List<DefaultAddressModel>> &&
+          actions:
+          //  (AppConfigure.wooCommerce && AppConfigure.megentoCommerce && 
+          //  addressProviders is AsyncData<List<DefaultAddressModel>> && 
+          //  addressProviders.value.length == 1)
+           addressProviders is AsyncData<List<DefaultAddressModel>> &&
                   addressProviders.value.length == 1 &&
-                  AppConfigure.wooCommerce
+                  AppConfigure.wooCommerce 
               ? null
-              : [
+              : 
+                  addressProviders is AsyncData<List<DefaultAddressModel>> &&
+                  addressProviders.value.length == 1 &&
+                  AppConfigure.megentoCommerce 
+
+                   ? null
+              :
+                
+                [
                   Tooltip(
                     message: "Add Address",
                     child: IconButton(
@@ -358,6 +370,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                 top: 5, left: 10, right: 10),
                             child: index >= 0
                                 ? Container(
+                                // color: Theme.of(context).colorScheme.onPrimary,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     width: double.maxFinite,
@@ -369,9 +382,10 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                               spreadRadius: 0,
                                               offset: Offset(0, 1))
                                         ],
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                          color: Theme.of(context).colorScheme.onPrimary,
+                                        // color: Theme.of(context)
+                                        //     .colorScheme
+                                        //     .secondary,
                                         // border: Border.all(
                                         //     color: Theme.of(context)
                                         //         .colorScheme
