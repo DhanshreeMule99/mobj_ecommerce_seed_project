@@ -37,7 +37,7 @@ dependencies:
   upgrader: ^6.2.0
   flutter_native_splash: ^2.2.19
   cached_network_image: ^3.3.0
-  intl: ^0.18.0
+  intl: ^0.19.0
   http: ^0.13.5
   fluttertoast: ^8.2.2
   skeleton_loader: ^2.0.0+4
