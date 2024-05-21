@@ -370,6 +370,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                 top: 5, left: 10, right: 10),
                             child: index >= 0
                                 ? Container(
+                                // color: Theme.of(context).colorScheme.onPrimary,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     width: double.maxFinite,
@@ -381,9 +382,10 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                               spreadRadius: 0,
                                               offset: Offset(0, 1))
                                         ],
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                          color: Theme.of(context).colorScheme.onPrimary,
+                                        // color: Theme.of(context)
+                                        //     .colorScheme
+                                        //     .secondary,
                                         // border: Border.all(
                                         //     color: Theme.of(context)
                                         //         .colorScheme
