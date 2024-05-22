@@ -560,7 +560,51 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 fontSize: 16.0);
                                           }
                                         });
-                                      } else {
+                                      }
+                                      else if (AppConfigure.megentoCommerce) {
+                                        //  log('product to ${widget.productId} ${widget.variantId}');
+                                        ProductRepository()
+                                            .CrateCartmagentoCommerce(
+                                           quantity.toString(),
+                                           user.sku
+                                          // variantId != null
+                                          //     ? variantId.toString()
+                                          //     : user.variants[0].id.toString(),
+                                             
+                                        )
+                                            .then((value) async {
+                                          if (value == AppString.success) {
+                                            Navigator.of(context).pop();
+                                            ref.refresh(
+                                                productDataProvider("1"));
+                                            ref.refresh(
+                                                cartDetailsDataProvider);
+                                            ref.refresh(productDetailsProvider(
+                                                widget.uid));
+                                            Fluttertoast.showToast(
+                                                msg: AppString.addToCartSuccess,
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 0,
+                                                backgroundColor:
+                                                    AppColors.green,
+                                                textColor: AppColors.whiteColor,
+                                                fontSize: 16.0);
+                                          } else {
+                                            Navigator.of(context).pop();
+                                            Fluttertoast.showToast(
+                                                msg: AppString.oops,
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 0,
+                                                backgroundColor:
+                                                    AppColors.green,
+                                                textColor: AppColors.whiteColor,
+                                                fontSize: 16.0);
+                                          }
+                                        });
+                                      }
+                                       else {
                                         ProductRepository()
                                             .addToCart(
                                                 variantId != null
@@ -1529,6 +1573,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 productName: productlist.title
                                                     .toString(),
                                                 address: productlist.description
+                                                    .toString(),
+                                                     sku: productlist.title
                                                     .toString(),
                                                 datetime:
                                                     "${AppLocalizations.of(context)!.deliverAt} ${productlist.createdAt.toString()}/${productlist.createdAt}/${productlist.createdAt}",

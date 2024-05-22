@@ -229,6 +229,7 @@ class SearchWidgetState extends ConsumerState<SearchWidget> {
                                     productName:
                                         product[index].title.toString(),
                                     address: product[index].bodyHtml.toString(),
+                                    sku: product[index].title.toString(),
                                     datetime:
                                         "${AppLocalizations.of(context)!.deliverAt} ${product[index].createdAt.toString()}/${product[index].createdAt}/${product[index].createdAt}",
                                     productImage:
