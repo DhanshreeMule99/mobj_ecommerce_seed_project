@@ -333,13 +333,16 @@ class AddressRepository {
  API api = API();
       // final uid = await SharedPreferenceManager().getUserId();
       try {
-
+        String userToken = await SharedPreferenceManager().getToken();
         final response;
        final AddressID = await SharedPreferenceManager().getAddressId();
         debugPrint("calling null addressid api");
         // var body1 = jsonEncode({"address": body});
         response = await api.sendRequest.delete(
           'addresses/$AddressID',
+           options: Options(headers: {
+            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          }), 
 //           data: {
 //    "customer":{
 //       "id":"",
@@ -591,6 +594,7 @@ class AddressRepository {
 
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
+                  String userToken = await SharedPreferenceManager().getToken();
           final response;
          
           debugPrint("calling null addressid api");
@@ -598,9 +602,10 @@ class AddressRepository {
           response = await api.sendRequest.put(
             'customers/$uid',
             data: body,
-            // options: Options(headers: {
-            //   'Content-Type': 'application/json',
-            // }),
+            options: Options(headers: {
+             
+'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+             }), 
           );
 
           if (response.statusCode == APIConstants.successCode) {
