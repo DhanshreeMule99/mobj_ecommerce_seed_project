@@ -119,12 +119,12 @@ class MagentoCommerceDraftOrderModel implements DraftOrderModel {
       taxLines: [MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")],
       tags: json['tags'] ?? DefaultValues.defaultString,
       noteAttributes: [],
-      totalPrice:  double.parse(json['items'][0]['price'].toString()) ??
+      totalPrice:  double.parse(json['items'][0]["price"].toString()) ??
           DefaultValues.defaultDouble,
-      subtotalPrice: (double.parse(json['items'][0]['price'].toString()) )
+      subtotalPrice: (double.parse(json['items'][0]["price"].toString()) )
               .toString() ??
           DefaultValues.defaultString,
-      totalTax: (double.parse(json['items'][0]['price'].toString()) )
+      totalTax: (double.parse(json['items'][0]["price"].toString()) )
               .toString() ??
           DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,

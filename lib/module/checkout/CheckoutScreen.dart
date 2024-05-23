@@ -316,7 +316,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                     }
 
                                                                     ref.refresh(
-                                                                        cartDetailsDataProvider);
+                                                                        cartDetailsDataProvider,);
+                                                                        //  ref.refresh(
+                                                                        // cartTotalDetailsDataProvider);
                                                                     Navigator.of(
                                                                             context)
                                                                         .pop();

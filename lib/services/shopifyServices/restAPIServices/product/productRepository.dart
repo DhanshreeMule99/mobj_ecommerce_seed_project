@@ -1187,6 +1187,123 @@ class ProductRepository {
     }
   }
 
+
+  Future<DraftOrderModel> getCarttotalDetails() async {
+    if (AppConfigure.bigCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String draftId = await SharedPreferenceManager().getDraftId();
+
+          final response = await ApiManager.get(
+              "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/carts/$draftId");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            debugPrint(response.body);
+            final result = jsonDecode(response.body)['data'];
+            debugPrint("result is this $result");
+
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
+    } else if (AppConfigure.wooCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String email = await SharedPreferenceManager().getCartToken();
+
+
+
+          final response = await ApiManager.get(
+              "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            debugPrint(response.body);
+            final result = jsonDecode(response.body);
+            debugPrint("result is this $result");
+            if (result['item_count'] == 0) {
+              throw (AppString.noDataError);
+            }
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
+    } 
+    
+    else 
+    if (AppConfigure.megentoCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          // String cartId = await SharedPreferenceManager().getCartToken();
+            String userToken  = await SharedPreferenceManager().getToken();
+
+          final response = await api.sendRequest.get(
+              "carts/mine/totals",
+               options: Options(headers: {
+            "Authorization": "Bearer $userToken",
+          }),
+              );
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+
+            //  debugPrint(response.data);
+            final result = response.data;
+            debugPrint("result is this $result");
+            if (result['items_qty'] == 0) {
+              throw (AppString.noDataError);
+            }
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
+    }
+   
+    else {
+      String baseUrl = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          String draftId = await SharedPreferenceManager().getDraftId();
+
+          final response = await ApiManager.get(
+              "$baseUrl${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            final result = jsonDecode(response.body)['draft_order'];
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error) {
+        rethrow;
+      }
+    }
+  }
+
   Future<DraftOrderModel> getRepeatOrderDetails(String oId) async {
     String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
