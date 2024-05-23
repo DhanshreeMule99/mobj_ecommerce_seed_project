@@ -41,9 +41,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
     // TODO: implement initState
     super.initState();
     if (widget.product != null) {
-      selectedVariant = (widget.product?.variants != null && widget.product!.variants.isNotEmpty) 
-    ? widget.product!.variants[0] 
-    : DefaultValues.defaultVariants;
+      selectedVariant = (widget.product?.variants != null &&
+              widget.product!.variants.isNotEmpty)
+          ? widget.product!.variants[0]
+          : DefaultValues.defaultVariants;
 
       setState(() {
         for (int i = 0; i <= widget.product!.options.length - 1; i++) {
@@ -158,7 +159,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               child: Row(
                                 children: [
                                   Text(
-                                      "\u{20B9}${selectedVariant != null ? selectedVariant.price : user.variants[0].price}",
+                                      AppConfigure.megentoCommerce
+                                          ? ""
+                                          : "\u{20B9}${selectedVariant != null ? selectedVariant.price : user.variants[0].price}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge),
@@ -1742,7 +1745,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                             decoration:
                                                                 const BoxDecoration(
                                                               color: Color
-                                                                  .fromARGB(255,
+                                                                  .fromARGB(
+                                                                      255,
                                                                       8,
                                                                       119,
                                                                       12),
@@ -2020,10 +2024,11 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       ),
                       loading: () => Container(),
                     ),
-                  
-                  SizedBox(
-                    height: 100.h,
-                  )],
+
+                    SizedBox(
+                      height: 100.h,
+                    )
+                  ],
                 ),
               ),
             ),

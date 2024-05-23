@@ -6,6 +6,12 @@ class ShopifyProductModel implements ProductModel {
   @override
   final int id;
   @override
+  final int price;
+  @override
+  final String sku;
+  @override
+  final int attribute_set_id;
+  @override
   final String title;
   @override
   final String bodyHtml;
@@ -41,6 +47,9 @@ class ShopifyProductModel implements ProductModel {
   final ShopifyProductImage image;
 
   ShopifyProductModel({
+    required this.price,
+    required this.sku,
+    required this.attribute_set_id,
     required this.id,
     required this.title,
     required this.bodyHtml, // Default value for bodyHtml
@@ -64,6 +73,9 @@ class ShopifyProductModel implements ProductModel {
   factory ShopifyProductModel.fromJson(Map<String, dynamic> json) {
     return ShopifyProductModel(
       id: json['id'] ?? DefaultValues.defaultId,
+      price: DefaultValues.defaultId,
+      sku: DefaultValues.defaultSku,
+      attribute_set_id: DefaultValues.defaultId,
       // Default value for id
       title: json['title'] ?? DefaultValues.defaultTitle,
       // Default value for title
@@ -101,10 +113,6 @@ class ShopifyProductModel implements ProductModel {
           json['image'] as Map<String, dynamic>? ?? {}),
     );
   }
-
-  @override
-  // TODO: implement price
-  int get price => throw UnimplementedError();
 }
 
 class ShopifyProductVariant implements ProductVariant {

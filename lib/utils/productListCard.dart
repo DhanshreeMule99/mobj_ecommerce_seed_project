@@ -2,25 +2,10 @@
 
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:like_button/like_button.dart';
 import 'package:mobj_project/utils/api.dart';
-import '../../utils/appColors.dart';
 import '../mappers/bigcommerce_models/bigcommerce_getwishlistModel.dart';
-import '../services/shopifyServices/restAPIServices/product/productRepository.dart';
-import 'appDimension.dart';
-import 'appString.dart';
 import 'cmsConfigue.dart';
-import 'commonAlert.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class ProductListCard extends StatefulWidget {
   final Color tileColor;
@@ -137,6 +122,7 @@ class _ProductListCardstate extends State<ProductListCard> {
         )
         .id;
     log("wishlist item id is this $wishlistItemID");
+    log('image url is ${widget.productImage}');
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -450,7 +436,8 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                 borderRadius:
                                                     BorderRadius.circular(10))),
                                         child: Text(
-                                          AppLocalizations.of(context)!.addToCart,
+                                          AppLocalizations.of(context)!
+                                              .addToCart,
                                           style: Theme.of(context)
                                               .textTheme
                                               .displayLarge,

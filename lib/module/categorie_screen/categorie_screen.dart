@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
@@ -24,8 +25,13 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     if (AppConfigure.megentoCommerce) {
       log('Megnto API for categories');
       try {
-        final response = await api.sendRequest
-            .get("https://hp.geexu.org/rest/V1/categories");
+        final response = await api.sendRequest.get(
+          "https://hp.geexu.org/rest/V1/categories",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+        );
         if (response.statusCode == APIConstants.successCode) {
           final apiData = response.data;
           List<dynamic> categories = _parseCategories(apiData['children_data']);

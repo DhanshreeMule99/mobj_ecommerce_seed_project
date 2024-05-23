@@ -19,7 +19,12 @@ class ProductRepository {
       try {
         log('megentoCommerce api');
         final response = await api.sendRequest.get(
-            'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10');
+          'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+        );
 
         if (response.statusCode == APIConstants.successCode) {
           log("product details: $response");
@@ -144,20 +149,28 @@ class ProductRepository {
     API api = API();
     if (AppConfigure.megentoCommerce) {
       try {
-        log("Logging product 20");
-       String baseUrl =
+        log("Logging product $pid");
+        String baseUrl =
             "https://hp.geexu.org/rest/default/V1/products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
         debugPrint(baseUrl + pid);
 
-        final response = await api.sendRequest.get(baseUrl);
-        log(response.data);
+        final response = await api.sendRequest.get(
+          baseUrl,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+        );
+        // log(response.data);
         if (response.statusCode == APIConstants.successCode) {
-          final userData = response.data;
+          final userData = response.data['items'][0];
           return ProductModel.fromJson(userData);
         } else {
           throw (AppString.noDataError);
         }
-      } catch (e) {
+      } catch (e,stackTrace) {
+        log("magento product details error is this ${e.toString() } $stackTrace");
+
         rethrow;
       }
     } else if (AppConfigure.wooCommerce) {

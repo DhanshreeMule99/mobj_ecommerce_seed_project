@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,65 +120,75 @@ class _CollectionWiseProductScreenState
       log("Product from Megento API");
       API api = API();
       try {
-        final response = await api.sendRequest
-            .get('https://hp.geexu.org/rest/V1/categories/$pid');
+        final response = await api.sendRequest.get(
+          'https://hp.geexu.org/rest/default/V1/categories/$pid/products?searchCriteria[currentPage]=1',
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+        );
 
         if (response.statusCode == APIConstants.successCode) {
           // Parse the response body correctly
-          Map<String, dynamic> responseBody = response.data;
+          List<dynamic> responseBody = response.data;
 
-          // Create a function to parse a category
-          ProductCollectionModel parseCategory(Map<String, dynamic> category) {
-            return ProductCollectionModel(
-              title: category['name'],
-              description: '',
-              handle: '',
-              featuredImage: category.containsKey('custom_attributes')
-                  ? category['custom_attributes'].firstWhere(
-                      (attr) => attr['attribute_code'] == 'image',
-                      orElse: () => {'value': ''})['value']
-                  : '',
-              minPrice:
-                  0.0, // Default value as price information is not provided
-              maxPrice:
-                  0.0, // Default value as price information is not provided
-              currencyCode: '',
-              imageUrls: category.containsKey('custom_attributes')
-                  ? [
-                      category['custom_attributes'].firstWhere(
-                          (attr) => attr['attribute_code'] == 'image',
-                          orElse: () => {'value': ''})['value']
-                    ]
-                  : [],
-              id: category['id'].toString(),
-            );
-          }
-
-          // Create a list to hold the parsed products
-          List<ProductCollectionModel> products = [];
-
-          // Parse the main category
-          products.add(parseCategory(responseBody));
-
-          // Parse the children data recursively
-          void parseChildren(List<dynamic> children) {
-            for (var child in children) {
-              products.add(parseCategory(child));
-              if (child.containsKey('children_data') &&
-                  child['children_data'].isNotEmpty) {
-                parseChildren(child['children_data']);
-              }
+          // Extract SKUs and join them into a comma-separated string
+          List<String> skus = [];
+          for (var product in responseBody) {
+            if (product.containsKey('sku')) {
+              skus.add(product['sku']);
             }
           }
 
-          if (responseBody.containsKey('children_data') &&
-              responseBody['children_data'].isNotEmpty) {
-            parseChildren(responseBody['children_data']);
-          }
+          String skuString = skus.join(',');
+          // Output the result
+          log('Comma-separated SKUs: $skuString');
+          final productResponse = await api.sendRequest.get(
+            'https://hp.geexu.org/rest/default/V1/products?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=$skuString&searchCriteria[filter_groups][0][filters][0][condition_type]=in',
+            options: Options(headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+            }),
+          );
 
-          return products;
+          if (productResponse.statusCode == APIConstants.successCode) {
+            List<dynamic> responseBody = productResponse.data['items'];
+
+            List<ProductCollectionModel> products = responseBody.map((e) {
+              List<String> imageUrls = e['media_gallery_entries']
+                  .map<String>((image) => image['file'].toString())
+                  .toList();
+
+              String firstImageUrl =
+                  imageUrls.isNotEmpty ? imageUrls.first : '';
+
+              return ProductCollectionModel(
+                title: e['name'],
+                description: e['custom_attributes']?.firstWhere(
+                      (attr) => attr['attribute_code'] == 'description',
+                      orElse: () => {'value': ''},
+                    )['value'] ??
+                    '',
+                handle: e['url_key'] ?? '',
+                featuredImage: firstImageUrl,
+                minPrice: double.tryParse(e['price'].toString()) ?? 0.0,
+                maxPrice: double.tryParse(e['price'].toString()) ?? 0.0,
+                currencyCode:
+                    '', // Update with the appropriate value if available
+                imageUrls: [firstImageUrl], // Ensure imageUrls is always a list
+                id: e['id'].toString(),
+              );
+            }).toList();
+
+            return products;
+          } else {
+            // Handle API error response
+            List<ProductCollectionModel> products = [];
+            return products;
+          }
         } else {
           // Handle API error response
+          log('API Error: ${response.statusCode}');
           List<ProductCollectionModel> products = [];
           return products;
         }
@@ -700,7 +711,7 @@ fragment PriceFields on Money {
                                             ref: ref,
                                             tileColor: Colors.white,
                                             productName: product.title,
-                                            productImage: product.featuredImage,
+                                            productImage:AppConfigure.megentoCommerce? "https://hp.geexu.org/media/catalog/product${product.featuredImage}": product.featuredImage,
                                             productPrice:
                                                 product.minPrice.toString(),
                                             addToCart: () {},

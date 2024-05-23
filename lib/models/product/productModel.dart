@@ -11,6 +11,8 @@ class ProductModel {
   final int id;
   final int price;
   final String title;
+  final String sku;
+  final int attribute_set_id;
   final String bodyHtml;
   final String vendor;
   final String productType;
@@ -28,7 +30,9 @@ class ProductModel {
   final List<ProductImage> images;
   final ProductImage image;
 
-  ProductModel({
+  ProductModel(
+    this.sku,
+    this.attribute_set_id, {
     required this.id,
     required this.price,
     required this.title,
@@ -136,12 +140,10 @@ class ProductVariant {
     if (AppConfigure.megentoCommerce) {
       log('MegentoVareient model');
       return MegentoProductVariant.fromJson(json);
-    } 
-    else if (AppConfigure.wooCommerce) {
+    } else if (AppConfigure.wooCommerce) {
       log('WooCommerce model');
       return WooCommerceProductVariant.fromJson(json);
-    } 
-    else if (AppConfigure.bigCommerce) {
+    } else if (AppConfigure.bigCommerce) {
       return BigCommerceProductVariant.fromJson(json);
     } else {
       return ShopifyProductVariant.fromJson(json);

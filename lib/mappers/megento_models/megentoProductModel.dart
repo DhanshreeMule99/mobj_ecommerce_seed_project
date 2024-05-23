@@ -6,8 +6,8 @@ import '../bigcommerce_models/bigcommerce_proudct_model.dart';
 class MengentoProductModel implements ProductModel {
   @override
   final int id;
-  final String sku;
   final int price;
+  final String sku;
   final int attribute_set_id;
   @override
   final String title;
@@ -75,7 +75,8 @@ class MengentoProductModel implements ProductModel {
         sku: json['sku'] ?? DefaultValues.defaultSku,
         attribute_set_id: json['attribute_set_id'] ?? DefaultValues.defaultId,
         title: json['name'] ?? DefaultValues.defaultTitle,
-        bodyHtml: json['type_id'] ?? DefaultValues.defaultBodyHtml,
+        bodyHtml: json['custom_attributes'][0]['value'] ??
+            DefaultValues.defaultBodyHtml,
         vendor: DefaultValues.defaultVendor,
         productType: json['type_id'] ?? DefaultValues.defaultProductType,
         createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
@@ -87,10 +88,7 @@ class MengentoProductModel implements ProductModel {
         tags: DefaultValues.defaultTags,
         status: json['status'].toString(),
         adminGraphqlApiId: json[''] ?? DefaultValues.defaultAdminGraphqlApiId,
-        variants: (json[''] as List<dynamic>?)
-                ?.map((variantJson) => BigCommerceProductVariant.fromJson(
-                    variantJson as Map<String, dynamic>))
-                .toList() ??
+        variants:
             DefaultValues.defaultVariants.cast<BigCommerceProductVariant>(),
         options: (json[''] as List<dynamic>?)
                 ?.map((optionJson) => BigCommerceProductOption.fromJson(
@@ -252,7 +250,7 @@ class MegentoProductVariant implements ProductVariant {
       id: json['id'] ?? DefaultValues.defaultId,
       productId: json[''] ?? DefaultValues.defaultProductId,
       title: json['name'] ?? DefaultValues.defaultTitle,
-      price: json['price'].toString() ?? DefaultValues.defaultPrice,
+      price: json[''].toString() ?? DefaultValues.defaultPrice,
       sku: json['sku'].toString() ?? DefaultValues.defaultSku,
       position: json['status'] ?? DefaultValues.defaultPosition,
       inventoryPolicy: json[''] ?? DefaultValues.defaultInventoryPolicy,

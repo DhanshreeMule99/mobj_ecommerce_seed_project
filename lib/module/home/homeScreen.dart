@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -104,8 +105,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (AppConfigure.megentoCommerce) {
       log('Megnto API for categories');
       try {
-        final response = await api.sendRequest
-            .get("https://hp.geexu.org/rest/V1/categories");
+        final response = await api.sendRequest.get(
+          "https://hp.geexu.org/rest/V1/categories",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+        );
         if (response.statusCode == APIConstants.successCode) {
           final apiData = response.data;
           List<dynamic> categories = _parseCategories(apiData['children_data']);
@@ -124,7 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           "https://ttf.setoo.org/wp-json/wc/v3/products/categories?consumer key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf");
       if (response.statusCode == APIConstants.successCode) {
         final apiData = json.decode(response.body);
-        log(response.body);
+        // log(response.body);
         setState(() {
           data = apiData;
         });
@@ -584,6 +590,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             productlist = [...productlist, ...local];
                           });
 
+                          // ignore: unnecessary_brace_in_string_interps
                           log("this is the end ${productlist.length} ${currentPage} ${local.last.title}");
                           Future.delayed(Duration(seconds: 1), () {
                             isLoading = false;
@@ -709,7 +716,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 datetime:
                                     "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
                                 productImage: AppConfigure.megentoCommerce
-                                    ? "https://hp.geexu.org/media/catalog/product${productlist[index].images.isNotEmpty == true ? productlist[index].images[0].src : '/default_image_path.jpg'}"
+                                    ? "https://hp.geexu.org/media/catalog/product${productlist[index].images[0].src}"
                                     : productlist[index].image.src.toString(),
                                 ratings: () {
                                   //TODO list product rating
