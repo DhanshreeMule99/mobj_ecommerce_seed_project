@@ -110,8 +110,8 @@ class MagentoCommerceDraftOrderModel implements DraftOrderModel {
       status: json["customer"]['lastname'] ?? DefaultValues.defaultString,
       lineItems: List<MagentoCommerceLineItem>.from(
           json['items'].map((item) => MagentoCommerceLineItem.fromJson(item))),
-      shippingAddress: json['customer']["addresses"] ?? DefaultValues.defaultString,
-      billingAddress: json['customer']["addresses"] ?? DefaultValues.defaultString,
+      shippingAddress: json['customer']["lastname"] ?? DefaultValues.defaultString,
+      billingAddress: json['customer']["lastname"] ?? DefaultValues.defaultString,
       invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
       appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
@@ -119,12 +119,14 @@ class MagentoCommerceDraftOrderModel implements DraftOrderModel {
       taxLines: [MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")],
       tags: json['tags'] ?? DefaultValues.defaultString,
       noteAttributes: [],
-      totalPrice: double.parse(json['items']['price'].toString()) / 100 ??
+      totalPrice:  double.parse(json['items'][0]['price'].toString()) ??
           DefaultValues.defaultDouble,
-      subtotalPrice: (double.parse(json['items']['price'].toString()) / 100)
+      subtotalPrice: (double.parse(json['items'][0]['price'].toString()) )
               .toString() ??
           DefaultValues.defaultString,
-      totalTax: json['items']['price'] ?? DefaultValues.defaultString,
+      totalTax: (double.parse(json['items'][0]['price'].toString()) )
+              .toString() ??
+          DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
           json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
@@ -236,29 +238,30 @@ class MagentoCommerceLineItem implements LineItem {
   });
 
   factory MagentoCommerceLineItem.fromJson(Map<String, dynamic> json) {
+    // final items = json['items'] ?? {};
     return MagentoCommerceLineItem(
-      id: json['items']['item_id'] ?? DefaultValues.defaultInt,
-      variantId: json['items']['item_id'] ?? DefaultValues.defaultInt,
-      productId: json['items']['item_id'] ?? DefaultValues.defaultInt,
-      title: json['items']['name'] ?? DefaultValues.defaultString,
-      variantTitle: json['items']['name'] ?? DefaultValues.defaultString,
-      sku: json['items']['sku'] ?? DefaultValues.defaultString,
-      vendor: json['items']['name'] ?? DefaultValues.defaultString,
-      quantity: json['items']['qty'] ?? DefaultValues.defaultInt,
+      id: json['item_id'] ?? DefaultValues.defaultInt,
+      variantId: json['item_id'] ?? DefaultValues.defaultInt,
+      productId: json['item_id'] ?? DefaultValues.defaultInt,
+      title: json['name'] ?? DefaultValues.defaultString,
+      variantTitle: json['name'] ?? DefaultValues.defaultString,
+      sku: json['sku'] ?? DefaultValues.defaultString,
+      vendor: json['name'] ?? DefaultValues.defaultString,
+      quantity: json['qty'] ?? DefaultValues.defaultInt,
       requiresShipping: json[''] ?? false,
       taxable: json[''] ?? false,
       giftCard: json[''] ?? false,
       fulfillmentService:
-          json['items']['name'] ?? DefaultValues.defaultString,
-      grams: json['items']['qty'].round() ?? DefaultValues.defaultInt,
+          json['name'] ?? DefaultValues.defaultString,
+      grams: json['qty'].round() ?? DefaultValues.defaultInt,
       taxLines: [MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")],
-      appliedDiscount: json['items']['name'] ?? DefaultValues.defaultString,
-      name: json['items']['name']?? DefaultValues.defaultString,
+      appliedDiscount: json['name'] ?? DefaultValues.defaultString,
+      name: json['name']?? DefaultValues.defaultString,
       properties: [],
       custom: json['is_virtual'] ?? false,
-      price: (double.parse(json['items']['price'].toString()) / 100).toString() ??
+      price: (double.parse(json['price'].toString())).toString() ??
           DefaultValues.defaultString,
-      adminGraphqlApiId: json["items"]['product_type'] ?? DefaultValues.defaultString,
+      adminGraphqlApiId: json['product_type'] ?? DefaultValues.defaultString,
     );
   }
 }
