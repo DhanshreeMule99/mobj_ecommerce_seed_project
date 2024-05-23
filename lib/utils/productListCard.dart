@@ -13,6 +13,7 @@ class ProductListCard extends StatefulWidget {
   final String productName;
   final String? productDetails;
   final String datetime;
+  final String sku;
   final String address;
   final String productImage;
   final String variantId;
@@ -41,6 +42,7 @@ class ProductListCard extends StatefulWidget {
     required this.productName,
     required this.address,
     required this.datetime,
+    required this.sku,
     required this.productImage,
     required this.addToCart,
     this.getwishlistIDHere = const [],
@@ -375,7 +377,59 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         fontSize: 16.0);
                                                   }
                                                 });
-                                              } else {
+                                              } 
+                                              else if (AppConfigure
+                                                  .megentoCommerce) {
+                                                    log('product to ${widget.productId} ${widget.variantId} ${widget.sku}');
+                                                    ProductRepository()
+                                                    .CrateCartmagentoCommerce(
+                                                         "1",
+                                                         widget.sku
+                                                          // widget.variantId
+                                                        )
+                                                    .then((value) async {
+                                                    if (value ==
+                                                      AppString.success) {
+                                                    Navigator.of(context).pop();
+                                                    widget.ref.refresh(
+                                                        productDataProvider(
+                                                            '1'));
+                                                    widget.ref.refresh(
+                                                        cartDetailsDataProvider);
+                                                    widget.ref.refresh(
+                                                        productDetailsProvider(
+                                                            widget.productId));
+                                                    Fluttertoast.showToast(
+                                                        msg: AppString
+                                                            .addToCartSuccess,
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.BOTTOM,
+                                                        timeInSecForIosWeb: 0,
+                                                        backgroundColor:
+                                                            AppColors.green,
+                                                        textColor: AppColors
+                                                            .whiteColor,
+                                                        fontSize: 16.0);
+                                                  } else {
+                                                    Navigator.of(context).pop();
+                                                    Fluttertoast.showToast(
+                                                        msg: AppString.oops,
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.BOTTOM,
+                                                        timeInSecForIosWeb: 0,
+                                                        backgroundColor:
+                                                            AppColors.green,
+                                                        textColor: AppColors
+                                                            .whiteColor,
+                                                        fontSize: 16.0);
+                                                  }
+                                                });
+                                              } 
+                                              else {
                                                 ProductRepository()
                                                     .addToCart(
                                                         widget.variantId, "1")

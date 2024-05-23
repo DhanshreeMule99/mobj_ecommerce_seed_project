@@ -68,7 +68,11 @@ class ShopifyProductModel implements ProductModel {
     required this.options,
     required this.images,
     required this.image,
+       required this.sku,
+       required this.price,
+    required this.attribute_set_id,
   });
+
 
   factory ShopifyProductModel.fromJson(Map<String, dynamic> json) {
     return ShopifyProductModel(
@@ -78,6 +82,7 @@ class ShopifyProductModel implements ProductModel {
       attribute_set_id: DefaultValues.defaultId,
       // Default value for id
       title: json['title'] ?? DefaultValues.defaultTitle,
+      sku:DefaultValues.defaultSku,
       // Default value for title
       bodyHtml: json['body_html'] ?? DefaultValues.defaultBodyHtml,
       vendor: json['vendor'] ?? DefaultValues.defaultVendor,

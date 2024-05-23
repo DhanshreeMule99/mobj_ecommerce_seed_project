@@ -319,6 +319,7 @@ fragment PriceFields on Money {
                                             products[index].name.toString(),
                                         address:
                                             products[index].name.toString(),
+                                            sku: products[index].name,
                                         datetime:
                                             products[index].name.toString(),
                                         // "${AppString.deliverAt} ${products[index].createdAt.toString()}/${products[index].createdAt}/${products[index].createdAt!}",

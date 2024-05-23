@@ -713,6 +713,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 productName:
                                     productlist[index].title.toString(),
                                 address: productlist[index].bodyHtml.toString(),
+                                sku: productlist[index].sku.toString(),
                                 datetime:
                                     "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
                                 productImage: AppConfigure.megentoCommerce

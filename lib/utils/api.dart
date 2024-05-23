@@ -31,7 +31,7 @@ class API {
       // _dio.options.headers['X-Shopify-Access-Token'] = token;
       // _dio.options.headers['X-Shopify-Storefront-Access-Token'] =
       //     storeFrontToken;
-      // _dio.options.headers['Content-Type'] = 'application/json';
+      _dio.options.headers['Content-Type'] = 'application/json';
       // _dio.options.headers["Authorization"] =
       //     "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri";
       // _dio.options.headers['SECRET-KEY'] = AppConfigure.feraSecretKey;

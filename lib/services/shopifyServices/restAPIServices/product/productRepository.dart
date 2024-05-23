@@ -459,6 +459,118 @@ class ProductRepository {
       return exceptionString;
     }
   }
+  
+   CrateCartmagentoCommerce(String quantity, String sku ) async {
+    String exceptionString = "";
+    String uid = await SharedPreferenceManager().getUserId();
+    // debugPrint('$uid $variantId');
+      String draftId = await SharedPreferenceManager().getDraftId();
+//     var body = 
+//     //   {
+//     //   "customer_id": int.parse(uid),
+//     //   "line_items": [
+//     //     {
+//     //       "quantity": int.parse(quantity),
+//     //       "product_id": int.parse(productId),
+//     //       "list_price": int.parse(price),
+//     //       "name": name,
+//     //       "variant_id": int.parse(variantId)
+//     //     }
+//     //   ],
+//     //   "currency": {"code": "USD"},
+//     //   "locale": "en-US"
+//     // }
+//     {
+//   "cart_item": {
+//     "quote_id": int.parse(draftId),
+//     "sku": "DEN101003005",
+//     "qty": int.parse(quantity),
+//   }
+// };
+
+    //  var decodedBody = jsonDecode(body);
+    String baseUrl = AppConfigure.baseUrl;
+    debugPrint(baseUrl + APIConstants.draftProduct);
+    try {
+      
+    
+  API api = API ();
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        String draftId = await SharedPreferenceManager().getDraftId();
+          String userToken  = await SharedPreferenceManager().getToken();
+        debugPrint('darftId is this $draftId');
+        log("sku is ...........$sku........$quantity");
+        final response;
+        if (draftId == "") {
+          response = await api.sendRequest.post("carts/mine", options: Options(headers: {
+            "Authorization": "Bearer $userToken",
+          }),);
+
+
+ if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+               final int  data = response.data;
+          if (draftId == "" ) {
+            await SharedPreferenceManager()
+                .setDraftId(data.toString());
+            // debugPrint(
+            //     'cart id is this bigcommerce.... $data');
+                String draftId = await SharedPreferenceManager().getDraftId();
+
+  debugPrint(
+                'cart id is this bigcommerce.... $draftId');
+          }
+          cartcount++;
+          return AppString.success;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+
+
+
+        } else {
+          response =
+              await api.sendRequest.post("carts/mine/items", 
+             data:  {
+  "cart_item": {
+    "quote_id": draftId,
+    "sku": sku,
+    "qty": int.parse(quantity),
+  }
+}, options: Options(headers: {
+           'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+          }),
+              
+              );
+
+               if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+               var data = response.data;
+          if (draftId == "" ) {
+            await SharedPreferenceManager()
+                .setDraftId(data.toString());
+            // debugPrint(
+            //     'cart id is this bigcommerce.... $data');
+                String draftId = await SharedPreferenceManager().getDraftId();
+
+  debugPrint(
+                'cart id is this bigcommerce.... $draftId');
+          }
+          cartcount++;
+          return AppString.success;
+        } else {
+          exceptionString = AppString.oops;
+          return exceptionString;
+        }
+        }
+      }
+    } catch (error, stackTrace) {
+      print("add to cart $error $stackTrace");
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+  }
 
   addToCartBigcommerce(String variantId, String quantity, String name,
       String price, String productId) async {
@@ -490,6 +602,9 @@ class ProductRepository {
         http.Response response;
         if (draftId == "") {
           response = await ApiManager.post("$baseUrl/carts", body);
+
+
+          
         } else {
           response =
               await ApiManager.post("$baseUrl/carts/$draftId/items", body);
@@ -560,6 +675,58 @@ class ProductRepository {
       return exceptionString;
     }
   }
+
+
+
+  //   addToCartmegentocommerce() async {
+  //       API api = API();
+  //   String exceptionString = "";
+  //   String uid = await SharedPreferenceManager().getUserId();
+  //   //  debugPrint('$uid $variantId');
+
+  //   // var body = jsonEncode({"id": productId, "quantity": quantity,});
+  //   // var decodedBody = jsonDecode(body);
+  //   String baseUrl = AppConfigure.baseUrl;
+  //   debugPrint(baseUrl);
+  //   try {
+  //     if (await ConnectivityUtils.isNetworkConnected()) {
+  //       String email = await SharedPreferenceManager().getemail();
+  // String userToken  = await SharedPreferenceManager().getToken();
+  //       var uuid = const Uuid();
+  //       String cartkey = await SharedPreferenceManager().getCartToken();
+  //       if (cartkey == "") {
+  //         cartkey = uuid.v4();
+  //         await SharedPreferenceManager().setCartToken(cartkey);
+  //       }
+  //       debugPrint('email is this $email');
+  //      final response;
+
+  //       response = await api.sendRequest.post(
+  //           "carts/mine/items",
+  //             options: Options(headers: {
+  //           "Authorization": "Bearer $userToken",
+  //         }),
+  //           );
+
+  //       var data = jsonDecode(response.body);
+  //       debugPrint('add to cart data is this $data');
+
+  //       if (response.statusCode == APIConstants.successCode ||
+  //           response.statusCode == APIConstants.successCreateCode) {
+
+
+              
+  //         return AppString.success;
+  //       } else {
+  //         exceptionString = AppString.oops;
+  //         return exceptionString;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     exceptionString = AppString.oops;
+  //     return exceptionString;
+  //   }
+  // }
 
   repeatOrder(Map<String, dynamic> reqBody) async {
     String exceptionString = "";
@@ -677,12 +844,15 @@ class ProductRepository {
     String exceptionString = "";
     String draftId = await SharedPreferenceManager().getDraftId();
     String uid = await SharedPreferenceManager().getUserId();
-    var body = jsonEncode({
+    var body = jsonEncode(
+      {
       "draft_order": {
         "line_items": reqBody,
         "customer": {"id": uid}
       }
-    });
+    }
+    
+    );
     String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL;
@@ -710,6 +880,52 @@ class ProductRepository {
     }
   }
 
+  updateCartMagento(List<dynamic> reqBody) async {
+    String exceptionString = "";
+    String draftId = await SharedPreferenceManager().getDraftId();
+    String uid = await SharedPreferenceManager().getUserId();
+    var body = jsonEncode(
+      {
+      "draft_order": {
+        "line_items": reqBody,
+        "customer": {"id": uid}
+      }
+    }
+    // {
+    //       "cart_item": {
+    //         "quote_id": "296",
+    //         "sku": "DEN101003005",
+    //         "qty": int.parse(quantity),
+    //       }
+    //     }
+    );
+    String baseUrl = AppConfigure.baseUrl +
+        APIConstants.apiForAdminURL +
+        APIConstants.apiURL;
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        http.Response response;
+        response = await ApiManager.put(
+            "carts/mine/items/336",
+            body);
+
+        var data = jsonDecode(response.body);
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          if (draftId != "") {
+            await SharedPreferenceManager()
+                .setDraftId(data["draft_order"]["id"].toString());
+          }
+
+          return AppString.success;
+        }
+      }
+    } catch (error) {
+      exceptionString = AppString.oops;
+      return exceptionString;
+    }
+  }
+ 
   checkoutTransaction(String orderId, String paymentMethod) async {
     String exceptionString = "";
     final body = {
@@ -887,6 +1103,8 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           String email = await SharedPreferenceManager().getCartToken();
 
+
+
           final response = await ApiManager.get(
               "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
           if (response.statusCode == APIConstants.successCode ||
@@ -908,7 +1126,42 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
-    } else {
+    } 
+    
+    else if (AppConfigure.megentoCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          // String cartId = await SharedPreferenceManager().getCartToken();
+            String userToken  = await SharedPreferenceManager().getToken();
+
+          final response = await api.sendRequest.get(
+              "carts/mine",
+               options: Options(headers: {
+            "Authorization": "Bearer $userToken",
+          }),
+              );
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+
+            //  debugPrint(response.data);
+            final result = response.data;
+            debugPrint("result is this $result");
+            if (result['items_count'] == 0) {
+              throw (AppString.noDataError);
+            }
+            return DraftOrderModel.fromJson(result);
+          } else {
+            throw (AppString.noDataError);
+          }
+        } else {
+          throw (AppString.error);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('error is this $error $stackTrace');
+        rethrow;
+      }
+    }
+    else {
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;

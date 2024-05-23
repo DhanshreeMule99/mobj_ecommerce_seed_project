@@ -9,6 +9,9 @@ import '../../mappers/woocommerce/woocommerce_productmodel.dart';
 
 class ProductModel {
   final int id;
+    final String sku;
+
+  final int attribute_set_id;
   final int price;
   final String title;
   final String sku;
@@ -52,6 +55,8 @@ class ProductModel {
     required this.options,
     required this.images,
     required this.image,
+        required this.sku,
+    required this.attribute_set_id,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {

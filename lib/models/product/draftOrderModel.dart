@@ -72,7 +72,10 @@ class DraftOrderModel {
       return BigCommerceDraftOrderModel.fromJson(json);
     } else if (AppConfigure.wooCommerce) {
       return WooCommerceDraftOrderModel.fromJson(json);
-    } else {
+    } 
+    else if (AppConfigure.megentoCommerce) {
+      return MagentoCommerceDraftOrderModel.fromJson(json);
+      } else {
       return ShopifyDraftOrderModel.fromJson(json);
     }
   }
@@ -224,7 +227,7 @@ class CustomerModel {
     else
     if ( AppConfigure.megentoCommerce){
 
-      return MegentoCustomerModel.fromJson(json);
+      return MagentoCustomerModel.fromJson(json);
     } else {
       return ShopifyCustomerModel.fromJson(json);
     }

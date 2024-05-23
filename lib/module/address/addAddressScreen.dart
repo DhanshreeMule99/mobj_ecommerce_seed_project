@@ -431,11 +431,7 @@ body = {
                           // ),
                           Text(
                             AppLocalizations.of(context)!.saveAddress,
-                            style: TextStyle(
-                              fontSize:
-                                  0.05 * MediaQuery.of(context).size.width,
-                              fontWeight: FontWeight.w700,
-                            ),
+                        style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 10),
                           Wrap(
@@ -516,16 +512,13 @@ body = {
                           ),
                           Text(
                             '${AppLocalizations.of(context)!.contactDetails}:',
-                            style: TextStyle(
-                              fontSize:
-                                  0.05 * MediaQuery.of(context).size.width,
-                              fontWeight: FontWeight.w700,
-                            ),
+                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           Padding(
                               padding: const EdgeInsets.only(
                                   top: 10, left: 0, right: 0),
                               child: Card(
+                              // color:  Theme.of(context).colorScheme.onPrimary,
                                   margin: const EdgeInsets.only(bottom: 5),
                                   elevation: 3,
                                   
@@ -749,16 +742,13 @@ body = {
                           ),
                           Text(
                             '${AppLocalizations.of(context)!.useMy}:',
-                            style: TextStyle(
-                              fontSize:
-                                  0.05 * MediaQuery.of(context).size.width,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                           Padding(
                               padding: const EdgeInsets.only(
                                   top: 10, left: 0, right: 0),
                               child: Card(
+                                //  color:  Theme.of(context).colorScheme.onPrimary,
                                   margin: const EdgeInsets.only(bottom: 5),
                                   elevation: 3,
                                   shape: RoundedRectangleBorder(
@@ -793,24 +783,17 @@ body = {
                               child: Center(
                                   child: Text(
                                 "Or",
-                                style: TextStyle(
-                                  fontSize:
-                                      0.05 * MediaQuery.of(context).size.width,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: Theme.of(context).textTheme.titleLarge,
                               ))),
                           Text(
                             '${AppLocalizations.of(context)!.addAddress}:',
-                            style: TextStyle(
-                              fontSize:
-                                  0.05 * MediaQuery.of(context).size.width,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
                           Card(
+                            //  color:  Theme.of(context).colorScheme.onPrimary,
                               elevation: 3,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
