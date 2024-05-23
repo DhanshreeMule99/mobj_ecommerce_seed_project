@@ -282,9 +282,9 @@ query {
           Response response = await api.sendRequest.put(
             '/customers/$uid',
             data: body,
-            // options: Options(headers: {
-            //   'Content-Type': 'application/json',
-            // }),
+            options: Options(headers: {
+            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          }), 
           );
 
           if (response.statusCode == APIConstants.successCode) {
