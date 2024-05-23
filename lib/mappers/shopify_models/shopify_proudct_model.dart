@@ -5,6 +5,12 @@ import '../../models/product/productModel.dart';
 class ShopifyProductModel implements ProductModel {
   @override
   final int id;
+    @override
+  final String sku;
+    @override
+  final int price;
+    @override
+  final int attribute_set_id;
   @override
   final String title;
   @override
@@ -59,13 +65,20 @@ class ShopifyProductModel implements ProductModel {
     required this.options,
     required this.images,
     required this.image,
+       required this.sku,
+       required this.price,
+    required this.attribute_set_id,
   });
+
 
   factory ShopifyProductModel.fromJson(Map<String, dynamic> json) {
     return ShopifyProductModel(
       id: json['id'] ?? DefaultValues.defaultId,
+       attribute_set_id:  DefaultValues.defaultId,
+       price:  DefaultValues.defaultId,
       // Default value for id
       title: json['title'] ?? DefaultValues.defaultTitle,
+      sku:DefaultValues.defaultSku,
       // Default value for title
       bodyHtml: json['body_html'] ?? DefaultValues.defaultBodyHtml,
       vendor: json['vendor'] ?? DefaultValues.defaultVendor,
@@ -102,9 +115,9 @@ class ShopifyProductModel implements ProductModel {
     );
   }
 
-  @override
-  // TODO: implement price
-  int get price => throw UnimplementedError();
+  // @override
+  // // TODO: implement price
+  // int get price => throw UnimplementedError();
 }
 
 class ShopifyProductVariant implements ProductVariant {

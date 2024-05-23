@@ -6,8 +6,11 @@ import '../bigcommerce_models/bigcommerce_proudct_model.dart';
 class MengentoProductModel implements ProductModel {
   @override
   final int id;
+    @override
   final String sku;
+    @override
   final int price;
+    @override
   final int attribute_set_id;
   @override
   final String title;
