@@ -442,15 +442,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     };
     
       try {
-        String cunsumerKey = AppConfigure.consumerkey;
-        String cumsumerSecret = AppConfigure.consumersecret;
+ 
         final response = await api.sendRequest.post(
           'customers',
           data: body,
           
-          //  options: Options(headers: {
-          //   "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
-          // }),
+           options: Options(headers: {
+            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          }),
         );
         debugPrint('status code is ${response.statusCode}');
         var data = response.data;

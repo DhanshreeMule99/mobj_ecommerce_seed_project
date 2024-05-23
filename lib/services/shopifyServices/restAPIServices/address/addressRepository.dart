@@ -594,7 +594,8 @@ class AddressRepository {
 
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-                  String userToken = await SharedPreferenceManager().getToken();
+                  // String userToken = await SharedPreferenceManager().getToken();
+                   final uid = await SharedPreferenceManager().getUserId();
           final response;
          
           debugPrint("calling null addressid api");
@@ -604,7 +605,7 @@ class AddressRepository {
             data: body,
             options: Options(headers: {
              
-'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+                'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
              }), 
           );
 

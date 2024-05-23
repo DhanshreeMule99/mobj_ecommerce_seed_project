@@ -138,6 +138,7 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
             selectedAddressIndex == 1)) {
       final uid = await SharedPreferenceManager().getUserId();
       final accessToken = await SharedPreferenceManager().getToken();
+       String email = await SharedPreferenceManager().getemail();
       log('access token is this $accessToken');
       Map<String, dynamic> body ;
       
@@ -205,13 +206,13 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
 body = {
    "customer":{
       "id":int.parse(uid),
-      "email":"rekha@setoo.co",
+      "email": email,
       "firstname":firstNameController.text,
       "lastname":selectedOption,
       "website_id":1,
       "addresses":[
          {
-            "customer_id":int.parse(uid),
+             "customer_id":int.parse(uid),
             "region":{
                "region_code":"string",
                "region":"string",

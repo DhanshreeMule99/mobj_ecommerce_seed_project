@@ -1040,7 +1040,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         print('Error occurred: $e');
       }
     } else 
-    if (AppConfigure.megentoCommerce == true){
+    if (AppConfigure.megentoCommerce){
 
 
       // login with Woo Commerce
@@ -1069,7 +1069,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           //  final String userEmail = responseData['data']['email'];
           // final int userId = responseData['data']['id'];
           // ignore: unnecessary_type_check
-          if (token is String) {
+          // if (token is String) {
         
 
         //  await SharedPreferenceManager().setEmail(userEmail);
@@ -1097,17 +1097,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   reverseTransitionDuration: Duration.zero,
                 ),
                 (route) => route.isCurrent);
-          } else {
-            // Failure, show error message
-            setState(() {
-              error = AppLocalizations.of(context)!.invalidCred;
-              isLoading = false;
-            });
-          }
+          // } else {
+          //   // Failure, show error message
+          //   setState(() {
+          //     error = AppLocalizations.of(context)!.invalidCred;
+          //     isLoading = false;
+          //   });
+          // }
         } else {
           // If the server did not return a 200 OK response, show error message
           setState(() {
-            error = AppLocalizations.of(context)!.oops;
+            error = AppLocalizations.of(context)!.invalidCred;
             isLoading = false;
           });
         }
