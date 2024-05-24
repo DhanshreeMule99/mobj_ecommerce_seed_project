@@ -286,47 +286,44 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
           //     )
           // ],
           actions:
-          //  (AppConfigure.wooCommerce && AppConfigure.megentoCommerce && 
-          //  addressProviders is AsyncData<List<DefaultAddressModel>> && 
-          //  addressProviders.value.length == 1)
-           addressProviders is AsyncData<List<DefaultAddressModel>> &&
-                  addressProviders.value.length == 1 &&
-                  AppConfigure.wooCommerce 
-              ? null
-              : 
-                  addressProviders is AsyncData<List<DefaultAddressModel>> &&
-                  addressProviders.value.length == 1 &&
-                  AppConfigure.megentoCommerce 
-
-                   ? null
-              :
-                
-                [
-                  Tooltip(
-                    message: "Add Address",
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) =>
-                                AddressScreen(
-                              addressId: "",
-                              isCheckout: widget.isCheckout ?? false,
-                              amount: widget.amount,
-                              mobile: widget.mobile,
+              //  (AppConfigure.wooCommerce && AppConfigure.megentoCommerce &&
+              //  addressProviders is AsyncData<List<DefaultAddressModel>> &&
+              //  addressProviders.value.length == 1)
+              addressProviders is AsyncData<List<DefaultAddressModel>> &&
+                      addressProviders.value.length == 1 &&
+                      AppConfigure.wooCommerce
+                  ? null
+                  : addressProviders is AsyncData<List<DefaultAddressModel>> &&
+                          addressProviders.value.length == 1 &&
+                          AppConfigure.megentoCommerce
+                      ? null
+                      : [
+                          Tooltip(
+                            message: "Add Address",
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            AddressScreen(
+                                      addressId: "",
+                                      isCheckout: widget.isCheckout ?? false,
+                                      amount: widget.amount,
+                                      mobile: widget.mobile,
+                                    ),
+                                    transitionDuration: Duration.zero,
+                                    reverseTransitionDuration: Duration.zero,
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.plus,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
-                            transitionDuration: Duration.zero,
-                            reverseTransitionDuration: Duration.zero,
-                          ),
-                        );
-                      },
-                      icon: Icon(
-                        FontAwesomeIcons.plus,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  )
-                ],
+                          )
+                        ],
         ),
         bottomNavigationBar: MobjBottombar(
           bgcolor: AppColors.whiteColor,
@@ -370,7 +367,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                 top: 5, left: 10, right: 10),
                             child: index >= 0
                                 ? Container(
-                                // color: Theme.of(context).colorScheme.onPrimary,
+                                    // color: Theme.of(context).colorScheme.onPrimary,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
                                     width: double.maxFinite,
@@ -382,7 +379,9 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                               spreadRadius: 0,
                                               offset: Offset(0, 1))
                                         ],
-                                          color: Theme.of(context).colorScheme.onPrimary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
                                         // color: Theme.of(context)
                                         //     .colorScheme
                                         //     .secondary,
@@ -1130,25 +1129,15 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  '${AppLocalizations.of(context)!.distance}:',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
+                                                    '${AppLocalizations.of(context)!.distance}:',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall),
                                                 Text(
-                                                  '${distance.toStringAsFixed(2)} KM',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
+                                                    '${distance.toStringAsFixed(2)} KM',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineLarge),
                                               ],
                                             ),
                                             const SizedBox(
@@ -1160,25 +1149,15 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  '${AppLocalizations.of(context)!.actualPrice}:',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
+                                                    '${AppLocalizations.of(context)!.actualPrice}:',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall),
                                                 Text(
-                                                  '\u{20B9}${product.subtotalPrice}',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
+                                                    '\u{20B9}${product.subtotalPrice}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineLarge),
                                               ],
                                             ),
                                             const SizedBox(
@@ -1190,25 +1169,15 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  '${AppLocalizations.of(context)!.tax}:',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
+                                                    '${AppLocalizations.of(context)!.tax}:',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall),
                                                 Text(
-                                                  '\u{20B9}${product.totalTax}',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
+                                                    '\u{20B9}${product.totalTax}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineLarge),
                                               ],
                                             ),
                                             const SizedBox(
@@ -1219,26 +1188,15 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
+                                                Text('${AppString.total}:',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall),
                                                 Text(
-                                                  '${AppString.total}:',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '\u{20B9}${product.totalPrice}',
-                                                  style: TextStyle(
-                                                    fontSize: 0.05 *
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
+                                                    '\u{20B9}${product.totalPrice}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineLarge),
                                               ],
                                             ),
                                             widget.isCheckout == true
@@ -1387,6 +1345,29 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                       productlist
                                                                           .totalPrice
                                                                           .toString()));
+                                                            } else if (AppConfigure
+                                                                .megentoCommerce) {
+                                                              PaymentHandler(
+                                                                _razorpay,
+                                                                context,
+                                                                ref,
+                                                              ).openPaymentPortal(
+                                                                  productlist
+                                                                          .customer
+                                                                          .firstName +
+                                                                      productlist
+                                                                          .customer
+                                                                          .lastName,
+                                                                  productlist
+                                                                      .customer
+                                                                      .phone,
+                                                                  productlist
+                                                                      .customer
+                                                                      .email,
+                                                                  double.parse(
+                                                                      productlist
+                                                                          .totalPrice
+                                                                          .toString()));
                                                             } else {
                                                               // Stripe payment gateway
                                                               // StripePaymentService(
@@ -1446,17 +1427,19 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                          backgroundColor: appInfo
-                                                              .primaryColorValue,
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
                                                           minimumSize:
                                                               const Size
                                                                   .fromHeight(
                                                                   50),
                                                           shape: RoundedRectangleBorder(
                                                               borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      AppDimension
-                                                                          .buttonRadius)),
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8)),
                                                           textStyle: const TextStyle(
                                                               color: AppColors
                                                                   .whiteColor,
@@ -1470,17 +1453,10 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                   context)!
                                                               .proceedTOPay
                                                               .toUpperCase(),
-                                                          style: TextStyle(
-                                                              color: AppColors
-                                                                  .whiteColor,
-                                                              fontSize: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.05,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .displayLarge,
                                                         )))
                                                 : Container(),
                                             const SizedBox(

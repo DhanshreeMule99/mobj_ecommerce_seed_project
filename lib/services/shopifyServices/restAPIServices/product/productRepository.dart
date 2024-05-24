@@ -1002,6 +1002,63 @@ class ProductRepository {
         exceptionString = AppString.oops;
         return exceptionString;
       }
+    } else if (AppConfigure.megentoCommerce) {
+      API api = API();
+      String exceptionString = "";
+      String token = await SharedPreferenceManager().getToken();
+      String baseUrl = AppConfigure.baseUrl +
+          APIConstants.apiForAdminURL +
+          APIConstants.apiURL;
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          Response response;
+          response = await api.sendRequest.post(
+              "carts/mine/payment-information",
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer $token'
+              }),
+              data: {
+                "paymentMethod": {"method": "cashondelivery"},
+                "billing_address": {
+                  "region": "Maharashtra",
+                  "region_id": 589,
+                  "region_code": "MH",
+                  "country_id": "IN",
+                  "street": ["happy birthday"],
+                  "company": "string",
+                  "telephone": "string",
+                  "fax": "string",
+                  "postcode": "416004",
+                  "city": "string",
+                  "firstname": "string",
+                  "lastname": "strasdfasdfing",
+                  "middlename": "stasdfasdfasdfring",
+                  "prefix": "string",
+                  "suffix": "string",
+                  "vat_id": "string",
+                  "customer_id": 52,
+                  "email": "csj@setoo.co",
+                  "same_as_billing": 0,
+                  "customer_address_id": 42,
+                  "save_in_address_book": 0
+                }
+              });
+          var data = response.data;
+          debugPrint("${response.data} ${response.statusCode}");
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            await SharedPreferenceManager().setCartToken("");
+            var service = await getPaymentDetails(paymentId);
+            var gateWayMethod = service["method"];
+            return AppString.success;
+          }
+        }
+      } catch (error) {
+        debugPrint('error is this $error');
+        exceptionString = AppString.oops;
+        return exceptionString;
+      }
     } else {
       String exceptionString = "";
       String draftId = await SharedPreferenceManager().getDraftId();

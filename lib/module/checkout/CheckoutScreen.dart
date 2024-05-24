@@ -256,7 +256,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                     .start,
                                                             children: [
                                                               SizedBox(
-                                                                width: 160.w,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    .5,
                                                                 child: Padding(
                                                                   padding:
                                                                       const EdgeInsets
@@ -281,14 +285,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               ),
                                                               IconButton(
                                                                 icon: Icon(
-                                                                  Icons.delete,
-                                                                  size: 20.sp,
-                                                                  color: ConstColors.red
-                                                                  // Theme.of(
-                                                                  //         context)
-                                                                  //     .colorScheme
-                                                                  //     .onSecondaryContainer,
-                                                                ),
+                                                                    Icons
+                                                                        .delete,
+                                                                    size: 20.sp,
+                                                                    color:
+                                                                        ConstColors
+                                                                            .red
+                                                                    // Theme.of(
+                                                                    //         context)
+                                                                    //     .colorScheme
+                                                                    //     .onSecondaryContainer,
+                                                                    ),
                                                                 onPressed:
                                                                     () async {
                                                                   debugPrint(
@@ -354,7 +361,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       var response =
                                                                           await ApiManager.delete(
                                                                               '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
-                                                                                      
+
                                                                       ref.refresh(
                                                                           cartDetailsDataProvider);
                                                                       Navigator.of(
@@ -362,7 +369,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           .pop();
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
-                                                                           cartcount--;
+                                                                      cartcount--;
                                                                     } else if (AppConfigure
                                                                         .wooCommerce) {
                                                                       String
@@ -372,7 +379,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       var response =
                                                                           await ApiManager.delete(
                                                                               '${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$email');
-                                                                             
+
                                                                       ref.refresh(
                                                                           cartDetailsDataProvider);
                                                                       Navigator.of(
@@ -380,7 +387,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           .pop();
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
-                                                                           cartcount--;
+                                                                      cartcount--;
                                                                     } else {
                                                                       ProductRepository()
                                                                           .updateCart(
@@ -446,7 +453,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   decoration: BoxDecoration(
                                                                       borderRadius:
                                                                           BorderRadius.circular(
-                                                                             10),
+                                                                              10),
                                                                       border: Border.all(
                                                                           color: Theme.of(context)
                                                                               .colorScheme
@@ -571,7 +578,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               },
                                                                   ),
                                                                 ),
-                                                            
                                                                 Text(
                                                                   '${orderList.quantity}',
                                                                   style: Theme.of(
@@ -720,7 +726,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                               },
                                                                   ),
                                                                 )
-                                                           
                                                               ],
                                                             ),
                                                           ),
