@@ -121,7 +121,7 @@ class _CollectionWiseProductScreenState
       API api = API();
       try {
         final response = await api.sendRequest.get(
-          'https://hp.geexu.org/rest/default/V1/categories/$pid/products?searchCriteria[currentPage]=1',
+          '${AppConfigure.megentoCommerceUrl}categories/$pid/products?searchCriteria[currentPage]=1',
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -144,7 +144,7 @@ class _CollectionWiseProductScreenState
           // Output the result
           log('Comma-separated SKUs: $skuString');
           final productResponse = await api.sendRequest.get(
-            'https://hp.geexu.org/rest/default/V1/products?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=$skuString&searchCriteria[filter_groups][0][filters][0][condition_type]=in',
+            '${AppConfigure.megentoCommerceUrl}products?searchCriteria[filter_groups][0][filters][0][field]=sku&searchCriteria[filter_groups][0][filters][0][value]=$skuString&searchCriteria[filter_groups][0][filters][0][condition_type]=in',
             options: Options(headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -524,7 +524,7 @@ fragment PriceFields on Money {
                                             logoPath: product.title,
                                             address: product.title,
                                             datetime: product.title,
-                                            sku:  product.title,
+                                            sku: product.title,
                                             ratingCount: num.parse("5.5"),
                                             productId: product.id,
                                             variantId: product.title,
@@ -708,12 +708,15 @@ fragment PriceFields on Money {
                                             ratingCount: num.parse("5.5"),
                                             productId: product.title,
                                             variantId: product.title,
-                                            sku:  product.title,
+                                            sku: product.title,
                                             stock: staticStock,
                                             ref: ref,
                                             tileColor: Colors.white,
                                             productName: product.title,
-                                            productImage:AppConfigure.megentoCommerce? "https://hp.geexu.org/media/catalog/product${product.featuredImage}": product.featuredImage,
+                                            productImage: AppConfigure
+                                                    .megentoCommerce
+                                                ? "https://hp.geexu.org/media/catalog/product${product.featuredImage}"
+                                                : product.featuredImage,
                                             productPrice:
                                                 product.minPrice.toString(),
                                             addToCart: () {},

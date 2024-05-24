@@ -106,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       log('Megnto API for categories');
       try {
         final response = await api.sendRequest.get(
-          "https://hp.geexu.org/rest/V1/categories",
+          "${AppConfigure.megentoCommerceUrl}categories",
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -485,17 +485,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ),
                                     errorWidget: (context, url, error) =>
                                         Container(
-                                            height: 55.sp,
-                                            width: 55.sp,
-                                            decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                                //image size fill
-                                                image: NetworkImage(
-                                                    'https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            color: AppColors.greyShade),
+                                      height: 55.sp,
+                                      width: 55.sp,
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.greyShade,
+                                        image: DecorationImage(
+                                          //image size fill
+                                          image: NetworkImage(
+                                              'https://t4.ftcdn.net/jpg/03/85/95/63/360_F_385956366_Zih7xDcSLqDxiJRYUfG5ZHNoFCSLMRjm.jpg'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 5,

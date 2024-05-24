@@ -26,7 +26,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
       log('Megnto API for categories');
       try {
         final response = await api.sendRequest.get(
-          "https://hp.geexu.org/rest/V1/categories",
+          "${AppConfigure.megentoCommerceUrl}categories",
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',

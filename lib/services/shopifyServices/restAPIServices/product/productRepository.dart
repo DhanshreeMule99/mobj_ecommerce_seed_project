@@ -19,7 +19,7 @@ class ProductRepository {
       try {
         log('megentoCommerce api');
         final response = await api.sendRequest.get(
-          'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
+          '${AppConfigure.megentoCommerceUrl}products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -151,7 +151,7 @@ class ProductRepository {
       try {
         log("Logging product $pid");
         String baseUrl =
-            "https://hp.geexu.org/rest/default/V1/products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
+            "${AppConfigure.megentoCommerceUrl}products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
         debugPrint(baseUrl + pid);
 
         final response = await api.sendRequest.get(
@@ -168,8 +168,8 @@ class ProductRepository {
         } else {
           throw (AppString.noDataError);
         }
-      } catch (e,stackTrace) {
-        log("magento product details error is this ${e.toString() } $stackTrace");
+      } catch (e, stackTrace) {
+        log("magento product details error is this ${e.toString()} $stackTrace");
 
         rethrow;
       }
@@ -459,13 +459,13 @@ class ProductRepository {
       return exceptionString;
     }
   }
-  
-   CrateCartmagentoCommerce(String quantity, String sku ) async {
+
+  CrateCartmagentoCommerce(String quantity, String sku) async {
     String exceptionString = "";
     String uid = await SharedPreferenceManager().getUserId();
     // debugPrint('$uid $variantId');
-      String draftId = await SharedPreferenceManager().getDraftId();
-//     var body = 
+    String draftId = await SharedPreferenceManager().getDraftId();
+//     var body =
 //     //   {
 //     //   "customer_id": int.parse(uid),
 //     //   "line_items": [
@@ -492,77 +492,70 @@ class ProductRepository {
     String baseUrl = AppConfigure.baseUrl;
     debugPrint(baseUrl + APIConstants.draftProduct);
     try {
-      
-    
-  API api = API ();
+      API api = API();
       if (await ConnectivityUtils.isNetworkConnected()) {
         String draftId = await SharedPreferenceManager().getDraftId();
-          String userToken  = await SharedPreferenceManager().getToken();
+        String userToken = await SharedPreferenceManager().getToken();
         debugPrint('darftId is this $draftId');
         log("sku is ...........$sku........$quantity");
         final response;
         if (draftId == "") {
-          response = await api.sendRequest.post("carts/mine", options: Options(headers: {
-            "Authorization": "Bearer $userToken",
-          }),);
+          response = await api.sendRequest.post(
+            "carts/mine",
+            options: Options(headers: {
+              "Authorization": "Bearer $userToken",
+            }),
+          );
 
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            final int data = response.data;
+            if (draftId == "") {
+              await SharedPreferenceManager().setDraftId(data.toString());
+              // debugPrint(
+              //     'cart id is this bigcommerce.... $data');
+              String draftId = await SharedPreferenceManager().getDraftId();
 
- if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-               final int  data = response.data;
-          if (draftId == "" ) {
-            await SharedPreferenceManager()
-                .setDraftId(data.toString());
-            // debugPrint(
-            //     'cart id is this bigcommerce.... $data');
-                String draftId = await SharedPreferenceManager().getDraftId();
-
-  debugPrint(
-                'cart id is this bigcommerce.... $draftId');
+              debugPrint('cart id is this bigcommerce.... $draftId');
+            }
+            cartcount++;
+            return AppString.success;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
           }
-          cartcount++;
-          return AppString.success;
         } else {
-          exceptionString = AppString.oops;
-          return exceptionString;
-        }
+          response = await api.sendRequest.post(
+            "carts/mine/items",
+            data: {
+              "cart_item": {
+                "quote_id": draftId,
+                "sku": sku,
+                "qty": int.parse(quantity),
+              }
+            },
+            options: Options(headers: {
+              'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+            }),
+          );
 
+          if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            var data = response.data;
+            if (draftId == "") {
+              await SharedPreferenceManager().setDraftId(data.toString());
+              // debugPrint(
+              //     'cart id is this bigcommerce.... $data');
+              String draftId = await SharedPreferenceManager().getDraftId();
 
-
-        } else {
-          response =
-              await api.sendRequest.post("carts/mine/items", 
-             data:  {
-  "cart_item": {
-    "quote_id": draftId,
-    "sku": sku,
-    "qty": int.parse(quantity),
-  }
-}, options: Options(headers: {
-           'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
-          }),
-              
-              );
-
-               if (response.statusCode == APIConstants.successCode ||
-            response.statusCode == APIConstants.successCreateCode) {
-               var data = response.data;
-          if (draftId == "" ) {
-            await SharedPreferenceManager()
-                .setDraftId(data.toString());
-            // debugPrint(
-            //     'cart id is this bigcommerce.... $data');
-                String draftId = await SharedPreferenceManager().getDraftId();
-
-  debugPrint(
-                'cart id is this bigcommerce.... $draftId');
+              debugPrint('cart id is this bigcommerce.... $draftId');
+            }
+            cartcount++;
+            return AppString.success;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
           }
-          cartcount++;
-          return AppString.success;
-        } else {
-          exceptionString = AppString.oops;
-          return exceptionString;
-        }
         }
       }
     } catch (error, stackTrace) {
@@ -602,9 +595,6 @@ class ProductRepository {
         http.Response response;
         if (draftId == "") {
           response = await ApiManager.post("$baseUrl/carts", body);
-
-
-          
         } else {
           response =
               await ApiManager.post("$baseUrl/carts/$draftId/items", body);
@@ -676,8 +666,6 @@ class ProductRepository {
     }
   }
 
-
-
   //   addToCartmegentocommerce() async {
   //       API api = API();
   //   String exceptionString = "";
@@ -714,8 +702,6 @@ class ProductRepository {
   //       if (response.statusCode == APIConstants.successCode ||
   //           response.statusCode == APIConstants.successCreateCode) {
 
-
-              
   //         return AppString.success;
   //       } else {
   //         exceptionString = AppString.oops;
@@ -844,15 +830,12 @@ class ProductRepository {
     String exceptionString = "";
     String draftId = await SharedPreferenceManager().getDraftId();
     String uid = await SharedPreferenceManager().getUserId();
-    var body = jsonEncode(
-      {
+    var body = jsonEncode({
       "draft_order": {
         "line_items": reqBody,
         "customer": {"id": uid}
       }
-    }
-    
-    );
+    });
     String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL;
@@ -884,30 +867,27 @@ class ProductRepository {
     String exceptionString = "";
     String draftId = await SharedPreferenceManager().getDraftId();
     String uid = await SharedPreferenceManager().getUserId();
-    var body = jsonEncode(
-      {
+    var body = jsonEncode({
       "draft_order": {
         "line_items": reqBody,
         "customer": {"id": uid}
       }
     }
-    // {
-    //       "cart_item": {
-    //         "quote_id": "296",
-    //         "sku": "DEN101003005",
-    //         "qty": int.parse(quantity),
-    //       }
-    //     }
-    );
+        // {
+        //       "cart_item": {
+        //         "quote_id": "296",
+        //         "sku": "DEN101003005",
+        //         "qty": int.parse(quantity),
+        //       }
+        //     }
+        );
     String baseUrl = AppConfigure.baseUrl +
         APIConstants.apiForAdminURL +
         APIConstants.apiURL;
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         http.Response response;
-        response = await ApiManager.put(
-            "carts/mine/items/336",
-            body);
+        response = await ApiManager.put("carts/mine/items/336", body);
 
         var data = jsonDecode(response.body);
         if (response.statusCode == APIConstants.successCode ||
@@ -925,7 +905,7 @@ class ProductRepository {
       return exceptionString;
     }
   }
- 
+
   checkoutTransaction(String orderId, String paymentMethod) async {
     String exceptionString = "";
     final body = {
@@ -1103,8 +1083,6 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           String email = await SharedPreferenceManager().getCartToken();
 
-
-
           final response = await ApiManager.get(
               "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
           if (response.statusCode == APIConstants.successCode ||
@@ -1126,23 +1104,20 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
-    } 
-    
-    else if (AppConfigure.megentoCommerce) {
+    } else if (AppConfigure.megentoCommerce) {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           // String cartId = await SharedPreferenceManager().getCartToken();
-            String userToken  = await SharedPreferenceManager().getToken();
+          String userToken = await SharedPreferenceManager().getToken();
 
           final response = await api.sendRequest.get(
-              "carts/mine",
-               options: Options(headers: {
-            "Authorization": "Bearer $userToken",
-          }),
-              );
+            "carts/mine",
+            options: Options(headers: {
+              "Authorization": "Bearer $userToken",
+            }),
+          );
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
-
             //  debugPrint(response.data);
             final result = response.data;
             debugPrint("result is this $result");
@@ -1160,8 +1135,7 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
-    }
-    else {
+    } else {
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;
@@ -1186,7 +1160,6 @@ class ProductRepository {
       }
     }
   }
-
 
   Future<DraftOrderModel> getCarttotalDetails() async {
     if (AppConfigure.bigCommerce) {
@@ -1218,8 +1191,6 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           String email = await SharedPreferenceManager().getCartToken();
 
-
-
           final response = await ApiManager.get(
               "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
           if (response.statusCode == APIConstants.successCode ||
@@ -1241,24 +1212,20 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
-    } 
-    
-    else 
-    if (AppConfigure.megentoCommerce) {
+    } else if (AppConfigure.megentoCommerce) {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           // String cartId = await SharedPreferenceManager().getCartToken();
-            String userToken  = await SharedPreferenceManager().getToken();
+          String userToken = await SharedPreferenceManager().getToken();
 
           final response = await api.sendRequest.get(
-              "carts/mine/totals",
-               options: Options(headers: {
-            "Authorization": "Bearer $userToken",
-          }),
-              );
+            "carts/mine/totals",
+            options: Options(headers: {
+              "Authorization": "Bearer $userToken",
+            }),
+          );
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
-
             //  debugPrint(response.data);
             final result = response.data;
             debugPrint("result is this $result");
@@ -1276,9 +1243,7 @@ class ProductRepository {
         debugPrint('error is this $error $stackTrace');
         rethrow;
       }
-    }
-   
-    else {
+    } else {
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;
