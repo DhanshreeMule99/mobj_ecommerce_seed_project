@@ -300,7 +300,11 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
                                                         productDetailsProvider(
-                                                            widget.productId));
+                                                            AppConfigure
+                                                                    .megentoCommerce
+                                                                ? widget.sku
+                                                                : widget
+                                                                    .productId));
                                                     Fluttertoast.showToast(
                                                         msg: AppString
                                                             .addToCartSuccess,
@@ -347,7 +351,11 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
                                                         productDetailsProvider(
-                                                            widget.productId));
+                                                            AppConfigure
+                                                                    .megentoCommerce
+                                                                ? widget.sku
+                                                                : widget
+                                                                    .productId));
                                                     Fluttertoast.showToast(
                                                         msg: AppString
                                                             .addToCartSuccess,
@@ -377,18 +385,16 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         fontSize: 16.0);
                                                   }
                                                 });
-                                              } 
-                                              else if (AppConfigure
+                                              } else if (AppConfigure
                                                   .megentoCommerce) {
-                                                    log('product to ${widget.productId} ${widget.variantId} ${widget.sku}');
-                                                    ProductRepository()
+                                                log('product to ${widget.productId} ${widget.variantId} ${widget.sku}');
+                                                ProductRepository()
                                                     .CrateCartmagentoCommerce(
-                                                         "1",
-                                                         widget.sku
-                                                          // widget.variantId
+                                                        "1", widget.sku
+                                                        // widget.variantId
                                                         )
                                                     .then((value) async {
-                                                    if (value ==
+                                                  if (value ==
                                                       AppString.success) {
                                                     Navigator.of(context).pop();
                                                     widget.ref.refresh(
@@ -398,7 +404,11 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
                                                         productDetailsProvider(
-                                                            widget.productId));
+                                                            AppConfigure
+                                                                    .megentoCommerce
+                                                                ? widget.sku
+                                                                : widget
+                                                                    .productId));
                                                     Fluttertoast.showToast(
                                                         msg: AppString
                                                             .addToCartSuccess,
@@ -428,8 +438,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         fontSize: 16.0);
                                                   }
                                                 });
-                                              } 
-                                              else {
+                                              } else {
                                                 ProductRepository()
                                                     .addToCart(
                                                         widget.variantId, "1")
@@ -444,7 +453,11 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                         cartDetailsDataProvider);
                                                     widget.ref.refresh(
                                                         productDetailsProvider(
-                                                            widget.productId));
+                                                            AppConfigure
+                                                                    .megentoCommerce
+                                                                ? widget.sku
+                                                                : widget
+                                                                    .productId));
                                                     Fluttertoast.showToast(
                                                         msg: AppString
                                                             .addToCartSuccess,

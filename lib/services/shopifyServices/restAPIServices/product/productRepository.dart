@@ -150,12 +150,10 @@ class ProductRepository {
     if (AppConfigure.megentoCommerce) {
       try {
         log("Logging product $pid");
-        String baseUrl =
-            "https://hp.geexu.org/rest/default/V1/products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
-        debugPrint(baseUrl + pid);
+        // debugPrint(baseUrl + pid);
 
         final response = await api.sendRequest.get(
-          baseUrl,
+          "products/$pid",
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -163,7 +161,7 @@ class ProductRepository {
         );
         // log(response.data);
         if (response.statusCode == APIConstants.successCode) {
-          final userData = response.data['items'][0];
+          final userData = response.data;
           return ProductModel.fromJson(userData);
         } else {
           throw (AppString.noDataError);

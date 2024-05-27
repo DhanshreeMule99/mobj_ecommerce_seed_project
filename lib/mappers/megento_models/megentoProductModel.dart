@@ -36,7 +36,7 @@ class MengentoProductModel implements ProductModel {
   @override
   final String adminGraphqlApiId;
   @override
-  final List<BigCommerceProductVariant> variants;
+  final List<MegentoProductVariant> variants;
   @override
   final List<BigCommerceProductOption> options;
   @override
@@ -78,9 +78,9 @@ class MengentoProductModel implements ProductModel {
         bodyHtml: json['custom_attributes'][0]['value'] ??
             DefaultValues.defaultBodyHtml,
         vendor: DefaultValues.defaultVendor,
-        productType: json['type_id'] ?? DefaultValues.defaultProductType,
+        productType: json[''] ?? DefaultValues.defaultProductType,
         createdAt: json['created_at'] ?? DefaultValues.defaultCreatedAt,
-        handle: json['name'] ?? DefaultValues.defaultHandle,
+        handle: json[''] ?? DefaultValues.defaultHandle,
         updatedAt: json['updated_at'] ?? DefaultValues.defaultUpdatedAt,
         publishedAt: json['updated_at'] ?? DefaultValues.defaultPublishedAt,
         templateSuffix: DefaultValues.defaultTemplateSuffix,
@@ -88,8 +88,17 @@ class MengentoProductModel implements ProductModel {
         tags: DefaultValues.defaultTags,
         status: json['status'].toString(),
         adminGraphqlApiId: json[''] ?? DefaultValues.defaultAdminGraphqlApiId,
-        variants:
-            DefaultValues.defaultVariants.cast<BigCommerceProductVariant>(),
+        //  variants: (json['variants'] as List<dynamic>?)
+        //         ?.map((variantJson) => BigCommerceProductVariant.fromJson(
+        //             variantJson as Map<String, dynamic>))
+        //         .toList() ??
+        //     DefaultValues.defaultVariants.cast<BigCommerceProductVariant>(),
+        variants: json['extension_attributes']
+                .map((variantJson) => MegentoProductVariant.fromJson(
+                    variantJson as Map<String, dynamic>))
+                .toList() ??
+            DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
+        // variants: DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
         options: (json[''] as List<dynamic>?)
                 ?.map((optionJson) => BigCommerceProductOption.fromJson(
                     optionJson as Map<String, dynamic>))
@@ -99,8 +108,8 @@ class MengentoProductModel implements ProductModel {
                 ?.map((imageJson) => MegentoProductImage.fromJson(imageJson))
                 .toList() ??
             DefaultValues.defaultImagesMegento.cast<MegentoProductImage>(),
-        image: MegentoProductImage.fromJson(
-            json[''] as Map<String, dynamic>? ?? {}));
+        image:
+            MegentoProductImage.fromJson(json[''] as Map<String, dynamic>? ?? {}));
   }
 }
 
@@ -247,12 +256,12 @@ class MegentoProductVariant implements ProductVariant {
 
   factory MegentoProductVariant.fromJson(Map<String, dynamic> json) {
     return MegentoProductVariant(
-      id: json['id'] ?? DefaultValues.defaultId,
+      id: json[''] ?? DefaultValues.defaultId,
       productId: json[''] ?? DefaultValues.defaultProductId,
-      title: json['name'] ?? DefaultValues.defaultTitle,
+      title: json[''] ?? DefaultValues.defaultTitle,
       price: json[''].toString() ?? DefaultValues.defaultPrice,
-      sku: json['sku'].toString() ?? DefaultValues.defaultSku,
-      position: json['status'] ?? DefaultValues.defaultPosition,
+      sku: json[''].toString() ?? DefaultValues.defaultSku,
+      position: json[''] ?? DefaultValues.defaultPosition,
       inventoryPolicy: json[''] ?? DefaultValues.defaultInventoryPolicy,
       compareAtPrice:
           json[''].toString() ?? DefaultValues.defaultCompareAtPrice,
@@ -274,7 +283,8 @@ class MegentoProductVariant implements ProductVariant {
           json[''] == null ? DefaultValues.defaultWeight : json[''].toDouble(),
       weightUnit: json[''] ?? DefaultValues.defaultWeightUnit,
       inventoryItemId: json[''] ?? DefaultValues.defaultInventoryItemId,
-      inventoryQuantity: json[''] ?? DefaultValues.defaultInventoryQuantity,
+      inventoryQuantity: json['extension_attributes']['stock_item']['qty'] ??
+          DefaultValues.defaultInventoryQuantity,
       oldInventoryQuantity:
           json[''] ?? DefaultValues.defaultOldInventoryQuantity,
       requiresShipping: json[''] ?? DefaultValues.defaultRequiresShipping,

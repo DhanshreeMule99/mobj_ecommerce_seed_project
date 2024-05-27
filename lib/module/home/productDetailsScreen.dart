@@ -20,10 +20,12 @@ import '../wishlist/wishlishScreen.dart';
 class ProductDetailsScreen extends ConsumerStatefulWidget {
   final String uid;
   final ProductModel? product;
+  final String sku;
 
   const ProductDetailsScreen({
     super.key,
     required this.uid,
+    this.sku = "",
     this.product,
   });
 
@@ -67,7 +69,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
         }
       });
     } else {
-      ref.read(productDetailsProvider(widget.uid)).when(
+      ref
+          .read(productDetailsProvider(
+              AppConfigure.megentoCommerce ? widget.sku : widget.uid))
+          .when(
             data: (product) {
               selectedVariant = product.variants[0];
               setState(() {
@@ -121,7 +126,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final appInfoAsyncValue = ref.watch(appInfoProvider);
-    final user = ref.watch(productDetailsProvider(widget.uid));
+    final user = ref.watch(productDetailsProvider(
+        AppConfigure.megentoCommerce ? widget.sku : widget.uid));
     final ratingProduct = ref.watch(productReviewsProvider(widget.uid));
     final product = ref.watch(productRecommendedDataProvider(widget.uid));
     final productRating = ref.watch(productRatingProvider(widget.uid));
@@ -500,7 +506,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             ref.refresh(
                                                 cartDetailsDataProvider);
                                             ref.refresh(productDetailsProvider(
-                                                widget.uid));
+                                                AppConfigure.megentoCommerce
+                                                    ? widget.sku
+                                                    : widget.uid));
                                             Fluttertoast.showToast(
                                                 msg: AppString.addToCartSuccess,
                                                 toastLength: Toast.LENGTH_SHORT,
@@ -540,7 +548,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             ref.refresh(
                                                 cartDetailsDataProvider);
                                             ref.refresh(productDetailsProvider(
-                                                widget.uid));
+                                                AppConfigure.megentoCommerce
+                                                    ? widget.sku
+                                                    : widget.uid));
                                             Fluttertoast.showToast(
                                                 msg: AppString.addToCartSuccess,
                                                 toastLength: Toast.LENGTH_SHORT,
@@ -563,18 +573,16 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 fontSize: 16.0);
                                           }
                                         });
-                                      }
-                                      else if (AppConfigure.megentoCommerce) {
+                                      } else if (AppConfigure.megentoCommerce) {
                                         //  log('product to ${widget.productId} ${widget.variantId}');
                                         ProductRepository()
                                             .CrateCartmagentoCommerce(
-                                           quantity.toString(),
-                                           user.sku
-                                          // variantId != null
-                                          //     ? variantId.toString()
-                                          //     : user.variants[0].id.toString(),
-                                             
-                                        )
+                                                quantity.toString(), user.sku
+                                                // variantId != null
+                                                //     ? variantId.toString()
+                                                //     : user.variants[0].id.toString(),
+
+                                                )
                                             .then((value) async {
                                           if (value == AppString.success) {
                                             Navigator.of(context).pop();
@@ -583,7 +591,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             ref.refresh(
                                                 cartDetailsDataProvider);
                                             ref.refresh(productDetailsProvider(
-                                                widget.uid));
+                                                AppConfigure.megentoCommerce
+                                                    ? widget.sku
+                                                    : widget.uid));
                                             Fluttertoast.showToast(
                                                 msg: AppString.addToCartSuccess,
                                                 toastLength: Toast.LENGTH_SHORT,
@@ -606,8 +616,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                 fontSize: 16.0);
                                           }
                                         });
-                                      }
-                                       else {
+                                      } else {
                                         ProductRepository()
                                             .addToCart(
                                                 variantId != null
@@ -625,7 +634,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                             ref.refresh(
                                                 cartDetailsDataProvider);
                                             ref.refresh(productDetailsProvider(
-                                                widget.uid));
+                                                AppConfigure.megentoCommerce
+                                                    ? widget.sku
+                                                    : widget.uid));
                                             Fluttertoast.showToast(
                                                 msg: AppLocalizations.of(
                                                         context)!
@@ -734,7 +745,10 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 backgroundColor: AppColors.buttonColor,
                               ),
                               onPressed: () {
-                                ref.refresh(productDetailsProvider(widget.uid));
+                                ref.refresh(productDetailsProvider(
+                                    AppConfigure.megentoCommerce
+                                        ? widget.sku
+                                        : widget.uid));
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.refresh,
@@ -1577,7 +1591,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                                     .toString(),
                                                 address: productlist.description
                                                     .toString(),
-                                                     sku: productlist.title
+                                                sku: productlist.title
                                                     .toString(),
                                                 datetime:
                                                     "${AppLocalizations.of(context)!.deliverAt} ${productlist.createdAt.toString()}/${productlist.createdAt}/${productlist.createdAt}",

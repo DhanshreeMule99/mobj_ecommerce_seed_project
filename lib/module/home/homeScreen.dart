@@ -624,15 +624,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               .firstWhere((id) => id != 0, orElse: () => 0);
                           return InkWell(
                               onTap: () {
-                                print("(${productlist[index].id.toString()})");
+                                print("(${productlist[index].sku.toString()})");
                                 ref.refresh(productDetailsProvider(
-                                    productlist[index].id.toString()));
+                                  productlist[index].id.toString(),
+                                ));
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
                                     pageBuilder:
                                         (context, animation1, animation2) =>
                                             ProductDetailsScreen(
                                       uid: productlist[index].id.toString(),
+                                      sku: productlist[index].sku.toString(),
                                       product: productlist[index],
                                     ),
                                     transitionDuration: Duration.zero,
