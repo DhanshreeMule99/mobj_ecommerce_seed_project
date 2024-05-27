@@ -24,11 +24,17 @@ class AddressListScreen extends ConsumerStatefulWidget {
   final int? amount;
   final String? mobile;
   final List<Map<String, dynamic>> bigcommerceOrderedItems;
+  final String actualPrice;
+  final String tax;
+  final String totalPrice;
   const AddressListScreen(
       {super.key,
       this.isCheckout,
       this.amount,
       this.mobile,
+      this.actualPrice = '0',
+      this.tax = '0',
+      this.totalPrice = '0',
       required this.bigcommerceOrderedItems});
 
   @override
@@ -1154,7 +1160,9 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         .textTheme
                                                         .bodySmall),
                                                 Text(
-                                                    '\u{20B9}${product.subtotalPrice}',
+                                                    AppConfigure.megentoCommerce
+                                                        ? '\u{20B9}${widget.actualPrice}'
+                                                        : '\u{20B9}${product.subtotalPrice}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headlineLarge),
@@ -1174,7 +1182,9 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         .textTheme
                                                         .bodySmall),
                                                 Text(
-                                                    '\u{20B9}${product.totalTax}',
+                                                    AppConfigure.megentoCommerce
+                                                        ? '\u{20B9}${widget.tax}'
+                                                        : '\u{20B9}${product.totalTax}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headlineLarge),
@@ -1193,7 +1203,9 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         .textTheme
                                                         .bodySmall),
                                                 Text(
-                                                    '\u{20B9}${product.totalPrice}',
+                                                    AppConfigure.megentoCommerce
+                                                        ? '\u{20B9}${widget.totalPrice}'
+                                                        : '\u{20B9}${product.totalPrice}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .headlineLarge),
