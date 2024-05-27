@@ -19,7 +19,7 @@ class ProductRepository {
       try {
         log('megentoCommerce api');
         final response = await api.sendRequest.get(
-          '${AppConfigure.megentoCommerceUrl}products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
+          'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
@@ -151,7 +151,7 @@ class ProductRepository {
       try {
         log("Logging product $pid");
         String baseUrl =
-            "${AppConfigure.megentoCommerceUrl}products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
+            "https://hp.geexu.org/rest/default/V1/products/?searchCriteria[filterGroups][0][filters][0][field]=entity_id&searchCriteria[filterGroups][0][filters][0][value]=$pid&searchCriteria[filterGroups][0][filters][0][condition_type]=eq";
         debugPrint(baseUrl + pid);
 
         final response = await api.sendRequest.get(
@@ -1218,111 +1218,41 @@ class ProductRepository {
     }
   }
 
-  Future<DraftOrderModel> getCarttotalDetails() async {
-    if (AppConfigure.bigCommerce) {
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          String draftId = await SharedPreferenceManager().getDraftId();
+  Future<List<String>> getCarttotalDetails() async {
+    try {
+      if (await ConnectivityUtils.isNetworkConnected()) {
+        // String cartId = await SharedPreferenceManager().getCartToken();
+        String userToken = await SharedPreferenceManager().getToken();
 
-          final response = await ApiManager.get(
-              "https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/carts/$draftId");
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            debugPrint(response.body);
-            final result = jsonDecode(response.body)['data'];
-            debugPrint("result is this $result");
-
-            return DraftOrderModel.fromJson(result);
-          } else {
+        final response = await api.sendRequest.get(
+          "carts/mine/totals",
+          options: Options(headers: {
+            "Authorization": "Bearer $userToken",
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          //  debugPrint(response.data);
+          final result = response.data;
+          debugPrint("result is this $result");
+          if (result['items_qty'] == 0) {
             throw (AppString.noDataError);
           }
-        } else {
-          throw (AppString.error);
-        }
-      } catch (error, stackTrace) {
-        debugPrint('error is this $error $stackTrace');
-        rethrow;
-      }
-    } else if (AppConfigure.wooCommerce) {
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          String email = await SharedPreferenceManager().getCartToken();
+          List<String> ATT = [];
+          ATT.add(result['subtotal'].toString());
+          ATT.add(result['tax_amount'].toString());
+          ATT.add(result['base_grand_total'].toString());
 
-          final response = await ApiManager.get(
-              "${AppConfigure.woocommerceUrl}/wp-json/cocart/v2/cart?cart_key=$email");
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            debugPrint(response.body);
-            final result = jsonDecode(response.body);
-            debugPrint("result is this $result");
-            if (result['item_count'] == 0) {
-              throw (AppString.noDataError);
-            }
-            return DraftOrderModel.fromJson(result);
-          } else {
-            throw (AppString.noDataError);
-          }
+          return ATT;
         } else {
-          throw (AppString.error);
+          throw (AppString.noDataError);
         }
-      } catch (error, stackTrace) {
-        debugPrint('error is this $error $stackTrace');
-        rethrow;
+      } else {
+        throw (AppString.error);
       }
-    } else if (AppConfigure.megentoCommerce) {
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          // String cartId = await SharedPreferenceManager().getCartToken();
-          String userToken = await SharedPreferenceManager().getToken();
-
-          final response = await api.sendRequest.get(
-            "carts/mine/totals",
-            options: Options(headers: {
-              "Authorization": "Bearer $userToken",
-            }),
-          );
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            //  debugPrint(response.data);
-            final result = response.data;
-            debugPrint("result is this $result");
-            if (result['items_qty'] == 0) {
-              throw (AppString.noDataError);
-            }
-            return DraftOrderModel.fromJson(result);
-          } else {
-            throw (AppString.noDataError);
-          }
-        } else {
-          throw (AppString.error);
-        }
-      } catch (error, stackTrace) {
-        debugPrint('error is this $error $stackTrace');
-        rethrow;
-      }
-    } else {
-      String baseUrl = AppConfigure.baseUrl +
-          APIConstants.apiForAdminURL +
-          APIConstants.apiURL;
-      try {
-        if (await ConnectivityUtils.isNetworkConnected()) {
-          String draftId = await SharedPreferenceManager().getDraftId();
-
-          final response = await ApiManager.get(
-              "$baseUrl${APIConstants.draftProduct.replaceAll(".json", "")}/$draftId.json");
-          if (response.statusCode == APIConstants.successCode ||
-              response.statusCode == APIConstants.successCreateCode) {
-            final result = jsonDecode(response.body)['draft_order'];
-            return DraftOrderModel.fromJson(result);
-          } else {
-            throw (AppString.noDataError);
-          }
-        } else {
-          throw (AppString.error);
-        }
-      } catch (error) {
-        rethrow;
-      }
+    } catch (error, stackTrace) {
+      debugPrint('error is this $error $stackTrace');
+      rethrow;
     }
   }
 

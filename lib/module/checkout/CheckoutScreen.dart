@@ -1,5 +1,7 @@
 // CheckoutScreen
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +24,24 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<DraftOrderModel> cart = [];
   double total = 0;
+  List<String> ATT = [];
 
   void removeItem(LineItem item) {}
 
   @override
   void initState() {
-    // TODO: implement initState
+    if (AppConfigure.megentoCommerce) {
+      getTotalDetails();
+    }
     super.initState();
+  }
+
+  ProductRepository apicall = ProductRepository();
+  Future<void> getTotalDetails() async {
+    await apicall.getCarttotalDetails().then((value) {
+      log("grand total is this $value");
+      ATT.addAll(value);
+    });
   }
 
   @override
@@ -323,9 +336,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                     }
 
                                                                     ref.refresh(
-                                                                        cartDetailsDataProvider,);
-                                                                        //  ref.refresh(
-                                                                        // cartTotalDetailsDataProvider);
+                                                                      cartDetailsDataProvider,
+                                                                    );
+                                                                    //  ref.refresh(
+                                                                    // cartTotalDetailsDataProvider);
                                                                     Navigator.of(
                                                                             context)
                                                                         .pop();
@@ -1254,7 +1268,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall),
-                                  Text('\u{20B9}${product.subtotalPrice}',
+                                  Text(
+                                      AppConfigure.megentoCommerce
+                                          ? '\u{20B9}${ATT.first}'
+                                          : '\u{20B9}${product.subtotalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1272,9 +1289,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .textTheme
                                           .bodySmall),
                                   Text(
-                                      product.totalTax == ""
-                                          ? '\u{20B9}${0}'
-                                          : '\u{20B9}${product.totalTax}',
+                                      AppConfigure.megentoCommerce
+                                          ? '\u{20B9}${ATT[1]}'
+                                          : product.totalTax == ""
+                                              ? '\u{20B9}${0}'
+                                              : '\u{20B9}${product.totalTax}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1292,7 +1311,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall),
-                                  Text('\u{20B9}${product.totalPrice}',
+                                  Text(
+                                      AppConfigure.megentoCommerce
+                                          ? '\u{20B9}${ATT.last}'
+                                          : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
