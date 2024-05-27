@@ -777,6 +777,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                             (subjectFromServer) {
                                                       Navigator.of(context)
                                                           .pop();
+                                                      ref.refresh(
+                                                          addressDataProvider);
                                                       if (subjectFromServer ==
                                                           AppString.success) {
                                                         ref.refresh(
@@ -1060,8 +1062,13 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       )
                                                           .then(
                                                               (subjectFromServer) {
+                                                        ref.refresh(
+                                                            addressDataProvider);
                                                         Navigator.of(context)
                                                             .pop();
+                                                        ref.refresh(
+                                                            addressDataProvider);
+
                                                         if (subjectFromServer ==
                                                             AppString.success) {
                                                           ref.refresh(

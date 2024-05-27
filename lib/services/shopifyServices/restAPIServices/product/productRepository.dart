@@ -514,7 +514,8 @@ class ProductRepository {
               //     'cart id is this bigcommerce.... $data');
               String draftId = await SharedPreferenceManager().getDraftId();
 
-              debugPrint('cart id is this bigcommerce.... $draftId');
+              debugPrint(
+                  'draft id ...cart id is this bigcommerce.... $draftId');
             }
             cartcount++;
             return AppString.success;
@@ -549,6 +550,7 @@ class ProductRepository {
               debugPrint('cart id is this bigcommerce.... $draftId');
             }
             cartcount++;
+            debugPrint('cart id is this bigcommerce.... $draftId');
             return AppString.success;
           } else {
             exceptionString = AppString.oops;
@@ -885,7 +887,7 @@ class ProductRepository {
     try {
       if (await ConnectivityUtils.isNetworkConnected()) {
         http.Response response;
-        response = await ApiManager.put("carts/mine/items/336", body);
+        response = await ApiManager.put("carts/mine/items/", body);
 
         var data = jsonDecode(response.body);
         if (response.statusCode == APIConstants.successCode ||
@@ -1179,6 +1181,7 @@ class ProductRepository {
             if (result['items_count'] == 0) {
               throw (AppString.noDataError);
             }
+
             return DraftOrderModel.fromJson(result);
           } else {
             throw (AppString.noDataError);
