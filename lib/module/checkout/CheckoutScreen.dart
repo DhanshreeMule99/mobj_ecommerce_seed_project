@@ -25,6 +25,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<DraftOrderModel> cart = [];
   double total = 0;
   List<String> ATT = [];
+  API api = API();
 
   void removeItem(LineItem item) {}
 
@@ -402,7 +403,25 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
                                                                       cartcount--;
-                                                                    } else {
+                                                                    } else if (AppConfigure.megentoCommerce){
+
+
+  var response =
+                                                                          await api.sendRequest.delete(
+                                                                              '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}');
+
+                                                                      ref.refresh(
+                                                                          cartDetailsDataProvider);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      debugPrint(
+                                                                          "cart item deleted successfully ${response.statusCode}");
+                                                                      cartcount--;
+
+                                                                    }
+                                                                    
+                                                                    else {
                                                                       ProductRepository()
                                                                           .updateCart(
                                                                               reqBody)
