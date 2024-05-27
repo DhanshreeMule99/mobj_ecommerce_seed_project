@@ -176,77 +176,75 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                           child: SizedBox(
                                                             width: 90.sp,
                                                             height: 90.sp,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: AppConfigure
-                                                                          .bigCommerce ||
-                                                                      AppConfigure
-                                                                          .wooCommerce
-                                                                  ? orderList
-                                                                      .adminGraphqlApiId
-                                                                  : (ref.watch(productImageDataProvider(orderList
-                                                                              .productId
-                                                                              .toString())))
-                                                                          .when(
-                                                                        data:
-                                                                            (images) {
-                                                                          if (images
-                                                                              .isNotEmpty) {
-                                                                            // Find the image with the specified variant ID
-                                                                            final selectedImage =
-                                                                                images.firstWhere(
-                                                                              (image) => image.variantIds.contains(orderList.variantId),
-                                                                              orElse: () => ProductImage(
-                                                                                id: 0,
-                                                                                // Provide a default ID
-                                                                                alt: "Default",
-                                                                                position: 0,
-                                                                                productId: 0,
-                                                                                createdAt: DateTime.now().toString(),
-                                                                                // Provide a default creation time
-                                                                                updatedAt: DateTime.now().toString(),
-                                                                                // Provide a default update time
-                                                                                adminGraphqlApiId: "gid://shopify/ProductImage/0",
-                                                                                width: 0,
-                                                                                height: 0,
-                                                                                src: images[0].src,
-                                                                                // Provide a default image URL
-                                                                                variantIds: [],
-                                                                              ),
-                                                                            );
+                                                            child: AppConfigure
+                                                                    .megentoCommerce
+                                                                ? SizedBox(
+                                                                    child: Image
+                                                                        .network(
+                                                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQKgoNY2BwxcRPF3_tGG9IWiaewRV0ApPBt4DcfhizGA&s'),
+                                                                  )
+                                                                : CachedNetworkImage(
+                                                                    imageUrl: AppConfigure.bigCommerce ||
+                                                                            AppConfigure
+                                                                                .wooCommerce
+                                                                        ? orderList
+                                                                            .adminGraphqlApiId
+                                                                        : (ref.watch(productImageDataProvider(orderList.productId.toString()))).when(
+                                                                              data: (images) {
+                                                                                if (images.isNotEmpty) {
+                                                                                  // Find the image with the specified variant ID
+                                                                                  final selectedImage = images.firstWhere(
+                                                                                    (image) => image.variantIds.contains(orderList.variantId),
+                                                                                    orElse: () => ProductImage(
+                                                                                      id: 0,
+                                                                                      // Provide a default ID
+                                                                                      alt: "Default",
+                                                                                      position: 0,
+                                                                                      productId: 0,
+                                                                                      createdAt: DateTime.now().toString(),
+                                                                                      // Provide a default creation time
+                                                                                      updatedAt: DateTime.now().toString(),
+                                                                                      // Provide a default update time
+                                                                                      adminGraphqlApiId: "gid://shopify/ProductImage/0",
+                                                                                      width: 0,
+                                                                                      height: 0,
+                                                                                      src: images[0].src,
+                                                                                      // Provide a default image URL
+                                                                                      variantIds: [],
+                                                                                    ),
+                                                                                  );
 
-                                                                            return selectedImage.src;
-                                                                          }
-                                                                          return DefaultValues
-                                                                              .defaultImagesSrc;
-                                                                        },
-                                                                        loading:
-                                                                            () =>
-                                                                                DefaultValues.defaultImagesSrc,
-                                                                        error: (_,
-                                                                                __) =>
+                                                                                  return selectedImage.src;
+                                                                                }
+                                                                                return DefaultValues.defaultImagesSrc;
+                                                                              },
+                                                                              loading: () => DefaultValues.defaultImagesSrc,
+                                                                              error: (_, __) => DefaultValues.defaultImagesSrc,
+                                                                            ) ??
                                                                             DefaultValues.defaultImagesSrc,
-                                                                      ) ??
-                                                                      DefaultValues
-                                                                          .defaultImagesSrc,
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      Container(
-                                                                width: 90.sp,
-                                                                height: 90.sp,
-                                                                color: AppColors
-                                                                    .greyShade,
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                              width: 90.sp,
-                                                              height: 90.sp,
-                                                              fit: BoxFit.cover,
-                                                            ),
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            Container(
+                                                                      width:
+                                                                          90.sp,
+                                                                      height:
+                                                                          90.sp,
+                                                                      color: AppColors
+                                                                          .greyShade,
+                                                                    ),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        const Icon(
+                                                                            Icons.error),
+                                                                    width:
+                                                                        90.sp,
+                                                                    height:
+                                                                        90.sp,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
                                                           ),
                                                         ),
                                                       ),
@@ -1349,9 +1347,24 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
                                               AddressListScreen(
+                                            actualPrice:
+                                                AppConfigure.megentoCommerce
+                                                    ? ATT.first.toString()
+                                                    : "",
+                                            tax: AppConfigure.megentoCommerce
+                                                ? ATT[1].toString()
+                                                : "",
+                                            totalPrice:
+                                                AppConfigure.megentoCommerce
+                                                    ? ATT.last.toString()
+                                                    : "",
                                             isCheckout: true,
-                                            amount: product.totalPrice.toInt() *
-                                                100,
+                                            amount: AppConfigure.megentoCommerce
+                                                ? int.parse(
+                                                        ATT.last.toString()) *
+                                                    100
+                                                : product.totalPrice.toInt() *
+                                                    100,
                                             mobile: product.customer.phone
                                                 .toString(),
                                             bigcommerceOrderedItems:
