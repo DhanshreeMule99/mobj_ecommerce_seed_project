@@ -1013,36 +1013,14 @@ class ProductRepository {
         if (await ConnectivityUtils.isNetworkConnected()) {
           Response response;
           response = await api.sendRequest.post(
-              "carts/mine/payment-information",
+              "https://hp.geexu.org/rest/V1/carts/mine/payment-information",
               options: Options(headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer $token'
               }),
               data: {
                 "paymentMethod": {"method": "cashondelivery"},
-                "billing_address": {
-                  "region": "Maharashtra",
-                  "region_id": 589,
-                  "region_code": "MH",
-                  "country_id": "IN",
-                  "street": ["happy birthday"],
-                  "company": "string",
-                  "telephone": "string",
-                  "fax": "string",
-                  "postcode": "416004",
-                  "city": "string",
-                  "firstname": "string",
-                  "lastname": "strasdfasdfing",
-                  "middlename": "stasdfasdfasdfring",
-                  "prefix": "string",
-                  "suffix": "string",
-                  "vat_id": "string",
-                  "customer_id": 52,
-                  "email": "csj@setoo.co",
-                  "same_as_billing": 0,
-                  "customer_address_id": 42,
-                  "save_in_address_book": 0
-                }
+                "billing_address": woocommerceaddressbody
               });
           var data = response.data;
           debugPrint("${response.data} ${response.statusCode}");

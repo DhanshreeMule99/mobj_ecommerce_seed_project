@@ -21,7 +21,8 @@ class AppConfigure {
           : (megentoCommerce
               ? megentoCommerceUrl
               : "https://pyvaidyass.myshopify.com/"));
-
+              
+  static const adminPanelUrl = "https://mobj-strapi-admin-panel.onrender.com/";
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
   static const aboutApp =
