@@ -21,11 +21,12 @@ class AppConfigure {
           : (megentoCommerce
               ? megentoCommerceUrl
               : "https://pyvaidyass.myshopify.com/"));
-
+              
+  static const adminPanelUrl = "https://mobj-strapi-admin-panel.onrender.com/";
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
-  // static const aboutApp =
-  //     "Download our laundry app now and we’ll collect, clean and deliver from your home or office. Placing your order via Laundrapp couldn’t be easier – we’ve developed it with ease of use in mind. The award-winning app relaunched in September ‘20 with a fresh new design and improved performance. Take us for a spin:";
+  static const aboutApp =
+      "Download our laundry app now and we’ll collect, clean and deliver from your home or office. Placing your order via Laundrapp couldn’t be easier – we’ve developed it with ease of use in mind. The award-winning app relaunched in September ‘20 with a fresh new design and improved performance. Take us for a spin:";
   static const paymentGateway = "razorpay";
   static const apiFramework = "shopify";
   static const razorPayId = "rzp_test_qPzk0NCwNZfI8n";

@@ -24,8 +24,11 @@ class PrivacyScreen extends ConsumerStatefulWidget {
 
 class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
   Future<String> fetchTermsAndConditions() async {
-    final response = await http.get(Uri.parse(
-        'https://c0a6-2409-40c2-1196-1baf-c01d-6b7-511c-6c.ngrok-free.app/api/terms-and-condition'));
+ 
+
+        String BaseUrl = AppConfigure.adminPanelUrl;
+        final response =await http.get(Uri.parse("$BaseUrl/api/terms-and-condition"));
+
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
