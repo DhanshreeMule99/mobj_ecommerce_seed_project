@@ -1,7 +1,5 @@
 // addressRepository
 
-
-
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -110,7 +108,7 @@ class AddressRepository {
             throw (AppString.noDataError);
           } else {
             // log("street${response.data["addresses"][0]["street"][0]}");
-    // await SharedPreferenceManager().setAddressId( response.data['addresses']['customer_id'].toString());
+            // await SharedPreferenceManager().setAddressId( response.data['addresses']['customer_id'].toString());
             List addressLocal = response.data["addresses"];
 
             List<DefaultAddressModel> addressList = [];
@@ -132,15 +130,12 @@ class AddressRepository {
                   countryCode: response.data['addresses'][i]['country_id'],
                   countryName: response.data['addresses'][i]['country_id'],
                   defaultAddress: false));
- await SharedPreferenceManager().setAddressId( response.data['addresses'][i]['id'].toString());
-
-
-
+              await SharedPreferenceManager()
+                  .setAddressId(response.data['addresses'][i]['id'].toString());
             }
-             final AddressID = await SharedPreferenceManager().getAddressId();
+            final AddressID = await SharedPreferenceManager().getAddressId();
             log("address id is here ..............$AddressID");
-             return addressList;
-
+            return addressList;
           }
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
@@ -327,22 +322,20 @@ class AddressRepository {
         print("error for address is this $error $stackTrace");
         rethrow;
       }
-    } 
-    else  if (AppConfigure.megentoCommerce){
-
- API api = API();
+    } else if (AppConfigure.megentoCommerce) {
+      API api = API();
       // final uid = await SharedPreferenceManager().getUserId();
       try {
         String userToken = await SharedPreferenceManager().getToken();
         final response;
-       final AddressID = await SharedPreferenceManager().getAddressId();
+        final AddressID = await SharedPreferenceManager().getAddressId();
         debugPrint("calling null addressid api");
         // var body1 = jsonEncode({"address": body});
         response = await api.sendRequest.delete(
           'addresses/$AddressID',
-           options: Options(headers: {
+          options: Options(headers: {
             "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
-          }), 
+          }),
 //           data: {
 //    "customer":{
 //       "id":"",
@@ -358,13 +351,13 @@ class AddressRepository {
 //                "region":"string",
 //                "region_id":0,
 //                "extension_attributes":{
-                  
+
 //                }
 //             },
 //             "region_id":0,
 //             "country_id":"IN",
 //             "street":[
-                
+
 //             ],
 //             "company":"string",
 //             "telephone":"",
@@ -405,11 +398,7 @@ class AddressRepository {
         print("error for address is this $error $stackTrace");
         rethrow;
       }
-
-
-
-    }
-    else {
+    } else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final accessToken = await SharedPreferenceManager().getToken();
@@ -586,27 +575,21 @@ class AddressRepository {
               fontSize: 16.0);
         }
       }
-    } 
-    
-    else  
-    if(AppConfigure.megentoCommerce ){
-
-
+    } else if (AppConfigure.megentoCommerce) {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
-                  // String userToken = await SharedPreferenceManager().getToken();
-                   final uid = await SharedPreferenceManager().getUserId();
+          // String userToken = await SharedPreferenceManager().getToken();
+          final uid = await SharedPreferenceManager().getUserId();
           final response;
-         
+
           debugPrint("calling null addressid api");
           var body1 = jsonEncode({"address": body});
           response = await api.sendRequest.put(
             'customers/$uid',
             data: body,
             options: Options(headers: {
-             
-                'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
-             }), 
+              'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+            }),
           );
 
           if (response.statusCode == APIConstants.successCode) {
@@ -637,11 +620,7 @@ class AddressRepository {
               fontSize: 16.0);
         }
       }
-
-
-    }
-    
-    else {
+    } else {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           final accessToken = await SharedPreferenceManager().getToken();
@@ -790,38 +769,70 @@ mutation {
   bigCommerceShippingAddress(Map<String, dynamic> addId) async {
     String exceptionString = "";
     final cartId = await SharedPreferenceManager().getDraftId();
+    final useraccessToken = await SharedPreferenceManager().getToken();
     print(cartId);
     API api = API();
-    try {
-      if (await ConnectivityUtils.isNetworkConnected()) {
-        var response = await api.sendRequest.post(
-            "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
-            data: addId,
-            options: Options(headers: {
-              "X-auth-Token": AppConfigure.bigCommerceAccessToken,
-              'Content-Type': 'application/json',
-            }));
-        // final response = await ApiManager.post(
-        //     "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
-        //     addId);
-        // var data = jsonDecode(response.body);
-        if (response.statusCode == APIConstants.successCode) {
-          return AppString.success;
-        } else if (response.statusCode == APIConstants.unAuthorizedCode) {
-          exceptionString = AppString.unAuthorized;
-          return exceptionString;
+    if (AppConfigure.bigCommerce) {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          var response = await api.sendRequest.post(
+              "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
+              data: addId,
+              options: Options(headers: {
+                "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                'Content-Type': 'application/json',
+              }));
+          // final response = await ApiManager.post(
+          //     "${AppConfigure.bigcommerceUrl}/checkouts/$cartId/billing-address",
+          //     addId);
+          // var data = jsonDecode(response.body);
+          if (response.statusCode == APIConstants.successCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
         } else {
-          exceptionString = AppString.serverError;
+          var exceptionString = AppString.checkInternet;
           return exceptionString;
         }
-      } else {
-        var exceptionString = AppString.checkInternet;
+      } catch (error) {
+        print(error.toString());
+        exceptionString = AppString.serverError;
         return exceptionString;
       }
-    } catch (error) {
-      print(error.toString());
-      exceptionString = AppString.serverError;
-      return exceptionString;
+    } else {
+      try {
+        if (await ConnectivityUtils.isNetworkConnected()) {
+          log("access token is $useraccessToken");
+          var response = await api.sendRequest.post(
+              "https://hp.geexu.org/rest/V1/carts/mine/shipping-information",
+              data: addId,
+              options: Options(headers: {
+                "Authorization": 'Bearer $useraccessToken',
+              }));
+
+          if (response.statusCode == APIConstants.successCode) {
+            return AppString.success;
+          } else if (response.statusCode == APIConstants.unAuthorizedCode) {
+            exceptionString = AppString.unAuthorized;
+            return exceptionString;
+          } else {
+            exceptionString = AppString.serverError;
+            return exceptionString;
+          }
+        } else {
+          var exceptionString = AppString.checkInternet;
+          return exceptionString;
+        }
+      } catch (error) {
+        print(error.toString());
+        exceptionString = AppString.serverError;
+        return exceptionString;
+      }
     }
   }
 }

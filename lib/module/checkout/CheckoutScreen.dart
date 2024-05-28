@@ -41,7 +41,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Future<void> getTotalDetails() async {
     await apicall.getCarttotalDetails().then((value) {
       log("grand total is this $value");
-      ATT.addAll(value);
+      setState(() {
+        ATT.addAll(value);
+      });
     });
   }
 
@@ -181,7 +183,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                 ? SizedBox(
                                                                     child: Image
                                                                         .network(
-                                                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQKgoNY2BwxcRPF3_tGG9IWiaewRV0ApPBt4DcfhizGA&s'),
+                                                                            'https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg'),
                                                                   )
                                                                 : CachedNetworkImage(
                                                                     imageUrl: AppConfigure.bigCommerce ||
