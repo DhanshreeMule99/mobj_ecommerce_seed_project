@@ -93,10 +93,11 @@ class MengentoProductModel implements ProductModel {
         //             variantJson as Map<String, dynamic>))
         //         .toList() ??
         //     DefaultValues.defaultVariants.cast<BigCommerceProductVariant>(),
-        variants: json['extension_attributes']
-                .map((variantJson) => MegentoProductVariant.fromJson(
-                    variantJson as Map<String, dynamic>))
-                .toList() ??
+        variants:
+            // json['extension_attributes']
+            //         .map((variantJson) => MegentoProductVariant.fromJson(
+            //             variantJson as Map<String, dynamic>))
+            //         .toList() ??
             DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
         // variants: DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
         options: (json[''] as List<dynamic>?)
@@ -108,8 +109,8 @@ class MengentoProductModel implements ProductModel {
                 ?.map((imageJson) => MegentoProductImage.fromJson(imageJson))
                 .toList() ??
             DefaultValues.defaultImagesMegento.cast<MegentoProductImage>(),
-        image:
-            MegentoProductImage.fromJson(json[''] as Map<String, dynamic>? ?? {}));
+        image: MegentoProductImage.fromJson(
+            json[''] as Map<String, dynamic>? ?? {}));
   }
 }
 
