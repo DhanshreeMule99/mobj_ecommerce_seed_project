@@ -50,6 +50,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
   double distance = 0.0;
   final LocationMobj _locationService = LocationMobj();
   Map<String, dynamic>? addressbody;
+  API api = API();
   Future<void> getUserLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
@@ -67,6 +68,8 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
       print("Error getting user location: $e");
     }
   }
+
+ 
 
   Future<void> getLocationFromAddress(String address) async {
     try {
