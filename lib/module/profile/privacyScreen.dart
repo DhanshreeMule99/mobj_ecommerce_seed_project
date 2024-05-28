@@ -3,7 +3,7 @@ import 'package:amazon_like_filter/props/applied_filter_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-
+import 'package:http/http.dart' as http;
 import '../wishlist/wishlishScreen.dart';
 
 class PrivacyScreen extends ConsumerStatefulWidget {
@@ -16,6 +16,8 @@ class PrivacyScreen extends ConsumerStatefulWidget {
 }
 
 class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
+ 
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(productDataProvider('1'));
@@ -25,29 +27,30 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
               appBar: AppBar(
-                 automaticallyImplyLeading: false,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              surfaceTintColor: Theme.of(context).colorScheme.secondary,
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                surfaceTintColor: Theme.of(context).colorScheme.secondary,
                 leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.chevron_left_rounded,
-                size: 25.sp,
-              )),
-                  title:   Text(
-                      AppLocalizations.of(context)!.privacyPolicy,style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.chevron_left_rounded,
+                      size: 25.sp,
+                    )),
+                title: Text(
+                  AppLocalizations.of(context)!.privacyPolicy,
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+              ),
               bottomNavigationBar: MobjBottombar(
                 bgcolor: Colors.white,
                 selcted_icon_color: AppColors.buttonColor,
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 4,
                 screen1: const HomeScreen(),
-                screen2:  SearchWidget(),
-                  screen3:  WishlistScreen(),
+                screen2: SearchWidget(),
+                screen3: WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
               ),
@@ -99,9 +102,11 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                     ),
                                     const SizedBox(height: 20),
                                     const SizedBox(height: 20),
-                                     Text(
+                                    Text(
                                       "Setoo recognises the importance of maintaining your privacy. We value your privacy and appreciate your trust in us. This Privacy Policy sets out how Setoo uses and protects any information that you give Setoo when you use this www.setoo.co or the Setoo mobile application or any other digital medium and other offline sources of our Company. Setoo is committed to ensure that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this website, then you can be assured that it will only be used in accordance with this Privacy Policy as it describes how we treat user information we collect from you, the policies and procedures on the collection, use, disclosure and protection of your information when you use our Setoo Platform.",
-                                      style: Theme.of(context).textTheme.headlineMedium,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
                                     ),
                                   ],
                                 ),
@@ -136,7 +141,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                       onPressed: () {
                                         ref.refresh(userDataProvider);
                                       },
-                                      child:  Text(
+                                      child: Text(
                                         AppLocalizations.of(context)!.refresh,
                                         style: const TextStyle(
                                           fontSize: 16,
