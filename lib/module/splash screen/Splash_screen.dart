@@ -65,7 +65,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => ProductDetailsScreen(
-          uid:itemId,
+          uid: itemId,
         ),
       ),
     );

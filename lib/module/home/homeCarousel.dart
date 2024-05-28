@@ -33,40 +33,69 @@ class _ImageCarouselState extends State<ImageCarousel> {
   }
 
   Future<void> fetchImages() async {
-    try {
-      log('calling api for carousel');
-      String productUrl =
-          "https://api.bigcommerce.com/stores/zwpg4jmenh/v2/banners";
-      API api = API();
-      final response = await api.sendRequest.get(productUrl);
+    if (AppConfigure.megentoCommerce) {
+      try {
+        log('calling api for carousel');
+        String productUrl =
+            "https://c0a6-2409-40c2-1196-1baf-c01d-6b7-511c-6c.ngrok-free.app/api/sliders";
+        API api = API();
+        final response = await api.sendRequest.get(productUrl);
 
-      if (response.statusCode == 200) {
-        List body = response.data;
+        if (response.statusCode == 200) {
+          var body = response.data['data']; // Parse the response body
 
-        // Clear imgList before adding new images
-        imgList.clear();
+          // Clear imgList and productList before adding new images
+          imgList.clear();
+          productList.clear();
 
-        // Loop through each item in the body list
-        for (var item in body) {
-          // Extract the image URL from the item content
-          String imageUrl = extractTextContent(item["content"]);
+          // Loop through each item in the body list
+          for (var item in body) {
+            // Extract the image URL and product ID from the item's attributes
+            String imageUrl = item["attributes"]["image_url"];
+            String productId = item["attributes"]["product_id"];
 
-          // Split the content by space
-          List<String> content = imageUrl.split(" ");
-
-          // Add the image URL to imgList
-          String contentLink = content[0];
-          List<String> productid = content[1].split(":");
-          log("Productid is ,$productid");
-          // log(contentLink);
-          imgList.add(contentLink);
-          productList.add(productid.last);
+            // Add the image URL and product ID to the respective lists
+            imgList.add(imageUrl);
+            productList.add(productId);
+          }
+          setState(() {});
         }
-        setState(() {});
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("error is this $error $stackTrace");
-      rethrow;
+    } else {
+      try {
+        log('calling api for carousel');
+        String productUrl =
+            "https://api.bigcommerce.com/stores/zwpg4jmenh/v2/banners";
+        API api = API();
+        final response = await api.sendRequest.get(productUrl);
+
+        if (response.statusCode == 200) {
+          var body =
+              jsonDecode(response.data)['data']; // Parse the response body
+
+          // Clear imgList and productList before adding new images
+          imgList.clear();
+          productList.clear();
+
+          // Loop through each item in the body list
+          for (var item in body) {
+            // Extract the image URL and product ID from the item's attributes
+            String imageUrl = item["attributes"]["image_url"];
+            String productId = item["attributes"]["product_id"];
+
+            // Add the image URL and product ID to the respective lists
+            imgList.add(imageUrl);
+            productList.add(productId);
+          }
+          setState(() {});
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this $error $stackTrace");
+        rethrow;
+      }
     }
   }
 
