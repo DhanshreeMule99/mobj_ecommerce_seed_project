@@ -1,9 +1,15 @@
 // Splash_screen
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:http/http.dart' as http;
+
+import '../../utils/api.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -18,6 +24,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   String deviceTokenToSendPushNotification = "";
   String jwt_token = "";
   String userid = "";
+  String imgLogo = "";
 
   int splashtime = 3;
 
@@ -65,17 +72,41 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => ProductDetailsScreen(
-          uid:itemId,
+          uid: itemId,
         ),
       ),
     );
+  }
+
+  Future<String> fetchAppInfo() async {
+    API api = API();
+    final response = await api.sendRequest
+        .get("https://mobj-strapi-admin-panel.onrender.com/api/logos");
+
+    if (response.statusCode == 200) {
+      log("Response received");
+      final responseBody = response.data;
+      final logoImagePath = responseBody['data'][0]['attributes']['image_url'];
+      log('Image path: $logoImagePath');
+      setState(() {
+        imgLogo = logoImagePath;
+      });
+      await SharedPreferenceManager().setLogoImg(imgLogo);
+      // final abc = await SharedPreferenceManager().getLogoImg();
+      // log('............................$abc.......................');
+      return "";
+    } else {
+      throw Exception('Failed to load app info');
+    }
   }
 
   @override
   @protected
   @mustCallSuper
   void initState() {
+    fetchAppInfo();
     getDeviceTokenToSendNotification();
+
     //TODO list firebase setup
     // Future.delayed(Duration.zero, () {
     //   FirebaseMessaging.instance.getInitialMessage().then(
@@ -197,7 +228,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                           height: 200,
                           width: 200,
                           child: CachedNetworkImage(
-                            imageUrl: appInfo.logoImagePath,
+                            imageUrl:
+                                imgLogo != "" ? imgLogo : appInfo.logoImagePath,
                             placeholder: (context, url) => Container(
                               height: 200,
                               width: 200,

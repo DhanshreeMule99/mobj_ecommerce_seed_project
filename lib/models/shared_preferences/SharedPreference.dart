@@ -12,6 +12,7 @@ class SharedPreferenceManager {
   static const String wishlistId = 'wishlistId';
   static const String cartKey = 'cartkey';
   static const String customer_id = 'customer_id';
+  static const String logoImg = 'logoImage';
 
   static final SharedPreferenceManager _instance =
       SharedPreferenceManager._internal();
@@ -30,6 +31,16 @@ class SharedPreferenceManager {
   Future<bool> setDraftId(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(draftId, tokens);
+  }
+
+  Future<String> getLogoImg() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(logoImg) ?? "";
+  }
+
+  Future<bool> setLogoImg(String tokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(logoImg, tokens);
   }
 
   Future<String> getDraftId() async {
@@ -97,7 +108,7 @@ class SharedPreferenceManager {
     return prefs.getString(userId) ?? "";
   }
 
-   Future<bool> setAddressId(String tokens) async {
+  Future<bool> setAddressId(String tokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(customer_id, tokens);
   }

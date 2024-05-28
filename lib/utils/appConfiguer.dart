@@ -14,10 +14,13 @@ class AppConfigure {
   //     ? bigcommerceUrl
   //     : (wooCommerce ? woocommerceUrl : "https://pyvaidyass.myshopify.com/");
 
-
-      static const baseUrl =  bigCommerce
+  static const baseUrl = bigCommerce
       ? bigcommerceUrl
-      : (wooCommerce ? woocommerceUrl : (megentoCommerce ? megentoCommerceUrl :"https://pyvaidyass.myshopify.com/" ));
+      : (wooCommerce
+          ? woocommerceUrl
+          : (megentoCommerce
+              ? megentoCommerceUrl
+              : "https://pyvaidyass.myshopify.com/"));
 
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
@@ -61,16 +64,13 @@ class AppConfigure {
   static const consumerkey = 'ck_db1d729eb2978c28ae46451d36c1ca02da112cb3';
   static const consumersecret = 'cs_c5cc06675e8ffa375b084acd40987fec142ec8cf';
 
-
 // Megento commerce uel
 // megento credentials
 
-static const megentoCommerce = true;
-static const megentoCommerceUrl = "https://hp.geexu.org/rest/default/V1/";
+  static const megentoCommerce = true;
+  static const megentoCommerceUrl = "https://hp.geexu.org/rest/default/V1/";
 // static const megentoConsumerKey = "xe0s5wusltyhpcq2cvvmhkt4usqeck27";
 // static const megentoCunsumerSecret = "z4t0ixs6n0ty25rcunwn3h3z1xqfqqlo";
-static const megentoCunsumerAccessToken = "7iqu2oq5y7oruxwdf9fzksf7ak16cfri";
+  static const megentoCunsumerAccessToken = "7iqu2oq5y7oruxwdf9fzksf7ak16cfri";
 // static const megentoCunsumerAccessTokenSecret = "u8wwqaxxoh6scsnvpelt0rt9uhmuygx3";
-
-
 }
