@@ -69,8 +69,6 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
     }
   }
 
- 
-
   Future<void> getLocationFromAddress(String address) async {
     try {
       List<Location> locations = await locationFromAddress(address);
@@ -432,49 +430,109 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       .displaySmall,
                                                 ),
                                                 onSelected: (value) {}),
-                                            AppConfigure.bigCommerce
+                                            AppConfigure.megentoCommerce
                                                 ? Radio(
                                                     value: index,
                                                     groupValue:
                                                         bigCommerceAddressIndex,
                                                     onChanged: (value) async {
-                                                      String draftId =
+                                                      String userId =
                                                           await SharedPreferenceManager()
-                                                              .getDraftId();
-                                                      print(draftId);
+                                                              .getUserId();
+
                                                       String email =
                                                           await SharedPreferenceManager()
                                                               .getEmail();
                                                       print(
                                                           "$value ${addressList[index]}");
                                                       addressbody = {
-                                                        "first_name":
-                                                            addresses.firstName,
-                                                        "last_name":
-                                                            addresses.lastName,
-                                                        "email": email,
-                                                        "company": "setoo",
-                                                        "address1":
-                                                            addresses.address1,
-                                                        "address2": "string",
-                                                        "city": addresses.city,
-                                                        "state_or_province":
-                                                            addresses.province,
-                                                        "state_or_province_code":
-                                                            addresses
-                                                                .provinceCode,
-                                                        "country_code":
-                                                            addresses
-                                                                .countryCode,
-                                                        "postal_code":
-                                                            addresses.zip,
-                                                        "phone":
-                                                            addresses.phone,
+                                                        "addressInformation": {
+                                                          "shipping_address": {
+                                                            // "id": 0,
+                                                            "region":
+                                                                "Maharashtra",
+                                                            "region_id": 589,
+                                                            "region_code": "MH",
+                                                            "country_id": "IN",
+                                                            "street": [
+                                                              "${addresses.address1}"
+                                                            ],
+                                                            "company": "setoo",
+                                                            "telephone":
+                                                                addresses.phone,
+                                                            "fax": "string",
+                                                            "postcode":
+                                                                addresses.zip,
+                                                            "city": "string",
+                                                            "firstname":
+                                                                addresses
+                                                                    .firstName,
+                                                            "lastname":
+                                                                addresses
+                                                                    .lastName,
+                                                            "middlename":
+                                                                "string",
+                                                            "prefix": "string",
+                                                            "suffix": "string",
+                                                            "vat_id": "string",
+                                                            "customer_id":
+                                                                int.parse(
+                                                                    userId),
+                                                            "email": email,
+                                                            "same_as_billing":
+                                                                0,
+                                                            "customer_address_id":
+                                                                addresses.id,
+                                                            "save_in_address_book":
+                                                                0
+                                                          },
+                                                          "shipping_method_code":
+                                                              "freeshipping",
+                                                          "shipping_carrier_code":
+                                                              "freeshipping"
+                                                        }
                                                       };
+
                                                       print(addressbody);
                                                       setState(() {
                                                         bigCommerceAddressIndex =
                                                             index;
+                                                        woocommerceaddressbody =
+                                                            {
+                                                          // "id": 0,
+                                                          "region":
+                                                              "Maharashtra",
+                                                          "region_id": 589,
+                                                          "region_code": "MH",
+                                                          "country_id": "IN",
+                                                          "street": [
+                                                            "${addresses.address1}"
+                                                          ],
+                                                          "company": "setoo",
+                                                          "telephone":
+                                                              addresses.phone,
+                                                          "fax": "string",
+                                                          "postcode":
+                                                              addresses.zip,
+                                                          "city": "string",
+                                                          "firstname": addresses
+                                                              .firstName,
+                                                          "lastname": addresses
+                                                              .lastName,
+                                                          "middlename":
+                                                              "string",
+                                                          "prefix": "string",
+                                                          "suffix": "string",
+                                                          "vat_id": "string",
+                                                          "customer_id":
+                                                              int.parse(userId),
+                                                          "email": email,
+                                                          "same_as_billing": 0,
+                                                          "customer_address_id":
+                                                              addresses.id,
+                                                          "save_in_address_book":
+                                                              0
+                                                        };
                                                       });
 
                                                       CommonAlert
@@ -528,7 +586,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                       });
                                                     },
                                                   )
-                                                : AppConfigure.wooCommerce
+                                                : AppConfigure.bigCommerce
                                                     ? Radio(
                                                         value: index,
                                                         groupValue:
@@ -551,60 +609,41 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                             "last_name":
                                                                 addresses
                                                                     .lastName,
-                                                            "phone":
-                                                                addresses.phone,
                                                             "email": email,
                                                             "company": "setoo",
-                                                            "address_1":
+                                                            "address1":
                                                                 addresses
                                                                     .address1,
-                                                            "address_2":
+                                                            "address2":
                                                                 "string",
                                                             "city":
                                                                 addresses.city,
-                                                            "state": addresses
-                                                                .province,
-                                                            // "state_or_province_code":
-                                                            //     addresses.provinceCode,
-                                                            "country": addresses
-                                                                .countryCode,
-                                                            "postcode":
+                                                            "state_or_province":
+                                                                addresses
+                                                                    .province,
+                                                            "state_or_province_code":
+                                                                addresses
+                                                                    .provinceCode,
+                                                            "country_code":
+                                                                addresses
+                                                                    .countryCode,
+                                                            "postal_code":
                                                                 addresses.zip,
+                                                            "phone":
+                                                                addresses.phone,
                                                           };
                                                           print(addressbody);
                                                           setState(() {
-                                                            woocommerceaddressbody =
-                                                                addressbody;
                                                             bigCommerceAddressIndex =
                                                                 index;
                                                           });
-                                                        },
-                                                      )
-                                                    : Radio(
-                                                        value: index,
-                                                        groupValue: selectedDefaultIndex ==
-                                                                0
-                                                            ? addressList
-                                                                .indexWhere(
-                                                                    (address) =>
-                                                                        address
-                                                                            .defaultAddress)
-                                                            : selectedDefaultIndex,
-                                                        onChanged:
-                                                            (value) async {
-                                                          setState(() {
-                                                            selectedDefaultIndex =
-                                                                value as int;
-                                                            getLocationFromAddress(
-                                                                "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
-                                                          });
+
                                                           CommonAlert
                                                               .show_loading_alert(
                                                                   context);
                                                           AddressRepository()
-                                                              .setDefaultAddress(
-                                                                  addresses.id
-                                                                      .toString())
+                                                              .bigCommerceShippingAddress(
+                                                                  addressbody!)
                                                               .then(
                                                                   (subjectFromServer) {
                                                             Navigator.of(
@@ -655,7 +694,141 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                             }
                                                           });
                                                         },
-                                                      ),
+                                                      )
+                                                    : AppConfigure.wooCommerce
+                                                        ? Radio(
+                                                            value: index,
+                                                            groupValue:
+                                                                bigCommerceAddressIndex,
+                                                            onChanged:
+                                                                (value) async {
+                                                              String draftId =
+                                                                  await SharedPreferenceManager()
+                                                                      .getDraftId();
+                                                              print(draftId);
+                                                              String email =
+                                                                  await SharedPreferenceManager()
+                                                                      .getEmail();
+                                                              print(
+                                                                  "$value ${addressList[index]}");
+                                                              addressbody = {
+                                                                "first_name":
+                                                                    addresses
+                                                                        .firstName,
+                                                                "last_name":
+                                                                    addresses
+                                                                        .lastName,
+                                                                "phone":
+                                                                    addresses
+                                                                        .phone,
+                                                                "email": email,
+                                                                "company":
+                                                                    "setoo",
+                                                                "address_1":
+                                                                    addresses
+                                                                        .address1,
+                                                                "address_2":
+                                                                    "string",
+                                                                "city":
+                                                                    addresses
+                                                                        .city,
+                                                                "state": addresses
+                                                                    .province,
+                                                                // "state_or_province_code":
+                                                                //     addresses.provinceCode,
+                                                                "country": addresses
+                                                                    .countryCode,
+                                                                "postcode":
+                                                                    addresses
+                                                                        .zip,
+                                                              };
+                                                              print(
+                                                                  addressbody);
+                                                              setState(() {
+                                                                woocommerceaddressbody =
+                                                                    addressbody;
+                                                                bigCommerceAddressIndex =
+                                                                    index;
+                                                              });
+                                                            },
+                                                          )
+                                                        : Radio(
+                                                            value: index,
+                                                            groupValue: selectedDefaultIndex ==
+                                                                    0
+                                                                ? addressList.indexWhere(
+                                                                    (address) =>
+                                                                        address
+                                                                            .defaultAddress)
+                                                                : selectedDefaultIndex,
+                                                            onChanged:
+                                                                (value) async {
+                                                              setState(() {
+                                                                selectedDefaultIndex =
+                                                                    value
+                                                                        as int;
+                                                                getLocationFromAddress(
+                                                                    "${addressList[selectedDefaultIndex].address1},${addressList[selectedDefaultIndex].zip},${addressList[selectedDefaultIndex].city},${addressList[selectedDefaultIndex].country}");
+                                                              });
+                                                              CommonAlert
+                                                                  .show_loading_alert(
+                                                                      context);
+                                                              AddressRepository()
+                                                                  .setDefaultAddress(
+                                                                      addresses
+                                                                          .id
+                                                                          .toString())
+                                                                  .then(
+                                                                      (subjectFromServer) {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                if (subjectFromServer ==
+                                                                    AppString
+                                                                        .success) {
+                                                                  ref.refresh(
+                                                                      addressDataProvider);
+                                                                  Fluttertoast.showToast(
+                                                                      msg: AppString
+                                                                          .defaultAddressSuccess,
+                                                                      toastLength:
+                                                                          Toast
+                                                                              .LENGTH_SHORT,
+                                                                      gravity: ToastGravity
+                                                                          .BOTTOM,
+                                                                      timeInSecForIosWeb:
+                                                                          0,
+                                                                      backgroundColor:
+                                                                          AppColors
+                                                                              .green,
+                                                                      textColor:
+                                                                          AppColors
+                                                                              .whiteColor,
+                                                                      fontSize:
+                                                                          16.0);
+                                                                } else {
+                                                                  Fluttertoast.showToast(
+                                                                      msg: AppString
+                                                                          .oops,
+                                                                      toastLength:
+                                                                          Toast
+                                                                              .LENGTH_SHORT,
+                                                                      gravity: ToastGravity
+                                                                          .BOTTOM,
+                                                                      timeInSecForIosWeb:
+                                                                          0,
+                                                                      backgroundColor:
+                                                                          AppColors
+                                                                              .green,
+                                                                      textColor:
+                                                                          AppColors
+                                                                              .whiteColor,
+                                                                      fontSize:
+                                                                          16.0);
+                                                                }
+                                                              });
+                                                            },
+                                                          ),
                                           ],
                                         ),
                                         Text(
@@ -1387,9 +1560,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                       .customer
                                                                       .email,
                                                                   double.parse(
-                                                                      productlist
-                                                                          .totalPrice
-                                                                          .toString()));
+                                                                      "${widget.totalPrice}.00"))  ;
                                                             } else {
                                                               // Stripe payment gateway
                                                               // StripePaymentService(
