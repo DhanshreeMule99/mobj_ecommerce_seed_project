@@ -18,11 +18,12 @@ class ProductRepository {
     if (AppConfigure.megentoCommerce) {
       try {
         log('megentoCommerce api');
+           String  accessToken = AppConfigure.megentoCunsumerAccessToken;
         final response = await api.sendRequest.get(
           'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
           options: Options(headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+            'Authorization': 'Bearer $accessToken',
           }),
         );
 
@@ -151,12 +152,12 @@ class ProductRepository {
       try {
         log("Logging product $pid");
         // debugPrint(baseUrl + pid);
-
+   String  accessToken = AppConfigure.megentoCunsumerAccessToken;
         final response = await api.sendRequest.get(
           "products/$pid",
           options: Options(headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+            'Authorization': 'Bearer $accessToken',
           }),
         );
         // log(response.data);
@@ -463,30 +464,7 @@ class ProductRepository {
     String uid = await SharedPreferenceManager().getUserId();
     // debugPrint('$uid $variantId');
     String draftId = await SharedPreferenceManager().getDraftId();
-//     var body =
-//     //   {
-//     //   "customer_id": int.parse(uid),
-//     //   "line_items": [
-//     //     {
-//     //       "quantity": int.parse(quantity),
-//     //       "product_id": int.parse(productId),
-//     //       "list_price": int.parse(price),
-//     //       "name": name,
-//     //       "variant_id": int.parse(variantId)
-//     //     }
-//     //   ],
-//     //   "currency": {"code": "USD"},
-//     //   "locale": "en-US"
-//     // }
-//     {
-//   "cart_item": {
-//     "quote_id": int.parse(draftId),
-//     "sku": "DEN101003005",
-//     "qty": int.parse(quantity),
-//   }
-// };
 
-    //  var decodedBody = jsonDecode(body);
     String baseUrl = AppConfigure.baseUrl;
     debugPrint(baseUrl + APIConstants.draftProduct);
     try {
@@ -524,6 +502,8 @@ class ProductRepository {
             return exceptionString;
           }
         } else {
+
+             String  accessToken = AppConfigure.megentoCunsumerAccessToken;
           response = await api.sendRequest.post(
             "carts/mine/items",
             data: {
@@ -534,7 +514,7 @@ class ProductRepository {
               }
             },
             options: Options(headers: {
-              'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+              'Authorization': 'Bearer $accessToken',
             }),
           );
 
@@ -1419,13 +1399,14 @@ class ProductRepository {
         rethrow;
       }
     } else if (AppConfigure.megentoCommerce) {
+         String  accessToken = AppConfigure.megentoCunsumerAccessToken;
       final email = await SharedPreferenceManager().getEmail();
       log("  user email is ..............................$email");
       try {
         final response = await api.sendRequest.get(
-          "orders?searchCriteria[filterGroups][][filters][][field]=customer_email&searchCriteria[filterGroups][0][filters][0][value]=rekha@setoo.co",
+          "orders?searchCriteria[filterGroups][][filters][][field]=customer_email&searchCriteria[filterGroups][0][filters][0][value]=$email",
           options: Options(headers: {
-            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+            "Authorization": "Bearer $accessToken",
           }),
         );
         if (response.statusCode == APIConstants.successCode ||

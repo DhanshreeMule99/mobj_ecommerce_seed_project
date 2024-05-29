@@ -326,7 +326,8 @@ class AddressRepository {
       API api = API();
       // final uid = await SharedPreferenceManager().getUserId();
       try {
-        String userToken = await SharedPreferenceManager().getToken();
+        String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+        
         final response;
         final AddressID = await SharedPreferenceManager().getAddressId();
         debugPrint("calling null addressid api");
@@ -334,58 +335,12 @@ class AddressRepository {
         response = await api.sendRequest.delete(
           'addresses/$AddressID',
           options: Options(headers: {
-            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+            "Authorization": "Bearer $accessToken",
           }),
-//           data: {
-//    "customer":{
-//       "id":"",
-//       "email":"",
-//       "firstname":"",
-//       "lastname":"",
-//       "website_id":1,
-//       "addresses":[
-//          {
-//             "customer_id":"",
-//             "region":{
-//                "region_code":"string",
-//                "region":"string",
-//                "region_id":0,
-//                "extension_attributes":{
-
-//                }
-//             },
-//             "region_id":0,
-//             "country_id":"IN",
-//             "street":[
-
-//             ],
-//             "company":"string",
-//             "telephone":"",
-//             "fax":"string",
-//             "postcode": "",
-//             "city":"",
-//             "firstname":"",
-//             "lastname":"",
-//             "middlename":"string",
-//             "prefix":"string",
-//             "suffix":"string",
-//             "vat_id":"string",
-//             "default_shipping":false,
-//             "default_billing":false
-//          }
-//       ]
-//    }
-// },
-          // options: Options(headers: {
-          //   'Content-Type': 'application/json',
-          // }),
         );
 
         if (response.statusCode == APIConstants.successCode) {
           debugPrint("body is this ${response.data} $uid");
-
-          // return [DefaultAddressModel(id: response.data['id'], customerId: response.data['id'], firstName: response.data['billing']['first_name'], lastName: response.data['billing']['last_name'], address1: response.data['billing']['address_1'], city: response.data['billing']['city'], province: response.data['billing']['address_2'], country: response.data['billing']['country'], zip: response.data['billing']['postcode'], phone: response.data['billing']['phone'], name: response.data['billing']['first_name'], provinceCode: response.data['billing']['first_name'], countryCode: response.data['billing']['first_name'], countryName: response.data['billing']['first_name'], defaultAddress: false)];
-
           return [null];
         } else if (response.statusCode == APIConstants.dataNotFoundCode) {
           throw (AppString.noDataError);
@@ -579,6 +534,7 @@ class AddressRepository {
       try {
         if (await ConnectivityUtils.isNetworkConnected()) {
           // String userToken = await SharedPreferenceManager().getToken();
+             String  accessToken = AppConfigure.megentoCunsumerAccessToken;
           final uid = await SharedPreferenceManager().getUserId();
           final response;
 
@@ -588,7 +544,7 @@ class AddressRepository {
             'customers/$uid',
             data: body,
             options: Options(headers: {
-              'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+              'Authorization': 'Bearer $accessToken',
             }),
           );
 

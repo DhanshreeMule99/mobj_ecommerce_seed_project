@@ -47,6 +47,7 @@ TextEditingController minPriceController = TextEditingController();
 TextEditingController maxPriceController = TextEditingController();
 double start = 0.0;
 double end = 0.0;
+List<String> skus = [];
 
 class _CollectionWiseProductScreenState
     extends ConsumerState<CollectionWiseProductScreen> {
@@ -133,7 +134,7 @@ class _CollectionWiseProductScreenState
           List<dynamic> responseBody = response.data;
 
           // Extract SKUs and join them into a comma-separated string
-          List<String> skus = [];
+
           for (var product in responseBody) {
             if (product.containsKey('sku')) {
               skus.add(product['sku']);
@@ -164,11 +165,7 @@ class _CollectionWiseProductScreenState
 
               return ProductCollectionModel(
                 title: e['name'],
-                description: e['custom_attributes']?.firstWhere(
-                      (attr) => attr['attribute_code'] == 'description',
-                      orElse: () => {'value': ''},
-                    )['value'] ??
-                    '',
+                description: e['sku'],
                 handle: e['url_key'] ?? '',
                 featuredImage: firstImageUrl,
                 minPrice: double.tryParse(e['price'].toString()) ?? 0.0,
@@ -475,7 +472,7 @@ fragment PriceFields on Money {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     final product = products[index];
-                                    log("image url is this ${product.featuredImage}");
+                                    log("image url is this ${product.featuredImage} ${product.description}");
 
                                     final int staticStock =
                                         10; // Example static value for stock
@@ -486,8 +483,11 @@ fragment PriceFields on Money {
                                             top: 5, left: 15, right: 15),
                                         child: InkWell(
                                           onTap: () {
+                                            log("sku is this ${product.description}");
                                             ref.refresh(productDetailsProvider(
-                                              product.id.toString(),
+                                              AppConfigure.megentoCommerce
+                                                  ? product.description
+                                                  : product.id.toString(),
                                             ));
                                             Navigator.of(context).push(
                                               PageRouteBuilder(
@@ -495,6 +495,10 @@ fragment PriceFields on Money {
                                                         animation1,
                                                         animation2) =>
                                                     ProductDetailsScreen(
+                                                  sku: AppConfigure
+                                                          .megentoCommerce
+                                                      ? product.description
+                                                      : "",
                                                   uid: product.id
                                                       .replaceAll(
                                                           "gid://shopify/Product/",
@@ -661,7 +665,7 @@ fragment PriceFields on Money {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         final product = products[index];
-                                        log("image url is this ${product.featuredImage}");
+                                        log("image url is this ${product.featuredImage} ${skus[index]}");
 
                                         final int staticStock =
                                             10; // Example static value for stock
@@ -675,6 +679,7 @@ fragment PriceFields on Money {
                                                         animation1,
                                                         animation2) =>
                                                     ProductDetailsScreen(
+                                                  sku: skus[index],
                                                   uid: product.id
                                                       .replaceAll(
                                                           "gid://shopify/Product/",
