@@ -341,12 +341,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                 ),
-                if (AppConfigure.bigCommerce)
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
-                    child: ImageCarousel(),
-                  ),
+                AppConfigure.bigCommerce
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.sp, horizontal: 10.w),
+                        child: ImageCarousel(),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.sp, horizontal: 10.w),
+                        child: ImageCarousel(),
+                      ),
+
                 Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 8.sp, horizontal: 10.w),
