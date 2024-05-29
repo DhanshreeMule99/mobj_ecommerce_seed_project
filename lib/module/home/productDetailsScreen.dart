@@ -154,7 +154,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         borderRadius: BorderRadius.circular(100)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -165,9 +165,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               child: Row(
                                 children: [
                                   Text(
-                                      AppConfigure.megentoCommerce
-                                          ? ""
-                                          : "\u{20B9}${selectedVariant != null ? selectedVariant.price : user.variants[0].price}",
+                                      "\u{20B9}${selectedVariant != null ? selectedVariant.price : user.variants[0].price}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge),
@@ -298,130 +296,140 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                       )
                                     : outOfStockCard()
                                 : user.variants[0].inventoryQuantity > 0
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: AppColors.blackColor,
-                                              width: 1.5),
-                                          borderRadius: BorderRadius.circular(
-                                              AppDimension.buttonRadius),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              width: 32.sp,
-                                              height: 32.sp,
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 15),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSecondaryContainer,
-                                                      width: 2)),
-                                              child: IconButton(
-                                                padding: EdgeInsets.zero,
-                                                // Remove padding
-                                                icon: const Icon(
-                                                  FontAwesomeIcons.minus,
+                                    ? Center(
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: AppColors.blackColor,
+                                                  width: 1.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      AppDimension
+                                                          .buttonRadius),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: 32.sp,
+                                                  height: 32.sp,
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 15),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      border: Border.all(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .colorScheme
+                                                              .onSecondaryContainer,
+                                                          width: 2)),
+                                                  child: IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    // Remove padding
+                                                    icon: const Icon(
+                                                      FontAwesomeIcons.minus,
+                                                    ),
+                                                    onPressed: () {
+                                                      if (quantity > 1) {
+                                                        setState(() {
+                                                          quantity--;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
                                                 ),
-                                                onPressed: () {
-                                                  if (quantity > 1) {
-                                                    setState(() {
-                                                      quantity--;
-                                                    });
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                            Text(
-                                              '$quantity',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headlineLarge,
-                                            ),
-                                            Container(
-                                              width: 32.sp,
-                                              height: 32.sp,
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 5, horizontal: 15),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
+                                                Text(
+                                                  '$quantity',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineLarge,
+                                                ),
+                                                Container(
+                                                  width: 32.sp,
+                                                  height: 32.sp,
+                                                  margin: EdgeInsets.symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 15),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      border: Border.all(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                          width: 2)),
+                                                  child: IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    // Remove padding
+
+                                                    icon: Icon(
+                                                      FontAwesomeIcons.plus,
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .primary,
-                                                      width: 2)),
-                                              child: IconButton(
-                                                padding: EdgeInsets.zero,
-                                                // Remove padding
-
-                                                icon: Icon(
-                                                  FontAwesomeIcons.plus,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        if (selectedVariant !=
+                                                            null) {
+                                                          if (quantity <
+                                                              user.variants[0]
+                                                                  .inventoryQuantity) {
+                                                            quantity++;
+                                                          } else {
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "Only ${user.variants[0].inventoryQuantity} left in stock",
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                timeInSecForIosWeb:
+                                                                    0,
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .blackColor,
+                                                                textColor: AppColors
+                                                                    .whiteColor,
+                                                                fontSize: 16.0);
+                                                          }
+                                                        } else {
+                                                          if (quantity <
+                                                              user.variants[0]
+                                                                  .inventoryQuantity) {
+                                                            quantity++;
+                                                          } else {
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    "Only ${user.variants[0].inventoryQuantity} left in stock",
+                                                                toastLength: Toast
+                                                                    .LENGTH_SHORT,
+                                                                gravity:
+                                                                    ToastGravity
+                                                                        .BOTTOM,
+                                                                timeInSecForIosWeb:
+                                                                    0,
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .blackColor,
+                                                                textColor: AppColors
+                                                                    .whiteColor,
+                                                                fontSize: 16.0);
+                                                          }
+                                                        }
+                                                      });
+                                                    },
+                                                  ),
                                                 ),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    if (selectedVariant !=
-                                                        null) {
-                                                      if (quantity <
-                                                          user.variants[0]
-                                                              .inventoryQuantity) {
-                                                        quantity++;
-                                                      } else {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Only ${user.variants[0].inventoryQuantity} left in stock",
-                                                            toastLength: Toast
-                                                                .LENGTH_SHORT,
-                                                            gravity:
-                                                                ToastGravity
-                                                                    .BOTTOM,
-                                                            timeInSecForIosWeb:
-                                                                0,
-                                                            backgroundColor:
-                                                                AppColors
-                                                                    .blackColor,
-                                                            textColor: AppColors
-                                                                .whiteColor,
-                                                            fontSize: 16.0);
-                                                      }
-                                                    } else {
-                                                      if (quantity <
-                                                          user.variants[0]
-                                                              .inventoryQuantity) {
-                                                        quantity++;
-                                                      } else {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Only ${user.variants[0].inventoryQuantity} left in stock",
-                                                            toastLength: Toast
-                                                                .LENGTH_SHORT,
-                                                            gravity:
-                                                                ToastGravity
-                                                                    .BOTTOM,
-                                                            timeInSecForIosWeb:
-                                                                0,
-                                                            backgroundColor:
-                                                                AppColors
-                                                                    .blackColor,
-                                                            textColor: AppColors
-                                                                .whiteColor,
-                                                            fontSize: 16.0);
-                                                      }
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ))
+                                              ],
+                                            )),
+                                      )
                                     : outOfStockCard(),
                           ],
                         ),
@@ -712,7 +720,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       .slide(begin: Offset(0, 1), end: Offset(0, 0));
                 },
                 error: (error, s) => const SizedBox(),
-                loading: () => const CircularProgressIndicator()),
+                loading: () => const SizedBox()),
             // bottomNavigationBar: MobjBottombar(
             //   bgcolor: AppColors.whiteColor,
             //   selcted_icon_color: AppColors.buttonColor,
@@ -773,6 +781,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       AsyncValue<List<RecommendedProductModel>> product,
       AsyncValue<ReviewProductModels> ratingProduct,
       AsyncValue<ProductRatingModel> productRating) {
+    RegExp regExp = RegExp(r'<li>\s*(.*?)\s*<\/li>');
+    Iterable<RegExpMatch> matches = regExp.allMatches(productModel.bodyHtml);
+    List<String> extractedTexts =
+        matches.map((match) => match.group(1)!.trim()).toList();
+
+    // Remove extra spaces from each extracted text and join them into a single string
+    String result = extractedTexts.join(' ');
     return appInfoAsyncValue.when(
       data: (appInfo) => CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -833,7 +848,8 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
             pinned: true,
             expandedHeight: 250.h,
             flexibleSpace: FlexibleSpaceBar(
-              background: AppConfigure.bigCommerce == true
+              background: AppConfigure.bigCommerce == true ||
+                      AppConfigure.megentoCommerce
                   ? Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
                       child: Center(
@@ -853,7 +869,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               );
                             },
                             child: CachedNetworkImage(
-                              imageUrl: productModel.image.src,
+                              imageUrl: AppConfigure.megentoCommerce
+                                  ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
+                                  : productModel.image.src,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 //    height: MediaQuery.of(context).size.height / 3,
@@ -1357,44 +1375,75 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           )
                         : const SizedBox(),
                     productModel.bodyHtml != ""
-                        ? Text.rich(
-                            style: Theme.of(context).textTheme.headlineMedium,
-                            TextSpan(
-                              children: <InlineSpan>[
+                        ? AppConfigure.megentoCommerce
+                            ? Text.rich(
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
                                 TextSpan(
-                                    text: extractTextContent(
+                                  children: <InlineSpan>[
+                                    TextSpan(
+                                        text: result.length > 150 && !showAll
+                                            ? result.substring(0, 150) + "..."
+                                            : result),
+                                    result.length > 150
+                                        ? WidgetSpan(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  showAll = !showAll;
+                                                });
+                                              },
+                                              child: Text(
+                                                showAll
+                                                    ? 'read less'
+                                                    : 'read more!',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              ),
+                                            ),
+                                          )
+                                        : TextSpan(),
+                                  ],
+                                ))
+                            : Text.rich(
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                                TextSpan(
+                                  children: <InlineSpan>[
+                                    TextSpan(
+                                        text: extractTextContent(productModel
+                                                            .bodyHtml)
+                                                        .length >
+                                                    150 &&
+                                                !showAll
+                                            ? extractTextContent(
                                                         productModel.bodyHtml)
-                                                    .length >
-                                                150 &&
-                                            !showAll
-                                        ? extractTextContent(
-                                                    productModel.bodyHtml)
-                                                .substring(0, 150) +
-                                            "..."
-                                        : extractTextContent(
-                                            productModel.bodyHtml)),
-                                extractTextContent(productModel.bodyHtml)
-                                            .length >
-                                        150
-                                    ? WidgetSpan(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              showAll = !showAll;
-                                            });
-                                          },
-                                          child: Text(
-                                            showAll
-                                                ? 'read less'
-                                                : 'read more!',
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          ),
-                                        ),
-                                      )
-                                    : TextSpan(),
-                              ],
-                            ))
+                                                    .substring(0, 150) +
+                                                "..."
+                                            : extractTextContent(
+                                                productModel.bodyHtml)),
+                                    extractTextContent(productModel.bodyHtml)
+                                                .length >
+                                            150
+                                        ? WidgetSpan(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  showAll = !showAll;
+                                                });
+                                              },
+                                              child: Text(
+                                                showAll
+                                                    ? 'read less'
+                                                    : 'read more!',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              ),
+                                            ),
+                                          )
+                                        : TextSpan(),
+                                  ],
+                                ))
                         : Container(),
                     // productModel.bodyHtml != ""
                     //     ? Text(

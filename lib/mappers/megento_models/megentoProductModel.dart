@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:mobj_project/models/product/productModel.dart';
 
 import '../../utils/defaultValues.dart';
@@ -6,8 +8,11 @@ import '../bigcommerce_models/bigcommerce_proudct_model.dart';
 class MengentoProductModel implements ProductModel {
   @override
   final int id;
+  @override
   final int price;
+  @override
   final String sku;
+  @override
   final int attribute_set_id;
   @override
   final String title;
@@ -69,6 +74,7 @@ class MengentoProductModel implements ProductModel {
   });
 
   factory MengentoProductModel.fromJson(Map<String, dynamic> json) {
+    log("body is this ${ json['custom_attributes'][0]['value']}");
     return MengentoProductModel(
         id: json['id'] ?? DefaultValues.defaultId,
         price: json['price'] ?? DefaultValues.defaultId,
@@ -93,12 +99,42 @@ class MengentoProductModel implements ProductModel {
         //             variantJson as Map<String, dynamic>))
         //         .toList() ??
         //     DefaultValues.defaultVariants.cast<BigCommerceProductVariant>(),
-        variants:
-            // json['extension_attributes']
-            //         .map((variantJson) => MegentoProductVariant.fromJson(
-            //             variantJson as Map<String, dynamic>))
-            //         .toList() ??
-            DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
+        variants: [
+          MegentoProductVariant(
+              id: json['id'],
+              productId: json['id'],
+              title: json['name'].toString(),
+              price: json['price'].toString(),
+              sku: '',
+              position: 1,
+              inventoryPolicy: '',
+              compareAtPrice: '10000',
+              fulfillmentService: '',
+              inventoryManagement: '10000',
+              option1: '',
+              option2: '',
+              option3: '',
+              createdAt: '',
+              updatedAt: '',
+              taxable: true,
+              barcode: '',
+              grams: 1,
+              imageId: null,
+              weight: 1.1,
+              weightUnit: 'kg',
+              inventoryItemId: json['id'],
+              inventoryQuantity:
+                   10000,
+              oldInventoryQuantity: 1000,
+              requiresShipping: true,
+              adminGraphqlApiId: '')
+        ]
+        // json['extension_attributes']['']
+        //         .map((variantJson) => MegentoProductVariant.fromJson(
+        //             variantJson as Map<String, dynamic>))
+        //         .toList() ??
+        //     DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
+        ,
         // variants: DefaultValues.defaultVariants.cast<MegentoProductVariant>(),
         options: (json[''] as List<dynamic>?)
                 ?.map((optionJson) => BigCommerceProductOption.fromJson(
