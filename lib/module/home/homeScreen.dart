@@ -175,12 +175,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return parsedCategories;
   }
 
+  Future<void> _fetchLogoImg() async {
+    var logouri = await SharedPreferenceManager().getLogoImg();
+    setState(() {
+      logoImg = logouri;
+    });
+  }
+
   String jwt_token = "";
   String userid = "";
+  String logoImg = '';
   Future<bool> isLogin() async {
     final jwt = await SharedPreferenceManager().getToken();
     jwt_token = jwt;
     final uid = await SharedPreferenceManager().getUserId();
+    // final imgUrl = await SharedPreferenceManager().getLogoImg();
     final did = await SharedPreferenceManager().getDeviceId();
     userid = uid;
 
@@ -199,6 +208,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     getWishlistproduct();
     fetchCategories();
     super.initState();
+    _fetchLogoImg();
   }
 
   @override
@@ -255,7 +265,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CachedNetworkImage(
-                      imageUrl: appInfo.logoImagePath,
+                      imageUrl: logoImg!,
                       imageBuilder: (context, imageProvider) => Container(
                         height: 35,
                         width: 35,

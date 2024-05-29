@@ -6,7 +6,6 @@ import 'package:html/parser.dart' as htmlParser;
 import 'package:mobj_project/module/home/productDetailsScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../utils/api.dart';
 
 final List<dynamic> imgList = [];
@@ -26,6 +25,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
   }
 
   int activeIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -33,69 +33,36 @@ class _ImageCarouselState extends State<ImageCarousel> {
   }
 
   Future<void> fetchImages() async {
-    if (AppConfigure.megentoCommerce) {
-      try {
-        log('calling api for carousel');
-        String productUrl =
-            "https://mobj-strapi-admin-panel.onrender.com/api/sliders";
-        API api = API();
-        final response = await api.sendRequest.get(productUrl);
+    try {
+      log('calling api for carousel');
+      String productUrl =
+          "${AppConfigure.adminPanelUrl}/api/sliders?populate=*";
+      API api = API();
+      final response = await api.sendRequest.get(productUrl);
 
-        if (response.statusCode == 200) {
-          var body = response.data['data']; // Parse the response body
+      if (response.statusCode == 200) {
+        var body = response.data['data']; // Parse the response body
 
-          // Clear imgList and productList before adding new images
-          imgList.clear();
-          productList.clear();
+        // Clear imgList and productList before adding new images
+        imgList.clear();
+        productList.clear();
 
-          // Loop through each item in the body list
-          for (var item in body) {
-            // Extract the image URL and product ID from the item's attributes
-            String imageUrl = item["attributes"]["image_url"];
-            String productId = item["attributes"]["product_id"];
+        // Loop through each item in the body list
+        for (var item in body) {
+          // Extract the image URL and product ID from the item's attributes
+          String imageUrl =
+              item["attributes"]["image"]["data"][0]["attributes"]["url"];
+          String productId = item["attributes"]["product_id"];
 
-            // Add the image URL and product ID to the respective lists
-            imgList.add(imageUrl);
-            productList.add(productId);
-          }
-          setState(() {});
+          // Add the image URL and product ID to the respective lists
+          imgList.add(imageUrl);
+          productList.add(productId);
         }
-      } catch (error, stackTrace) {
-        debugPrint("error is this $error $stackTrace");
-        rethrow;
+        setState(() {});
       }
-    } else {
-      try {
-        log('calling api for carousel');
-        String productUrl =
-            "https://api.bigcommerce.com/stores/zwpg4jmenh/v2/banners";
-        API api = API();
-        final response = await api.sendRequest.get(productUrl);
-
-        if (response.statusCode == 200) {
-          var body =
-              jsonDecode(response.data)['data']; // Parse the response body
-
-          // Clear imgList and productList before adding new images
-          imgList.clear();
-          productList.clear();
-
-          // Loop through each item in the body list
-          for (var item in body) {
-            // Extract the image URL and product ID from the item's attributes
-            String imageUrl = item["attributes"]["image_url"];
-            String productId = item["attributes"]["product_id"];
-
-            // Add the image URL and product ID to the respective lists
-            imgList.add(imageUrl);
-            productList.add(productId);
-          }
-          setState(() {});
-        }
-      } catch (error, stackTrace) {
-        debugPrint("error is this $error $stackTrace");
-        rethrow;
-      }
+    } catch (error, stackTrace) {
+      debugPrint("error is this $error $stackTrace");
+      rethrow;
     }
   }
 
@@ -103,12 +70,11 @@ class _ImageCarouselState extends State<ImageCarousel> {
   Widget build(BuildContext context) {
     return Center(
       child: imgList.isEmpty
-          ? const CircularProgressIndicator()
+          ? Container()
           : Stack(
               children: [
                 CarouselSlider(
                   options: CarouselOptions(
-                    //aspectRatio: 1/.7,
                     viewportFraction: 1,
                     autoPlay: true,
                     enlargeCenterPage: true,
@@ -129,12 +95,13 @@ class _ImageCarouselState extends State<ImageCarousel> {
                           width: MediaQuery.of(context).size.width,
                           margin: const EdgeInsets.symmetric(horizontal: 5.0),
                           decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage(imageUrl),
-                                fit: BoxFit.cover,
-                              )),
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(
@@ -142,6 +109,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                                   pageBuilder:
                                       (context, animation1, animation2) =>
                                           ProductDetailsScreen(
+                                    sku: productId.toString(),
                                     uid: productId.toString(),
                                   ),
                                   transitionDuration: Duration.zero,
@@ -162,7 +130,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     activeIndex: activeIndex,
                     count: imgList.length,
                   ),
-                )
+                ),
               ],
             ),
     );
