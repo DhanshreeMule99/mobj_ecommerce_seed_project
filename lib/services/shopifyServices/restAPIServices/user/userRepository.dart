@@ -277,13 +277,14 @@ query {
       // var body1 = jsonEncode({"customer": body});
       try {
          final uid = await SharedPreferenceManager().getUserId();
+            String  accessToken = AppConfigure.megentoCunsumerAccessToken;
             
         if (await ConnectivityUtils.isNetworkConnected()) {
           Response response = await api.sendRequest.put(
             '/customers/$uid',
             data: body,
             options: Options(headers: {
-            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+            "Authorization": "Bearer $accessToken",
           }), 
           );
 

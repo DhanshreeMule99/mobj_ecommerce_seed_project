@@ -412,22 +412,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             "email": email.text,
             "firstname": firstName.text,
             "lastname":lastName.text,
-            // "addresses": [{
-            //     "defaultShipping": true,
-            //     "defaultBilling": true,
-            //     "firstname": "Kavin",
-            //     "lastname": "Peter",
-            //     "region": {
-            //         "regionCode": "NY",
-            //         "region": "New York",
-            //         "regionId":43
-            //     },
-            //     "postcode": "10755",
-            //     "street": ["123 Oak Ave"],
-            //     "city": "Purchase",
-            //     "telephone": "1234567890",
-            //     "countryId": "US"
-            // }],
             "extension_attributes": {
                 "is_subscribed": true
             },
@@ -442,13 +426,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     };
     
       try {
+           String  accessToken = AppConfigure.megentoCunsumerAccessToken;
  
         final response = await api.sendRequest.post(
           'customers',
           data: body,
           
            options: Options(headers: {
-            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+            "Authorization": "Bearer $accessToken",
           }),
         );
         debugPrint('status code is ${response.statusCode}');

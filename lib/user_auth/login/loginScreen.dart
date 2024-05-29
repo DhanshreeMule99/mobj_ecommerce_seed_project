@@ -1042,7 +1042,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } else 
     if (AppConfigure.megentoCommerce){
 
-
+   String  accessToken = AppConfigure.megentoCunsumerAccessToken;
       // login with Woo Commerce
       API api = API();
 
@@ -1058,7 +1058,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         final response = await api.sendRequest.post(
           'integration/customer/token',
           options: Options(headers: {
-            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+            "Authorization": "Bearer $accessToken",
           }),
           data: body,
         );
