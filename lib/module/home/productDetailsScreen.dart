@@ -298,137 +298,131 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 : user.variants[0].inventoryQuantity > 0
                                     ? Center(
                                         child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: AppColors.blackColor,
-                                                  width: 1.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      AppDimension
-                                                          .buttonRadius),
-                                            ),
+                                            // decoration: BoxDecoration(
+                                            //   border: Border.all(
+                                            //       color: AppColors.blackColor,
+                                            //       width: 1.5),
+                                            //   borderRadius:
+                                            //       BorderRadius.circular(
+                                            //           AppDimension
+                                            //               .buttonRadius),
+                                            // ),
                                             child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  width: 32.sp,
-                                                  height: 32.sp,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 15),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      border: Border.all(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .colorScheme
-                                                              .onSecondaryContainer,
-                                                          width: 2)),
-                                                  child: IconButton(
-                                                    padding: EdgeInsets.zero,
-                                                    // Remove padding
-                                                    icon: const Icon(
-                                                      FontAwesomeIcons.minus,
-                                                    ),
-                                                    onPressed: () {
-                                                      if (quantity > 1) {
-                                                        setState(() {
-                                                          quantity--;
-                                                        });
-                                                      }
-                                                    },
-                                                  ),
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              width: 32.sp,
+                                              height: 32.sp,
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 15),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSecondaryContainer,
+                                                      width: 2)),
+                                              child: IconButton(
+                                                padding: EdgeInsets.zero,
+                                                // Remove padding
+                                                icon: const Icon(
+                                                  FontAwesomeIcons.minus,
                                                 ),
-                                                Text(
-                                                  '$quantity',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headlineLarge,
-                                                ),
-                                                Container(
-                                                  width: 32.sp,
-                                                  height: 32.sp,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 15),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      border: Border.all(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .primary,
-                                                          width: 2)),
-                                                  child: IconButton(
-                                                    padding: EdgeInsets.zero,
-                                                    // Remove padding
-
-                                                    icon: Icon(
-                                                      FontAwesomeIcons.plus,
+                                                onPressed: () {
+                                                  if (quantity > 1) {
+                                                    setState(() {
+                                                      quantity--;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                            Text(
+                                              '$quantity',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineLarge,
+                                            ),
+                                            Container(
+                                              width: 32.sp,
+                                              height: 32.sp,
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 15),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .primary,
-                                                    ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        if (selectedVariant !=
-                                                            null) {
-                                                          if (quantity <
-                                                              user.variants[0]
-                                                                  .inventoryQuantity) {
-                                                            quantity++;
-                                                          } else {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    "Only ${user.variants[0].inventoryQuantity} left in stock",
-                                                                toastLength: Toast
-                                                                    .LENGTH_SHORT,
-                                                                gravity:
-                                                                    ToastGravity
-                                                                        .BOTTOM,
-                                                                timeInSecForIosWeb:
-                                                                    0,
-                                                                backgroundColor:
-                                                                    AppColors
-                                                                        .blackColor,
-                                                                textColor: AppColors
-                                                                    .whiteColor,
-                                                                fontSize: 16.0);
-                                                          }
-                                                        } else {
-                                                          if (quantity <
-                                                              user.variants[0]
-                                                                  .inventoryQuantity) {
-                                                            quantity++;
-                                                          } else {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    "Only ${user.variants[0].inventoryQuantity} left in stock",
-                                                                toastLength: Toast
-                                                                    .LENGTH_SHORT,
-                                                                gravity:
-                                                                    ToastGravity
-                                                                        .BOTTOM,
-                                                                timeInSecForIosWeb:
-                                                                    0,
-                                                                backgroundColor:
-                                                                    AppColors
-                                                                        .blackColor,
-                                                                textColor: AppColors
-                                                                    .whiteColor,
-                                                                fontSize: 16.0);
-                                                          }
-                                                        }
-                                                      });
-                                                    },
-                                                  ),
+                                                      width: 2)),
+                                              child: IconButton(
+                                                padding: EdgeInsets.zero,
+                                                // Remove padding
+
+                                                icon: Icon(
+                                                  FontAwesomeIcons.plus,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                 ),
-                                              ],
-                                            )),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    if (selectedVariant !=
+                                                        null) {
+                                                      if (quantity <
+                                                          user.variants[0]
+                                                              .inventoryQuantity) {
+                                                        quantity++;
+                                                      } else {
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "Only ${user.variants[0].inventoryQuantity} left in stock",
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                0,
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .blackColor,
+                                                            textColor: AppColors
+                                                                .whiteColor,
+                                                            fontSize: 16.0);
+                                                      }
+                                                    } else {
+                                                      if (quantity <
+                                                          user.variants[0]
+                                                              .inventoryQuantity) {
+                                                        quantity++;
+                                                      } else {
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "Only ${user.variants[0].inventoryQuantity} left in stock",
+                                                            toastLength: Toast
+                                                                .LENGTH_SHORT,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .BOTTOM,
+                                                            timeInSecForIosWeb:
+                                                                0,
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .blackColor,
+                                                            textColor: AppColors
+                                                                .whiteColor,
+                                                            fontSize: 16.0);
+                                                      }
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                       )
                                     : outOfStockCard(),
                           ],
