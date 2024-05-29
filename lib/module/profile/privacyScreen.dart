@@ -33,7 +33,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
  
 
         String BaseUrl = AppConfigure.adminPanelUrl;
-        final response =await http.get(Uri.parse("$BaseUrl/api/terms-and-condition"));
+        final response =await http.get(Uri.parse("$BaseUrl/api/terms-and-condition?populate=*"));
 
 
     if (response.statusCode == 200) {

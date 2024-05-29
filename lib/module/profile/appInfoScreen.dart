@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobj_project/module/home/homeCarousel.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import '../wishlist/wishlishScreen.dart';
@@ -28,7 +29,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
 
   Future<String> fetchAboutApp() async {
     String BaseUrl = AppConfigure.adminPanelUrl;
-    final response = await http.get(Uri.parse("$BaseUrl/api/about-uses"));
+    final response = await http.get(Uri.parse("$BaseUrl/api/about-uses?populate=*"));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -79,35 +80,36 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Center(
-                            child: ClipRRect(
-                              child: CachedNetworkImage(
-                                imageUrl: appInfo.logoImagePath,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                                placeholder: (context, url) => Container(
-                                  width: 28,
-                                  height: 28,
-                                  color: AppColors.greyShade800,
-                                ),
-                                errorWidget: (context, url, error) => Container(
-                                  width: 28,
-                                  height: 28,
-                                  color: AppColors.greyShade800,
-                                ),
-                              ),
-                            ),
-                          ),
+                         
+                          // Center(
+                          //   child: ClipRRect(
+                          //     child: CachedNetworkImage(
+                          //       imageUrl: appInfo.logoImagePath,
+                          //       imageBuilder: (context, imageProvider) =>
+                          //           Container(
+                          //         width: MediaQuery.of(context).size.width,
+                          //         height:
+                          //             MediaQuery.of(context).size.height * 0.2,
+                          //         decoration: BoxDecoration(
+                          //           image: DecorationImage(
+                          //             image: imageProvider,
+                          //             fit: BoxFit.contain,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       placeholder: (context, url) => Container(
+                          //         width: 28,
+                          //         height: 28,
+                          //         color: AppColors.greyShade800,
+                          //       ),
+                          //       errorWidget: (context, url, error) => Container(
+                          //         width: 28,
+                          //         height: 28,
+                          //         color: AppColors.greyShade800,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           const SizedBox(height: 20),
                           FutureBuilder<String>(
                             future: aboutApp,
