@@ -125,8 +125,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                 } else {
                                                   ref.refresh(
                                                       productDetailsProvider(
-                                                    orderList.productId
-                                                        .toString(),
+                                                    AppConfigure.megentoCommerce
+                                                        ? orderList.sku
+                                                            .toString()
+                                                        : orderList.productId
+                                                            .toString(),
                                                   ));
                                                   Navigator.of(context).push(
                                                     PageRouteBuilder(
@@ -134,6 +137,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                               animation1,
                                                               animation2) =>
                                                           ProductDetailsScreen(
+                                                        sku: AppConfigure
+                                                                .megentoCommerce
+                                                            ? orderList.sku
+                                                                .toString()
+                                                            : "",
                                                         uid: orderList.productId
                                                             .toString(),
                                                       ),
