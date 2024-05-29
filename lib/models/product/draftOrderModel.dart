@@ -134,7 +134,13 @@ class LineItem {
       return BigCommerceLineItem.fromJson(json);
     } else if (AppConfigure.wooCommerce) {
       return WooCommerceLineItem.fromJson(json);
-    } else {
+    } 
+    else if (AppConfigure.megentoCommerce){
+       return MagentoCommerceLineItem.fromJson(json);
+      
+      
+      }
+      else {
       return ShopifyLineItem.fromJson(json);
     }
   }

@@ -1418,6 +1418,36 @@ class ProductRepository {
         debugPrint("error is this: $error");
         rethrow;
       }
+    } else if (AppConfigure.megentoCommerce) {
+      final email = await SharedPreferenceManager().getEmail();
+      log("  user email is ..............................$email");
+      try {
+        final response = await api.sendRequest.get(
+          "orders?searchCriteria[filterGroups][][filters][][field]=customer_email&searchCriteria[filterGroups][0][filters][0][value]=rekha@setoo.co",
+          options: Options(headers: {
+            "Authorization": "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri",
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode ||
+            response.statusCode == APIConstants.successCreateCode) {
+          //  debugPrint(response.data);
+          final result = response.data;
+          debugPrint("result is this $result");
+
+          if (response.data['items'].isEmpty) {
+            throw (AppString.noDataError);
+          } else {
+            List order = response.data["items"];
+            return order.map((e) => OrderModel.fromJson(e)).toList();
+          }
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
     } else {
       final uid = await SharedPreferenceManager().getUserId();
       String baseUrl = AppConfigure.baseUrl +

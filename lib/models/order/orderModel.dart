@@ -1,3 +1,4 @@
+import 'package:mobj_project/mappers/megento_models/magento_ordermodel.dart';
 import 'package:mobj_project/mappers/woocommerce/woocommerce_order_model.dart';
 import 'package:mobj_project/utils/appConfiguer.dart';
 
@@ -23,9 +24,9 @@ class OrderModel {
   final String contactEmail;
   final String createdAt;
   final String currency;
-  final String currentSubtotalPrice;
-  final String totalPrice;
-  final String currentTotalTax;
+  final dynamic currentSubtotalPrice;
+  final dynamic totalPrice;
+  final dynamic currentTotalTax;
 
   // Add other attributes as needed
 
@@ -62,6 +63,11 @@ class OrderModel {
       return WooCommerceOrderModel.fromJson(json);
     } else if (AppConfigure.bigCommerce) {
       return BigCommerceOrderModel.fromJson(json);
+    }
+    else if 
+    ( AppConfigure.megentoCommerce){
+
+  return MagentoCommerceOrderModel.fromJson(json);
     } else {
       return ShopifyOrderModel.fromJson(json);
     }

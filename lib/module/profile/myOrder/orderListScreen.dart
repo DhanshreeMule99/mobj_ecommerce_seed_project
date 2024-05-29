@@ -112,7 +112,10 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order[index].totalPrice).toStringAsFixed(2)} '),
+                                              '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${order[index].totalPrice.toStringAsFixed(2)}',
+                                            ),
+
+                                            // '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order[index].totalPrice).toString()} '),
                                             const SizedBox(
                                               height: 5,
                                             ),
