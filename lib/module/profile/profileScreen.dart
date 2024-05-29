@@ -36,7 +36,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     profilePic = await SharedPreferenceManager().getProfile();
     setState(() {});
   }
- GraphQlRepository graphQLConfig = GraphQlRepository();
+
+  GraphQlRepository graphQLConfig = GraphQlRepository();
   @override
   void initState() {
     // TODO: implement initState
@@ -44,8 +45,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
   }
 
-
-   logout() async {
+  logout() async {
     if (AppConfigure.bigCommerce) {
       // Logout with BigCommerce
 
@@ -104,20 +104,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         RouteConstants.login,
         (route) => false,
       );
-    }else 
-    if (AppConfigure.megentoCommerce ) {
-      
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+    } else if (AppConfigure.megentoCommerce) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.clear();
       Navigator.of(context).pop();
       navigatorKey.currentState!.pushNamedAndRemoveUntil(
         RouteConstants.login,
         (route) => false,
       );
-
-    }
-    
-    else {
+    } else {
       // Logout with Shopify (existing code)
       GraphQLClient client = graphQLConfig.clientToQuery();
       final token = await SharedPreferenceManager().getToken();
@@ -292,7 +287,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               unselcted_icon_color: AppColors.blackColor,
               selectedPage: 4,
               screen1: const HomeScreen(),
-              screen2:  SearchWidget(),
+              screen2: SearchWidget(),
               screen3: WishlistScreen(),
               screen4: const ProfileScreen(),
               ref: ref,
@@ -343,14 +338,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                               Icon(
                                                 Icons.person,
                                                 size: 16.sp,
-                                                color: Theme.of(context).colorScheme.primary,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ),
                                               const SizedBox(width: 5),
-                                              Text(
-                                                "${user.firstName} ${user.lastName}",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineLarge,
+                                              SizedBox(
+                                                width: 100.w,
+                                                child: Text(
+                                                  "${user.firstName} ${user.lastName}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineLarge,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
                                               ),
                                               const SizedBox(width: 5),
                                               IconButton(
@@ -363,7 +364,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                   icon: Icon(
                                                     Icons.edit,
                                                     size: 20,
-                                                    color: Theme.of(context).colorScheme.primary,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
                                                   ))
                                             ],
                                           )),
@@ -375,7 +378,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             Icon(
                                               Icons.email,
                                               size: 16.sp,
-                                              color: Theme.of(context).colorScheme.primary,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
@@ -395,7 +400,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                             Icon(
                                               Icons.phone,
                                               size: 16.sp,
-                                              color:Theme.of(context).colorScheme.primary,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
@@ -411,9 +418,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   )),
                             )),
                         ProfileOptionButton(
-                            icon: Icons.shopping_bag,
-                           iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,  
+                          icon: Icons.shopping_bag,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           title: AppLocalizations.of(context)!.myOrders,
                           onTap: () {
                             Navigator.of(context).push(
@@ -429,8 +437,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                         ProfileOptionButton(
                           icon: Icons.location_on_outlined,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           title: AppLocalizations.of(context)!.myAddressList,
                           onTap: () {
                             Navigator.of(context).push(
@@ -447,40 +456,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             );
                           },
                         ),
-                         ProfileOptionButton(
+                        ProfileOptionButton(
                           icon: Icons.settings,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           title: AppLocalizations.of(context)!.setting,
                           onTap: () async {
                             SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      LanguageProvider languageProvider =
-                          LanguageProvider(prefs);
-                              Navigator.of(context).push(
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              SettingScreen(
-                            languageProvider: languageProvider,
-                          ),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
+                                await SharedPreferences.getInstance();
+                            LanguageProvider languageProvider =
+                                LanguageProvider(prefs);
+                            Navigator.of(context).push(
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        SettingScreen(
+                                  languageProvider: languageProvider,
+                                ),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ),
+                            );
                           },
                         ),
-                         ProfileOptionButton(
+                        ProfileOptionButton(
                           icon: Icons.logout_outlined,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           title: AppLocalizations.of(context)!.logout,
-                          onTap: ()async {
+                          onTap: () async {
                             bool? logoutConfirmed =
-                          await showLogoutConfirmationDialog(context);
-                      if (logoutConfirmed!) {
-                        CommonAlert.show_loading_alert(context);
-                        logout();
-                      }
+                                await showLogoutConfirmationDialog(context);
+                            if (logoutConfirmed!) {
+                              CommonAlert.show_loading_alert(context);
+                              logout();
+                            }
                           },
                         ),
                         //ToDO list wishList and paymentOption
@@ -524,33 +536,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         error: (error, s) => const SizedBox(),
         loading: () => const SizedBox());
   }
+
   Future<bool?> showLogoutConfirmationDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(AppLocalizations.of(context)!.logoutConfirmation),
-        content: Text(AppLocalizations.of(context)!.areYouSurelogout),
-        actions: [
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.no),
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(false); // Close the dialog and return false
-            },
-          ),
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.yes),
-            onPressed: () {
-              Navigator.of(context)
-                  .pop(true); // Close the dialog and return true
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.logoutConfirmation),
+          content: Text(AppLocalizations.of(context)!.areYouSurelogout),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.no),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Close the dialog and return false
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.yes),
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(true); // Close the dialog and return true
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class ProfileOptionButton extends StatelessWidget {
@@ -561,9 +574,12 @@ class ProfileOptionButton extends StatelessWidget {
   final Color backgroundColor;
 
   const ProfileOptionButton(
-      {super.key, required this.title,     required this.icon,
-    required this.iconColor,
-    required this.backgroundColor, required this.onTap});
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.iconColor,
+      required this.backgroundColor,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -582,9 +598,10 @@ class ProfileOptionButton extends StatelessWidget {
         ),
       ),
       title: Text(title),
-      trailing:  Icon(Icons.arrow_forward_ios,
-      color: Theme.of(context).colorScheme.primary,
-      size: 20,
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: Theme.of(context).colorScheme.primary,
+        size: 20,
       ),
       onTap: () {
         onTap();

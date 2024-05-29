@@ -34,13 +34,13 @@ class SharedPreferenceManager {
   }
 
   Future<String> getLogoImg() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(logoImg) ?? "";
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(logoImg) ?? '';
   }
 
-  Future<bool> setLogoImg(String tokens) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(logoImg, tokens);
+  Future<void> setLogoImg(String img) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(logoImg, img);
   }
 
   Future<String> getDraftId() async {
