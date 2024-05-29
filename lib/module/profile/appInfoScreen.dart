@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +27,8 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
   }
 
   Future<String> fetchAboutApp() async {
-  
-         String BaseUrl = AppConfigure.adminPanelUrl;
-        final response =await http.get(Uri.parse("$BaseUrl/api/about-uses"));
+    String BaseUrl = AppConfigure.adminPanelUrl;
+    final response = await http.get(Uri.parse("$BaseUrl/api/about-uses"));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -102,8 +100,7 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                                   height: 28,
                                   color: AppColors.greyShade800,
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Container(
+                                errorWidget: (context, url, error) => Container(
                                   width: 28,
                                   height: 28,
                                   color: AppColors.greyShade800,
@@ -128,9 +125,8 @@ class _AppInfoScreenState extends ConsumerState<AppInfoScreen> {
                               } else {
                                 return Text(
                                   snapshot.data ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineLarge,
+                                  style:
+                                      Theme.of(context).textTheme.headlineLarge,
                                 );
                               }
                             },

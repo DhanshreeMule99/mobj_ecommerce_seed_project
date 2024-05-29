@@ -23,6 +23,12 @@ class PrivacyScreen extends ConsumerStatefulWidget {
 }
 
 class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
+
+   @override
+  void initState() {
+    super.initState();
+  fetchTermsAndConditions();
+  }
   Future<String> fetchTermsAndConditions() async {
  
 
