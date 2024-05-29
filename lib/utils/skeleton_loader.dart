@@ -17,6 +17,7 @@ class _SkeletonLoaderWidgetState extends State<SkeletonLoaderWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: SkeletonLoader(
+      baseColor: Colors.white,
       builder: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(

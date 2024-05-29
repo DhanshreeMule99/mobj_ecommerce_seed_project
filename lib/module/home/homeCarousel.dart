@@ -70,7 +70,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
   Widget build(BuildContext context) {
     return Center(
       child: imgList.isEmpty
-          ? Container()
+          ? const SizedBox()
           : Stack(
               children: [
                 CarouselSlider(

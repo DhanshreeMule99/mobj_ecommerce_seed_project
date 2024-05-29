@@ -179,8 +179,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             child: FutureBuilder<String>(
               future: SharedPreferenceManager().getLogoImg(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                if (snapshot.data == null) {
+                  return const SizedBox();
                 } else if (snapshot.hasError) {
                   return const Text('Error loading logo');
                 } else {
@@ -198,6 +198,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                             width: 200,
                             color: Colors.grey.shade200,
                           ),
+                          
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
                         ),
