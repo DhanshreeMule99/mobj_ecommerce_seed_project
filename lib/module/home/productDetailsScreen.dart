@@ -854,7 +854,9 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 builder: (BuildContext context) {
                                   try {
                                     return ImageDialog(
-                                      imageUrl: productModel.image.src,
+                                      imageUrl: AppConfigure.megentoCommerce
+                                          ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
+                                          : productModel.image.src,
                                     );
                                   } catch (e) {
                                     return Container();
