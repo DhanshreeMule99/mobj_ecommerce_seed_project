@@ -1,8 +1,3 @@
-
-
-
-
-import 'dart:convert';
 import 'package:amazon_like_filter/props/applied_filter_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 import '../wishlist/wishlishScreen.dart';
+//
+
+import 'dart:convert';
 
 class PrivacyScreen extends ConsumerStatefulWidget {
   final bool? logout;
@@ -23,22 +21,23 @@ class PrivacyScreen extends ConsumerStatefulWidget {
 }
 
 class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
-
-   @override
+  @override
   void initState() {
     super.initState();
-  fetchTermsAndConditions();
+    fetchTermsAndConditions();
   }
-  Future<String> fetchTermsAndConditions() async {
- 
 
-        String BaseUrl = AppConfigure.adminPanelUrl;
-        final response =await http.get(Uri.parse("$BaseUrl/api/terms-and-condition?populate=*"));
-
+  Future<Map<String, String>> fetchTermsAndConditions() async {
+    String BaseUrl = AppConfigure.adminPanelUrl;
+    final response = await http
+        .get(Uri.parse("$BaseUrl/api/terms-and-condition?populate=*"));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['data']['attributes']['terms_and_condition'];
+      String terms = data['data']['attributes']['terms_and_condition'];
+      String imageUrl =
+          data['data']['attributes']['image']['data']['attributes']['url'];
+      return {'terms': terms, 'image': imageUrl};
     } else {
       throw Exception('Failed to load terms and conditions');
     }
@@ -92,45 +91,8 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Center(
-                                            child: ClipRRect(
-                                                child: CachedNetworkImage(
-                                              imageUrl: appInfo.logoImagePath,
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.2,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    //image size fill
-                                                    image: imageProvider,
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                ),
-                                              ),
-                                              placeholder: (context, url) =>
-                                                  Container(
-                                                width: 28,
-                                                height: 28,
-                                                color: Colors.grey.shade800,
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Container(
-                                                width: 28,
-                                                height: 28,
-                                                color: Colors.grey.shade800,
-                                              ),
-                                            )),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          FutureBuilder<String>(
+                                          //
+                                          FutureBuilder<Map<String, String>>(
                                             future: fetchTermsAndConditions(),
                                             builder: (context, snapshot) {
                                               if (snapshot.connectionState ==
@@ -174,11 +136,36 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                                   ],
                                                 );
                                               } else {
-                                                return Text(
-                                                  snapshot.data!,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headlineMedium,
+                                                return Column(
+                                                  children: [
+                                                    CachedNetworkImage(
+                                                      imageUrl: snapshot
+                                                          .data!['image']!,
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Container(
+                                                        width: 28,
+                                                        height: 28,
+                                                        color: Colors
+                                                            .grey.shade800,
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Container(
+                                                        width: 28,
+                                                        height: 28,
+                                                        color: Colors
+                                                            .grey.shade800,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Text(
+                                                      snapshot.data!['terms']!,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headlineMedium,
+                                                    ),
+                                                  ],
                                                 );
                                               }
                                             },
@@ -187,18 +174,16 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                                       ),
                                     );
                                   },
-                                  loading: () =>
-                                      const SkeletonLoaderWidget(),
+                                  loading: () => const SkeletonLoaderWidget(),
                                   error: (error, stackTrace) => Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        height: MediaQuery.of(context)
-                                                .size
-                                                .height /
-                                            4.2,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                4.2,
                                       ),
                                       const Center(
                                         child: ErrorHandling(
