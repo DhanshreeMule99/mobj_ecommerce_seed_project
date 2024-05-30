@@ -361,6 +361,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                         }),
                                                                       );
                                                                       getTotalDetails();
+                                                                      //  await SharedPreferenceManager()
+                                                                      //     .setDraftId(
+                                                                      //         "");
 
                                                                       ref.refresh(
                                                                           cartDetailsDataProvider);
@@ -547,122 +550,249 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           width:
                                                                               2)),
                                                                   child:
-                                                                      IconButton(
-                                                                    padding:
-                                                                        EdgeInsets
-                                                                            .zero,
-                                                                    // Remove padding
-                                                                    icon:
-                                                                        const Icon(
-                                                                      FontAwesomeIcons
-                                                                          .minus,
-                                                                    ),
-                                                                    // Adjust icon size
-                                                                    onPressed: AppConfigure
-                                                                            .bigCommerce
-                                                                        ? () async {
-                                                                            if (orderList.quantity >
-                                                                                1) {
-                                                                              API api = API();
-                                                                              try {
-                                                                                String draftId = await SharedPreferenceManager().getDraftId();
-                                                                                CommonAlert.show_loading_alert(context);
 
-                                                                                orderList.quantity--;
-                                                                                setState(() {});
-                                                                                debugPrint('add maps');
+IconButton(
+  padding: EdgeInsets.zero, // Remove padding
+  icon: const Icon(
+    FontAwesomeIcons.minus,
+  ), // Adjust icon size
+  onPressed: AppConfigure.bigCommerce
+      ? () async {
+          if (orderList.quantity > 1) {
+            API api = API();
+            try {
+              String draftId = await SharedPreferenceManager().getDraftId();
+              CommonAlert.show_loading_alert(context);
 
-                                                                                debugPrint('calling put api ');
-                                                                                var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                                    data: {
-                                                                                      "line_item": {
-                                                                                        "id": orderList.id,
-                                                                                        "variant_id": orderList.variantId,
-                                                                                        "product_id": orderList.productId,
-                                                                                        "quantity": orderList.quantity,
-                                                                                      }
-                                                                                    },
-                                                                                    options: Options(headers: {
-                                                                                      "X-auth-Token": AppConfigure.bigCommerceAccessToken,
-                                                                                      'Content-Type': 'application/json',
-                                                                                    }));
+              orderList.quantity--;
+              setState(() {});
+              debugPrint('add maps');
 
-                                                                                // Response
-                                                                                //     response =
-                                                                                //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                                                                                //         body);
+              debugPrint('calling put api ');
+              var response = await api.sendRequest.put(
+                '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                data: {
+                  "line_item": {
+                    "id": orderList.id,
+                    "variant_id": orderList.variantId,
+                    "product_id": orderList.productId,
+                    "quantity": orderList.quantity,
+                  }
+                },
+                options: Options(headers: {
+                  "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                  'Content-Type': 'application/json',
+                }),
+              );
 
-                                                                                ref.refresh(cartDetailsDataProvider);
+              ref.refresh(cartDetailsDataProvider);
 
-                                                                                debugPrint('cart updated successfully ${response.statusCode}');
-                                                                              } on Exception catch (e) {
-                                                                                debugPrint(e.toString());
-                                                                              } finally {
-                                                                                Navigator.of(context).pop();
-                                                                              }
-                                                                            }
-                                                                          }
-                                                                        : AppConfigure.wooCommerce
-                                                                            ? () async {
-                                                                                if (orderList.quantity > 1) {
-                                                                                  API api = API();
-                                                                                  try {
-                                                                                    String draftId = await SharedPreferenceManager().getDraftId();
-                                                                                    CommonAlert.show_loading_alert(context);
+              debugPrint('cart updated successfully ${response.statusCode}');
+            } on Exception catch (e) {
+              debugPrint(e.toString());
+            } finally {
+              Navigator.of(context).pop();
+            }
+          }
+        }
+      : AppConfigure.wooCommerce
+          ? () async {
+              if (orderList.quantity > 1) {
+                API api = API();
+                try {
+                  String draftId = await SharedPreferenceManager().getDraftId();
+                  CommonAlert.show_loading_alert(context);
 
-                                                                                    orderList.quantity--;
-                                                                                    setState(() {});
-                                                                                    debugPrint('add maps');
+                  orderList.quantity--;
+                  setState(() {});
+                  debugPrint('add maps');
 
-                                                                                    debugPrint('calling put api ');
-                                                                                    String cartToken = await SharedPreferenceManager().getCartToken();
+                  debugPrint('calling put api ');
+                  String cartToken = await SharedPreferenceManager().getCartToken();
 
-                                                                                    var response = await api.sendRequest.post(
-                                                                                      'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
-                                                                                      data: {
-                                                                                        "quantity": orderList.quantity.toString()
-                                                                                      },
-                                                                                    );
+                  var response = await api.sendRequest.post(
+                    'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                    data: {
+                      "quantity": orderList.quantity.toString()
+                    },
+                  );
 
-                                                                                    ref.refresh(cartDetailsDataProvider);
+                  ref.refresh(cartDetailsDataProvider);
 
-                                                                                    debugPrint('cart updated successfully ${response.statusCode}');
-                                                                                  } on Exception catch (e) {
-                                                                                    debugPrint(e.toString());
-                                                                                  } finally {
-                                                                                    Navigator.of(context).pop();
-                                                                                  }
-                                                                                }
-                                                                              }
-                                                                            : () {
-                                                                                if (orderList.quantity > 1) {
-                                                                                  setState(
-                                                                                    () {
-                                                                                      orderList.quantity--;
-                                                                                      final lineItemsList = productlist.lineItems;
-                                                                                      var reqBody = [];
-                                                                                      for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
-                                                                                        reqBody.add({
-                                                                                          "variant_id": lineItemsList[i].variantId,
-                                                                                          "quantity": lineItemsList[i].quantity
-                                                                                        });
-                                                                                      }
+                  debugPrint('cart updated successfully ${response.statusCode}');
+                } on Exception catch (e) {
+                  debugPrint(e.toString());
+                } finally {
+                  Navigator.of(context).pop();
+                }
+              }
+            }
+          : AppConfigure.megentoCommerce
+              ? () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        // title: Text("Magento "),
+                        content: Text("You can NOT decrement cart quantity. You should delete the cart."),
+                        actions: [
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              : () {
+                  if (orderList.quantity > 1) {
+                    setState(
+                      () {
+                        orderList.quantity--;
+                        final lineItemsList = productlist.lineItems;
+                        var reqBody = [];
+                        for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                          reqBody.add({
+                            "variant_id": lineItemsList[i].variantId,
+                            "quantity": lineItemsList[i].quantity
+                          });
+                        }
 
-                                                                                      CommonAlert.show_loading_alert(context);
-                                                                                      // getProductsByVariantId
+                        CommonAlert.show_loading_alert(context);
 
-                                                                                      ProductRepository().updateCart(reqBody).then((subjectFromServer) {
-                                                                                        Navigator.of(context).pop();
+                        ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                          Navigator.of(context).pop();
 
-                                                                                        if (subjectFromServer == AppString.success) {
-                                                                                          ref.refresh(cartDetailsDataProvider);
-                                                                                        }
-                                                                                      });
-                                                                                    },
-                                                                                  );
-                                                                                }
-                                                                              },
-                                                                  ),
+                          if (subjectFromServer == AppString.success) {
+                            ref.refresh(cartDetailsDataProvider);
+                          }
+                        });
+                      },
+                    );
+                  }
+                },
+),
+
+
+                                                                  //     IconButton(
+                                                                  //   padding:
+                                                                  //       EdgeInsets
+                                                                  //           .zero,
+                                                                  //   // Remove padding
+                                                                  //   icon:
+                                                                  //       const Icon(
+                                                                  //     FontAwesomeIcons
+                                                                  //         .minus,
+                                                                  //   ),
+                                                                  //   // Adjust icon size
+                                                                  //   onPressed: AppConfigure
+                                                                  //           .bigCommerce
+                                                                  //       ? () async {
+                                                                  //           if (orderList.quantity >
+                                                                  //               1) {
+                                                                  //             API api = API();
+                                                                  //             try {
+                                                                  //               String draftId = await SharedPreferenceManager().getDraftId();
+                                                                  //               CommonAlert.show_loading_alert(context);
+
+                                                                  //               orderList.quantity--;
+                                                                  //               setState(() {});
+                                                                  //               debugPrint('add maps');
+
+                                                                  //               debugPrint('calling put api ');
+                                                                  //               var response = await api.sendRequest.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                  //                   data: {
+                                                                  //                     "line_item": {
+                                                                  //                       "id": orderList.id,
+                                                                  //                       "variant_id": orderList.variantId,
+                                                                  //                       "product_id": orderList.productId,
+                                                                  //                       "quantity": orderList.quantity,
+                                                                  //                     }
+                                                                  //                   },
+                                                                  //                   options: Options(headers: {
+                                                                  //                     "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                                  //                     'Content-Type': 'application/json',
+                                                                  //                   }));
+
+                                                                  //               // Response
+                                                                  //               //     response =
+                                                                  //               //     await ApiManager.put('${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                  //               //         body);
+
+                                                                  //               ref.refresh(cartDetailsDataProvider);
+
+                                                                  //               debugPrint('cart updated successfully ${response.statusCode}');
+                                                                  //             } on Exception catch (e) {
+                                                                  //               debugPrint(e.toString());
+                                                                  //             } finally {
+                                                                  //               Navigator.of(context).pop();
+                                                                  //             }
+                                                                  //           }
+                                                                  //         }
+                                                                  //       : AppConfigure.wooCommerce
+                                                                  //           ? () async {
+                                                                  //               if (orderList.quantity > 1) {
+                                                                  //                 API api = API();
+                                                                  //                 try {
+                                                                  //                   String draftId = await SharedPreferenceManager().getDraftId();
+                                                                  //                   CommonAlert.show_loading_alert(context);
+
+                                                                  //                   orderList.quantity--;
+                                                                  //                   setState(() {});
+                                                                  //                   debugPrint('add maps');
+
+                                                                  //                   debugPrint('calling put api ');
+                                                                  //                   String cartToken = await SharedPreferenceManager().getCartToken();
+
+                                                                  //                   var response = await api.sendRequest.post(
+                                                                  //                     'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                                  //                     data: {
+                                                                  //                       "quantity": orderList.quantity.toString()
+                                                                  //                     },
+                                                                  //                   );
+
+                                                                  //                   ref.refresh(cartDetailsDataProvider);
+
+                                                                  //                   debugPrint('cart updated successfully ${response.statusCode}');
+                                                                  //                 } on Exception catch (e) {
+                                                                  //                   debugPrint(e.toString());
+                                                                  //                 } finally {
+                                                                  //                   Navigator.of(context).pop();
+                                                                  //                 }
+                                                                  //               }
+                                                                  //             }
+                                                                  //           : () {
+                                                                  //               if (orderList.quantity > 1) {
+                                                                  //                 setState(
+                                                                  //                   () {
+                                                                  //                     orderList.quantity--;
+                                                                  //                     final lineItemsList = productlist.lineItems;
+                                                                  //                     var reqBody = [];
+                                                                  //                     for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                  //                       reqBody.add({
+                                                                  //                         "variant_id": lineItemsList[i].variantId,
+                                                                  //                         "quantity": lineItemsList[i].quantity
+                                                                  //                       });
+                                                                  //                     }
+
+                                                                  //                     CommonAlert.show_loading_alert(context);
+                                                                  //                     // getProductsByVariantId
+
+                                                                  //                     ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                  //                       Navigator.of(context).pop();
+
+                                                                  //                       if (subjectFromServer == AppString.success) {
+                                                                  //                         ref.refresh(cartDetailsDataProvider);
+                                                                  //                       }
+                                                                  //                     });
+                                                                  //                   },
+                                                                  //                 );
+                                                                  //               }
+                                                                  //             },
+                                                                  // ),
                                                                 ),
                                                                 Text(
                                                                   '${orderList.quantity}',
