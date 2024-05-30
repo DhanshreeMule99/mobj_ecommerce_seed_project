@@ -334,16 +334,46 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   CommonAlert
                                                                       .show_loading_alert(
                                                                           context);
-                                                                  if (productlist
-                                                                          .lineItems
-                                                                          .length ==
-                                                                      1) {
+                                                                  if (productlist.lineItems.length == 1) {
                                                                     if (AppConfigure
                                                                         .wooCommerce) {
                                                                       await SharedPreferenceManager()
                                                                           .setCartToken(
                                                                               "");
-                                                                    } else {
+                                                                    }
+                                                                    
+                                                                     else if (AppConfigure.megentoCommerce)
+                                                                    
+                                                                    {
+                                                                        log("delete by witch id ....................${orderList.id}");
+                                                                      String
+                                                                          userToken =
+                                                                          await SharedPreferenceManager()
+                                                                              .getToken();
+                                                                      var response = await api
+                                                                          .sendRequest
+                                                                          .delete(
+                                                                        'carts/mine/items/${orderList.id}',
+                                                                        options:
+                                                                            Options(headers: {
+                                                                          "Authorization":
+                                                                              "Bearer $userToken",
+                                                                        }),
+                                                                      );
+                                                                      getTotalDetails();
+
+                                                                      ref.refresh(
+                                                                          cartDetailsDataProvider);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      debugPrint(
+                                                                          "cart item deleted successfully ${response.statusCode}");
+                                                                      cartcount--;
+
+
+                                                                    }
+                                                                     else {
                                                                       await SharedPreferenceManager()
                                                                           .setDraftId(
                                                                               "");
