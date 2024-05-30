@@ -855,8 +855,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                   try {
                                     return ImageDialog(
                                       imageUrl: AppConfigure.megentoCommerce
-                                          ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
-                                          : productModel.image.src,
+                                          ? (productModel.images != null &&
+                                                  productModel.images.isNotEmpty
+                                              ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
+                                              : "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg")
+                                          : (productModel.image != null
+                                              ? productModel.image.src
+                                              : "https://hp.geexu.org/media/catalog/product/placeholder-image.png"),
                                     );
                                   } catch (e) {
                                     return Container();
@@ -866,8 +871,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                             },
                             child: CachedNetworkImage(
                               imageUrl: AppConfigure.megentoCommerce
-                                  ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
-                                  : productModel.image.src,
+                                  ? (productModel.images != null &&
+                                          productModel.images.isNotEmpty
+                                      ? "https://hp.geexu.org/media/catalog/product${productModel.images[0].src}"
+                                      : "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg")
+                                  : (productModel.image != null
+                                      ? productModel.image.src
+                                      : "https://hp.geexu.org/media/catalog/product/placeholder-image.png"),
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 //    height: MediaQuery.of(context).size.height / 3,

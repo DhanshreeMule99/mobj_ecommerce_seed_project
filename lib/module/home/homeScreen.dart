@@ -736,7 +736,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 datetime:
                                     "${AppString.deliverAt} ${productlist[index].createdAt.toString()}/${productlist[index].createdAt}/${productlist[index].createdAt}",
                                 productImage: AppConfigure.megentoCommerce
-                                    ? "https://hp.geexu.org/media/catalog/product${productlist[index].images[0].src}"
+                                    ? (productlist[index].images.isNotEmpty
+                                        ? "https://hp.geexu.org/media/catalog/product${productlist[index].images[0].src}"
+                                        : "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg")
                                     : productlist[index].image.src.toString(),
                                 ratings: () {
                                   //TODO list product rating
