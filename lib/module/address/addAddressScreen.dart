@@ -18,6 +18,9 @@ class AddressScreen extends ConsumerStatefulWidget {
   final int? amount;
   final String? mobile;
   final String addressId;
+  final String actualPrice;
+  final String tax;
+  final String totalPrice;
 
   const AddressScreen(
       {super.key,
@@ -25,6 +28,9 @@ class AddressScreen extends ConsumerStatefulWidget {
       this.address,
       required this.isCheckout,
       this.amount,
+      this.actualPrice = '0',
+      this.tax = '0',
+      this.totalPrice = '0',
       this.mobile});
 
   @override
@@ -312,11 +318,13 @@ class _AddressScreenState extends ConsumerState<AddressScreen> {
             PageRouteBuilder(
               pageBuilder: (context, animation1, animation2) =>
                   AddressListScreen(
-                isCheckout: widget.isCheckout,
-                amount: widget.amount,
-                mobile: widget.mobile,
-                bigcommerceOrderedItems: bigcommerceOrderedItems,
-              ),
+                      isCheckout: widget.isCheckout,
+                      amount: widget.amount,
+                      mobile: widget.mobile,
+                      bigcommerceOrderedItems: bigcommerceOrderedItems,
+                      actualPrice: widget.actualPrice,
+                      tax: widget.tax,
+                      totalPrice: widget.totalPrice),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),
