@@ -50,15 +50,24 @@ class _ImageCarouselState extends State<ImageCarousel> {
         // Loop through each item in the body list
         for (var item in body) {
           // Extract the image URL and product ID from the item's attributes
-          String imageUrl =
+          String? imageUrl =
               item["attributes"]["image"]["data"][0]["attributes"]["url"];
-          String productId = item["attributes"]["product_id"];
+          String? productId = item["attributes"]["product_id"];
 
           // Add the image URL and product ID to the respective lists
-          imgList.add(imageUrl);
-          productList.add(productId);
+          if (imageUrl != null && imageUrl.isNotEmpty) {
+            imgList.add(imageUrl);
+            productList.add(productId);
+          }
         }
+
+        // Debug prints
+        log('Fetched image URLs: $imgList');
+        log('Fetched product IDs: $productList');
+
         setState(() {});
+      } else {
+        log('Failed to load images. Status code: ${response.statusCode}');
       }
     } catch (error, stackTrace) {
       debugPrint("error is this $error $stackTrace");
@@ -87,7 +96,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   items: imgList.asMap().entries.map((entry) {
                     int index = entry.key;
                     String imageUrl = entry.value;
-                    String productId = productList[index];
+                    String? productId = productList[index];
 
                     return Builder(
                       builder: (BuildContext context) {
@@ -103,20 +112,23 @@ class _ImageCarouselState extends State<ImageCarousel> {
                             ),
                           ),
                           child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation1, animation2) =>
-                                          ProductDetailsScreen(
-                                    sku: productId.toString(),
-                                    uid: productId.toString(),
-                                  ),
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            },
+                            onTap: productId != null
+                                ? () {
+                                    Navigator.of(context).push(
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                ProductDetailsScreen(
+                                          sku: productId.toString(),
+                                          uid: productId.toString(),
+                                        ),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  }
+                                : null,
                           ),
                         );
                       },
