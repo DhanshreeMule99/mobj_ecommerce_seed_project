@@ -231,5 +231,6 @@
       "wishlist" : "इच्छा-सूची",
       "noProduct":"कोई उत्पाद नहीं",
       "noOrder":"कोई आदेश नहीं",
-      "addressAppBar" : "पता"
+      "addressAppBar" : "पता",
+      "contactUs":"संपर्क करें"
 }

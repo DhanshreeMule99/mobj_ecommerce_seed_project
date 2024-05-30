@@ -229,8 +229,9 @@
   "searchHere": "येथे शोधा",
   "viewAll": "सर्व पहा",
   "categories": "श्रेण्या",
-  "noOrder" : "ऑर्डर नाही",
-  "noProduct" : "उत्पादन नाही",
-  "wishlist" : "विशलिस्ट",
-  "addressAppBar" : "पत्ता"
+  "noOrder": "ऑर्डर नाही",
+  "noProduct": "उत्पादन नाही",
+  "wishlist": "विशलिस्ट",
+  "addressAppBar": "पत्ता",
+  "contactUs": "आमच्याशी संपर्क साधा"
 }
