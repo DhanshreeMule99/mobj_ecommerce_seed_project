@@ -46,6 +46,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   logout() async {
+    cartcount = 0;
     if (AppConfigure.bigCommerce) {
       // Logout with BigCommerce
 
@@ -350,7 +351,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .headlineLarge,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               const SizedBox(width: 5),

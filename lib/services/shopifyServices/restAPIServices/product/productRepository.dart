@@ -1025,7 +1025,7 @@ class ProductRepository {
           debugPrint("${response.data} ${response.statusCode}");
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
-            await SharedPreferenceManager().setCartToken("");
+            await SharedPreferenceManager().setDraftId("");
             var service = await getPaymentDetails(paymentId);
             var gateWayMethod = service["method"];
             return AppString.success;

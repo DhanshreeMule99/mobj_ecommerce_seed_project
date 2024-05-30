@@ -314,11 +314,14 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                     pageBuilder:
                                         (context, animation1, animation2) =>
                                             AddressScreen(
-                                      addressId: "",
-                                      isCheckout: widget.isCheckout ?? false,
-                                      amount: widget.amount,
-                                      mobile: widget.mobile,
-                                    ),
+                                                addressId: "",
+                                                isCheckout:
+                                                    widget.isCheckout ?? false,
+                                                amount: widget.amount,
+                                                mobile: widget.mobile,
+                                                actualPrice: widget.actualPrice,
+                                                tax: widget.tax,
+                                                totalPrice: widget.totalPrice),
                                     transitionDuration: Duration.zero,
                                     reverseTransitionDuration: Duration.zero,
                                   ),
@@ -1560,7 +1563,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                       .customer
                                                                       .email,
                                                                   double.parse(
-                                                                      "${widget.totalPrice}.00"))  ;
+                                                                      "${widget.totalPrice}.00"));
                                                             } else {
                                                               // Stripe payment gateway
                                                               // StripePaymentService(

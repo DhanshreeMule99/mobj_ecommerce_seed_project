@@ -41,7 +41,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Future<void> getTotalDetails() async {
     String cartId = await SharedPreferenceManager().getDraftId();
     print("cart id is this $cartId");
-
+    ATT.clear();
     if (cartId != "") {
       await apicall.getCarttotalDetails().then((value) {
         log("grand total is this $value");
@@ -334,18 +334,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                   CommonAlert
                                                                       .show_loading_alert(
                                                                           context);
-                                                                  if (productlist.lineItems.length == 1) {
+                                                                  if (productlist
+                                                                          .lineItems
+                                                                          .length ==
+                                                                      1) {
                                                                     if (AppConfigure
                                                                         .wooCommerce) {
                                                                       await SharedPreferenceManager()
                                                                           .setCartToken(
                                                                               "");
-                                                                    }
-                                                                    
-                                                                     else if (AppConfigure.megentoCommerce)
-                                                                    
-                                                                    {
-                                                                        log("delete by witch id ....................${orderList.id}");
+                                                                    } else if (AppConfigure
+                                                                        .megentoCommerce) {
+                                                                      log("delete by witch id ....................${orderList.id}");
                                                                       String
                                                                           userToken =
                                                                           await SharedPreferenceManager()
@@ -373,10 +373,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       debugPrint(
                                                                           "cart item deleted successfully ${response.statusCode}");
                                                                       cartcount--;
-
-
-                                                                    }
-                                                                     else {
+                                                                    } else {
                                                                       await SharedPreferenceManager()
                                                                           .setDraftId(
                                                                               "");
@@ -451,8 +448,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       cartcount--;
                                                                     } else if (AppConfigure
                                                                         .megentoCommerce) {
-
-                                                                          log("delete by witch id ....................${orderList.id}");
+                                                                      log("delete by witch id ....................${orderList.id}");
                                                                       String
                                                                           userToken =
                                                                           await SharedPreferenceManager()
@@ -908,7 +904,6 @@ IconButton(
                                                                           API api =
                                                                               API();
                                                                           try {
-                                                                       
                                                                             String
                                                                                 draftId =
                                                                                 await SharedPreferenceManager().getDraftId();
@@ -924,7 +919,7 @@ IconButton(
                                                                               'carts/mine/items/${orderList.id}',
                                                                               data: {
                                                                                 "cart_item": {
-                                                                                   "quote_id": draftId,
+                                                                                  "quote_id": draftId,
                                                                                   "sku": orderList.sku,
                                                                                   "qty": 1
                                                                                 }
@@ -934,7 +929,7 @@ IconButton(
                                                                               }),
                                                                             );
 
-                                                                            getTotalDetails();
+                                                                            await getTotalDetails();
                                                                             ref.refresh(cartDetailsDataProvider);
 
                                                                             debugPrint('cart updated successfully ${response.statusCode}');
