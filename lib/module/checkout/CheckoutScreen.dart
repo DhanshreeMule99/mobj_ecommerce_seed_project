@@ -39,12 +39,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   ProductRepository apicall = ProductRepository();
   Future<void> getTotalDetails() async {
-    await apicall.getCarttotalDetails().then((value) {
-      log("grand total is this $value");
-      setState(() {
-        ATT.addAll(value);
+    String cartId = await SharedPreferenceManager().getDraftId();
+    print("cart id is this $cartId");
+
+    if (cartId != "") {
+      await apicall.getCarttotalDetails().then((value) {
+        log("grand total is this $value");
+        setState(() {
+          ATT.addAll(value);
+        });
       });
-    });
+    }
   }
 
   @override
