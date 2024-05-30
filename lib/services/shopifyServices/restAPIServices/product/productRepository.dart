@@ -486,17 +486,39 @@ class ProductRepository {
           if (response.statusCode == APIConstants.successCode ||
               response.statusCode == APIConstants.successCreateCode) {
             final int data = response.data;
-            if (draftId == "") {
               await SharedPreferenceManager().setDraftId(data.toString());
-              // debugPrint(
-              //     'cart id is this bigcommerce.... $data');
+              debugPrint(
+                  'cart id is this bigcommerce.... $data');
               String draftId = await SharedPreferenceManager().getDraftId();
 
               debugPrint(
                   'draft id ...cart id is this bigcommerce.... $draftId');
-            }
+
+                  String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+          final create = await api.sendRequest.post(
+            "carts/mine/items",
+            data: {
+              "cart_item": {
+                "quote_id": draftId,
+                "sku": sku,
+                "qty": int.parse(quantity),
+              }
+            },
+            options: Options(headers: {
+              'Authorization': 'Bearer $accessToken',
+            }),
+          );
+           if (response.statusCode == APIConstants.successCode ||
+              response.statusCode == APIConstants.successCreateCode) {
+            var data = response.data;
+          
             cartcount++;
+            debugPrint('cart id is this bigcommerce.... $draftId');
             return AppString.success;
+          } else {
+            exceptionString = AppString.oops;
+            return exceptionString;
+          }
           } else {
             exceptionString = AppString.oops;
             return exceptionString;

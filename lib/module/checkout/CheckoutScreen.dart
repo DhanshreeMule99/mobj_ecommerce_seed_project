@@ -413,6 +413,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                       cartcount--;
                                                                     } else if (AppConfigure
                                                                         .megentoCommerce) {
+
+                                                                          log("delete by witch id ....................${orderList.id}");
                                                                       String
                                                                           userToken =
                                                                           await SharedPreferenceManager()
@@ -741,6 +743,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           API api =
                                                                               API();
                                                                           try {
+                                                                       
                                                                             String
                                                                                 draftId =
                                                                                 await SharedPreferenceManager().getDraftId();
@@ -748,21 +751,21 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                                                                             orderList.quantity++;
                                                                             setState(() {});
-                                                                            debugPrint('add maps');
+                                                                            debugPrint('add maps................${orderList.sku}');
 
-                                                                            debugPrint('calling put api ');
+                                                                            debugPrint('calling put api  $draftId ');
                                                                             var response =
                                                                                 await api.sendRequest.put(
                                                                               'carts/mine/items/${orderList.id}',
                                                                               data: {
                                                                                 "cart_item": {
-                                                                                  "quote_id": draftId,
+                                                                                   "quote_id": draftId,
                                                                                   "sku": orderList.sku,
                                                                                   "qty": 1
                                                                                 }
                                                                               },
                                                                               options: Options(headers: {
-                                                                                'Authorization': 'Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri',
+                                                                                'Authorization': 'Bearer ${AppConfigure.megentoCunsumerAccessToken}',
                                                                               }),
                                                                             );
 
