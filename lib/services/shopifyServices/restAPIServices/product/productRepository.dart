@@ -548,7 +548,7 @@ class ProductRepository {
 
             //   debugPrint('cart id is this bigcommerce.... $draftId');
 
-            // cartcount++;
+            cartcount++;
             // debugPrint('cart id is this bigcommerce.... $draftId');
             return AppString.success;
           } else {
