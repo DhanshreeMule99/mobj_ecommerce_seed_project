@@ -18,9 +18,9 @@ class ProductRepository {
     if (AppConfigure.megentoCommerce) {
       try {
         log('megentoCommerce api');
-           String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+        String accessToken = AppConfigure.megentoCunsumerAccessToken;
         final response = await api.sendRequest.get(
-          'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=1&searchCriteria[pageSize]=10',
+          'https://hp.geexu.org/rest/default/V1/products?searchCriteria[currentPage]=$currentPage&searchCriteria[pageSize]=10',
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $accessToken',
@@ -152,7 +152,7 @@ class ProductRepository {
       try {
         log("Logging product $pid");
         // debugPrint(baseUrl + pid);
-   String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+        String accessToken = AppConfigure.megentoCunsumerAccessToken;
         final response = await api.sendRequest.get(
           "products/$pid",
           options: Options(headers: {
@@ -524,8 +524,7 @@ class ProductRepository {
             return exceptionString;
           }
         } else {
-
-             String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+          String accessToken = AppConfigure.megentoCunsumerAccessToken;
           response = await api.sendRequest.post(
             "carts/mine/items",
             data: {
@@ -1421,7 +1420,7 @@ class ProductRepository {
         rethrow;
       }
     } else if (AppConfigure.megentoCommerce) {
-         String  accessToken = AppConfigure.megentoCunsumerAccessToken;
+      String accessToken = AppConfigure.megentoCunsumerAccessToken;
       final email = await SharedPreferenceManager().getEmail();
       log("  user email is ..............................$email");
       try {
