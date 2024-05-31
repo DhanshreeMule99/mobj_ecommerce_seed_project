@@ -41,7 +41,7 @@ class MagentoCommerceOrderModel implements OrderModel {
   @override
   final double currentSubtotalPrice;
   @override
-  final double totalPrice;
+  final int totalPrice;
   @override
   final double currentTotalTax;
 
@@ -79,47 +79,40 @@ class MagentoCommerceOrderModel implements OrderModel {
 
   factory MagentoCommerceOrderModel.fromJson(Map<String, dynamic> json) {
     return MagentoCommerceOrderModel(
-      firstname:
-          json['items'][0]['customer_firstname'] ?? DefaultValues.stringDefault,
-      lastname:
-          json['items'][0]['customer_lastname'] ?? DefaultValues.stringDefault,
-      phone: json['items'][0]['increment_id'] ?? DefaultValues.stringDefault,
-      id: json['items'][0]['customer_id'] ?? DefaultValues.intDefault,
-      adminGraphqlApiId:
-          json['items'][0]['billing_address_id'] ?? DefaultValues.stringDefault,
-      appId: json['items'][0]['billing_address_id'] ?? DefaultValues.intDefault,
-      browserIp:
-          json['items'][0]['protect_code'] ?? DefaultValues.stringDefault,
+      firstname: json['customer_firstname'] ?? DefaultValues.stringDefault,
+      lastname: json['customer_lastname'] ?? DefaultValues.stringDefault,
+      phone:
+          json['billing_address']['telephone'] ?? DefaultValues.stringDefault,
+      id: json['items'][0]['order_id'] ?? DefaultValues.intDefault,
+      adminGraphqlApiId: json[''] ?? DefaultValues.stringDefault,
+      appId: json['store_id'] ?? DefaultValues.intDefault,
+      browserIp: json[''] ?? DefaultValues.stringDefault,
       buyerAcceptsMarketing: json[''] ?? DefaultValues.boolDefault,
-      cancelReason: json['items'][0]['shipping_description'],
-      cancelledAt: json['items'][0]['updated_at'],
-      cartToken: json['items'][0]['shipping_description'],
-      checkoutId: json['items'][0]['quote_id'] ?? DefaultValues.intDefault,
-      checkoutToken: json['items'][0]['shipping_description'] ??
-          DefaultValues.stringDefault,
+      cancelReason: json['shipping_description'],
+      cancelledAt: json['updated_at'],
+      cartToken: json['shipping_description'],
+      checkoutId: json['quote_id'] ?? DefaultValues.intDefault,
+      checkoutToken:
+          json['shipping_description'] ?? DefaultValues.stringDefault,
       confirmed: json[''] ?? DefaultValues.boolDefault,
-      contactEmail:
-          json['items'][0]['customer_email'] ?? DefaultValues.stringDefault,
+      contactEmail: json['customer_email'] ?? DefaultValues.stringDefault,
       // contactEmail: json['contact_email'] ?? DefaultValues.stringDefault,
-      createdAt: json['items'][0]['created_at'] ?? DefaultValues.stringDefault,
+      createdAt: json['created_at'] ?? DefaultValues.stringDefault,
       // createdAt: json['date_created'] ?? DefaultValues.stringDefault,
-      currency: json['items'][0]['global_currency_code'] ??
-          DefaultValues.stringDefault,
+      currency: json['global_currency_code'] ?? DefaultValues.stringDefault,
       currentSubtotalPrice:
-          json['items'][0]['base_total_due'] ?? DefaultValues.doubleDefault,
+          json['base_subtotal'] ?? DefaultValues.doubleDefault,
       // Add other attributes as needed
 
-      customer: MagentoCustomerModel.fromJson(
-          json['items'][0]['billing_address'] ?? {}),
-      lineItems: (json['items'][0]['items'] as List<dynamic>?)
+      customer: MagentoCustomerModel.fromJson(json['billing_address'] ?? {}),
+      lineItems: (json['items'] as List<dynamic>?)
               ?.map((item) => MagentoCommerceLineItem.fromJson(item))
               .toList() ??
           [],
       // totalPrice: json['current_total_price'] ??"",
-      totalPrice:
-          json['items'][0]['base_subtotal'] ?? DefaultValues.doubleDefault,
+      totalPrice: json['grand_total'] ?? DefaultValues.doubleDefault,
       // totalPrice: json['current_total_price'] ?? DefaultValues.stringDefault,
-      currentTotalTax: json['items'][0]['base_tax_amount'] ??
+      currentTotalTax: json['base_tax_amount'] ??
           DefaultValues.doubleDefault, // Ensure it's a List<LineItem>
     );
   }

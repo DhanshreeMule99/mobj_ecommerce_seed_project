@@ -1,8 +1,5 @@
-
 import 'package:mobj_project/models/product/draftOrderModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
-
-
 
 class MagentoCommerceDraftOrderModel implements DraftOrderModel {
   @override
@@ -99,8 +96,8 @@ class MagentoCommerceDraftOrderModel implements DraftOrderModel {
       note: json["customer"]['firstname'] ?? DefaultValues.defaultString,
       email: json["customer"]['email'] ?? DefaultValues.defaultString,
       taxesIncluded: json['is_virtual'] ?? false,
-      currency:
-          json['currency']['global_currency_code'] ?? DefaultValues.defaultString,
+      currency: json['currency']['global_currency_code'] ??
+          DefaultValues.defaultString,
       invoiceSentAt: json['created_at'] ?? DefaultValues.defaultString,
       createdAt: json['created_at'] ?? DefaultValues.defaultString,
       updatedAt: json['updated_at'] ?? DefaultValues.defaultString,
@@ -110,23 +107,27 @@ class MagentoCommerceDraftOrderModel implements DraftOrderModel {
       status: json["customer"]['lastname'] ?? DefaultValues.defaultString,
       lineItems: List<MagentoCommerceLineItem>.from(
           json['items'].map((item) => MagentoCommerceLineItem.fromJson(item))),
-      shippingAddress: json['customer']["lastname"] ?? DefaultValues.defaultString,
-      billingAddress: json['customer']["lastname"] ?? DefaultValues.defaultString,
+      shippingAddress:
+          json['customer']["lastname"] ?? DefaultValues.defaultString,
+      billingAddress:
+          json['customer']["lastname"] ?? DefaultValues.defaultString,
       invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
       appliedDiscount: json['applied_discount'] ?? DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
       shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
-      taxLines: [MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")],
+      taxLines: [
+        MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")
+      ],
       tags: json['tags'] ?? DefaultValues.defaultString,
       noteAttributes: [],
-      totalPrice:  double.parse(json['items'][0]["price"].toString()) ??
+      totalPrice: double.parse(json['items'][0]["price"].toString()) ??
           DefaultValues.defaultDouble,
-      subtotalPrice: (double.parse(json['items'][0]["price"].toString()) )
-              .toString() ??
-          DefaultValues.defaultString,
-      totalTax: (double.parse(json['items'][0]["price"].toString()) )
-              .toString() ??
-          DefaultValues.defaultString,
+      subtotalPrice:
+          (double.parse(json['items'][0]["price"].toString())).toString() ??
+              DefaultValues.defaultString,
+      totalTax:
+          (double.parse(json['items'][0]["price"].toString())).toString() ??
+              DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
           json['admin_graphql_api_id'] ?? DefaultValues.defaultString,
@@ -251,21 +252,21 @@ class MagentoCommerceLineItem implements LineItem {
       requiresShipping: json[''] ?? false,
       taxable: json[''] ?? false,
       giftCard: json[''] ?? false,
-      fulfillmentService:
-          json['name'] ?? DefaultValues.defaultString,
-      grams: json['qty'].round() ?? DefaultValues.defaultInt,
-      taxLines: [MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")],
+      fulfillmentService: json['name'] ?? DefaultValues.defaultString,
+      grams: 3 ?? DefaultValues.defaultInt,
+      taxLines: [
+        MagentoCommerceTaxLine(rate: 1.00, title: "name", price: "11.0")
+      ],
       appliedDiscount: json['name'] ?? DefaultValues.defaultString,
-      name: json['name']?? DefaultValues.defaultString,
+      name: json['name'] ?? DefaultValues.defaultString,
       properties: [],
-      custom: json['is_virtual'] ?? false,
+      custom: false,
       price: (double.parse(json['price'].toString())).toString() ??
           DefaultValues.defaultString,
       adminGraphqlApiId: json['product_type'] ?? DefaultValues.defaultString,
     );
   }
 }
-
 
 class MagentoCommerceTaxLine implements TaxLine {
   @override
@@ -289,6 +290,7 @@ class MagentoCommerceTaxLine implements TaxLine {
     );
   }
 }
+
 class MagentoCustomerModel implements CustomerModel {
   @override
   final int id;
@@ -373,7 +375,6 @@ class MagentoCustomerModel implements CustomerModel {
   }
 }
 
-
 class MagentoDefaultAddressModel implements DefaultAddressModel {
   @override
   final int id;
@@ -430,7 +431,8 @@ class MagentoDefaultAddressModel implements DefaultAddressModel {
       customerId: json['id'] ?? DefaultValues.defaultInt,
       firstName: json['firstname'] ?? DefaultValues.defaultString,
       lastName: json['lastname'] ?? DefaultValues.defaultString,
-      address1: json['addresses']["street"][0].toString() ?? DefaultValues.defaultString,
+      address1: json['addresses']["street"][0].toString() ??
+          DefaultValues.defaultString,
       city: json['addresses']['city'] ?? DefaultValues.defaultString,
       province: json['addresses']['vat_id'] ?? DefaultValues.defaultString,
       country: json['addresses']['country_id'] ?? DefaultValues.defaultString,
@@ -438,11 +440,11 @@ class MagentoDefaultAddressModel implements DefaultAddressModel {
       phone: json['addresses']['telephone'] ?? DefaultValues.defaultString,
       name: json['firstname'] ?? DefaultValues.defaultString,
       provinceCode: json['addresses']['vat_id'] ?? DefaultValues.defaultString,
-      countryCode: json['addresses']['country_id']?? DefaultValues.defaultString,
-      countryName: json['addresses']['country_id']?? DefaultValues.defaultString,
+      countryCode:
+          json['addresses']['country_id'] ?? DefaultValues.defaultString,
+      countryName:
+          json['addresses']['country_id'] ?? DefaultValues.defaultString,
       defaultAddress: json['default'] ?? false,
     );
   }
-  
- 
 }

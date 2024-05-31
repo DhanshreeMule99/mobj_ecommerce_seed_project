@@ -41,23 +41,20 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
     return appInfoAsyncValue.when(
       data: (appInfo) => Scaffold(
           appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              surfaceTintColor: Theme.of(context).colorScheme.secondary,
-
-               leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.chevron_left_rounded,
-                size: 25.sp,
-              )),
-        
+            automaticallyImplyLeading: false,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            surfaceTintColor: Theme.of(context).colorScheme.secondary,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(
+                  Icons.chevron_left_rounded,
+                  size: 25.sp,
+                )),
             title: Text(
               AppLocalizations.of(context)!.orderDetailsTitle,
               style: Theme.of(context).textTheme.headlineLarge,
-
             ),
             actions: const [],
           ),
@@ -93,7 +90,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                       child: ListTile(
                                         contentPadding: EdgeInsets.zero,
                                         title: Text(
-                                            '${AppLocalizations.of(context)!.orderId}: ${order.id.toString()}'),
+                                            '${AppLocalizations.of(context)!.orderId}: ${order.id}'),
                                         subtitle: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -122,7 +119,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                               height: 5,
                                             ),
                                             Text(
-                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${double.parse(order.totalPrice).toStringAsFixed(2)} ${order.currency}'),
+                                                '${AppLocalizations.of(context)!.totalPrice}: \u{20B9}${(order.totalPrice).toStringAsFixed(2)} ${order.currency}'),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -131,8 +128,8 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                           ],
                                         ),
                                         trailing: const OrderStatus(
-                                            orderStatus:
-                                                AppString.orderStatus2,),
+                                          orderStatus: AppString.orderStatus2,
+                                        ),
                                       )),
                                   const SizedBox(
                                     height: 5,
@@ -291,7 +288,7 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                             backgroundColor: AppColors.buttonColor,
                           ),
                           onPressed: () {
-                            ref.refresh(orderDataProvider);
+                            ref.refresh(orderDetailsProvider(widget.oId));
                           },
                           child: Text(
                             AppLocalizations.of(context)!.refresh,
@@ -313,7 +310,6 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
 
               surfaceTintColor: Theme.of(context).colorScheme.secondary,
               color: Theme.of(context).colorScheme.secondary,
-
               child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
@@ -342,7 +338,8 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const OrderTrackingScreen()),
+                                builder: (context) =>
+                                    const OrderTrackingScreen()),
                           );
                         },
                       ),

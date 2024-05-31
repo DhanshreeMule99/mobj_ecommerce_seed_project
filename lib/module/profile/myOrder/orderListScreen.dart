@@ -1,4 +1,6 @@
 // OrderListScreen
+import 'dart:developer';
+
 import 'package:intl/intl.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -123,6 +125,8 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                                                 '${AppLocalizations.of(context)!.orderDate}: $formattedDate '),
                                           ]),
                                       onTap: () {
+
+                                        log("  oder id ...............................${order[index].id}");
                                         Navigator.of(context).push(
                                           PageRouteBuilder(
                                             pageBuilder: (context, animation1,
@@ -205,7 +209,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                           backgroundColor: AppColors.buttonColor,
                         ),
                         onPressed: () {
-                          ref.refresh(cartDetailsDataProvider);
+                          ref.refresh(orderDataProvider);
                         },
                         child: Text(
                           AppLocalizations.of(context)!.refresh,
