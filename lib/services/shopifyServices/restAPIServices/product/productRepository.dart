@@ -1006,6 +1006,8 @@ class ProductRepository {
       API api = API();
       String exceptionString = "";
       String token = await SharedPreferenceManager().getToken();
+
+
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;

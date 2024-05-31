@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -26,6 +27,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   // double total = 0;
   List<String> ATT = [];
   API api = API();
+  final couponApply = TextEditingController();
 
   void removeItem(LineItem item) {}
 
@@ -546,132 +548,136 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                                                           width:
                                                                               2)),
                                                                   child:
+                                                                      IconButton(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .zero, // Remove padding
+                                                                    icon:
+                                                                        const Icon(
+                                                                      FontAwesomeIcons
+                                                                          .minus,
+                                                                    ), // Adjust icon size
+                                                                    onPressed: AppConfigure
+                                                                            .bigCommerce
+                                                                        ? () async {
+                                                                            if (orderList.quantity >
+                                                                                1) {
+                                                                              API api = API();
+                                                                              try {
+                                                                                String draftId = await SharedPreferenceManager().getDraftId();
+                                                                                CommonAlert.show_loading_alert(context);
 
-IconButton(
-  padding: EdgeInsets.zero, // Remove padding
-  icon: const Icon(
-    FontAwesomeIcons.minus,
-  ), // Adjust icon size
-  onPressed: AppConfigure.bigCommerce
-      ? () async {
-          if (orderList.quantity > 1) {
-            API api = API();
-            try {
-              String draftId = await SharedPreferenceManager().getDraftId();
-              CommonAlert.show_loading_alert(context);
+                                                                                orderList.quantity--;
+                                                                                setState(() {});
+                                                                                debugPrint('add maps');
 
-              orderList.quantity--;
-              setState(() {});
-              debugPrint('add maps');
+                                                                                debugPrint('calling put api ');
+                                                                                var response = await api.sendRequest.put(
+                                                                                  '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
+                                                                                  data: {
+                                                                                    "line_item": {
+                                                                                      "id": orderList.id,
+                                                                                      "variant_id": orderList.variantId,
+                                                                                      "product_id": orderList.productId,
+                                                                                      "quantity": orderList.quantity,
+                                                                                    }
+                                                                                  },
+                                                                                  options: Options(headers: {
+                                                                                    "X-auth-Token": AppConfigure.bigCommerceAccessToken,
+                                                                                    'Content-Type': 'application/json',
+                                                                                  }),
+                                                                                );
 
-              debugPrint('calling put api ');
-              var response = await api.sendRequest.put(
-                '${AppConfigure.bigcommerceUrl}/carts/$draftId/items/${orderList.id}',
-                data: {
-                  "line_item": {
-                    "id": orderList.id,
-                    "variant_id": orderList.variantId,
-                    "product_id": orderList.productId,
-                    "quantity": orderList.quantity,
-                  }
-                },
-                options: Options(headers: {
-                  "X-auth-Token": AppConfigure.bigCommerceAccessToken,
-                  'Content-Type': 'application/json',
-                }),
-              );
+                                                                                ref.refresh(cartDetailsDataProvider);
 
-              ref.refresh(cartDetailsDataProvider);
+                                                                                debugPrint('cart updated successfully ${response.statusCode}');
+                                                                              } on Exception catch (e) {
+                                                                                debugPrint(e.toString());
+                                                                              } finally {
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        : AppConfigure.wooCommerce
+                                                                            ? () async {
+                                                                                if (orderList.quantity > 1) {
+                                                                                  API api = API();
+                                                                                  try {
+                                                                                    String draftId = await SharedPreferenceManager().getDraftId();
+                                                                                    CommonAlert.show_loading_alert(context);
 
-              debugPrint('cart updated successfully ${response.statusCode}');
-            } on Exception catch (e) {
-              debugPrint(e.toString());
-            } finally {
-              Navigator.of(context).pop();
-            }
-          }
-        }
-      : AppConfigure.wooCommerce
-          ? () async {
-              if (orderList.quantity > 1) {
-                API api = API();
-                try {
-                  String draftId = await SharedPreferenceManager().getDraftId();
-                  CommonAlert.show_loading_alert(context);
+                                                                                    orderList.quantity--;
+                                                                                    setState(() {});
+                                                                                    debugPrint('add maps');
 
-                  orderList.quantity--;
-                  setState(() {});
-                  debugPrint('add maps');
+                                                                                    debugPrint('calling put api ');
+                                                                                    String cartToken = await SharedPreferenceManager().getCartToken();
 
-                  debugPrint('calling put api ');
-                  String cartToken = await SharedPreferenceManager().getCartToken();
+                                                                                    var response = await api.sendRequest.post(
+                                                                                      'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
+                                                                                      data: {
+                                                                                        "quantity": orderList.quantity.toString()
+                                                                                      },
+                                                                                    );
 
-                  var response = await api.sendRequest.post(
-                    'wp-json/cocart/v2/cart/item/${orderList.id}?cart_key=$cartToken',
-                    data: {
-                      "quantity": orderList.quantity.toString()
-                    },
-                  );
+                                                                                    ref.refresh(cartDetailsDataProvider);
 
-                  ref.refresh(cartDetailsDataProvider);
+                                                                                    debugPrint('cart updated successfully ${response.statusCode}');
+                                                                                  } on Exception catch (e) {
+                                                                                    debugPrint(e.toString());
+                                                                                  } finally {
+                                                                                    Navigator.of(context).pop();
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            : AppConfigure.megentoCommerce
+                                                                                ? () {
+                                                                                    showDialog(
+                                                                                      context: context,
+                                                                                      builder: (BuildContext context) {
+                                                                                        return AlertDialog(
+                                                                                          // title: Text("Magento "),
+                                                                                          content: Text("You can NOT decrement cart quantity. You should delete the cart."),
+                                                                                          actions: [
+                                                                                            TextButton(
+                                                                                              child: Text("OK"),
+                                                                                              onPressed: () {
+                                                                                                Navigator.of(context).pop();
+                                                                                              },
+                                                                                            ),
+                                                                                          ],
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  }
+                                                                                : () {
+                                                                                    if (orderList.quantity > 1) {
+                                                                                      setState(
+                                                                                        () {
+                                                                                          orderList.quantity--;
+                                                                                          final lineItemsList = productlist.lineItems;
+                                                                                          var reqBody = [];
+                                                                                          for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
+                                                                                            reqBody.add({
+                                                                                              "variant_id": lineItemsList[i].variantId,
+                                                                                              "quantity": lineItemsList[i].quantity
+                                                                                            });
+                                                                                          }
 
-                  debugPrint('cart updated successfully ${response.statusCode}');
-                } on Exception catch (e) {
-                  debugPrint(e.toString());
-                } finally {
-                  Navigator.of(context).pop();
-                }
-              }
-            }
-          : AppConfigure.megentoCommerce
-              ? () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        // title: Text("Magento "),
-                        content: Text("You can NOT decrement cart quantity. You should delete the cart."),
-                        actions: [
-                          TextButton(
-                            child: Text("OK"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              : () {
-                  if (orderList.quantity > 1) {
-                    setState(
-                      () {
-                        orderList.quantity--;
-                        final lineItemsList = productlist.lineItems;
-                        var reqBody = [];
-                        for (int i = 0; i <= productlist.lineItems.length - 1; i++) {
-                          reqBody.add({
-                            "variant_id": lineItemsList[i].variantId,
-                            "quantity": lineItemsList[i].quantity
-                          });
-                        }
+                                                                                          CommonAlert.show_loading_alert(context);
 
-                        CommonAlert.show_loading_alert(context);
+                                                                                          ProductRepository().updateCart(reqBody).then((subjectFromServer) {
+                                                                                            Navigator.of(context).pop();
 
-                        ProductRepository().updateCart(reqBody).then((subjectFromServer) {
-                          Navigator.of(context).pop();
-
-                          if (subjectFromServer == AppString.success) {
-                            ref.refresh(cartDetailsDataProvider);
-                          }
-                        });
-                      },
-                    );
-                  }
-                },
-),
-
+                                                                                            if (subjectFromServer == AppString.success) {
+                                                                                              ref.refresh(cartDetailsDataProvider);
+                                                                                            }
+                                                                                          });
+                                                                                        },
+                                                                                      );
+                                                                                    }
+                                                                                  },
+                                                                  ),
 
                                                                   //     IconButton(
                                                                   //   padding:
@@ -1498,6 +1504,98 @@ IconButton(
                                 thickness: 1.5,
                                 color: AppColors.greyShade,
                               ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextFormField(
+                                controller: couponApply,
+                                // keyboardType: TextInputType.text,
+                                // inputFormatters: [
+                                //   FilteringTextInputFormatter.allow(
+                                //       RegExp(r'.*'))
+                                // ],
+                                // decoration: InputDecoration(
+                                //   labelText: AppLocalizations.of(context)!.personNameLabel,
+                                //   enabledBorder: OutlineInputBorder(
+                                //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when enabled
+                                //   ),
+                                //   focusedBorder: OutlineInputBorder(
+                                //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when focused
+                                //   ),
+                                // ),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+
+                                decoration: InputDecoration(
+                                    errorStyle: const TextStyle(fontSize: 12),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 15.0, horizontal: 10),
+                                    label: Text(
+                                      "Enter Coupon",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    suffixIcon: TextButton(
+                                      onPressed: () {
+                                        log("coupon is this ${couponApply.text}");
+                                        if (couponApply.text.trim() != "") {
+                                          ApplyCoupon();
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg: 'Please enter coupon');
+                                        }
+                                      },
+                                      child: Text('APPLY',
+                                          style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                        //Outline border type for TextFeild
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(
+                                                AppDimension.buttonRadius)),
+                                        borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1.5,
+                                        )),
+                                    //normal border
+                                    enabledBorder: OutlineInputBorder(
+                                        //Outline  order type for TextFeild
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(
+                                                AppDimension.buttonRadius)),
+                                        borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 1.5,
+                                        )),
+                                    focusedBorder: OutlineInputBorder(
+                                        //Outline border type for TextFeild
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(
+                                                AppDimension.buttonRadius)),
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            width: 1.5))),
+                                keyboardType: TextInputType.text,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r'\s')),
+                                ],
+
+                                validator: (value) {
+                                  return Validation().nameValidation(value);
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1668,5 +1766,23 @@ IconButton(
         },
         error: (error, s) => Container(),
         loading: () => Container());
+  }
+
+  Future<void> ApplyCoupon() async {
+    String token = await SharedPreferenceManager().getToken();
+
+    try {
+      Response response = await api.sendRequest.put(
+          'carts/mine/coupons/${couponApply.text}',
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: 'Coupon applied successfully');
+        getTotalDetails();
+      } else {}
+    } on Exception catch (e) {
+      log('appply coupon error is this $e');
+      Fluttertoast.showToast(msg: 'Coupon is not valid');
+      rethrow;
+    }
   }
 }
