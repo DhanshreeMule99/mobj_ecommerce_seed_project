@@ -232,5 +232,7 @@
   "wishlist": "Wishlist",
   "noProduct": "No Product",
   "noOrder": "No Order",
-  "addressAppBar": "Address"
+  "addressAppBar": "Address",
+  "contactUs": "Contact Us",
+  "followUs" : "Follow Us"
 }

@@ -1,6 +1,7 @@
 // SettingScreen
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:mobj_project/module/profile/contactuescreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,46 +38,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
         RouteConstants.login,
         (route) => false,
       );
-
-      // try {
-      //   final response = await http.post(
-      //     Uri.parse('${AppConfigure.bigcommerceUrl}/customers/logout'),
-      //     headers: <String, String>{
-      //       "Content-Type": "application/json",
-      //       "X-Auth-Token": AppConfigure.bigCommerceAccessToken,
-      //     },
-      //   );
-
-      //   if (response.statusCode == 204) {
-      //     SharedPreferences prefs = await SharedPreferences.getInstance();
-      //     prefs.clear();
-      //     Navigator.of(context).pop();
-      //     navigatorKey.currentState!.pushNamedAndRemoveUntil(
-      //       RouteConstants.login,
-      //       (route) => false,
-      //     );
-      //   } else {
-      //     Fluttertoast.showToast(
-      //       msg: 'Logout failed. Please try again. 1234',
-      //       toastLength: Toast.LENGTH_SHORT,
-      //       gravity: ToastGravity.BOTTOM,
-      //       timeInSecForIosWeb: 0,
-      //       backgroundColor: AppColors.blackColor,
-      //       textColor: AppColors.whiteColor,
-      //       fontSize: 16.0,
-      //     );
-      //   }
-      // } catch (e) {
-      //   Fluttertoast.showToast(
-      //     msg: 'Logout failed. Please try again.',
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.BOTTOM,
-      //     timeInSecForIosWeb: 0,
-      //     backgroundColor: AppColors.blackColor,
-      //     textColor: AppColors.whiteColor,
-      //     fontSize: 16.0,
-      //   );
-      // }
     } else if (AppConfigure.wooCommerce) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.clear();
@@ -144,62 +105,6 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
         Navigator.of(context).pop();
       }
     }
-
-    // GraphQLClient client = graphQLConfig.clientToQuery();
-    // final token = await SharedPreferenceManager().getToken();
-
-    // try {
-    //   final MutationOptions options = MutationOptions(
-    //     document: gql('''
-    //     mutation DeleteAccessToken(\$customerAccessToken: String!) {
-    //       customerAccessTokenDelete(customerAccessToken: \$customerAccessToken) {
-    //         deletedAccessToken
-    //       }
-    //     }
-    //   '''),
-    //     variables: {
-    //       "customerAccessToken": token,
-    //     },
-    //   );
-
-    //   final QueryResult result = await client.mutate(options);
-
-    //   if (result.hasException) {
-    //     Navigator.of(context).pop();
-    //     Fluttertoast.showToast(
-    //         msg: AppLocalizations.of(context)!.oops,
-    //         toastLength: Toast.LENGTH_SHORT,
-    //         gravity: ToastGravity.BOTTOM,
-    //         timeInSecForIosWeb: 0,
-    //         backgroundColor: AppColors.blackColor,
-    //         textColor: AppColors.whiteColor,
-    //         fontSize: 16.0);
-    //     print(
-    //         'Failed to delete access token. Exception: ${result.exception.toString()}');
-    //   } else {
-    //     final deletedAccessToken =
-    //         result.data?['customerAccessTokenDelete']['deletedAccessToken'];
-    //     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //     prefs.clear();
-    //     Navigator.of(context).pop();
-    //     navigatorKey.currentState!.pushNamedAndRemoveUntil(
-    //       RouteConstants.login,
-    //       (route) => false,
-    //     );
-    //   }
-    // } catch (errors) {
-    //   Fluttertoast.showToast(
-    //       msg: AppLocalizations.of(context)!.oops,
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.BOTTOM,
-    //       timeInSecForIosWeb: 0,
-    //       backgroundColor: AppColors.blackColor,
-    //       textColor: AppColors.whiteColor,
-    //       fontSize: 16.0);
-    //   Navigator.of(context).pop();
-    // }
-
-    // final login = LoginRepository();
   }
 
   @override
@@ -211,18 +116,17 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
     return appInfoAsyncValue.when(
         data: (appInfo) => Scaffold(
               appBar: AppBar(
-                 automaticallyImplyLeading: false,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              surfaceTintColor: Theme.of(context).colorScheme.secondary,
-                  leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.chevron_left_rounded,
-                size: 25.sp,
-              )),
-           
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                surfaceTintColor: Theme.of(context).colorScheme.secondary,
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      Icons.chevron_left_rounded,
+                      size: 25.sp,
+                    )),
                 title: Text(
                   AppLocalizations.of(context)!.setting,
                   style: Theme.of(context).textTheme.headlineLarge,
@@ -234,7 +138,7 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                 unselcted_icon_color: AppColors.blackColor,
                 selectedPage: 4,
                 screen1: const HomeScreen(),
-                screen2:  SearchWidget(),
+                screen2: SearchWidget(),
                 screen3: WishlistScreen(),
                 screen4: const ProfileScreen(),
                 ref: ref,
@@ -255,24 +159,50 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     title:
                         '${AppLocalizations.of(context)!.about} ${appInfo.appName}',
                     // leading: const Icon(Icons.info),
-                    trailing:  Icon(Icons.arrow_forward_ios,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
                       color: Theme.of(context).colorScheme.primary,
                       size: 20,
-                      ) ,
-                      icon: Icons.info,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    icon: Icons.info,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  MobjListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const ContactUs(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    },
+                    title:
+                        '${AppLocalizations.of(context)!.contactUs}',
+                    // leading: const Icon(Icons.info),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                    icon: Icons.contact_phone,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   appInfo.tawkURL != "" || appInfo.tawkURL.isNotEmpty
                       ? MobjListTile(
-                        trailing:  Icon(Icons.arrow_forward_ios,
-      color: Theme.of(context).colorScheme.primary,
-      size: 20,
-      ) ,
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20,
+                          ),
                           // leading: const Icon(Icons.help),
-                            icon: Icons.help,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                          icon: Icons.help,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
                           title: AppLocalizations.of(context)!.help,
                           onTap: () {
                             Navigator.of(context).push(
@@ -288,14 +218,15 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                         )
                       : const SizedBox(),
                   MobjListTile(
-                    trailing:  Icon(Icons.arrow_forward_ios,
-      color: Theme.of(context).colorScheme.primary,
-      size: 20,
-      ) ,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
                     // leading: const Icon(Icons.vpn_key),
-                      icon: Icons.vpn_key,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    icon: Icons.vpn_key,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     title: AppLocalizations.of(context)!.resetPass,
                     onTap: () async {
                       Navigator.of(context).push(
@@ -311,18 +242,18 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     },
                   ),
                   MobjListTile(
-                
-                  icon: Icons.lightbulb_outline,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    icon: Icons.lightbulb_outline,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     title: AppLocalizations.of(context)!.themeChange,
-                    trailing:
-                     Switch(
-                      trackOutlineColor:  MaterialStatePropertyAll( Theme.of(context).colorScheme.primary), 
-                      inactiveThumbColor: Theme.of(context).colorScheme.primary ,
-                      inactiveTrackColor: Theme.of(context).colorScheme.onPrimary,
-                       activeTrackColor: Theme.of(context).colorScheme.onPrimary,
-                        focusColor: Theme.of(context).colorScheme.onPrimary ,
+                    trailing: Switch(
+                      trackOutlineColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.primary),
+                      inactiveThumbColor: Theme.of(context).colorScheme.primary,
+                      inactiveTrackColor:
+                          Theme.of(context).colorScheme.onPrimary,
+                      activeTrackColor: Theme.of(context).colorScheme.onPrimary,
+                      focusColor: Theme.of(context).colorScheme.onPrimary,
                       activeColor: Theme.of(context).colorScheme.primary,
                       value: theme,
                       onChanged: (value) =>
@@ -331,17 +262,20 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     onTap: () {},
                   ),
                   ListTile(
-                     leading: 
-                     CircleAvatar(
+                    leading: CircleAvatar(
                         radius: 15,
-                        backgroundColor:Theme.of(context).colorScheme.onPrimary ,
-                       child: Icon(Icons.language,
-                       size: 20,
-                       color: Theme.of(context).colorScheme.primary,)),
-                        trailing:  Icon(Icons.arrow_forward_ios,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20,
-                        ),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                        child: Icon(
+                          Icons.language,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
                     title: Text(AppLocalizations.of(context)!.changeLanguage),
                     onTap: () {
                       _showLanguageDialog(context, languageProviders);
@@ -362,13 +296,14 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   //   },
                   // ),
                   MobjListTile(
-                    trailing:  Icon(Icons.arrow_forward_ios,
-      color: Theme.of(context).colorScheme.primary,
-      size: 20,
-      ) ,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
                     icon: Icons.info,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     title: AppLocalizations.of(context)!.privacyPolicy,
                     onTap: () {
                       Navigator.of(context).push(
@@ -382,13 +317,14 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                     },
                   ),
                   MobjListTile(
-                    trailing:  Icon(Icons.arrow_forward_ios,
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
                       color: Theme.of(context).colorScheme.primary,
                       size: 20,
-                      ) ,
+                    ),
                     icon: Icons.star,
-                            iconColor:  Theme.of(context).colorScheme.primary,
-                          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
                     title: AppLocalizations.of(context)!.rateUs,
                     onTap: () async {
                       LaunchReview.launch(
@@ -410,20 +346,23 @@ class SettingScreenState extends ConsumerState<SettingScreen> {
                   //   },
                   // ),
                   ListTile(
-                    // icon: Icons.person,
-                            // iconColor:  Theme.of(context).colorScheme.primary,
-                          // backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                       leading: CircleAvatar(
-                        radius: 15,
-                        backgroundColor:Theme.of(context).colorScheme.onPrimary ,
-                       child: Icon(Icons.person,
-                       size: 20,
-                       
-                       color: Theme.of(context).colorScheme.primary,)),
-                        trailing:  Icon(Icons.arrow_forward_ios,
+                      // icon: Icons.person,
+                      // iconColor:  Theme.of(context).colorScheme.primary,
+                      // backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                      leading: CircleAvatar(
+                          radius: 15,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          child: Icon(
+                            Icons.person,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
                         color: Theme.of(context).colorScheme.primary,
-                         size: 20,
-                         ),
+                        size: 20,
+                      ),
                       title: Text(AppLocalizations.of(context)!.accDeactivate),
                       onTap: () async {
                         bool? logoutConfirmed =
@@ -579,47 +518,46 @@ Future<bool?> showDeactivateAccountDialog(BuildContext context) {
   );
 }
 
-
 class MobjListTile extends StatelessWidget {
   final GestureTapCallback onTap;
   final String title;
-   final IconData icon;
+  final IconData icon;
   final Color iconColor;
   final Color backgroundColor;
   final Widget? trailing;
   MobjListTile({
     Key? key,
     required this.onTap,
-    required this.title,  required this.icon,
+    required this.title,
+    required this.icon,
     required this.iconColor,
-    required this.backgroundColor,  this.trailing,
+    required this.backgroundColor,
+    this.trailing,
   }) : super(key: key);
 
- 
 // class _MobjListTiletate extends State<MobjListTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
         leading: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor,
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor,
+          ),
+          child: Icon(
+            size: 20,
+            icon,
+            color: iconColor,
+          ),
         ),
-        child: Icon(
-          size: 20,
-          icon,
-          color: iconColor,
-        ),
-      ),
         title: Text(title),
-         trailing:  trailing,
-      //    Icon(Icons.arrow_forward_ios,
-      // color: Theme.of(context).colorScheme.primary,
-      // size: 20,
-      // ) ,
+        trailing: trailing,
+        //    Icon(Icons.arrow_forward_ios,
+        // color: Theme.of(context).colorScheme.primary,
+        // size: 20,
+        // ) ,
         onTap: onTap);
   }
-
 }
