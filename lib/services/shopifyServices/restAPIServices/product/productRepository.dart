@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:mobj_project/mappers/bigcommerce_models/bicommerce_wishlistModel.dart';
+import 'package:mobj_project/mappers/megento_models/megento_draftmodel.dart';
 import 'package:mobj_project/utils/api.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 import 'package:http/http.dart' as http;
@@ -1337,6 +1338,25 @@ class ProductRepository {
       } catch (error) {
         rethrow;
       }
+    } else if (AppConfigure.megentoCommerce) {
+      try {
+        final response = await api.sendRequest.get("orders/$pid",
+          options: Options(headers: {
+            "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+          }),
+        );
+
+        if (response.statusCode == APIConstants.successCode) {
+          final userData = response.data;
+          return OrderModel.fromJson(userData);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
     } else {
       try {
         String baseUrl = AppConfigure.baseUrl +
@@ -1350,7 +1370,9 @@ class ProductRepository {
         } else {
           throw (AppString.noDataError);
         }
-      } catch (error) {
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
         rethrow;
       }
     }
@@ -1438,7 +1460,73 @@ class ProductRepository {
             throw (AppString.noDataError);
           } else {
             List order = response.data["items"];
-            return order.map((e) => OrderModel.fromJson(e)).toList();
+
+            List<OrderModel> orderlist = [];
+
+            for (int i = 0; i < order.length; i++) {
+              orderlist.add(OrderModel(
+                  id: response.data['items'][i]['items'][0]['order_id'],
+                  adminGraphqlApiId: "",
+                  appId: response.data['items'][i]['items'][0]['store_id'],
+                  browserIp: "",
+                  buyerAcceptsMarketing: true,
+                  cancelReason: "",
+                  cancelledAt: response.data['items'][i]['items'][0]
+                      ['created_at'],
+                  cartToken: response.data['items'][i]['items'][0]['sku'],
+                  checkoutId: response.data['items'][i]['items'][0]
+                      ['quote_item_id'],
+                  checkoutToken: response.data['items'][i]['items'][0]
+                      ['product_type'],
+                  confirmed: true,
+                  contactEmail: response.data['items'][i]['customer_email'],
+                  createdAt: response.data['items'][i]['items'][0]
+                      ['created_at'],
+                  currency: response.data['items'][i]['base_currency_code'],
+                  currentSubtotalPrice: response.data['items'][i]
+                      ['base_subtotal'],
+                  currentTotalTax: response.data['items'][i]['base_tax_amount'],
+                  totalPrice: response.data['items'][i]
+                      ['base_subtotal_incl_tax'],
+                  // customer: response.data['items'][i]['items']['order_id'],
+                  customer: MagentoCustomerModel(
+                    id: response.data['items'][i]['customer_id'],
+                    email: response.data['items'][i]['customer_email'],
+                    acceptsMarketing: true,
+                    createdAt: response.data['items'][i]['created_at'],
+                    updatedAt: response.data['items'][i]['updated_at'],
+                    firstName: response.data['items'][i]['customer_firstname'],
+                    lastName: response.data['items'][i]['customer_lastname'],
+                    ordersCount: response.data['items'][i]['total_item_count'],
+                    state: response.data['items'][i]['status'],
+                    totalSpent: response.data['items'][i]['increment_id'],
+                    lastOrderId: response.data['items'][i]['total_qty_ordered'],
+                    note: response.data['items'][i]['store_name'],
+                    taxExempt: true,
+                    tags: response.data['items'][i]['shipping_description'],
+                    lastOrderName: response.data['items'][i]['store_name'],
+                    currency: response.data['items'][i]['store_currency_code'],
+                    phone: response.data['items'][i]['billing_address']
+                        ['telephone'],
+                    adminGraphqlApiId: "",
+                  ),
+                  // lineItems: response.data['items'][i]['items']['order_id'],
+                  lineItems: (response.data['items'][i]['items']
+                              as List<dynamic>?)
+                          ?.map(
+                              (item) => MagentoCommerceLineItem.fromJson(item))
+                          .toList() ??
+                      [],
+                  firstname: response.data['items'][i]['customer_firstname'],
+                  lastname: response.data['items'][i]['customer_lastname'],
+                  phone: response.data['items'][i]['billing_address']
+                      ['telephone']));
+            }
+
+            return orderlist;
+
+            // List order = response.data["items"];
+            // return order.map((e) => OrderModel.fromJson(e)).toList();
           }
         } else {
           throw (AppString.noDataError);
