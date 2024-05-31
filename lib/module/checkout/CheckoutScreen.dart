@@ -35,6 +35,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   void initState() {
     if (AppConfigure.megentoCommerce) {
       getTotalDetails();
+      alreadyApplyCoupon();
     }
     super.initState();
   }
@@ -1782,6 +1783,23 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     } on Exception catch (e) {
       log('appply coupon error is this $e');
       Fluttertoast.showToast(msg: 'Coupon is not valid');
+      rethrow;
+    }
+  }
+
+  Future<void> alreadyApplyCoupon() async {
+    String token = await SharedPreferenceManager().getToken();
+
+    try {
+      Response response = await api.sendRequest.get('carts/mine/coupons',
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+      if (response.statusCode == 200) {
+        setState(() {
+          couponApply.text = response.data.toString();
+        });
+      } else {}
+    } on Exception catch (e) {
+      
       rethrow;
     }
   }
