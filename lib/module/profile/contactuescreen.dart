@@ -56,7 +56,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
         automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).colorScheme.secondary,
         surfaceTintColor: Theme.of(context).colorScheme.secondary,
-        title: const Text("Contact Us"),
+        title: Text(AppLocalizations.of(context)!.contactUs),
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -71,7 +71,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
         bgcolor: AppColors.whiteColor,
         selcted_icon_color: AppColors.buttonColor,
         unselcted_icon_color: AppColors.blackColor,
-        selectedPage: 1,
+        selectedPage: 4,
         screen1: const HomeScreen(),
         screen2: SearchWidget(),
         screen3: WishlistScreen(),
@@ -107,7 +107,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Address:',
+                            '${AppLocalizations.of(context)!.addressAppBar} : ',
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                           Text(
@@ -123,7 +123,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Mobile Number:',
+                                  '${AppLocalizations.of(context)!.mobileNo} :',
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -169,7 +169,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Email:',
+                                  '${AppLocalizations.of(context)!.email} :',
                                   style:
                                       Theme.of(context).textTheme.headlineLarge,
                                 ),
@@ -185,7 +185,7 @@ class _ContactUsState extends ConsumerState<ContactUs> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'Follow Us:',
+                            AppLocalizations.of(context)!.followUs,
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                           Row(

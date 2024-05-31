@@ -233,5 +233,6 @@
   "noProduct": "No Product",
   "noOrder": "No Order",
   "addressAppBar": "Address",
-  "contactUs": "Contact Us"
+  "contactUs": "Contact Us",
+  "followUs" : "Follow Us"
 }
