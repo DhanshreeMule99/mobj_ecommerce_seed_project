@@ -650,7 +650,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         (context, animation1, animation2) =>
                                             ProductDetailsScreen(
                                       uid: productlist[index].id.toString(),
-                                      sku: productlist[index].sku.toString(),
+                                      sku: AppConfigure.megentoCommerce
+                                          ? productlist[index].sku.toString()
+                                          : "",
                                       product: productlist[index],
                                     ),
                                     transitionDuration: Duration.zero,
@@ -921,15 +923,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   //   }
                                   // });
                                 },
-                                variantId: '',
-                                // productlist[index]
-                                //     .variants[0]
-                                //     .id
-                                //     .toString(),
-                                stock: 10,
-                                // productlist[index]
-                                //     .variants[0]
-                                //     .inventoryQuantity,
+                                variantId: AppConfigure.megentoCommerce
+                                    ? ''
+                                    : productlist[index]
+                                        .variants[0]
+                                        .id
+                                        .toString(),
+                                stock: AppConfigure.megentoCommerce
+                                    ? 10
+                                    : productlist[index]
+                                        .variants[0]
+                                        .inventoryQuantity,
                                 ref: ref,
                               ));
                         });

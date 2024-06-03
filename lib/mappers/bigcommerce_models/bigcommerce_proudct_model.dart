@@ -8,6 +8,8 @@ class BigCommerceProductModel implements ProductModel {
   @override
   final String title;
   @override
+  final String sku;
+  @override
   final String bodyHtml;
   @override
   final String vendor;
@@ -40,8 +42,9 @@ class BigCommerceProductModel implements ProductModel {
   @override
   final BigCommerceProductImage image;
 
-  BigCommerceProductModel({
+  BigCommerceProductModel( {
     required this.id,
+     this.sku="",
     required this.title,
     required this.bodyHtml, // Default value for bodyHtml
     required this.vendor,

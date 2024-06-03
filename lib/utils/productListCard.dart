@@ -289,7 +289,7 @@ class _ProductListCardstate extends State<ProductListCard> {
                                                             .toString(),
                                                         widget.productId)
                                                     .then((value) async {
-                                                  print("value is this $value");
+                                                 
                                                   if (value ==
                                                       AppString.success) {
                                                     Navigator.of(context).pop();
