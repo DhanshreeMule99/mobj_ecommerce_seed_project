@@ -274,6 +274,41 @@ class ProductRepository {
         debugPrint("error is this: $error");
         rethrow;
       }
+    } else if (AppConfigure.bigCommerce) {
+      try {
+        Response response = await api.sendRequest.get(
+          'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v2/coupons',
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // var result = response.data;
+          // return ReviewProductModels.fromJson(result);
+
+          final data = response.data;
+          log("Coupons data are, $data");
+          final List<dynamic> couponList = data;
+          List<Coupon> coupons = [];
+
+          for (int i = 0; i < couponList.length; i++) {
+            coupons.add(Coupon(
+                couponId: couponList[i]['id'],
+                ruleId: 0,
+                code: couponList[i]['code'],
+                usageLimit: 0,
+                usagePerCustomer: 0,
+                timesUsed: 0,
+                isPrimary: true,
+                type: 0,
+                discription: ""));
+          }
+          return coupons;
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
     } else {
       try {
         Response response = await api.sendRequest.get(

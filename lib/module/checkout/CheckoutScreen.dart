@@ -1856,18 +1856,36 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     String token = await SharedPreferenceManager().getToken();
     log("asdfghjkl;...................................................$token");
 
-    try {
-      Response response = await api.sendRequest.put(
-          'carts/mine/coupons/${couponApply.text}',
-          options: Options(headers: {'Authorization': 'Bearer $token'}));
-      if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: 'Coupon applied successfully');
-        getTotalDetails();
-      } else {}
-    } on Exception catch (e) {
-      log('appply coupon error is this $e');
-      Fluttertoast.showToast(msg: 'Coupon is not valid');
-      rethrow;
+    if (AppConfigure.megentoCommerce) {
+      try {
+        Response response = await api.sendRequest.put(
+            'carts/mine/coupons/${couponApply.text}',
+            options: Options(headers: {'Authorization': 'Bearer $token'}));
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(msg: 'Coupon applied successfully');
+          getTotalDetails();
+        } else {}
+      } on Exception catch (e) {
+        log('appply coupon error is this $e');
+        Fluttertoast.showToast(msg: 'Coupon is not valid');
+        rethrow;
+      }
+    } else if (AppConfigure.bigCommerce) {
+      String draftId = await SharedPreferenceManager().getDraftId();
+      try {
+        Response response = await api.sendRequest.post(
+            'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/checkouts/$draftId/coupons',
+            data: {"coupon_code": couponApply.text},
+            options: Options());
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(msg: 'Coupon applied successfully');
+          ref.refresh(cartDetailsDataProvider);
+        } else {}
+      } on Exception catch (e) {
+        log('appply coupon error is this $e');
+        Fluttertoast.showToast(msg: 'Coupon is not valid');
+        rethrow;
+      }
     }
   }
 
@@ -1887,29 +1905,27 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
-
-Future<Couponmodel> fetchCouponDescription(int ruleId) async {
-  API api = API();
-  try {
-    Response response = await api.sendRequest.get(
-      'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
-      options: Options(headers: {
-        "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
-      }),
-    );
-    if (response.statusCode == APIConstants.successCode) {
-      var data = response.data;
-      return Couponmodel.fromJson(data);
-    } else {
-      throw (AppString.noDataError);
+  Future<Couponmodel> fetchCouponDescription(int ruleId) async {
+    API api = API();
+    try {
+      Response response = await api.sendRequest.get(
+        'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
+        options: Options(headers: {
+          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+        }),
+      );
+      if (response.statusCode == APIConstants.successCode) {
+        var data = response.data;
+        return Couponmodel.fromJson(data);
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      debugPrint("Error fetching coupon description: $stackTrace");
+      debugPrint("Error: $error");
+      rethrow;
     }
-  } catch (error, stackTrace) {
-    debugPrint("Error fetching coupon description: $stackTrace");
-    debugPrint("Error: $error");
-    rethrow;
   }
-}
-
 
   // void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
   //   showModalBottomSheet(
@@ -1960,82 +1976,80 @@ Future<Couponmodel> fetchCouponDescription(int ruleId) async {
   //   );
   // }
 
-void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Consumer(builder: (context, ref, _) {
-          // Use FutureProvider to fetch descriptions for each coupon
-          final descriptions = Future.wait(
-            coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
-          );
+  void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer(builder: (context, ref, _) {
+            // Use FutureProvider to fetch descriptions for each coupon
+            final descriptions = Future.wait(
+              coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
+            );
 
-          return FutureBuilder<List<Couponmodel>>(
-            future: descriptions,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Text('No descriptions found.');
-              } else {
-                final couponDescriptions = snapshot.data!;
-                return ListView.builder(
-                  itemCount: coupons.length,
-                  itemBuilder: (context, index) {
-                    final coupon = coupons[index];
-                    final description = couponDescriptions.firstWhere(
-                        (desc) => desc.ruleId == coupon.ruleId,
-                        orElse: () => Couponmodel(
-                            ruleId: coupon.ruleId,
-                            name: '',
-                            description: 'No description available',
-                            fromDate: DateTime.now(),
-                            toDate: DateTime.now(),
-                            isActive: false,
-                            usesPerCustomer: 0,
-                            usesPerCoupon: 0,
-                            simpleAction: '',
-                            discountAmount: 0.0,
-                            applyToShipping: false));
+            return FutureBuilder<List<Couponmodel>>(
+              future: descriptions,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No descriptions found.');
+                } else {
+                  final couponDescriptions = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: coupons.length,
+                    itemBuilder: (context, index) {
+                      final coupon = coupons[index];
+                      final description = couponDescriptions.firstWhere(
+                          (desc) => desc.ruleId == coupon.ruleId,
+                          orElse: () => Couponmodel(
+                              ruleId: coupon.ruleId,
+                              name: '',
+                              description: 'No description available',
+                              fromDate: DateTime.now(),
+                              toDate: DateTime.now(),
+                              isActive: false,
+                              usesPerCustomer: 0,
+                              usesPerCoupon: 0,
+                              simpleAction: '',
+                              discountAmount: 0.0,
+                              applyToShipping: false));
 
-                    return ListTile(
-                      title: Text('Rule ID: ${coupon.ruleId}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Code: ${coupon.code}'),
-                          Text('Description: ${description.description}'),
-                        ],
-                      ),
-                      trailing: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                      return ListTile(
+                        title: Text('Rule ID: ${coupon.ruleId}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Code: ${coupon.code}'),
+                            Text('Description: ${description.description}'),
+                          ],
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          setState(() {
-                            couponApply.text = coupon.code;
-                          });
-                        },
-                        child: Text('Apply'),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-          );
-        }),
-      );
-    },
-  );
-}
-
-
+                        trailing: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            setState(() {
+                              couponApply.text = coupon.code;
+                            });
+                          },
+                          child: Text('Apply'),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            );
+          }),
+        );
+      },
+    );
+  }
 }

@@ -7,6 +7,7 @@ class Coupon {
   final int timesUsed;
   final bool isPrimary;
   final int type;
+  final String discription;
 
   Coupon({
     required this.couponId,
@@ -17,6 +18,7 @@ class Coupon {
     required this.timesUsed,
     required this.isPrimary,
     required this.type,
+    this.discription = "",
   });
 
   factory Coupon.fromJson(Map<String, dynamic> json) {
@@ -32,7 +34,6 @@ class Coupon {
     );
   }
 }
-
 
 class Couponmodel {
   final int ruleId;
@@ -77,5 +78,3 @@ class Couponmodel {
     );
   }
 }
-
-
