@@ -260,8 +260,8 @@ class ProductRepository {
               couponId: couponList[i]['coupon_id'],
               ruleId: couponList[i]['rule_id'],
               code: couponList[i]['code'],
-              usageLimit: couponList[i]['usage_limit'],
-              usagePerCustomer: couponList[i]['usage_per_customer'],
+              usageLimit: couponList[i]['rule_id'],
+              usagePerCustomer: couponList[i]['rule_id'],
               timesUsed: couponList[i]['times_used'],
               isPrimary: couponList[i]['is_primary'],
               type: couponList[i]['type']));
@@ -1283,6 +1283,7 @@ class ProductRepository {
           ATT.add(result['subtotal'].toString());
           ATT.add(result['tax_amount'].toString());
           ATT.add(result['base_grand_total'].toString());
+           ATT.add(result['discount_amount'].toString());
 
           return ATT;
         } else {

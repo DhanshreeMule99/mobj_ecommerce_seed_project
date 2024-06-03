@@ -26,12 +26,14 @@ class AddressListScreen extends ConsumerStatefulWidget {
   final List<Map<String, dynamic>> bigcommerceOrderedItems;
   final String actualPrice;
   final String tax;
+  final String discount;
   final String totalPrice;
   const AddressListScreen(
       {super.key,
       this.isCheckout,
       this.amount,
       this.mobile,
+      this.discount = '0',
       this.actualPrice = '0',
       this.tax = '0',
       this.totalPrice = '0',

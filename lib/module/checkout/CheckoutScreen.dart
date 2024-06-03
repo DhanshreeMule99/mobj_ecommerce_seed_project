@@ -1527,9 +1527,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                 thickness: 1.5,
                                 color: AppColors.greyShade,
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 8.sp, horizontal: 10.w),
@@ -1671,6 +1671,27 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
+                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      'Discount',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                  Text(
+                                      AppConfigure.megentoCommerce
+                                          ? '\u{20B9}${ATT.last}'
+                                          : '\u{20B9}${product.totalPrice}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge),
+                                ],
+                              ),
+                               const SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1690,8 +1711,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .headlineLarge),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
+                             
+
+                               const Divider(
+                                thickness: 1.5,
+                                color: AppColors.greyShade,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -1704,7 +1728,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT.last}'
+                                          ? '\u{20B9}${ATT[2]}'
                                           : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
@@ -1721,10 +1745,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
                                               AddressListScreen(
-                                            actualPrice:
-                                                AppConfigure.megentoCommerce
+                                                discount: AppConfigure.megentoCommerce
                                                     ? ATT.first.toString()
                                                     : "",
+ 
+                                            actualPrice:
+                                                AppConfigure.megentoCommerce
+                                                    ? ATT[2].toString()
+                                                    : "",
+
+
                                             tax: AppConfigure.megentoCommerce
                                                 ? ATT[1].toString()
                                                 : "",
@@ -1824,6 +1854,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> ApplyCoupon() async {
     String token = await SharedPreferenceManager().getToken();
+    log("asdfghjkl;...................................................$token");
 
     try {
       Response response = await api.sendRequest.put(
