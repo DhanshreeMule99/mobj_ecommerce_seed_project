@@ -137,134 +137,134 @@ class _OrderdetailsScreenState extends ConsumerState<OrderdetailsScreen> {
                                 ],
                               ),
                             )),
-                        Column(
-                          children: order.lineItems.map((item) {
-                            return Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, left: 10, right: 10),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation1,
-                                                  animation2) =>
-                                              ProductDetailsScreen(
-                                                  uid: item.productId
-                                                      .toString()),
-                                          transitionDuration: Duration.zero,
-                                          reverseTransitionDuration:
-                                              Duration.zero,
-                                        ),
-                                      );
-                                    },
-                                    child: Card(
-                                       color: Theme.of(context).colorScheme.onPrimary,
-                                      margin: const EdgeInsets.only(bottom: 0),
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        leading: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: CachedNetworkImage(
-                                            imageUrl: (ref.watch(
-                                                        productImageDataProvider(
-                                                            item.productId
-                                                                .toString())))
-                                                    .when(
-                                                  data: (images) {
-                                                    if (images.isNotEmpty) {
-                                                      // Find the image with the specified variant ID
-                                                      final selectedImage =
-                                                          images.firstWhere(
-                                                        (image) => image
-                                                            .variantIds
-                                                            .contains(
-                                                                item.variantId),
-                                                        orElse: () =>
-                                                            ProductImage(
-                                                          id: 0,
-                                                          // Provide a default ID
-                                                          alt: "Default",
-                                                          position: 0,
-                                                          productId: 0,
-                                                          createdAt:
-                                                              DateTime.now()
-                                                                  .toString(),
-                                                          // Provide a default creation time
-                                                          updatedAt:
-                                                              DateTime.now()
-                                                                  .toString(),
-                                                          // Provide a default update time
-                                                          adminGraphqlApiId:
-                                                              "gid://shopify/ProductImage/0",
-                                                          width: 0,
-                                                          height: 0,
-                                                          src: images[0].src,
-                                                          // Provide a default image URL
-                                                          variantIds: [],
-                                                        ),
-                                                      );
+                        // Column(
+                        //   children: order.lineItems.map((item) {
+                        //     return Padding(
+                        //         padding: const EdgeInsets.only(
+                        //             top: 10, left: 10, right: 10),
+                        //         child: GestureDetector(
+                        //             onTap: () {
+                        //               Navigator.of(context).push(
+                        //                 PageRouteBuilder(
+                        //                   pageBuilder: (context, animation1,
+                        //                           animation2) =>
+                        //                       ProductDetailsScreen(
+                        //                           uid: item.productId
+                        //                               .toString()),
+                        //                   transitionDuration: Duration.zero,
+                        //                   reverseTransitionDuration:
+                        //                       Duration.zero,
+                        //                 ),
+                        //               );
+                        //             },
+                        //             child: Card(
+                        //                color: Theme.of(context).colorScheme.onPrimary,
+                        //               margin: const EdgeInsets.only(bottom: 0),
+                        //               elevation: 3,
+                        //               shape: RoundedRectangleBorder(
+                        //                 borderRadius: BorderRadius.circular(15),
+                        //               ),
+                        //               child: ListTile(
+                        //                 contentPadding: EdgeInsets.zero,
+                        //                 leading: Padding(
+                        //                   padding:
+                        //                       const EdgeInsets.only(left: 5),
+                        //                   child: CachedNetworkImage(
+                        //                     imageUrl: (ref.watch(
+                        //                                 productImageDataProvider(
+                        //                                     item.productId
+                        //                                         .toString())))
+                        //                             .when(
+                        //                           data: (images) {
+                        //                             if (images.isNotEmpty) {
+                        //                               // Find the image with the specified variant ID
+                        //                               final selectedImage =
+                        //                                   images.firstWhere(
+                        //                                 (image) => image
+                        //                                     .variantIds
+                        //                                     .contains(
+                        //                                         item.variantId),
+                        //                                 orElse: () =>
+                        //                                     ProductImage(
+                        //                                   id: 0,
+                        //                                   // Provide a default ID
+                        //                                   alt: "Default",
+                        //                                   position: 0,
+                        //                                   productId: 0,
+                        //                                   createdAt:
+                        //                                       DateTime.now()
+                        //                                           .toString(),
+                        //                                   // Provide a default creation time
+                        //                                   updatedAt:
+                        //                                       DateTime.now()
+                        //                                           .toString(),
+                        //                                   // Provide a default update time
+                        //                                   adminGraphqlApiId:
+                        //                                       "gid://shopify/ProductImage/0",
+                        //                                   width: 0,
+                        //                                   height: 0,
+                        //                                   src: images[0].src,
+                        //                                   // Provide a default image URL
+                        //                                   variantIds: [],
+                        //                                 ),
+                        //                               );
 
-                                                      return selectedImage.src;
-                                                    }
-                                                    return DefaultValues
-                                                        .defaultImagesSrc;
-                                                  },
-                                                  loading: () => DefaultValues
-                                                      .defaultImagesSrc,
-                                                  error: (_, __) =>
-                                                      DefaultValues
-                                                          .defaultImagesSrc,
-                                                ) ??
-                                                DefaultValues.defaultImagesSrc,
-                                            placeholder: (context, url) =>
-                                                Container(
-                                              height: 50,
-                                              width: 50,
-                                              color: AppColors.greyShade,
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        title: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10, left: 10),
-                                          child: Text(item.name),
-                                        ),
-                                        subtitle: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, left: 10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(item.price.toString()) * item.quantity).toStringAsFixed(2)}',
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  '${AppLocalizations.of(context)!.quantity}: ${item.quantity.toString()}',
-                                                ),
-                                                const SizedBox(
-                                                  height: 5,
-                                                ),
-                                              ],
-                                            )),
-                                      ),
-                                    )));
-                          }).toList(),
-                        ),
+                        //                               return selectedImage.src;
+                        //                             }
+                        //                             return DefaultValues
+                        //                                 .defaultImagesSrc;
+                        //                           },
+                        //                           loading: () => DefaultValues
+                        //                               .defaultImagesSrc,
+                        //                           error: (_, __) =>
+                        //                               DefaultValues
+                        //                                   .defaultImagesSrc,
+                        //                         ) ??
+                        //                         DefaultValues.defaultImagesSrc,
+                        //                     placeholder: (context, url) =>
+                        //                         Container(
+                        //                       height: 50,
+                        //                       width: 50,
+                        //                       color: AppColors.greyShade,
+                        //                     ),
+                        //                     errorWidget:
+                        //                         (context, url, error) =>
+                        //                             const Icon(Icons.error),
+                        //                     width: 50,
+                        //                     height: 50,
+                        //                     fit: BoxFit.contain,
+                        //                   ),
+                        //                 ),
+                        //                 title: Padding(
+                        //                   padding: const EdgeInsets.only(
+                        //                       top: 10, left: 10),
+                        //                   child: Text(item.name),
+                        //                 ),
+                        //                 subtitle: Padding(
+                        //                     padding: const EdgeInsets.only(
+                        //                         top: 10, left: 10),
+                        //                     child: Column(
+                        //                       crossAxisAlignment:
+                        //                           CrossAxisAlignment.start,
+                        //                       children: [
+                        //                         Text(
+                        //                           '${AppLocalizations.of(context)!.price}: \u{20B9}${(double.parse(item.price.toString()) * item.quantity).toStringAsFixed(2)}',
+                        //                         ),
+                        //                         const SizedBox(
+                        //                           height: 5,
+                        //                         ),
+                        //                         Text(
+                        //                           '${AppLocalizations.of(context)!.quantity}: ${item.quantity.toString()}',
+                        //                         ),
+                        //                         const SizedBox(
+                        //                           height: 5,
+                        //                         ),
+                        //                       ],
+                        //                     )),
+                        //               ),
+                        //             )));
+                        //   }).toList(),
+                        // ),
                         const SizedBox(
                           height: 15,
                         )
