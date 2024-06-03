@@ -921,15 +921,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   //   }
                                   // });
                                 },
-                                variantId: '',
-                                // productlist[index]
-                                //     .variants[0]
-                                //     .id
-                                //     .toString(),
-                                stock: 10,
-                                // productlist[index]
-                                //     .variants[0]
-                                //     .inventoryQuantity,
+                                variantId: AppConfigure.megentoCommerce
+                                    ? ''
+                                    : productlist[index]
+                                        .variants[0]
+                                        .id
+                                        .toString(),
+                                stock: AppConfigure.megentoCommerce
+                                    ? 10
+                                    : productlist[index]
+                                        .variants[0]
+                                        .inventoryQuantity,
                                 ref: ref,
                               ));
                         });
