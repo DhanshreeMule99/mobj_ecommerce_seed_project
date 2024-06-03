@@ -10,7 +10,6 @@ import '../../mappers/woocommerce/woocommerce_productmodel.dart';
 class ProductModel {
   final int id;
   final String sku;
-
   final int attribute_set_id;
   final int price;
   final String title;

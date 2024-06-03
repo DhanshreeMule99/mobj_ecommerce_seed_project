@@ -17,14 +17,10 @@ class API {
       _dio.options.headers["Content-Type"] = "application/json";
       _dio.options.headers["Accept"] = "application/json";
       _dio.options.headers["Authorization"] =
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjaWQiOjEsImNvcnMiOltdLCJlYXQiOjE4ODU2MzUxNzYsImlhdCI6MTcxNTA2MjY5NywiaXNzIjoiQkMiLCJzaWQiOjEwMDMxNzY2NzAsInN1YiI6ImVlNnhnaGJ4cGhsOXo2YWJ0ZnBianV5cHZleXc4dmEiLCJzdWJfdHlwZSI6MiwidG9rZW5fdHlwZSI6MX0.ZBAbkfHsOe4AXSBTIaCkLZX5wDzqdWlog7qn7VlRB38lcRl0nJfX0DfNV0j1G82Lk1urzG64FAgZsdmhQYBOxw";
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjaWQiOjEsImNvcnMiOltdLCJlYXQiOjE4ODU2MzUxNzYsImlhdCI6MTcxNzQwMDA2OCwiaXNzIjoiQkMiLCJzaWQiOjEwMDMxOTU4NzksInN1YiI6ImdoZjluNm4wMm52OWhma3UydmIxdmpyZGpscHNxaGsiLCJzdWJfdHlwZSI6MiwidG9rZW5fdHlwZSI6MX0.gE7hLbCd0_wkdVK0CoAmu5j2RjKbQmHm8y98AiL1tzDrBix59VOCml27tEgnbXaglcMCGbYwnPd0enBbSy_bcw";
     } else if (AppConfigure.wooCommerce) {
       _dio.options.headers["Content-Type"] = "application/json";
-    }
-    else
-    
-    
-     if (AppConfigure.megentoCommerce ){
+    } else if (AppConfigure.megentoCommerce) {
       // String? token = AppConfigure.accessToken;
       // String storeFrontToken = AppConfigure.storeFrontToken ?? "";
 
@@ -35,8 +31,6 @@ class API {
       // _dio.options.headers["Authorization"] =
       //     "Bearer 7iqu2oq5y7oruxwdf9fzksf7ak16cfri";
       // _dio.options.headers['SECRET-KEY'] = AppConfigure.feraSecretKey;
-
-
     } else {
       String? token = AppConfigure.accessToken;
       String storeFrontToken = AppConfigure.storeFrontToken ?? "";
