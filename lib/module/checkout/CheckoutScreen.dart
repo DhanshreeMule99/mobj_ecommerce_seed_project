@@ -1661,7 +1661,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT.first}'
+                                          ? '\u{20B9}${ATT.first.toString()}'
                                           : '\u{20B9}${product.subtotalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
@@ -1671,25 +1671,24 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                               Row(
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                      'Discount',
+                                  Text('Discount',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT.last}'
+                                          ? '\u{20B9}${ATT.last.toString()}'
                                           : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
                                 ],
                               ),
-                               const SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Row(
@@ -1702,7 +1701,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT[1]}'
+                                          ? '\u{20B9}${ATT[1].toString()}'
                                           : product.totalTax == ""
                                               ? '\u{20B9}${0}'
                                               : '\u{20B9}${product.totalTax}',
@@ -1711,9 +1710,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           .headlineLarge),
                                 ],
                               ),
-                             
 
-                               const Divider(
+                              const Divider(
                                 thickness: 1.5,
                                 color: AppColors.greyShade,
                               ),
@@ -1745,30 +1743,30 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
                                               AddressListScreen(
-                                                discount: AppConfigure.megentoCommerce
-                                                    ? ATT.first.toString()
-                                                    : "",
- 
+                                            discount: AppConfigure.megentoCommerce
+                                                ? ATT.last.toString()
+                                                : "",
+
                                             actualPrice:
                                                 AppConfigure.megentoCommerce
-                                                    ? ATT[2].toString()
+                                                    ? ATT.first.toString()
                                                     : "",
-
 
                                             tax: AppConfigure.megentoCommerce
                                                 ? ATT[1].toString()
                                                 : "",
                                             totalPrice:
                                                 AppConfigure.megentoCommerce
-                                                    ? ATT.last.toString()
+                                                    ? ATT[2].toString()
                                                     : "",
                                             isCheckout: true,
                                             amount: AppConfigure.megentoCommerce
-                                                ? int.parse(
-                                                        ATT.last.toString()) *
-                                                    100
-                                                : product.totalPrice.toInt() *
-                                                    100,
+                                                // ? int.parse(ATT[2].toString()) *
+                                                //     100
+                                                // : product.totalPrice.toInt() *
+                                                //     100,
+                                                 ? (double.parse(ATT[2].toString()) * 100).toInt()
+                                                  : product.totalPrice.toInt() * 100,
                                             mobile: product.customer.phone
                                                 .toString(),
                                             bigcommerceOrderedItems:

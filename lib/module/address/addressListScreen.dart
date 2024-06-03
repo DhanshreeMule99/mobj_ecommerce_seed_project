@@ -26,14 +26,14 @@ class AddressListScreen extends ConsumerStatefulWidget {
   final List<Map<String, dynamic>> bigcommerceOrderedItems;
   final String actualPrice;
   final String tax;
-  final String discount;
+   final String discount;
   final String totalPrice;
   const AddressListScreen(
       {super.key,
       this.isCheckout,
       this.amount,
       this.mobile,
-      this.discount = '0',
+       this.discount = '0',
       this.actualPrice = '0',
       this.tax = '0',
       this.totalPrice = '0',
@@ -1356,7 +1356,32 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         .headlineLarge),
                                               ],
                                             ),
+
+
                                             const SizedBox(
+                                              height: 10,
+                                            ),
+
+                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    '${"Discount"}:',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall),
+                                                Text(
+                                                    AppConfigure.megentoCommerce
+                                                        ? '\u{20B9}${widget.discount}'
+                                                        : '\u{20B9}${product.appliedDiscount}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineLarge),
+                                              ],
+                                            ),
+                                             const SizedBox(
                                               height: 10,
                                             ),
                                             Row(
@@ -1378,9 +1403,13 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                         .headlineLarge),
                                               ],
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
+                                             const Divider(
+                                thickness: 1.5,
+                                color: AppColors.greyShade,
+                              ),
+                                            // const SizedBox(
+                                            //   height: 10,
+                                            // ),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
