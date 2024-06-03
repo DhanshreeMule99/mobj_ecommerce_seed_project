@@ -650,7 +650,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         (context, animation1, animation2) =>
                                             ProductDetailsScreen(
                                       uid: productlist[index].id.toString(),
-                                      sku: productlist[index].sku.toString(),
+                                      sku: AppConfigure.megentoCommerce
+                                          ? productlist[index].sku.toString()
+                                          : "",
                                       product: productlist[index],
                                     ),
                                     transitionDuration: Duration.zero,
