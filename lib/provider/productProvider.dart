@@ -1,3 +1,4 @@
+import 'package:mobj_project/models/coupons/couponsModel.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
 final productDataProvider =
@@ -27,6 +28,15 @@ final productReviewsProvider =
     FutureProvider.family<ReviewProductModels, String>((ref, pid) async {
   return ref.watch(productsProvider).getProductReviews(pid.toString());
 });
+
+final couponsProvider = FutureProvider<List<Coupon>>((ref) async {
+  return ref.watch(productsProvider).getCoupons();
+});
+
+final couponsDescriptionProvider = FutureProvider.family<List<Couponmodel>, String>((ref, ruleId) async {
+  return ref.watch(productsProvider).getCouponsDescription(ruleId.toString());
+});
+
 final productRecommendedDataProvider =
     FutureProvider.family<List<RecommendedProductModel>, String>(
         (ref, pid) async {

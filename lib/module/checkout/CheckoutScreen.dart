@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobj_project/models/coupons/couponsModel.dart';
 import 'package:mobj_project/module/wishlist/wishlishScreen.dart';
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
@@ -40,6 +41,27 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     super.initState();
   }
 
+// Future<List<Coupon>>  getCoupons() async{
+
+//       try {
+//         Response response = await api.sendRequest.get('https://hp.geexu.org/rest/V1/coupons/search?searchCriteria=all'
+//         );
+//         if (response.statusCode == APIConstants.successCode) {
+//           // var result = response.data;
+//           // return ReviewProductModels.fromJson(result);
+
+//           final data = json.decode(response.data);
+//     final List<dynamic> couponList = data['items'];
+//     return couponList.map((json) => Coupon.fromJson(json)).toList();
+//         } else {
+//           throw (AppString.noDataError);
+//         }
+//       } catch (error, stackTrace) {
+//         debugPrint('print error is this $error $stackTrace');
+//         rethrow;
+//       }
+
+// }
   ProductRepository apicall = ProductRepository();
   Future<void> getTotalDetails() async {
     String cartId = await SharedPreferenceManager().getDraftId();
@@ -1508,6 +1530,36 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.sp, horizontal: 10.w),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Text(
+                                    //   AppLocalizations.of(context)!.categories,
+                                    //   style: Theme.of(context).textTheme.headlineLarge,
+                                    // ),
+                                    InkWell(
+                                      onTap: ()async {
+                                        // showReviewsBottomSheet(context);
+                                    final coupons = await ref.read(couponsProvider.future);
+                                    showReviewsBottomSheet(context, coupons);
+                                  
+                                      },
+                                      child: Text(
+                                          AppLocalizations.of(context)!.viewAll,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .displayMedium),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               TextFormField(
                                 controller: couponApply,
                                 // keyboardType: TextInputType.text,
@@ -1799,8 +1851,101 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         });
       } else {}
     } on Exception catch (e) {
-      
+      rethrow;
+    }
+  }
+
+
+//  void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
+//     showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: coupons.map((coupon) {
+//               return ListTile(
+//                 title: Text('Rule ID: ${coupon.ruleId}'),
+//                 subtitle: Text('Code: ${coupon.code}'),
+//               );
+//             }).toList(),
+//           ),
+//         );
+//       },
+//     );
+//   }
+
+
+
+  void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer(builder: (context, ref, _) {
+            final couponDescriptions = ref.watch(couponDescriptionProvider);
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: coupons.map((coupon) {
+                final description = couponDescriptions[coupon.ruleId] ?? '';
+                return ListTile(
+                  title: Text('Rule ID: ${coupon.ruleId}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Code: ${coupon.code}'),
+                      if (description.isNotEmpty)
+                        Text(
+                          description,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                    ],
+                  ),
+                  onTap: () {
+                    ref.read(couponDescriptionProvider.notifier).fetchCouponDescription(coupon.ruleId);
+                  },
+                );
+              }).toList(),
+            );
+          }),
+        );
+      },
+    );
+  }
+}
+
+class CouponDescriptionState extends StateNotifier<Map<int, String>> {
+  CouponDescriptionState() : super({});
+
+  Future<void> fetchCouponDescription(int ruleId) async {
+    API api = API();
+    try {
+      Response response = await api.sendRequest.get(
+        'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
+        options: Options(headers: {
+          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+        }),
+      );
+      if (response.statusCode == APIConstants.successCode) {
+        var data = response.data;
+        Couponmodel coupon = Couponmodel.fromJson(data);
+        state = {
+          ...state,
+          ruleId: coupon.description,
+        };
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      debugPrint("Error fetching coupon description: $stackTrace");
+      debugPrint("Error: $error");
       rethrow;
     }
   }
 }
+
+final couponDescriptionProvider = StateNotifierProvider<CouponDescriptionState, Map<int, String>>((ref) {
+  return CouponDescriptionState();
+});

@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 import '../../../../main.dart';
+import '../../../../models/coupons/couponsModel.dart';
 
 class ProductRepository {
   List<ProductModel> empty = [];
@@ -234,6 +235,66 @@ class ProductRepository {
         throw (AppString.noDataError);
       }
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<Coupon>> getCoupons() async {
+    try {
+      Response response = await api.sendRequest.get(
+        'https://hp.geexu.org/rest/V1/coupons/search?searchCriteria=all',
+        options: Options(headers: {
+          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+        }),
+      );
+      if (response.statusCode == APIConstants.successCode) {
+        // var result = response.data;
+        // return ReviewProductModels.fromJson(result);
+
+        final data = response.data;
+        final List<dynamic> couponList = data['items'];
+        List<Coupon> coupons = [];
+
+        for (int i = 0; i < couponList.length; i++) {
+          coupons.add(Coupon(
+              couponId: couponList[i]['coupon_id'],
+              ruleId: couponList[i]['rule_id'],
+              code: couponList[i]['code'],
+              usageLimit: couponList[i]['usage_limit'],
+              usagePerCustomer: couponList[i]['usage_per_customer'],
+              timesUsed: couponList[i]['times_used'],
+              isPrimary: couponList[i]['is_primary'],
+              type: couponList[i]['type']));
+        }
+        return coupons;
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      debugPrint("error is this order details: $stackTrace");
+      debugPrint("error is this: $error");
+      rethrow;
+    }
+  }
+
+  Future<List<Couponmodel>> getCouponsDescription(String ruleId) async {
+    try {
+      Response response = await api.sendRequest.get(
+        'https://hp.geexu.org/rest/V1/salesRules/6',
+        options: Options(headers: {
+          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+        }),
+      );
+      if (response.statusCode == APIConstants.successCode) {
+         var result = response.data;
+        return result.map((e) => Couponmodel.fromJson(e)).toList();
+        
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      debugPrint("error is this order details: $stackTrace");
+      debugPrint("error is this: $error");
       rethrow;
     }
   }
@@ -1007,7 +1068,6 @@ class ProductRepository {
       String exceptionString = "";
       String token = await SharedPreferenceManager().getToken();
 
-
       String baseUrl = AppConfigure.baseUrl +
           APIConstants.apiForAdminURL +
           APIConstants.apiURL;
@@ -1342,9 +1402,11 @@ class ProductRepository {
       }
     } else if (AppConfigure.megentoCommerce) {
       try {
-        final response = await api.sendRequest.get("orders/$pid",
+        final response = await api.sendRequest.get(
+          "orders/$pid",
           options: Options(headers: {
-            "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+            "Authorization":
+                "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
           }),
         );
 
@@ -1490,7 +1552,6 @@ class ProductRepository {
                   currentTotalTax: response.data['items'][i]['base_tax_amount'],
                   totalPrice: response.data['items'][i]
                       ['base_subtotal_incl_tax'],
-                  // customer: response.data['items'][i]['items']['order_id'],
                   customer: MagentoCustomerModel(
                     id: response.data['items'][i]['customer_id'],
                     email: response.data['items'][i]['customer_email'],
@@ -1512,7 +1573,6 @@ class ProductRepository {
                         ['telephone'],
                     adminGraphqlApiId: "",
                   ),
-                  // lineItems: response.data['items'][i]['items']['order_id'],
                   lineItems: (response.data['items'][i]['items']
                               as List<dynamic>?)
                           ?.map(
@@ -1524,7 +1584,6 @@ class ProductRepository {
                   phone: response.data['items'][i]['billing_address']
                       ['telephone']));
             }
-
             return orderlist;
 
             // List order = response.data["items"];
