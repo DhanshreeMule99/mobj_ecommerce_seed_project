@@ -1594,7 +1594,7 @@ class _AddressListScreenState extends ConsumerState<AddressListScreen> {
                                                                       .customer
                                                                       .email,
                                                                   double.parse(
-                                                                      "${widget.totalPrice}.00"));
+                                                                      "${widget.totalPrice.toString()}"));
                                                             } else {
                                                               // Stripe payment gateway
                                                               // StripePaymentService(
