@@ -298,7 +298,7 @@ class ProductRepository {
                 timesUsed: 0,
                 isPrimary: true,
                 type: 0,
-                discription: ""));
+                discription: couponList[i]['name']));
           }
           return coupons;
         } else {
@@ -1233,7 +1233,7 @@ class ProductRepository {
               response.statusCode == APIConstants.successCreateCode) {
             debugPrint(response.body);
             final result = jsonDecode(response.body)['data'];
-            debugPrint("result is this $result");
+            log("result is this $result");
 
             return DraftOrderModel.fromJson(result);
           } else {
