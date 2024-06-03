@@ -92,7 +92,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   Future<void> fetchImgUri() async {
     API api = API();
     final response = await api.sendRequest.get(
-        "https://mobj-strapi-admin-panel.onrender.com/api/logos?populate=*");
+        "https://mobj-strapi-admin-panel.onrender.com/api/logos?populate=*",
+        options: Options(headers: {"Authorization": ""}));
 
     if (response.statusCode == 200) {
       log("Response received");
@@ -198,7 +199,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                             width: 200,
                             color: Colors.grey.shade200,
                           ),
-                          
                           errorWidget: (context, url, error) =>
                               const Icon(Icons.error),
                         ),

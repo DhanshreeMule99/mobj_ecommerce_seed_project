@@ -472,7 +472,7 @@ fragment PriceFields on Money {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     final product = products[index];
-                                    log("image url is this ${product.featuredImage} ${product.description}");
+                                    //  log("image url is this ${product.featuredImage} ${product.description}");
 
                                     final int staticStock =
                                         10; // Example static value for stock
@@ -483,7 +483,7 @@ fragment PriceFields on Money {
                                             top: 5, left: 15, right: 15),
                                         child: InkWell(
                                           onTap: () {
-                                            log("sku is this ${product.description}");
+                                            //  log("sku is this ${product.description}");
                                             ref.refresh(productDetailsProvider(
                                               AppConfigure.megentoCommerce
                                                   ? product.description

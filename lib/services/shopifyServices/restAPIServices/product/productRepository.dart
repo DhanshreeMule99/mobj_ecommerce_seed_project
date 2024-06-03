@@ -679,7 +679,7 @@ class ProductRepository {
           "variant_id": int.parse(variantId)
         }
       ],
-      "currency": {"code": "USD"},
+      "currency": {"code": "INR"},
       "locale": "en-US"
     });
     var decodedBody = jsonDecode(body);
