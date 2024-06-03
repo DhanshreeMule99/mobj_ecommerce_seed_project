@@ -665,7 +665,7 @@ fragment PriceFields on Money {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         final product = products[index];
-                                        log("image url is this ${product.featuredImage} ${skus[index]}");
+                                        // log("image url is this ${product.featuredImage} ${skus[index]}");
 
                                         final int staticStock =
                                             10; // Example static value for stock
@@ -679,7 +679,7 @@ fragment PriceFields on Money {
                                                         animation1,
                                                         animation2) =>
                                                     ProductDetailsScreen(
-                                                  sku: skus[index],
+                                                  sku: AppConfigure.megentoCommerce? skus[index] : "",
                                                   uid: product.id
                                                       .replaceAll(
                                                           "gid://shopify/Product/",

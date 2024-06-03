@@ -240,40 +240,77 @@ class ProductRepository {
   }
 
   Future<List<Coupon>> getCoupons() async {
-    try {
-      Response response = await api.sendRequest.get(
-        'https://hp.geexu.org/rest/V1/coupons/search?searchCriteria=all',
-        options: Options(headers: {
-          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
-        }),
-      );
-      if (response.statusCode == APIConstants.successCode) {
-        // var result = response.data;
-        // return ReviewProductModels.fromJson(result);
+    if (AppConfigure.wooCommerce) {
+      try {
+        Response response = await api.sendRequest.get(
+          'https://ttf.setoo.org//wp-json/wc/v3/coupons?consumer_key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer_secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf',
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // var result = response.data;
+          // return ReviewProductModels.fromJson(result);
 
-        final data = response.data;
-        final List<dynamic> couponList = data['items'];
-        List<Coupon> coupons = [];
+          final data = response.data;
+          log("Coupons data are, $data");
+          final List<dynamic> couponList = data;
+          List<Coupon> coupons = [];
 
-        for (int i = 0; i < couponList.length; i++) {
-          coupons.add(Coupon(
-              couponId: couponList[i]['coupon_id'],
-              ruleId: couponList[i]['rule_id'],
-              code: couponList[i]['code'],
-              usageLimit: couponList[i]['usage_limit'],
-              usagePerCustomer: couponList[i]['usage_per_customer'],
-              timesUsed: couponList[i]['times_used'],
-              isPrimary: couponList[i]['is_primary'],
-              type: couponList[i]['type']));
+          for (int i = 0; i < couponList.length; i++) {
+            coupons.add(Coupon(
+                couponId: couponList[i]['id'],
+                ruleId: 0,
+                code: couponList[i]['code'],
+                usageLimit: 0,
+                usagePerCustomer: 0,
+                timesUsed: 0,
+                isPrimary: true,
+                type: 0));
+          }
+          return coupons;
+        } else {
+          throw (AppString.noDataError);
         }
-        return coupons;
-      } else {
-        throw (AppString.noDataError);
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("error is this order details: $stackTrace");
-      debugPrint("error is this: $error");
-      rethrow;
+    } else {
+      try {
+        Response response = await api.sendRequest.get(
+          'https://hp.geexu.org/rest/V1/coupons/search?searchCriteria=all',
+          options: Options(headers: {
+            "Authorization":
+                "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // var result = response.data;
+          // return ReviewProductModels.fromJson(result);
+
+          final data = response.data;
+          final List<dynamic> couponList = data['items'];
+          List<Coupon> coupons = [];
+
+          for (int i = 0; i < couponList.length; i++) {
+            coupons.add(Coupon(
+                couponId: couponList[i]['coupon_id'],
+                ruleId: couponList[i]['rule_id'],
+                code: couponList[i]['code'],
+                usageLimit: couponList[i]['usage_limit'],
+                usagePerCustomer: couponList[i]['usage_per_customer'],
+                timesUsed: couponList[i]['times_used'],
+                isPrimary: couponList[i]['is_primary'],
+                type: couponList[i]['type']));
+          }
+          return coupons;
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
     }
   }
 
@@ -286,9 +323,8 @@ class ProductRepository {
         }),
       );
       if (response.statusCode == APIConstants.successCode) {
-         var result = response.data;
+        var result = response.data;
         return result.map((e) => Couponmodel.fromJson(e)).toList();
-        
       } else {
         throw (AppString.noDataError);
       }
