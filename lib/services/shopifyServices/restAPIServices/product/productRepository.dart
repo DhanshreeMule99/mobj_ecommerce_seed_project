@@ -291,25 +291,26 @@ class ProductRepository {
           final List<dynamic> couponList = data['items'];
           List<Coupon> coupons = [];
 
-        for (int i = 0; i < couponList.length; i++) {
-          coupons.add(Coupon(
-              couponId: couponList[i]['coupon_id'],
-              ruleId: couponList[i]['rule_id'],
-              code: couponList[i]['code'],
-              usageLimit: couponList[i]['rule_id'],
-              usagePerCustomer: couponList[i]['rule_id'],
-              timesUsed: couponList[i]['times_used'],
-              isPrimary: couponList[i]['is_primary'],
-              type: couponList[i]['type']));
+          for (int i = 0; i < couponList.length; i++) {
+            coupons.add(Coupon(
+                couponId: couponList[i]['coupon_id'],
+                ruleId: couponList[i]['rule_id'],
+                code: couponList[i]['code'],
+                usageLimit: couponList[i]['rule_id'],
+                usagePerCustomer: couponList[i]['rule_id'],
+                timesUsed: couponList[i]['times_used'],
+                isPrimary: couponList[i]['is_primary'],
+                type: couponList[i]['type']));
+          }
+          return coupons;
+        } else {
+          throw (AppString.noDataError);
         }
-        return coupons;
-      } else {
-        throw (AppString.noDataError);
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("error is this order details: $stackTrace");
-      debugPrint("error is this: $error");
-      rethrow;
     }
   }
 
@@ -1318,7 +1319,7 @@ class ProductRepository {
           ATT.add(result['subtotal'].toString());
           ATT.add(result['tax_amount'].toString());
           ATT.add(result['base_grand_total'].toString());
-           ATT.add(result['discount_amount'].toString());
+          ATT.add(result['discount_amount'].toString());
 
           return ATT;
         } else {
