@@ -1642,9 +1642,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                       RegExp(r'\s')),
                                 ],
 
-                                validator: (value) {
-                                  return Validation().nameValidation(value);
-                                },
+                                // validator: (value) {
+                                //   return Validation().nameValidation(value);
+                                // },
                               ),
                               const SizedBox(
                                 height: 10,

@@ -21,7 +21,7 @@ class AppConfigure {
           : (megentoCommerce
               ? megentoCommerceUrl
               : "https://pyvaidyass.myshopify.com/"));
-              
+
   static const adminPanelUrl = "https://mobj-strapi-admin-panel.onrender.com";
   static const tawkURL =
       "https://tawk.to/chat/64917d1494cf5d49dc5ec746/1h3c51695";
@@ -49,7 +49,7 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = false;
+  static const bigCommerce = true;
 
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/zwpg4jmenh/v3';
@@ -68,7 +68,7 @@ class AppConfigure {
 // Megento commerce uel
 // megento credentials
 
-  static const megentoCommerce = true;
+  static const megentoCommerce = false;
   static const megentoCommerceUrl = "https://hp.geexu.org/rest/default/V1/";
 // static const megentoConsumerKey = "xe0s5wusltyhpcq2cvvmhkt4usqeck27";
 // static const megentoCunsumerSecret = "z4t0ixs6n0ty25rcunwn3h3z1xqfqqlo";
