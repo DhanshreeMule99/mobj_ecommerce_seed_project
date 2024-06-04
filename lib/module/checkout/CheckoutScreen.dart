@@ -29,7 +29,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<String> ATT = [];
   API api = API();
   final couponApply = TextEditingController();
-int totolPriceis = 0;
+  int totolPriceis = 0;
   void removeItem(LineItem item) {}
 
   @override
@@ -121,8 +121,9 @@ int totolPriceis = 0;
                     couponApply.text = product.invoiceUrl;
                   });
                 }
-           if(totolPriceis == 0)  {totolPriceis = product.totalPrice.round();}
-
+                if (totolPriceis == 0) {
+                  totolPriceis = product.totalPrice.round();
+                }
 
                 DraftOrderModel productlist = product;
                 for (var element in productlist.lineItems) {
@@ -2058,7 +2059,6 @@ int totolPriceis = 0;
                                   Navigator.of(context).pop();
 
                                   setState(() {
-                                   
                                     couponApply.text = coupon.code;
                                   });
                                 },
@@ -2087,12 +2087,16 @@ int totolPriceis = 0;
                           onPressed: () {
                             Navigator.of(context).pop();
                             setState(() {
-
-                                 totolPriceis = totolPriceis - (totolPriceis / double.parse(coupon.amt).round()).round();
-                                 log('totoal price = $totolPriceis');
-                                 
-                            
                               couponApply.text = coupon.code;
+                              if (AppConfigure.megentoCommerce) {
+                                totolPriceis = totolPriceis -
+                                    (totolPriceis /
+                                            double.parse(coupon.amt).round())
+                                        .round();
+                                log('totoal price = $totolPriceis');
+                              } else if (AppConfigure.bigCommerce) {
+                                ApplyCoupon();
+                              }
                             });
                           },
                           child: Text('Apply'),
