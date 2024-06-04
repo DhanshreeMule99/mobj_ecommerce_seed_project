@@ -30,6 +30,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   API api = API();
   final couponApply = TextEditingController();
   int totolPriceis = 0;
+  int originaltotalValue = 0;
+  int discountpriceis = 0;
   bool _isCouponApplied = false;
   void removeItem(LineItem item) {}
 
@@ -117,13 +119,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
             body: product.when(
               data: (product) {
-                if (!AppConfigure.megentoCommerce) {
+                if (AppConfigure.bigCommerce) {
                   setState(() {
                     couponApply.text = product.invoiceUrl;
                   });
                 }
                 if (totolPriceis == 0) {
                   totolPriceis = product.totalPrice.round();
+                  originaltotalValue = product.totalPrice.round();
                 }
 
                 DraftOrderModel productlist = product;
@@ -1752,7 +1755,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT.last}'
-                                          : '\u{20B9}${product.appliedDiscount}',
+                                          :AppConfigure.wooCommerce?"\u{20B9}$discountpriceis": '\u{20B9}${product.appliedDiscount}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1798,7 +1801,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT[2]}'
-                                          : '\u{20B9}${product.totalPrice}',
+                                          : AppConfigure.wooCommerce
+                                              ? '\u{20B9}${totolPriceis}'
+                                              : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -2010,16 +2015,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
   void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Consumer(builder: (context, ref, _) {
-          // Use FutureProvider to fetch descriptions for each coupon
-          final descriptions = Future.wait(
-            coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
-          );
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer(builder: (context, ref, _) {
+            // Use FutureProvider to fetch descriptions for each coupon
+            if (AppConfigure.megentoCommerce) {
+              descriptions = Future.wait(
+                coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
+              );
+            }
 
           return AppConfigure.megentoCommerce
               ? FutureBuilder<List<Couponmodel>>(
@@ -2077,7 +2084,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Navigator.of(context).pop();
 
                                   setState(() {
-                                    couponApply.text = coupon.code;
+                                    couponApply.text = coupon.code.toString();
                                   });
                                    ApplyCoupon();
                                 },
@@ -2112,17 +2119,21 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
+                            log('totoal price = $totolPriceis ${couponApply.text} = ${coupon.code}; ${coupon.amt}');
+                            if (AppConfigure.wooCommerce) {
+                              totolPriceis = originaltotalValue;
+                              totolPriceis = totolPriceis -
+                                  (totolPriceis /
+                                          double.parse(coupon.amt).round())
+                                      .round();
+                                      discountpriceis =  (totolPriceis /
+                                          double.parse(coupon.amt).round())
+                                      .round();
+                            } else if (AppConfigure.bigCommerce) {
+                              ApplyCoupon();
+                            }
                             setState(() {
-                              couponApply.text = coupon.code;
-                              if (AppConfigure.megentoCommerce) {
-                                totolPriceis = totolPriceis -
-                                    (totolPriceis /
-                                            double.parse(coupon.amt).round())
-                                        .round();
-                                log('totoal price = $totolPriceis');
-                              } else if (AppConfigure.bigCommerce) {
-                                ApplyCoupon();
-                              }
+                              couponApply.text = coupon.code.toString();
                             });
                           },
                           child: Text('Apply'),
