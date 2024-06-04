@@ -256,6 +256,7 @@ class ProductRepository {
 
           for (int i = 0; i < couponList.length; i++) {
             coupons.add(Coupon(
+                amt: couponList[i]['amount'].toString(),
                 couponId: couponList[i]['id'],
                 ruleId: 0,
                 code: couponList[i]['code'],
@@ -263,6 +264,7 @@ class ProductRepository {
                 usagePerCustomer: 0,
                 timesUsed: 0,
                 isPrimary: true,
+                discription: couponList[i]['description'],
                 type: 0));
           }
           return coupons;
@@ -293,6 +295,7 @@ class ProductRepository {
 
           for (int i = 0; i < couponList.length; i++) {
             coupons.add(Coupon(
+                amt: "",
                 couponId: couponList[i]['coupon_id'],
                 ruleId: couponList[i]['rule_id'],
                 code: couponList[i]['code'],

@@ -29,7 +29,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   List<String> ATT = [];
   API api = API();
   final couponApply = TextEditingController();
-
+int totolPriceis = 0;
   void removeItem(LineItem item) {}
 
   @override
@@ -116,6 +116,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
             body: product.when(
               data: (product) {
+           if(totolPriceis == 0)  {totolPriceis = product.totalPrice.round();}
+
+
                 DraftOrderModel productlist = product;
                 for (var element in productlist.lineItems) {
                   bigcommerceOrderedItems.add(AppConfigure.wooCommerce
@@ -1705,7 +1708,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT.last}'
-                                          : '\u{20B9}${product.totalPrice}',
+                                          : AppConfigure.wooCommerce ? totolPriceis.toString() :'\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1856,29 +1859,61 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
+  Future<Couponmodel> fetchCouponDescription(int ruleId) async {
+    API api = API();
+    // if (AppConfigure.wooCommerce) {
+    //   try {
+    //     Response response = await api.sendRequest.get(
+    //       'https://ttf.setoo.org//wp-json/wc/v3/coupons?consumer_key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer_secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf',
+    //     );
+    //     // log("Response is $response");
+    //     if (response.statusCode == APIConstants.successCode) {
+    //       var data = response.data;
+    //       var dateExpires = DateTime.parse(data[0]['date_expires']);
+    //       // Parse the date string to DateTime
+    //       var discountAmount = double.parse(data[0]['amount']);
 
-Future<Couponmodel> fetchCouponDescription(int ruleId) async {
-  API api = API();
-  try {
-    Response response = await api.sendRequest.get(
-      'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
-      options: Options(headers: {
-        "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
-      }),
-    );
-    if (response.statusCode == APIConstants.successCode) {
-      var data = response.data;
-      return Couponmodel.fromJson(data);
-    } else {
-      throw (AppString.noDataError);
+    //       return Couponmodel(
+    //           ruleId: ruleId,
+    //           amt: data[0]['amount'],
+    //           name: data[0]['code'],
+    //           description: data[0]['description'],
+    //           fromDate: dateExpires,
+    //           toDate: dateExpires,
+    //           isActive: true,
+    //           usesPerCustomer: 1,
+    //           usesPerCoupon: 1,
+    //           simpleAction: "simpleAction",
+    //           discountAmount: discountAmount,
+    //           applyToShipping: true);
+    //     } else {
+    //       throw (AppString.noDataError);
+    //     }
+    //   } catch (error, stackTrace) {
+    //     log("Error fetching coupon description: $stackTrace");
+    //     log("Error: $error, $stackTrace");
+    //     rethrow;
+    //   }
+    // } else {
+    try {
+      Response response = await api.sendRequest.get(
+        'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
+        options: Options(headers: {
+          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+        }),
+      );
+      if (response.statusCode == APIConstants.successCode) {
+        var data = response.data;
+        return Couponmodel.fromJson(data);
+      } else {
+        throw (AppString.noDataError);
+      }
+    } catch (error, stackTrace) {
+      debugPrint("Error fetching coupon description: $stackTrace");
+      debugPrint("Error: $error");
+      rethrow;
     }
-  } catch (error, stackTrace) {
-    debugPrint("Error fetching coupon description: $stackTrace");
-    debugPrint("Error: $error");
-    rethrow;
   }
-}
-
 
   // void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
   //   showModalBottomSheet(
@@ -1929,82 +1964,118 @@ Future<Couponmodel> fetchCouponDescription(int ruleId) async {
   //   );
   // }
 
-void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Consumer(builder: (context, ref, _) {
-          // Use FutureProvider to fetch descriptions for each coupon
-          final descriptions = Future.wait(
-            coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
-          );
+  void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer(builder: (context, ref, _) {
+            // Use FutureProvider to fetch descriptions for each coupon
+            final descriptions = Future.wait(
+              coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
+            );
 
-          return FutureBuilder<List<Couponmodel>>(
-            future: descriptions,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Text('No descriptions found.');
-              } else {
-                final couponDescriptions = snapshot.data!;
-                return ListView.builder(
-                  itemCount: coupons.length,
-                  itemBuilder: (context, index) {
-                    final coupon = coupons[index];
-                    final description = couponDescriptions.firstWhere(
-                        (desc) => desc.ruleId == coupon.ruleId,
-                        orElse: () => Couponmodel(
-                            ruleId: coupon.ruleId,
-                            name: '',
-                            description: 'No description available',
-                            fromDate: DateTime.now(),
-                            toDate: DateTime.now(),
-                            isActive: false,
-                            usesPerCustomer: 0,
-                            usesPerCoupon: 0,
-                            simpleAction: '',
-                            discountAmount: 0.0,
-                            applyToShipping: false));
+            return AppConfigure.megentoCommerce
+                ? FutureBuilder<List<Couponmodel>>(
+                    future: descriptions,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text('No descriptions found.');
+                      } else {
+                        final couponDescriptions = snapshot.data!;
+                        return ListView.builder(
+                          itemCount: coupons.length,
+                          itemBuilder: (context, index) {
+                            final coupon = coupons[index];
+                            final description = couponDescriptions.firstWhere(
+                                (desc) => desc.ruleId == coupon.ruleId,
+                                orElse: () => Couponmodel(
+                                    amt: "",
+                                    ruleId: coupon.ruleId,
+                                    name: '',
+                                    description: 'No description available',
+                                    fromDate: DateTime.now(),
+                                    toDate: DateTime.now(),
+                                    isActive: false,
+                                    usesPerCustomer: 0,
+                                    usesPerCoupon: 0,
+                                    simpleAction: '',
+                                    discountAmount: 0.0,
+                                    applyToShipping: false));
 
-                    return ListTile(
-                      title: Text('Rule ID: ${coupon.ruleId}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Code: ${coupon.code}'),
-                          Text('Description: ${description.description}'),
-                        ],
-                      ),
-                      trailing: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                            return ListTile(
+                              title: Text('Code: ${coupon.code.toUpperCase()}'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Text('Code: ${coupon.code}'),
+                                  Text(
+                                    'Description: ${description.description}',
+                                    style: TextStyle(fontSize: 12.sp),
+                                  ),
+                                ],
+                              ),
+                              trailing: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+
+                                  setState(() {
+                                   
+                                    couponApply.text = coupon.code;
+                                  });
+                                },
+                                child: Text('Apply'),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: coupons.length,
+                    itemBuilder: (context, index) {
+                      final coupon = coupons[index];
+
+                      return ListTile(
+                        title: Text('Code: ${coupon.code}'),
+                        subtitle: Text('Description: ${coupon.discription}'),
+                        trailing: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            setState(() {
+
+                                 totolPriceis = totolPriceis - (totolPriceis / double.parse(coupon.amt).round()).round();
+                                 log('totoal price = $totolPriceis');
+                                 
+                            
+                              couponApply.text = coupon.code;
+                            });
+                          },
+                          child: Text('Apply'),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          setState(() {
-                            couponApply.text = coupon.code;
-                          });
-                        },
-                        child: Text('Apply'),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-          );
-        }),
-      );
-    },
-  );
-}
-
-
+                      );
+                    },
+                  );
+          }),
+        );
+      },
+    );
+  }
 }

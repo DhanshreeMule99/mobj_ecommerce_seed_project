@@ -7,8 +7,11 @@ class Coupon {
   final int timesUsed;
   final bool isPrimary;
   final int type;
+  final String amt;
+  final String discription;
 
   Coupon({
+    required this.amt,
     required this.couponId,
     required this.ruleId,
     required this.code,
@@ -17,10 +20,12 @@ class Coupon {
     required this.timesUsed,
     required this.isPrimary,
     required this.type,
+    this.discription=""
   });
 
   factory Coupon.fromJson(Map<String, dynamic> json) {
     return Coupon(
+      amt: json['amount'],
       couponId: json['coupon_id'],
       ruleId: json['rule_id'],
       code: json['code'],
@@ -33,9 +38,9 @@ class Coupon {
   }
 }
 
-
 class Couponmodel {
   final int ruleId;
+  final String amt;
   final String name;
   final String description;
   final DateTime fromDate;
@@ -49,6 +54,7 @@ class Couponmodel {
 
   Couponmodel({
     required this.ruleId,
+    required this.amt,
     required this.name,
     required this.description,
     required this.fromDate,
@@ -64,6 +70,7 @@ class Couponmodel {
   factory Couponmodel.fromJson(Map<String, dynamic> json) {
     return Couponmodel(
       ruleId: json['rule_id'],
+      amt: json['amount'],
       name: json['name'],
       description: json['description'],
       fromDate: DateTime.parse(json['from_date']),
@@ -77,5 +84,3 @@ class Couponmodel {
     );
   }
 }
-
-
