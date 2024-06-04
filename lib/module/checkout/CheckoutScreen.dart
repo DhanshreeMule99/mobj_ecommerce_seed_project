@@ -1736,7 +1736,7 @@ int totolPriceis = 0;
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT[2]}'
-                                          : '\u{20B9}${product.totalPrice}',
+                                          : AppConfigure.wooCommerce? '\u{20B9}${totolPriceis}' : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
