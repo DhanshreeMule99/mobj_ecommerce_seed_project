@@ -42,7 +42,7 @@ class Coupon {
 
 class Couponmodel {
   final int ruleId;
-  final String amt;
+ 
   final String name;
   final String description;
   final DateTime fromDate;
@@ -56,7 +56,7 @@ class Couponmodel {
 
   Couponmodel({
     required this.ruleId,
-    required this.amt,
+   
     required this.name,
     required this.description,
     required this.fromDate,
@@ -72,7 +72,7 @@ class Couponmodel {
   factory Couponmodel.fromJson(Map<String, dynamic> json) {
     return Couponmodel(
       ruleId: json['rule_id'],
-      amt: json['amount'],
+    
       name: json['name'],
       description: json['description'],
       fromDate: DateTime.parse(json['from_date']),

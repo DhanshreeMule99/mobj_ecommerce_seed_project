@@ -30,6 +30,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   API api = API();
   final couponApply = TextEditingController();
   int totolPriceis = 0;
+  bool _isCouponApplied = false;
   void removeItem(LineItem item) {}
 
   @override
@@ -1570,92 +1571,152 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              TextFormField(
-                                controller: couponApply,
-                                // keyboardType: TextInputType.text,
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(
-                                //       RegExp(r'.*'))
-                                // ],
-                                // decoration: InputDecoration(
-                                //   labelText: AppLocalizations.of(context)!.personNameLabel,
-                                //   enabledBorder: OutlineInputBorder(
-                                //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when enabled
-                                //   ),
-                                //   focusedBorder: OutlineInputBorder(
-                                //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when focused
-                                //   ),
-                                // ),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
+                              // TextFormField(
+                              //   controller: couponApply,
+                              //   // keyboardType: TextInputType.text,
+                              //   // inputFormatters: [
+                              //   //   FilteringTextInputFormatter.allow(
+                              //   //       RegExp(r'.*'))
+                              //   // ],
+                              //   // decoration: InputDecoration(
+                              //   //   labelText: AppLocalizations.of(context)!.personNameLabel,
+                              //   //   enabledBorder: OutlineInputBorder(
+                              //   //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when enabled
+                              //   //   ),
+                              //   //   focusedBorder: OutlineInputBorder(
+                              //   //     borderSide: BorderSide(color: Theme.of(context).colorScheme.primary,), // Color when focused
+                              //   //   ),
+                              //   // ),
+                              //   autovalidateMode:
+                              //       AutovalidateMode.onUserInteraction,
 
-                                decoration: InputDecoration(
-                                    errorStyle: const TextStyle(fontSize: 12),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 15.0, horizontal: 10),
-                                    label: Text(
-                                      "Enter Coupon",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                    suffixIcon: TextButton(
-                                      onPressed: () {
-                                        log("coupon is this ${couponApply.text}");
-                                        if (couponApply.text.trim() != "") {
-                                          ApplyCoupon();
-                                        } else {
-                                          Fluttertoast.showToast(
-                                              msg: 'Please enter coupon');
-                                        }
-                                      },
-                                      child: Text('APPLY',
-                                          style: GoogleFonts.inter(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                        //Outline border type for TextFeild
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(
-                                                AppDimension.buttonRadius)),
-                                        borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          width: 1.5,
-                                        )),
-                                    //normal border
-                                    enabledBorder: OutlineInputBorder(
-                                        //Outline  order type for TextFeild
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(
-                                                AppDimension.buttonRadius)),
-                                        borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          width: 1.5,
-                                        )),
-                                    focusedBorder: OutlineInputBorder(
-                                        //Outline border type for TextFeild
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(
-                                                AppDimension.buttonRadius)),
-                                        borderSide: BorderSide(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            width: 1.5))),
-                                keyboardType: TextInputType.text,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.deny(
-                                      RegExp(r'\s')),
-                                ],
+                              //   decoration: InputDecoration(
+                              //       errorStyle: const TextStyle(fontSize: 12),
+                              //       contentPadding: const EdgeInsets.symmetric(
+                              //           vertical: 15.0, horizontal: 10),
+                              //       label: Text(
+                              //         "Enter Coupon",
+                              //         style: Theme.of(context)
+                              //             .textTheme
+                              //             .titleMedium,
+                              //       ),
+                              //       suffixIcon: TextButton(
+                              //         onPressed: () {
+                              //           log("coupon is this ${couponApply.text}");
+                              //           if (couponApply.text.trim() != "") {
+                              //             ApplyCoupon();
+                              //           } else {
+                              //             Fluttertoast.showToast(
+                              //                 msg: 'Please enter coupon');
+                              //           }
+                              //         },
+                              //         child: Text('APPLY',
+                              //             style: GoogleFonts.inter(
+                              //                 fontWeight: FontWeight.bold)),
+                              //       ),
+                              //       border: OutlineInputBorder(
+                              //           //Outline border type for TextFeild
+                              //           borderRadius: const BorderRadius.all(
+                              //               Radius.circular(
+                              //                   AppDimension.buttonRadius)),
+                              //           borderSide: BorderSide(
+                              //             color: Theme.of(context)
+                              //                 .colorScheme
+                              //                 .primary,
+                              //             width: 1.5,
+                              //           )),
+                              //       //normal border
+                              //       enabledBorder: OutlineInputBorder(
+                              //           //Outline  order type for TextFeild
+                              //           borderRadius: const BorderRadius.all(
+                              //               Radius.circular(
+                              //                   AppDimension.buttonRadius)),
+                              //           borderSide: BorderSide(
+                              //             color: Theme.of(context)
+                              //                 .colorScheme
+                              //                 .primary,
+                              //             width: 1.5,
+                              //           )),
+                              //       focusedBorder: OutlineInputBorder(
+                              //           //Outline border type for TextFeild
+                              //           borderRadius: const BorderRadius.all(
+                              //               Radius.circular(
+                              //                   AppDimension.buttonRadius)),
+                              //           borderSide: BorderSide(
+                              //               color: Theme.of(context)
+                              //                   .colorScheme
+                              //                   .primary,
+                              //               width: 1.5))),
+                              //   keyboardType: TextInputType.text,
+                              //   inputFormatters: [
+                              //     FilteringTextInputFormatter.deny(
+                              //         RegExp(r'\s')),
+                              //   ],
 
-                                // validator: (value) {
-                                //   return Validation().nameValidation(value);
-                                // },
+                              //   // validator: (value) {
+                              //   //   return Validation().nameValidation(value);
+                              //   // },
+                              // ),
+
+                                      TextFormField(
+                                    
+                            controller: couponApply,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              errorStyle: const TextStyle(fontSize: 12),
+                              contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+                              label: Text(
+                                "Enter Coupon",
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
+                              suffixIcon: TextButton(
+                               
+                                onPressed: () {
+                                  log("coupon is this ${couponApply.text}");
+                                  if (couponApply.text.trim() != "") {
+                                    ApplyCoupon();
+                                  } else {
+                                    Fluttertoast.showToast(msg: 'Please enter coupon');
+                                  }
+                                },
+                                child: Text(
+                                  _isCouponApplied ? 'APPLIED' : 'APPLY',
+
+                                  
+                                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                // Outline border type for TextField
+                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              // Normal border
+                              enabledBorder: OutlineInputBorder(
+                                // Outline border type for TextField
+                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                // Outline border type for TextField
+                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 1.5,
+                                ),
+                              ),
+                            ),
+                            keyboardType: TextInputType.text,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                            ],
+                          ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -1865,7 +1926,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> ApplyCoupon() async {
     String token = await SharedPreferenceManager().getToken();
-    log("asdfghjkl;...................................................$token");
+     log("asdfghjkl;...................................................$token");
 
     if (AppConfigure.megentoCommerce) {
       try {
@@ -1875,6 +1936,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         if (response.statusCode == 200) {
           Fluttertoast.showToast(msg: 'Coupon applied successfully');
           getTotalDetails();
+           setState(() {
+              _isCouponApplied = true;
+            });
         } else {}
       } on Exception catch (e) {
         log('appply coupon error is this $e');
@@ -1891,6 +1955,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         if (response.statusCode == 200) {
           Fluttertoast.showToast(msg: 'Coupon applied successfully');
           ref.refresh(cartDetailsDataProvider);
+           setState(() {
+              _isCouponApplied = true;
+            });
         } else {}
       } on Exception catch (e) {
         log('appply coupon error is this $e');
@@ -1942,117 +2009,68 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       throw "its not magento";
     }
   }
-
-  // void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return Padding(
-  //         padding: const EdgeInsets.all(16.0),
-  //         child: Consumer(builder: (context, ref, _) {
-  //           final couponDescriptions = ref.watch(couponDescriptionProvider);
-  //           return Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: coupons.map((coupon) {
-  //               final description = couponDescriptions[coupon.ruleId] ?? '';
-  //               return ListTile(
-  //                 title: Text('Rule ID: ${coupon.ruleId}'),
-  //                 subtitle: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Text('Code: ${coupon.code}'),
-  //                     if (description.isNotEmpty)
-  //                       Text(
-  //                         description,
-  //                         style: TextStyle(color: Colors.red),
-  //                       ),
-  //                   ],
-  //                 ),
-  //                 trailing: OutlinedButton(
-
-  //                   style: OutlinedButton.styleFrom(
-  //                     side: BorderSide(
-  //                       color: Theme.of(context).colorScheme.primary,
-  //                     ),
-  //                   ),
-  //                   onPressed: () {
-  //                     // Add your apply logic here
-  //                   },
-  //                   child: Text('Apply'),
-  //                 ),
-  //                 onTap: () {
-  //                   ref.read(couponDescriptionProvider.notifier).fetchCouponDescription(coupon.ruleId);
-  //                 },
-  //               );
-  //             }).toList(),
-  //           );
-  //         }),
-  //       );
-  //     },
-  //   );
-  // }
-
   void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Consumer(builder: (context, ref, _) {
-            // Use FutureProvider to fetch descriptions for each coupon
-            final descriptions = Future.wait(
-              coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
-            );
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Consumer(builder: (context, ref, _) {
+          // Use FutureProvider to fetch descriptions for each coupon
+          final descriptions = Future.wait(
+            coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
+          );
 
-            return AppConfigure.megentoCommerce
-                ? FutureBuilder<List<Couponmodel>>(
-                    future: descriptions,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Text('No descriptions found.');
-                      } else {
-                        final couponDescriptions = snapshot.data!;
-                        return ListView.builder(
-                          itemCount: coupons.length,
-                          itemBuilder: (context, index) {
-                            final coupon = coupons[index];
-                            final description = couponDescriptions.firstWhere(
-                                (desc) => desc.ruleId == coupon.ruleId,
-                                orElse: () => Couponmodel(
-                                    amt: "",
-                                    ruleId: coupon.ruleId,
-                                    name: '',
-                                    description: 'No description available',
-                                    fromDate: DateTime.now(),
-                                    toDate: DateTime.now(),
-                                    isActive: false,
-                                    usesPerCustomer: 0,
-                                    usesPerCoupon: 0,
-                                    simpleAction: '',
-                                    discountAmount: 0.0,
-                                    applyToShipping: false));
+          return AppConfigure.megentoCommerce
+              ? FutureBuilder<List<Couponmodel>>(
+                  future: descriptions,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text('No descriptions found.');
+                    } else {
+                      final couponDescriptions = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: coupons.length,
+                        itemBuilder: (context, index) {
+                          final coupon = coupons[index];
+                          final description = couponDescriptions.firstWhere(
+                              (desc) => desc.ruleId == coupon.ruleId,
+                              orElse: () => Couponmodel(
+                                 
+                                  ruleId: coupon.ruleId,
+                                  name: '',
+                                  description: 'No description available',
+                                  fromDate: DateTime.now(),
+                                  toDate: DateTime.now(),
+                                  isActive: false,
+                                  usesPerCustomer: 0,
+                                  usesPerCoupon: 0,
+                                  simpleAction: '',
+                                  discountAmount: 0.0,
+                                  applyToShipping: false));
 
-                            return ListTile(
+                          return Card(
+                             color: Theme.of(context).colorScheme.onPrimary,
+                                elevation: 3,
+                           
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: ListTile(
                               title: Text('Code: ${coupon.code.toUpperCase()}'),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Text('Code: ${coupon.code}'),
-                                  Text(
-                                    'Description: ${description.description}',
-                                    style: TextStyle(fontSize: 12.sp),
-                                  ),
-                                ],
+                              subtitle: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  'Description: ${description.description}',
+                                  style: TextStyle(fontSize: 12.sp),
+                                ),
                               ),
                               trailing: OutlinedButton(
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 onPressed: () {
@@ -2061,23 +2079,31 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   setState(() {
                                     couponApply.text = coupon.code;
                                   });
+                                   ApplyCoupon();
                                 },
                                 child: Text('Apply'),
                               ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  )
-                : ListView.builder(
-                    itemCount: coupons.length,
-                    itemBuilder: (context, index) {
-                      final coupon = coupons[index];
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
+                )
+              : ListView.builder(
+                  itemCount: coupons.length,
+                  itemBuilder: (context, index) {
+                    final coupon = coupons[index];
 
-                      return ListTile(
+                    return Card(
+                      elevation: 3,
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
                         title: Text('Code: ${coupon.code}'),
-                        subtitle: Text('Description: ${coupon.discription}'),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text('Description: ${coupon.discription}'),
+                        ),
                         trailing: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
@@ -2101,12 +2127,133 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           },
                           child: Text('Apply'),
                         ),
-                      );
-                    },
-                  );
-          }),
-        );
-      },
-    );
-  }
+                      ),
+                    );
+                  },
+                );
+        }),
+      );
+    },
+  );
+}
+
+
+
+  // void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Padding(
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: Consumer(builder: (context, ref, _) {
+  //           // Use FutureProvider to fetch descriptions for each coupon
+  //           final descriptions = Future.wait(
+  //             coupons.map((coupon) => fetchCouponDescription(coupon.ruleId)),
+  //           );
+
+  //           return AppConfigure.megentoCommerce
+  //               ? FutureBuilder<List<Couponmodel>>(
+  //                   future: descriptions,
+  //                   builder: (context, snapshot) {
+  //                     if (snapshot.connectionState == ConnectionState.waiting) {
+  //                       return const CircularProgressIndicator();
+  //                     } else if (snapshot.hasError) {
+  //                       return Text('Error: ${snapshot.error}');
+  //                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  //                       return const Text('No descriptions found.');
+  //                     } else {
+  //                       final couponDescriptions = snapshot.data!;
+  //                       return ListView.builder(
+  //                         itemCount: coupons.length,
+  //                         itemBuilder: (context, index) {
+  //                           final coupon = coupons[index];
+  //                           final description = couponDescriptions.firstWhere(
+  //                               (desc) => desc.ruleId == coupon.ruleId,
+  //                               orElse: () => Couponmodel(
+  //                                   ruleId: coupon.ruleId,
+  //                                   name: '',
+  //                                   description: 'No description available',
+  //                                   fromDate: DateTime.now(),
+  //                                   toDate: DateTime.now(),
+  //                                   isActive: false,
+  //                                   usesPerCustomer: 0,
+  //                                   usesPerCoupon: 0,
+  //                                   simpleAction: '',
+  //                                   discountAmount: 0.0,
+  //                                   applyToShipping: false));
+
+  //                           return ListTile(
+  //                             title: Text('Code: ${coupon.code.toUpperCase()}'),
+  //                             subtitle: Column(
+  //                               crossAxisAlignment: CrossAxisAlignment.start,
+  //                               children: [
+  //                                 // Text('Code: ${coupon.code}'),
+  //                                 Text(
+  //                                   'Description: ${description.description}',
+  //                                   style: TextStyle(fontSize: 12.sp),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                             trailing: OutlinedButton(
+  //                               style: OutlinedButton.styleFrom(
+  //                                 side: BorderSide(
+  //                                   color:
+  //                                       Theme.of(context).colorScheme.primary,
+  //                                 ),
+  //                               ),
+  //                               onPressed: () {
+  //                                 Navigator.of(context).pop();
+
+  //                                 setState(() {
+  //                                   couponApply.text = coupon.code;
+  //                                 });
+  //                                  ApplyCoupon();
+  //                               },
+  //                               child: Text('Apply'),
+  //                             ),
+  //                           );
+  //                         },
+  //                       );
+  //                     }
+  //                   },
+  //                 )
+  //               : ListView.builder(
+  //                   itemCount: coupons.length,
+  //                   itemBuilder: (context, index) {
+  //                     final coupon = coupons[index];
+
+  //                     return ListTile(
+  //                       title: Text('Code: ${coupon.code}'),
+  //                       subtitle: Text('Description: ${coupon.discription}'),
+  //                       trailing: OutlinedButton(
+  //                         style: OutlinedButton.styleFrom(
+  //                           side: BorderSide(
+  //                             color: Theme.of(context).colorScheme.primary,
+  //                           ),
+  //                         ),
+  //                         onPressed: () {
+  //                           Navigator.of(context).pop();
+  //                           setState(() {
+  //                             couponApply.text = coupon.code;
+  //                             if (AppConfigure.megentoCommerce) {
+  //                               totolPriceis = totolPriceis -
+  //                                   (totolPriceis /
+  //                                           double.parse(coupon.amt).round())
+  //                                       .round();
+  //                               log('totoal price = $totolPriceis');
+  //                             } else if (AppConfigure.bigCommerce) {
+  //                               ApplyCoupon();
+  //                             }
+  //                           });
+  //                         },
+  //                         child: Text('Apply'),
+  //                       ),
+  //                     );
+  //                   },
+  //                 );
+  //         }),
+  //       );
+  //     },
+  //   );
+  // }
 }

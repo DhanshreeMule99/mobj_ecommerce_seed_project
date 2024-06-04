@@ -49,7 +49,7 @@ class AppConfigure {
   static const pickUpAddressLatitude = 18.516040;
 
   ////bigcommerce urls
-  static const bigCommerce = true;
+  static const bigCommerce = false;
 
   static const bigcommerceUrl =
       'https://api.bigcommerce.com/stores/repxc8puns/v3';
@@ -69,7 +69,7 @@ class AppConfigure {
 // Megento commerce uel
 // megento credentials
 
-  static const megentoCommerce = false;
+  static const megentoCommerce = true;
   static const megentoCommerceUrl = "https://hp.geexu.org/rest/default/V1/";
 // static const megentoConsumerKey = "xe0s5wusltyhpcq2cvvmhkt4usqeck27";
 // static const megentoCunsumerSecret = "z4t0ixs6n0ty25rcunwn3h3z1xqfqqlo";
