@@ -31,6 +31,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final couponApply = TextEditingController();
   int totolPriceis = 0;
   int originaltotalValue = 0;
+  int discountpriceis = 0;
   void removeItem(LineItem item) {}
 
   @override
@@ -1693,7 +1694,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT.last}'
-                                          : '\u{20B9}${product.appliedDiscount}',
+                                          :AppConfigure.wooCommerce?"\u{20B9}$discountpriceis": '\u{20B9}${product.appliedDiscount}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -2097,6 +2098,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               totolPriceis = originaltotalValue;
                               totolPriceis = totolPriceis -
                                   (totolPriceis /
+                                          double.parse(coupon.amt).round())
+                                      .round();
+                                      discountpriceis =  (totolPriceis /
                                           double.parse(coupon.amt).round())
                                       .round();
                             } else if (AppConfigure.bigCommerce) {
