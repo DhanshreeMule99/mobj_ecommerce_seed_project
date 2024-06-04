@@ -1661,65 +1661,76 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               //   // },
                               // ),
 
-                                      TextFormField(
-                                    
-                            controller: couponApply,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(
-                              errorStyle: const TextStyle(fontSize: 12),
-                              contentPadding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
-                              label: Text(
-                                "Enter Coupon",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              suffixIcon: TextButton(
-                               
-                                onPressed: () {
-                                  log("coupon is this ${couponApply.text}");
-                                  if (couponApply.text.trim() != "") {
-                                    ApplyCoupon();
-                                  } else {
-                                    Fluttertoast.showToast(msg: 'Please enter coupon');
-                                  }
-                                },
-                                child: Text(
-                                  _isCouponApplied ? 'APPLIED' : 'APPLY',
-
-                                  
-                                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+                              TextFormField(
+                                controller: couponApply,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                decoration: InputDecoration(
+                                  errorStyle: const TextStyle(fontSize: 12),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 15.0, horizontal: 10),
+                                  label: Text(
+                                    "Enter Coupon",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  suffixIcon: TextButton(
+                                    onPressed: () {
+                                      log("coupon is this ${couponApply.text}");
+                                      if (couponApply.text.trim() != "") {
+                                        ApplyCoupon();
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: 'Please enter coupon');
+                                      }
+                                    },
+                                    child: Text(
+                                      _isCouponApplied ? 'APPLIED' : 'APPLY',
+                                      style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    // Outline border type for TextField
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  // Normal border
+                                  enabledBorder: OutlineInputBorder(
+                                    // Outline border type for TextField
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    // Outline border type for TextField
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            AppDimension.buttonRadius)),
+                                    borderSide: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1.5,
+                                    ),
+                                  ),
                                 ),
+                                keyboardType: TextInputType.text,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r'\s')),
+                                ],
                               ),
-                              border: OutlineInputBorder(
-                                // Outline border type for TextField
-                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 1.5,
-                                ),
-                              ),
-                              // Normal border
-                              enabledBorder: OutlineInputBorder(
-                                // Outline border type for TextField
-                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 1.5,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                // Outline border type for TextField
-                                borderRadius: const BorderRadius.all(Radius.circular(AppDimension.buttonRadius)),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.text,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp(r'\s')),
-                            ],
-                          ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -1755,7 +1766,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Text(
                                       AppConfigure.megentoCommerce
                                           ? '\u{20B9}${ATT.last}'
-                                          :AppConfigure.wooCommerce?"\u{20B9}$discountpriceis": '\u{20B9}${product.appliedDiscount}',
+                                          : AppConfigure.wooCommerce
+                                              ? "\u{20B9}$discountpriceis"
+                                              : '\u{20B9}${product.appliedDiscount}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1931,7 +1944,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> ApplyCoupon() async {
     String token = await SharedPreferenceManager().getToken();
-     log("asdfghjkl;...................................................$token");
+    log("asdfghjkl;...................................................$token");
 
     if (AppConfigure.megentoCommerce) {
       try {
@@ -1941,9 +1954,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         if (response.statusCode == 200) {
           Fluttertoast.showToast(msg: 'Coupon applied successfully');
           getTotalDetails();
-           setState(() {
-              _isCouponApplied = true;
-            });
+          setState(() {
+            _isCouponApplied = true;
+          });
         } else {}
       } on Exception catch (e) {
         log('appply coupon error is this $e');
@@ -1960,9 +1973,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         if (response.statusCode == 200) {
           Fluttertoast.showToast(msg: 'Coupon applied successfully');
           ref.refresh(cartDetailsDataProvider);
-           setState(() {
-              _isCouponApplied = true;
-            });
+          setState(() {
+            _isCouponApplied = true;
+          });
         } else {}
       } on Exception catch (e) {
         log('appply coupon error is this $e');
@@ -2014,6 +2027,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       throw "its not magento";
     }
   }
+
+  var descriptions;
   void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
     showModalBottomSheet(
       context: context,
@@ -2028,127 +2043,126 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               );
             }
 
-          return AppConfigure.megentoCommerce
-              ? FutureBuilder<List<Couponmodel>>(
-                  future: descriptions,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Text('No descriptions found.');
-                    } else {
-                      final couponDescriptions = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: coupons.length,
-                        itemBuilder: (context, index) {
-                          final coupon = coupons[index];
-                          final description = couponDescriptions.firstWhere(
-                              (desc) => desc.ruleId == coupon.ruleId,
-                              orElse: () => Couponmodel(
-                                 
-                                  ruleId: coupon.ruleId,
-                                  name: '',
-                                  description: 'No description available',
-                                  fromDate: DateTime.now(),
-                                  toDate: DateTime.now(),
-                                  isActive: false,
-                                  usesPerCustomer: 0,
-                                  usesPerCoupon: 0,
-                                  simpleAction: '',
-                                  discountAmount: 0.0,
-                                  applyToShipping: false));
+            return AppConfigure.megentoCommerce
+                ? FutureBuilder<List<Couponmodel>>(
+                    future: descriptions,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Text('No descriptions found.');
+                      } else {
+                        final couponDescriptions = snapshot.data!;
+                        return ListView.builder(
+                          itemCount: coupons.length,
+                          itemBuilder: (context, index) {
+                            final coupon = coupons[index];
+                            final description = couponDescriptions.firstWhere(
+                                (desc) => desc.ruleId == coupon.ruleId,
+                                orElse: () => Couponmodel(
+                                    ruleId: coupon.ruleId,
+                                    name: '',
+                                    description: 'No description available',
+                                    fromDate: DateTime.now(),
+                                    toDate: DateTime.now(),
+                                    isActive: false,
+                                    usesPerCustomer: 0,
+                                    usesPerCoupon: 0,
+                                    simpleAction: '',
+                                    discountAmount: 0.0,
+                                    applyToShipping: false));
 
-                          return Card(
-                             color: Theme.of(context).colorScheme.onPrimary,
-                                elevation: 3,
-                           
-                            margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: ListTile(
-                              title: Text('Code: ${coupon.code.toUpperCase()}'),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
-                                  'Description: ${description.description}',
-                                  style: TextStyle(fontSize: 12.sp),
-                                ),
-                              ),
-                              trailing: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
+                            return Card(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              elevation: 3,
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                title:
+                                    Text('Code: ${coupon.code.toUpperCase()}'),
+                                subtitle: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: Text(
+                                    'Description: ${description.description}',
+                                    style: TextStyle(fontSize: 12.sp),
                                   ),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
+                                trailing: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
 
-                                  setState(() {
-                                    couponApply.text = coupon.code.toString();
-                                  });
-                                   ApplyCoupon();
-                                },
-                                child: Text('Apply'),
+                                    setState(() {
+                                      couponApply.text = coupon.code.toString();
+                                    });
+                                    ApplyCoupon();
+                                  },
+                                  child: Text('Apply'),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: coupons.length,
+                    itemBuilder: (context, index) {
+                      final coupon = coupons[index];
+
+                      return Card(
+                        elevation: 3,
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: ListTile(
+                          title: Text('Code: ${coupon.code}'),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Text('Description: ${coupon.discription}'),
+                          ),
+                          trailing: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                )
-              : ListView.builder(
-                  itemCount: coupons.length,
-                  itemBuilder: (context, index) {
-                    final coupon = coupons[index];
-
-                    return Card(
-                      elevation: 3,
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text('Code: ${coupon.code}'),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text('Description: ${coupon.discription}'),
-                        ),
-                        trailing: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              log('totoal price = $totolPriceis ${couponApply.text} = ${coupon.code}; ${coupon.amt}');
+                              if (AppConfigure.wooCommerce) {
+                                totolPriceis = originaltotalValue;
+                                totolPriceis = totolPriceis -
+                                    (totolPriceis /
+                                            double.parse(coupon.amt).round())
+                                        .round();
+                                discountpriceis = (totolPriceis /
+                                        double.parse(coupon.amt).round())
+                                    .round();
+                              } else if (AppConfigure.bigCommerce) {
+                                ApplyCoupon();
+                              }
+                              setState(() {
+                                couponApply.text = coupon.code.toString();
+                              });
+                            },
+                            child: Text('Apply'),
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            log('totoal price = $totolPriceis ${couponApply.text} = ${coupon.code}; ${coupon.amt}');
-                            if (AppConfigure.wooCommerce) {
-                              totolPriceis = originaltotalValue;
-                              totolPriceis = totolPriceis -
-                                  (totolPriceis /
-                                          double.parse(coupon.amt).round())
-                                      .round();
-                                      discountpriceis =  (totolPriceis /
-                                          double.parse(coupon.amt).round())
-                                      .round();
-                            } else if (AppConfigure.bigCommerce) {
-                              ApplyCoupon();
-                            }
-                            setState(() {
-                              couponApply.text = coupon.code.toString();
-                            });
-                          },
-                          child: Text('Apply'),
                         ),
-                      ),
-                    );
-                  },
-                );
-        }),
-      );
-    },
-  );
-}
-
-
+                      );
+                    },
+                  );
+          }),
+        );
+      },
+    );
+  }
 
   // void showReviewsBottomSheet(BuildContext context, List<Coupon> coupons) {
   //   showModalBottomSheet(
