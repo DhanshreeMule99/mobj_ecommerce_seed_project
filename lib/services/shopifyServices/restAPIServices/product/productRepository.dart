@@ -276,6 +276,41 @@ class ProductRepository {
         debugPrint("error is this: $error");
         rethrow;
       }
+    } else if (AppConfigure.bigCommerce) {
+      try {
+        Response response = await api.sendRequest.get(
+          'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v2/coupons',
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          // var result = response.data;
+          // return ReviewProductModels.fromJson(result);
+
+          final data = response.data;
+          log("Coupons data are, $data");
+          final List<dynamic> couponList = data;
+          List<Coupon> coupons = [];
+
+          for (int i = 0; i < couponList.length; i++) {
+            coupons.add(Coupon(
+                couponId: couponList[i]['id'],
+                ruleId: 0,
+                code: couponList[i]['code'],
+                usageLimit: 0,
+                usagePerCustomer: 0,
+                timesUsed: 0,
+                isPrimary: true,
+                type: 0,
+                discription: couponList[i]['name']));
+          }
+          return coupons;
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("error is this order details: $stackTrace");
+        debugPrint("error is this: $error");
+        rethrow;
+      }
     } else {
       try {
         Response response = await api.sendRequest.get(
@@ -299,8 +334,8 @@ class ProductRepository {
                 couponId: couponList[i]['coupon_id'],
                 ruleId: couponList[i]['rule_id'],
                 code: couponList[i]['code'],
-                usageLimit: couponList[i]['usage_limit'],
-                usagePerCustomer: couponList[i]['usage_per_customer'],
+                usageLimit: couponList[i]['rule_id'],
+                usagePerCustomer: couponList[i]['rule_id'],
                 timesUsed: couponList[i]['times_used'],
                 isPrimary: couponList[i]['is_primary'],
                 type: couponList[i]['type']));
@@ -682,7 +717,7 @@ class ProductRepository {
           "variant_id": int.parse(variantId)
         }
       ],
-      "currency": {"code": "USD"},
+      "currency": {"code": "INR"},
       "locale": "en-US"
     });
     var decodedBody = jsonDecode(body);
@@ -1201,7 +1236,7 @@ class ProductRepository {
               response.statusCode == APIConstants.successCreateCode) {
             debugPrint(response.body);
             final result = jsonDecode(response.body)['data'];
-            debugPrint("result is this $result");
+            log("result is this $result");
 
             return DraftOrderModel.fromJson(result);
           } else {
@@ -1322,6 +1357,7 @@ class ProductRepository {
           ATT.add(result['subtotal'].toString());
           ATT.add(result['tax_amount'].toString());
           ATT.add(result['base_grand_total'].toString());
+          ATT.add(result['discount_amount'].toString());
 
           return ATT;
         } else {

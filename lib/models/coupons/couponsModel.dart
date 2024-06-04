@@ -7,6 +7,7 @@ class Coupon {
   final int timesUsed;
   final bool isPrimary;
   final int type;
+  final String discription;
   final String amt;
   final String discription;
 
@@ -20,6 +21,7 @@ class Coupon {
     required this.timesUsed,
     required this.isPrimary,
     required this.type,
+    this.discription = "",
     this.discription=""
   });
 

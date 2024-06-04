@@ -1,6 +1,5 @@
 import 'package:mobj_project/utils/cmsConfigue.dart';
 
-
 class BigCommerceDraftOrderModel implements DraftOrderModel {
   @override
   final dynamic id;
@@ -109,9 +108,10 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
           .map((item) => BigCommerceLineItem.fromJson(item))),
       shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
       billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
-      invoiceUrl: json['invoice_url'] ?? DefaultValues.defaultString,
-      appliedDiscount:
-          json['discount_amount'].toString() ?? DefaultValues.defaultString,
+      invoiceUrl:
+          json['coupons'][0]['code'].toString() ?? DefaultValues.defaultString,
+      appliedDiscount: json['discounts'][0]['discounted_amount'].toString() ??
+          DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
       shippingLine: json['shipping_line'] ?? DefaultValues.defaultString,
       taxLines: [BigCommerceTaxLine(rate: 1.00, title: "title", price: "11.0")],
@@ -120,7 +120,7 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
       totalPrice: double.parse(json['cart_amount'].toString()) ??
           DefaultValues.defaultDouble,
       subtotalPrice:
-          json['cart_amount'].toString() ?? DefaultValues.defaultString,
+          json['base_amount'].toString() ?? DefaultValues.defaultString,
       totalTax: json['total_tax'] ?? DefaultValues.defaultString,
       paymentTerms: json['payment_terms'] ?? DefaultValues.defaultString,
       adminGraphqlApiId:
@@ -479,7 +479,8 @@ class BigCommerceDefaultAddressModel implements DefaultAddressModel {
       city: json['city'] ?? DefaultValues.defaultString,
       province: json['state_or_province'] ?? DefaultValues.defaultString,
       country: json['country'] ?? DefaultValues.defaultString,
-      zip: json['postal_code'] ??DefaultValues.defaultString ??
+      zip: json['postal_code'] ??
+          DefaultValues.defaultString ??
           DefaultValues.defaultString,
       phone: json['phone'] ?? DefaultValues.defaultString,
       name: json['name'] ?? DefaultValues.defaultString,

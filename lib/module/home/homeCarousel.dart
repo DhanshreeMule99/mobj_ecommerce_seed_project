@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -38,7 +39,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
       String productUrl =
           "${AppConfigure.adminPanelUrl}/api/sliders?populate=*";
       API api = API();
-      final response = await api.sendRequest.get(productUrl);
+      final response = await api.sendRequest.get(productUrl,
+        options: Options(headers: {"Authorization": ""}));
 
       if (response.statusCode == 200) {
         var body = response.data['data']; // Parse the response body

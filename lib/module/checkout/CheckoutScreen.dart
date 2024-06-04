@@ -116,6 +116,11 @@ int totolPriceis = 0;
             ),
             body: product.when(
               data: (product) {
+                if (!AppConfigure.megentoCommerce) {
+                  setState(() {
+                    couponApply.text = product.invoiceUrl;
+                  });
+                }
            if(totolPriceis == 0)  {totolPriceis = product.totalPrice.round();}
 
 
@@ -1530,9 +1535,9 @@ int totolPriceis = 0;
                                 thickness: 1.5,
                                 color: AppColors.greyShade,
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
                               Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 8.sp, horizontal: 10.w),
@@ -1664,7 +1669,7 @@ int totolPriceis = 0;
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT.first}'
+                                          ? '\u{20B9}${ATT.first.toString()}'
                                           : '\u{20B9}${product.subtotalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
@@ -1678,13 +1683,34 @@ int totolPriceis = 0;
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  Text('Discount',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                  Text(
+                                      AppConfigure.megentoCommerce
+                                          ? '\u{20B9}${ATT.last}'
+                                          : '\u{20B9}${product.appliedDiscount}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineLarge),
+                                ],
+                              ),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
                                   Text('${AppLocalizations.of(context)!.tax}:',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT[1]}'
+                                          ? '\u{20B9}${ATT[1].toString()}'
                                           : product.totalTax == ""
                                               ? '\u{20B9}${0}'
                                               : '\u{20B9}${product.totalTax}',
@@ -1693,8 +1719,10 @@ int totolPriceis = 0;
                                           .headlineLarge),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
+
+                              const Divider(
+                                thickness: 1.5,
+                                color: AppColors.greyShade,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -1707,8 +1735,8 @@ int totolPriceis = 0;
                                           .bodySmall),
                                   Text(
                                       AppConfigure.megentoCommerce
-                                          ? '\u{20B9}${ATT.last}'
-                                          : AppConfigure.wooCommerce ? totolPriceis.toString() :'\u{20B9}${product.totalPrice}',
+                                          ? '\u{20B9}${ATT[2]}'
+                                          : '\u{20B9}${product.totalPrice}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
@@ -1724,6 +1752,10 @@ int totolPriceis = 0;
                                           pageBuilder: (context, animation1,
                                                   animation2) =>
                                               AddressListScreen(
+                                            discount:
+                                                AppConfigure.megentoCommerce
+                                                    ? ATT.last.toString()
+                                                    : "",
                                             actualPrice:
                                                 AppConfigure.megentoCommerce
                                                     ? ATT.first.toString()
@@ -1733,13 +1765,18 @@ int totolPriceis = 0;
                                                 : "",
                                             totalPrice:
                                                 AppConfigure.megentoCommerce
-                                                    ? ATT.last.toString()
+                                                    ? ATT[2].toString()
                                                     : "",
                                             isCheckout: true,
                                             amount: AppConfigure.megentoCommerce
-                                                ? int.parse(
-                                                        ATT.last.toString()) *
-                                                    100
+                                                // ? int.parse(ATT[2].toString()) *
+                                                //     100
+                                                // : product.totalPrice.toInt() *
+                                                //     100,
+                                                ? (double.parse(
+                                                            ATT[2].toString()) *
+                                                        100)
+                                                    .toInt()
                                                 : product.totalPrice.toInt() *
                                                     100,
                                             mobile: product.customer.phone
@@ -1827,19 +1864,38 @@ int totolPriceis = 0;
 
   Future<void> ApplyCoupon() async {
     String token = await SharedPreferenceManager().getToken();
+    log("asdfghjkl;...................................................$token");
 
-    try {
-      Response response = await api.sendRequest.put(
-          'carts/mine/coupons/${couponApply.text}',
-          options: Options(headers: {'Authorization': 'Bearer $token'}));
-      if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: 'Coupon applied successfully');
-        getTotalDetails();
-      } else {}
-    } on Exception catch (e) {
-      log('appply coupon error is this $e');
-      Fluttertoast.showToast(msg: 'Coupon is not valid');
-      rethrow;
+    if (AppConfigure.megentoCommerce) {
+      try {
+        Response response = await api.sendRequest.put(
+            'carts/mine/coupons/${couponApply.text}',
+            options: Options(headers: {'Authorization': 'Bearer $token'}));
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(msg: 'Coupon applied successfully');
+          getTotalDetails();
+        } else {}
+      } on Exception catch (e) {
+        log('appply coupon error is this $e');
+        Fluttertoast.showToast(msg: 'Coupon is not valid');
+        rethrow;
+      }
+    } else if (AppConfigure.bigCommerce) {
+      String draftId = await SharedPreferenceManager().getDraftId();
+      try {
+        Response response = await api.sendRequest.post(
+            'https://api.bigcommerce.com/stores/${AppConfigure.storeFront}/v3/checkouts/$draftId/coupons',
+            data: {"coupon_code": couponApply.text},
+            options: Options());
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(msg: 'Coupon applied successfully');
+          ref.refresh(cartDetailsDataProvider);
+        } else {}
+      } on Exception catch (e) {
+        log('appply coupon error is this $e');
+        Fluttertoast.showToast(msg: 'Coupon is not valid');
+        rethrow;
+      }
     }
   }
 
@@ -1861,57 +1917,28 @@ int totolPriceis = 0;
 
   Future<Couponmodel> fetchCouponDescription(int ruleId) async {
     API api = API();
-    // if (AppConfigure.wooCommerce) {
-    //   try {
-    //     Response response = await api.sendRequest.get(
-    //       'https://ttf.setoo.org//wp-json/wc/v3/coupons?consumer_key=ck_db1d729eb2978c28ae46451d36c1ca02da112cb3&consumer_secret=cs_c5cc06675e8ffa375b084acd40987fec142ec8cf',
-    //     );
-    //     // log("Response is $response");
-    //     if (response.statusCode == APIConstants.successCode) {
-    //       var data = response.data;
-    //       var dateExpires = DateTime.parse(data[0]['date_expires']);
-    //       // Parse the date string to DateTime
-    //       var discountAmount = double.parse(data[0]['amount']);
-
-    //       return Couponmodel(
-    //           ruleId: ruleId,
-    //           amt: data[0]['amount'],
-    //           name: data[0]['code'],
-    //           description: data[0]['description'],
-    //           fromDate: dateExpires,
-    //           toDate: dateExpires,
-    //           isActive: true,
-    //           usesPerCustomer: 1,
-    //           usesPerCoupon: 1,
-    //           simpleAction: "simpleAction",
-    //           discountAmount: discountAmount,
-    //           applyToShipping: true);
-    //     } else {
-    //       throw (AppString.noDataError);
-    //     }
-    //   } catch (error, stackTrace) {
-    //     log("Error fetching coupon description: $stackTrace");
-    //     log("Error: $error, $stackTrace");
-    //     rethrow;
-    //   }
-    // } else {
-    try {
-      Response response = await api.sendRequest.get(
-        'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
-        options: Options(headers: {
-          "Authorization": "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
-        }),
-      );
-      if (response.statusCode == APIConstants.successCode) {
-        var data = response.data;
-        return Couponmodel.fromJson(data);
-      } else {
-        throw (AppString.noDataError);
+    if (AppConfigure.megentoCommerce) {
+      try {
+        Response response = await api.sendRequest.get(
+          'https://hp.geexu.org/rest/V1/salesRules/$ruleId',
+          options: Options(headers: {
+            "Authorization":
+                "Bearer ${AppConfigure.megentoCunsumerAccessToken}",
+          }),
+        );
+        if (response.statusCode == APIConstants.successCode) {
+          var data = response.data;
+          return Couponmodel.fromJson(data);
+        } else {
+          throw (AppString.noDataError);
+        }
+      } catch (error, stackTrace) {
+        debugPrint("Error fetching coupon description: $stackTrace");
+        debugPrint("Error: $error");
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      debugPrint("Error fetching coupon description: $stackTrace");
-      debugPrint("Error: $error");
-      rethrow;
+    } else {
+      throw "its not magento";
     }
   }
 

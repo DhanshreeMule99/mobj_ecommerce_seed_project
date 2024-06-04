@@ -41,7 +41,7 @@ class MagentoCommerceOrderModel implements OrderModel {
   @override
   final double currentSubtotalPrice;
   @override
-  final int totalPrice;
+  final double totalPrice;
   @override
   final double currentTotalTax;
 
