@@ -292,6 +292,7 @@ class ProductRepository {
 
           for (int i = 0; i < couponList.length; i++) {
             coupons.add(Coupon(
+              amt:"",
                 couponId: couponList[i]['id'],
                 ruleId: 0,
                 code: couponList[i]['code'],

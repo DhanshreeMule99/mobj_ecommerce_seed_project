@@ -9,7 +9,7 @@ class Coupon {
   final int type;
   final String discription;
   final String amt;
-  final String discription;
+  
 
   Coupon({
     required this.amt,
@@ -22,7 +22,7 @@ class Coupon {
     required this.isPrimary,
     required this.type,
     this.discription = "",
-    this.discription=""
+   
   });
 
   factory Coupon.fromJson(Map<String, dynamic> json) {
