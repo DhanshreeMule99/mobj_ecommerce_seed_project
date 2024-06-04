@@ -320,7 +320,7 @@ int totolPriceis = 0;
                                                                             context)
                                                                         .size
                                                                         .width *
-                                                                    .5,
+                                                                    .48,
                                                                 child: Padding(
                                                                   padding:
                                                                       const EdgeInsets

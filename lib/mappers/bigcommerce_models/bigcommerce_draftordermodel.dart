@@ -108,8 +108,9 @@ class BigCommerceDraftOrderModel implements DraftOrderModel {
           .map((item) => BigCommerceLineItem.fromJson(item))),
       shippingAddress: json['shipping_address'] ?? DefaultValues.defaultString,
       billingAddress: json['billing_address'] ?? DefaultValues.defaultString,
-      invoiceUrl:
-          json['coupons'][0]['code'].toString() ?? DefaultValues.defaultString,
+      invoiceUrl: json['coupons'].length != 0
+          ? json['coupons'][0]['code'].toString()
+          : DefaultValues.defaultString,
       appliedDiscount: json['discounts'][0]['discounted_amount'].toString() ??
           DefaultValues.defaultString,
       orderId: json['order_id'] ?? DefaultValues.defaultInt,
